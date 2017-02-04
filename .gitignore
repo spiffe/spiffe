@@ -1,0 +1,4 @@
+scripts/root
+python/venv
+python/spiffe.cert.pem
+python/spiffe.key.pem
