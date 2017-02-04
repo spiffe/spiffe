@@ -14,7 +14,9 @@ Follow the prompts and you will get a directory called `root` in the scripts dir
 
 ## Building a spiffe cert that is signed by the intermediate
 
-Run the following commands
+Run the following commands.
+NOTE: The security standing of the python cryptography library used in the example is not known. It was chosen for its API
+not its cryptographic guarantees.
 
 ```
 $ cd python
