@@ -83,7 +83,7 @@ def generate_spiffe_to_file(private_key, certificate, file_prefix):
 
 if __name__ == '__main__':
     path_to_ca = sys.argv[1]
-    p_key, certificate = generate_spiffe("urn:spiffe:service:twilio.com:dev-us1:foo",
+    p_key, certificate = generate_spiffe("urn:spiffe:service:acme.com:acme-dev:foo-service",
                                          b"secret",
                                          path_to_ca,
                                          b'secret')
