@@ -16,7 +16,7 @@ Follow the prompts and you will get a directory called `root` in the scripts dir
 
 Run the following commands.
 NOTE: The security standing of the python cryptography library used in the example is not known. It was chosen for its API
-not its cryptographic guarantees.
+not its cryptographic guarantees. Here are its documented limitations -> https://cryptography.io/en/latest/limitations/
 
 ```
 $ cd python
