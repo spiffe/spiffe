@@ -53,7 +53,7 @@ if [ ! -e "org/$SPIFFE_CERT_ORG_NAME/ca/certs/ca.cert.pem" ]; then
       -sha256 \
       -extensions v3_ca \
       -out certs/ca.cert.pem \
-      -subj "/O=$SPIFFE_CERT_ORG_NAME/CN=spiffe:$SPIFFE_CERT_ORG_NAME"
+      -subj "/O=$SPIFFE_CERT_ORG_NAME/CN=$SPIFFE_CERT_ORG_NAME Root CA"
     chmod 744 certs/ca.cert.pem
     openssl x509 -noout -text -in certs/ca.cert.pem
   popd
@@ -87,7 +87,7 @@ if [ ! -e "org/$SPIFFE_CERT_ORG_NAME/ca/intermediate/certs/ca-chain.cert.pem" ];
         -sha256 \
         -key intermediate/private/intermediate.key.pem \
         -out intermediate/csr/intermediate.csr.pem \
-        -subj "/O=$SPIFFE_CERT_ORG_NAME/CN=spiffe:$SPIFFE_CERT_ORG_NAME:" \
+        -subj "/O=$SPIFFE_CERT_ORG_NAME/CN=$SPIFFE_CERT_ORG_NAME Intermediate CA" \
 
     #sign the intermediate with the root
     openssl ca -config openssl.conf -extensions v3_intermediate_ca \
