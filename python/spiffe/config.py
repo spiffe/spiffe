@@ -10,6 +10,8 @@ COMMON_NAME = "commonName"
 SECTION_SUBJECT_NAME = "subject_name"
 SECTION_EXTENSIONS = "extensions"
 NAME_CONSTRAINTS = "nameConstraints"
+HOSTNAME = "hostname"
+SPIFFE_ID = "spiffeID"
 
 class SpiffeConfig(object):
 
@@ -27,6 +29,8 @@ class SpiffeConfig(object):
         self._common_name = ""
 
         self._name_constraints = []
+        self._hostname = ""
+        self._spiffeID = ""
         self._parser = None
 
     @property
@@ -58,6 +62,14 @@ class SpiffeConfig(object):
         return self._name_constraints
 
     @property
+    def hostname(self):
+        return self._hostname
+
+    @property
+    def spiffeID(self):
+        return self._spiffeID
+
+    @property
     def parser(self):
         return self._parser
 
@@ -85,6 +97,12 @@ class SpiffeConfig(object):
 
             self._name_constraints = self.get_list(SECTION_EXTENSIONS,
                                                    NAME_CONSTRAINTS)
+
+            self._hostname = self.get(SECTION_EXTENSIONS,
+                                      HOSTNAME)
+
+            self._spiffeID = self.get(SECTION_EXTENSIONS,
+                                      SPIFFE_ID)
 
         except Exception as exp:
             # TODO: Logging

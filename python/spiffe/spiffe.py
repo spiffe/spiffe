@@ -1,14 +1,13 @@
 """Spiffe Leaf PKI.
 
 Usage:
-  spiffe.py --id=<spiffe_id> --path=<cert_path> --pass=<pass> --secret=<secret> --config=<config>
+  spiffe.py  --path=<cert_path> --pass=<pass> --secret=<secret> --config=<config>
   spiffe.py (-h | --help)
   spiffe.py --version
 
 Options:
   -h --help     Show this screen.
   --version               Show version.
-  --id=<spiffe_id>        SPIFFE ID to user in certificate.
   --path=<cert_path>      Path to intermediate certificates
   --pass=<pass>           Passpharse for certificate
   --secret=<secret>       Secret for intermediate certificates
@@ -31,7 +30,6 @@ import sys
 from config import SpiffeConfig
 
 def generate_spiffe(spiffe_config,
-                    identity,
                     passphrase,
                     intermediate_path,
                     intermediate_secret):
@@ -53,7 +51,7 @@ def generate_spiffe(spiffe_config,
     ])).add_extension(
         x509.SubjectAlternativeName([
             # Describe what sites we want this certificate for.
-            x509.UniformResourceIdentifier(identity),
+            x509.UniformResourceIdentifier(spiffe_config.spiffeID),
         ]),
         critical=False,
         # Sign the CSR with our private key.
@@ -84,12 +82,15 @@ def generate_spiffe(spiffe_config,
 
     # x509 Extensions
     cert = cert.add_extension(
-        x509.SubjectAlternativeName([x509.UniformResourceIdentifier(identity)]),
+        x509.SubjectAlternativeName([x509.UniformResourceIdentifier(spiffe_config.spiffeID),
+                                     x509.DNSName(spiffe_config.hostname)]),
         critical=False,)
 
     cert = cert.add_extension(x509.BasicConstraints(ca=False,path_length=None),
                               critical=True)
 
+    # Name constraints are used by Intermediate Certs to verify
+    # THE CSR request is valid and within its path.  Just here as an example 
     name_constraints = []
     for constraint in spiffe_config.name_contraints:
 
@@ -99,15 +100,17 @@ def generate_spiffe(spiffe_config,
                                                    excluded_subtrees=None),
                               critical=False)
 
-    cert.add_extension(x509.ExtendedKeyUsage([x509.oid.ExtendedKeyUsageOID.CLIENT_AUTH,
-                                                    x509.oid.ExtendedKeyUsageOID.SERVER_AUTH]),
+    cert = cert.add_extension(x509.ExtendedKeyUsage([x509.oid.ExtendedKeyUsageOID.CLIENT_AUTH,
+                                                     x509.oid.ExtendedKeyUsageOID.SERVER_AUTH]),
                               critical=False)
 
-    cert.add_extension(x509.SubjectKeyIdentifier(),
-                       critical=False)
+    cert = cert.add_extension(x509.SubjectKeyIdentifier.from_public_key(csr.public_key()),
+                              critical=False)
 
-    cert.add_extension(x509.AuthorityKeyIdentifier(),
-                       critical=False)
+    cert = cert.add_extension(
+        x509.AuthorityKeyIdentifier.from_issuer_public_key(intermediate_cert.public_key()),
+        critical=False)
+
     # Sign our certificate with our private key
     cert = cert.sign(intermediate_key, hashes.SHA256(), default_backend())
 
@@ -144,7 +147,6 @@ if __name__ == '__main__':
 
     # "urn:spiffe:service:acme.com:acme-dev:foo-service"
     p_key, certificate = generate_spiffe(spiffe_config=spiffe_local_config,
-                                         identity=args["--id"],
                                          passphrase=bytes(args["--pass"], 'utf-8'),
                                          intermediate_path=args["--path"],
                                          intermediate_secret=bytes(args["--secret"], 'utf-8'))
