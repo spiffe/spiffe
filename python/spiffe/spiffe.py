@@ -26,7 +26,6 @@ from cryptography.hazmat.primitives import hashes
 from datetime import datetime, timedelta
 from docopt import docopt
 
-import sys
 from config import SpiffeConfig
 
 def generate_spiffe(spiffe_config,
@@ -57,7 +56,6 @@ def generate_spiffe(spiffe_config,
         # Sign the CSR with our private key.
     ).sign(key, hashes.SHA256(), default_backend())
 
-
     # sign the csr with the intermediate cert
     intermediate_key = None
     with open("{}/private/intermediate.key.pem".format(intermediate_path), 'rb') as f:
@@ -78,7 +76,6 @@ def generate_spiffe(spiffe_config,
     cert = cert.not_valid_after(
         # Our certificate will be valid for 10 days
         datetime.utcnow() + timedelta(days=10))
-
 
     # x509 Extensions
     cert = cert.add_extension(
@@ -114,7 +111,6 @@ def generate_spiffe(spiffe_config,
     # Sign our certificate with our private key
     cert = cert.sign(intermediate_key, hashes.SHA256(), default_backend())
 
-
     private_out = key.private_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.TraditionalOpenSSL,
@@ -140,8 +136,6 @@ if __name__ == '__main__':
 
     args = docopt(__doc__, version='Spiffe PKI 1.0')
 
-    print(args)
-
     spiffe_local_config = SpiffeConfig(args["--config"])
     spiffe_local_config.load()
 
@@ -152,7 +146,6 @@ if __name__ == '__main__':
                                          intermediate_secret=bytes(args["--secret"], 'utf-8'))
 
     generate_spiffe_to_file(p_key, certificate, 'spiffe')
-
 
 # to check csr run $ openssl req -in spiffe.csr.pem -noout -text
 # to check private key run $ openssl rsa -in spiffe.key.pem -check
