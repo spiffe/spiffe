@@ -1,5 +1,8 @@
+.idea
 scripts/root
 python/venv
 python/spiffe.cert.pem
 python/spiffe.key.pem
 scripts/org/*
+*.venv
+*.pyc
