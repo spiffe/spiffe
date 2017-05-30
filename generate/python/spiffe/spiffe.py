@@ -1,15 +1,16 @@
 """Spiffe Leaf PKI.
 
 Usage:
-  spiffe.py  --path=<cert_path> --pass=<pass> --secret=<secret> --config=<config>
+  spiffe.py  --path=<cert_path> --pass=<pass> --secret=<secret> --config=<config> --target=<target_path>
   spiffe.py (-h | --help)
   spiffe.py --version
 
 Options:
   -h --help     Show this screen.
   --version               Show version.
+  --target=<target_path>  Path to target directory where generated Certificates are stored
   --path=<cert_path>      Path to intermediate certificates
-  --pass=<pass>           Passpharse for certificate
+  --pass=<pass>           Passphrase for certificate
   --secret=<secret>       Secret for intermediate certificates
   --config=<config file>  Config File that loads all configurations for SPIFFE
                           certificate generation
@@ -88,18 +89,20 @@ def generate_spiffe(spiffe_config,
 
     # Name constraints are used by Intermediate Certs to verify
     # THE CSR request is valid and within its path.  Just here as an example 
-    name_constraints = []
-    for constraint in spiffe_config.name_contraints:
-
-        name_constraints.append(x509.UniformResourceIdentifier(constraint))
-
-    cert = cert.add_extension(x509.NameConstraints(permitted_subtrees=name_constraints,
-                                                   excluded_subtrees=None),
-                              critical=False)
-
     cert = cert.add_extension(x509.ExtendedKeyUsage([x509.oid.ExtendedKeyUsageOID.CLIENT_AUTH,
                                                      x509.oid.ExtendedKeyUsageOID.SERVER_AUTH]),
                               critical=False)
+
+    cert = cert.add_extension(x509.KeyUsage(digital_signature=True,
+                                            key_agreement=True,
+                                            key_encipherment=True,
+                                            content_commitment=False,
+                                            data_encipherment=False,
+                                            key_cert_sign=False,
+                                            crl_sign=False,
+                                            encipher_only=False,
+                                            decipher_only=False),
+                              critical=True)
 
     cert = cert.add_extension(x509.SubjectKeyIdentifier.from_public_key(csr.public_key()),
                               critical=False)
@@ -122,13 +125,14 @@ def generate_spiffe(spiffe_config,
 
 def generate_spiffe_to_file(private_key,
                             certificate,
+                            target_directory,
                             file_prefix):
     """
     """
-    with open("{}.key.pem".format(file_prefix), 'wb') as f:
+    with open("{}/{}.key.pem".format(target_directory, file_prefix), 'wb') as f:
         f.write(private_key)
 
-    with open("{}.cert.pem".format(file_prefix), 'wb') as f:
+    with open("{}/{}.cert.pem".format(target_directory, file_prefix), 'wb') as f:
         f.write(certificate)
 
 
@@ -145,7 +149,10 @@ if __name__ == '__main__':
                                          intermediate_path=args["--path"],
                                          intermediate_secret=bytes(args["--secret"], 'utf-8'))
 
-    generate_spiffe_to_file(p_key, certificate, 'spiffe')
+    generate_spiffe_to_file(private_key=p_key,
+                            certificate=certificate,
+                            target_directory=args["--target"],
+                            file_prefix=spiffe_local_config.hostname)
 
 # to check csr run $ openssl req -in spiffe.csr.pem -noout -text
 # to check private key run $ openssl rsa -in spiffe.key.pem -check

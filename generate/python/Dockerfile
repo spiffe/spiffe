@@ -1,18 +1,18 @@
-
 # Use a specific version of Ubuntu
 
-FROM ubuntu:latest
-MAINTAINER Emiliano Berenbaum "emiliano@scytale.io"
 
-RUN apt-get -y update
+FROM python:3.6
+
+MAINTAINER Emiliano Berenbaum "emiliano@scytale.io"
+LABEL Description="Python shell SVID testing"
+LABEL vendor="Spiffe"
+
 RUN apt-get install -qy libssl-dev
-RUN apt-get install -qy python3
-RUN apt-get install -qy python3-pip
 
 #
-ADD . /svid_gen_leaf
+ADD  ./spiffe  /spiffe/svid/gen
 
-WORKDIR /svid_gen_leaf
+WORKDIR /spiffe/svid/gen
 
 RUN pip3 install --upgrade pip
-RUN pip3 install -r spiffe/requirements/dev.txt
+RUN pip3 install -r requirements/dev.txt

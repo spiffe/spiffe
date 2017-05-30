@@ -1,12 +1,20 @@
 # Generate Leaf certificates 
 
-Run a Python Docker catainer that will generate VSID leaf 
-certificates in a mouted directory 
+Run a Python Docker container that will generate VSID leaf 
+certificates in a mouted output directory 
+
+
+The make script has to be supplied two ENV variables 
+
+SECRET is the Intermediate Secret 
+PASSPHRASE Is the secret used on the generated key for the leaf certificate
 
 ```bash
 
+$ make build 
 
-docker build -t svid_gen_python .
+$ make SECRET={secret} PASSPHARSE={passphrase} generate
 
-docker run -it -v ${PWD}/../.cert:/spiffe/certs svig_gen_python /bin/bash
 ```
+
+

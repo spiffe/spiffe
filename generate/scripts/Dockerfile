@@ -2,10 +2,14 @@
 
 FROM ubuntu:latest
 MAINTAINER Emiliano Berenbaum "emiliano@scytale.io"
+LABEL Description="OpenSSL shell SVID generation"
+LABEL vendor="Spiffe"
 
 RUN apt-get -y update
+RUN apt-get install -qy libssl-dev
+RUN apt-get install -qy openssl
 
 #
-ADD . /svid_gen
+ADD ./bash /spiffe/svid/gen
 
-WORKDIR /svid_gen
+WORKDIR /spiffe/svid/gen
