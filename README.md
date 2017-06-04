@@ -24,6 +24,7 @@ $ cd scripts
 $ ./generate_ca.sh acme.com blogservice
 $ cd ../python
 $ make python_env
+$ source .venv/bin/activate
 $ make dev_requirements
 $ python spiffe/spiffe.py --config=sample_config.ini  --pass=<pass> --secret=<intermediate_pass> --path=../scripts/org/acme.com/ca/intermediate
 ```
