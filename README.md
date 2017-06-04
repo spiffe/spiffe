@@ -19,12 +19,12 @@ NOTE: The security standing of the python cryptography library used in the examp
 not its cryptographic guarantees. Here are its documented limitations -> https://cryptography.io/en/latest/limitations/
 
 ```
-$ cd python
+$ cd scripts
+$ ./generate_ca.sh acme.com blogservice
+$ cd ../python
 $ make python_env
 $ make dev_requirements
-$ python spiffe/spiffe.py ../scripts/root/ca/intermediate/
-
-$ python --config=sample_config.ini  --pass=<pass> --secret=<intermediate_pass> --path=../scripts/org/acme.com/ca/intermediate
+$ python spiffe/spiffe.py --config=sample_config.ini  --pass=<pass> --secret=<intermediate_pass> --path=../scripts/org/acme.com/ca/intermediate
 ```
 You should get two files, `spiffe.cert.pem` and `spiffe.key.pem` which is your public cert and private key. To view a readable output of the spiffe cert run the following command
 
