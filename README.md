@@ -7,24 +7,26 @@ To build the root and intermediate CA infrastructure and an example client and s
 NOTE: you will need openssl installed for this to work including the command line tools.
 ```
 $ cd scripts
-$ ./generate_ca.sh
+$ ./generate_ca.sh <org_name> <service_name>
 ```
 
-Follow the prompts and you will get a directory called `root` in the scripts directory. This contains all the root and intermediate certs and private keys, as well as the ca-chain.
+Follow the prompts and you will get a directory called `org/<org_name>` in the scripts directory. This contains all the root and intermediate certs and private keys, as well as the ca-chain.
 
 ## Building a spiffe cert that is signed by the intermediate
 
 Run the following commands.
 NOTE: The security standing of the python cryptography library used in the example is not known. It was chosen for its API
 not its cryptographic guarantees. Here are its documented limitations -> https://cryptography.io/en/latest/limitations/
+NOTE: This script is python3 only.
 
 ```
-$ cd python
+$ cd scripts
+$ ./generate_ca.sh acme.com blogservice
+$ cd ../python
 $ make python_env
+$ source .venv/bin/activate
 $ make dev_requirements
-$ python spiffe/spiffe.py ../scripts/root/ca/intermediate/
-
-$ python --config=sample_config.ini  --pass=<pass> --secret=<intermediate_pass> --path=../scripts/org/acme.com/ca/intermediate
+$ python spiffe/spiffe.py --config=sample_config.ini  --pass=<pass> --secret=<intermediate_pass> --path=../scripts/org/acme.com/ca/intermediate
 ```
 You should get two files, `spiffe.cert.pem` and `spiffe.key.pem` which is your public cert and private key. To view a readable output of the spiffe cert run the following command
 
