@@ -1,5 +1,5 @@
 .idea
-scripts/root
+*.certs
 python/venv
 python/spiffe.cert.pem
 python/spiffe.key.pem
