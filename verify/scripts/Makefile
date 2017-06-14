@@ -1,20 +1,18 @@
 #==========================
 #-------------------------- 
-
-
-NAME = spiffe/gen/bash
+NAME = spiffe/verify/bash
 
 VERSION = 0.1.0
 
 MKDIR_P = mkdir -p 
 
 
-SRC_CERTS_DIR = ${PWD}/../.certs
+SRC_CERTS_DIR = ${PWD}/../../generate/.certs
 SRC_CONF_DIR  = ${PWD}/conf
 
 CERTS_DIR     = /spiffe/certs
 CONF_DIR      = /spiffe/conf
-GEN_DIR       = /spiffe/svid/gen
+VERIFY_DIR    = /spiffe/svid/verify
 
 ORG_NAME     = acme.com
 SERVICE_NAME = blog
@@ -34,11 +32,11 @@ setup:
 	@echo "----------------------"
 	$(MKDIR_P) $(SRC_CERTS_DIR)
 
-clean:
-	@echo "======================"
-	@echo "Cleanup certs: $(SRC_CERTS_DIR)"
-	@echo "----------------------"
-	rm -Rf $(SRC_CERTS_DIR)/org/*
+#clean:
+#	@echo "======================"
+#	@echo "Cleanup certs: $(SRC_CERTS_DIR)"
+#	@echo "----------------------"
+# 	rm -Rf $(SRC_CERTS_DIR)/org/*
 
 
 clean_exited:
@@ -50,9 +48,8 @@ tag_latest:
 
 
 generate:
-	@echo "Generate ..."
-	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(ORG_NAME) $(SERVICE_NAME) $(CERTS_DIR) $(CONF_DIR) 
-	# docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(GEN_DIR)/generate_ca.sh  $(ORG_NAME) $(SERVICE_NAME) $(CERTS_DIR) $(CONF_DIR) 
+	@echo "Verify ..."
+	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(VERIFY_DIR)/verify_ca.sh )  $(SERVICE_NAME) $(CERTS_DIR) $(CONF_DIR) 
 
 
 run:
@@ -62,11 +59,6 @@ run:
 
 last_build_date:
 	docker inspect -f '{{ .Created }}' $(NAME):$(VERSION)
-
-
-
-
-
 
 
 

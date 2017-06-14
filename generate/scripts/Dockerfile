@@ -1,15 +1,25 @@
-# Use a specific version of Ubuntu
 
-FROM ubuntu:latest
+FROM alpine:latest
+
 MAINTAINER Emiliano Berenbaum "emiliano@scytale.io"
 LABEL Description="OpenSSL shell SVID generation"
 LABEL vendor="Spiffe"
 
-RUN apt-get -y update
-RUN apt-get install -qy libssl-dev
-RUN apt-get install -qy openssl
+# install openssl
+RUN apk add --update openssl && \
+    rm -rf /var/cache/apk/*
 
-#
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git
+
+
 ADD ./bash /spiffe/svid/gen
 
 WORKDIR /spiffe/svid/gen
+
+# Copy Library repos
+RUN git clone https://github.com/tests-always-included/mo.git  ./lib/mo
+RUN git clone https://github.com/geoffroy-aubry/awk-csv-parser.git ./lib/awk-csv-parser
+
+
+# ENTRYPOINT [ "/spiffe/svid/gen/generate_ca.sh"]

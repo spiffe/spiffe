@@ -38,6 +38,21 @@ $ cd generate/.certs
 $ openssl x509 -in frontend.dev.acme.com.cert.pem -text -noout
 ```
 
+
+Directory layout for generated certificates 
+
+```bash
+
+$ .certs/
+$ .certs/org/<domain>/
+$ .certs/org/<domain>/ca
+$ .certs/org/<domain>/intermediate
+$ .certs/org/<domain>/leaf
+
+```
+
+
+
 Which should get you something like
 
 ```
