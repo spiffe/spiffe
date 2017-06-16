@@ -1,7 +1,5 @@
 #==========================
 #-------------------------- 
-
-
 NAME = spiffe/gen/bash
 
 VERSION = 0.1.0
@@ -16,8 +14,6 @@ CERTS_DIR     = /spiffe/certs
 CONF_DIR      = /spiffe/conf
 GEN_DIR       = /spiffe/svid/gen
 
-ORG_NAME     = acme.com
-SERVICE_NAME = blog
 
 .PHONY: all build
 
@@ -51,8 +47,7 @@ tag_latest:
 
 generate:
 	@echo "Generate ..."
-	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(ORG_NAME) $(SERVICE_NAME) $(CERTS_DIR) $(CONF_DIR) 
-	# docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(GEN_DIR)/generate_ca.sh  $(ORG_NAME) $(SERVICE_NAME) $(CERTS_DIR) $(CONF_DIR) 
+	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(GEN_DIR)/generate_ca.sh  $(CERTS_DIR) $(CONF_DIR) 
 
 
 run:

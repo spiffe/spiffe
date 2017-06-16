@@ -32,12 +32,6 @@ setup:
 	@echo "----------------------"
 	$(MKDIR_P) $(SRC_CERTS_DIR)
 
-#clean:
-#	@echo "======================"
-#	@echo "Cleanup certs: $(SRC_CERTS_DIR)"
-#	@echo "----------------------"
-# 	rm -Rf $(SRC_CERTS_DIR)/org/*
-
 
 clean_exited:
 	@echo "Cleanup all exited containers"
@@ -47,9 +41,9 @@ tag_latest:
 	docker tag -f $(NAME):$(VERSION) $(NAME):latest
 
 
-generate:
+verify:
 	@echo "Verify ..."
-	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(VERIFY_DIR)/verify_ca.sh )  $(SERVICE_NAME) $(CERTS_DIR) $(CONF_DIR) 
+	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(VERIFY_DIR)/verify_ca.sh  $(CERTS_DIR) $(CONF_DIR) 
 
 
 run:

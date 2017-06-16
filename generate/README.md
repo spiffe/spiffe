@@ -46,11 +46,23 @@ Directory layout for generated certificates
 $ .certs/
 $ .certs/org/<domain>/
 $ .certs/org/<domain>/ca
+$ .certs/org/<domain>/ca/certs
+$ .certs/org/<domain>/ca/crl
+$ .certs/org/<domain>/ca/newcerts
+$ .certs/org/<domain>/ca/private
 $ .certs/org/<domain>/intermediate
 $ .certs/org/<domain>/leaf
 
 ```
 
+
+The cert bundle is in the directory 
+
+```bash
+
+$ .certs/org/<domain>/intermediate/certs 
+
+```
 
 
 Which should get you something like

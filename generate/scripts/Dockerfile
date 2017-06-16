@@ -18,8 +18,9 @@ ADD ./bash /spiffe/svid/gen
 WORKDIR /spiffe/svid/gen
 
 # Copy Library repos
-RUN git clone https://github.com/tests-always-included/mo.git  ./lib/mo
-RUN git clone https://github.com/geoffroy-aubry/awk-csv-parser.git ./lib/awk-csv-parser
+RUN git clone https://github.com/tests-always-included/mo.git  ./.lib/mo
+RUN git clone https://github.com/geoffroy-aubry/awk-csv-parser.git ./.lib/awk-csv-parser
 
 
+# TODO: Setup entry point to simplify the Makefile
 # ENTRYPOINT [ "/spiffe/svid/gen/generate_ca.sh"]

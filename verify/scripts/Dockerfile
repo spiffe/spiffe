@@ -10,10 +10,11 @@ LABEL vendor="Spiffe"
 RUN apk add --update openssl && \
     rm -rf /var/cache/apk/*
 
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash
 
-#
 ADD ./bash /spiffe/svid/verify
 
 WORKDIR /spiffe/svid/verify
 
-ENTRYPOINT [ "/spiffe/svid/verify/verify_ca.sh" ]
+# ENTRYPOINT [ "/spiffe/svid/verify/verify_ca.sh" ]
