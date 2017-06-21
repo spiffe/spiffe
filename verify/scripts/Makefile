@@ -2,20 +2,20 @@
 #-------------------------- 
 NAME = spiffe/verify/bash
 
-VERSION = 0.1.0
+VERSION = 0.1.1
 
 MKDIR_P = mkdir -p 
 
-
-SRC_CERTS_DIR = ${PWD}/../../generate/.certs
-SRC_CONF_DIR  = ${PWD}/conf
+MY_PWD = $(shell pwd)
+SRC_CERTS_DIR = $(MY_PWD)/../../generate/.certs
+SRC_CONF_DIR  = $(MY_PWD)/conf
 
 CERTS_DIR     = /spiffe/certs
 CONF_DIR      = /spiffe/conf
 VERIFY_DIR    = /spiffe/svid/verify
 
-ORG_NAME     = acme.com
-SERVICE_NAME = blog
+ORG_NAME     ?= acme.com
+SERVICE_NAME ?= blog
 
 .PHONY: all build
 
@@ -24,7 +24,6 @@ build:
 	@echo "Create Docker Image"
 	@echo "----------------------"
 	docker build -t $(NAME):$(VERSION) --rm  .
-
 
 setup:
 	@echo "======================"
@@ -45,22 +44,9 @@ verify:
 	@echo "Verify ..."
 	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(VERIFY_DIR)/verify_ca.sh  $(CERTS_DIR) $(CONF_DIR) 
 
-
 run:
 	@echo "Run container: $(NAME)"
 	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) /bin/bash
 
-
 last_build_date:
 	docker inspect -f '{{ .Created }}' $(NAME):$(VERSION)
-
-
-
-
-
-
-
-
-
-
-

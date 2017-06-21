@@ -2,13 +2,13 @@
 #-------------------------- 
 NAME = spiffe/gen/bash
 
-VERSION = 0.1.0
+VERSION = 0.1.1
 
 MKDIR_P = mkdir -p 
 
-
-SRC_CERTS_DIR = ${PWD}/../.certs
-SRC_CONF_DIR  = ${PWD}/conf
+MY_PWD = $(shell pwd)
+SRC_CERTS_DIR = $(MY_PWD)/../.certs
+SRC_CONF_DIR  = $(MY_PWD)/conf
 
 CERTS_DIR     = /spiffe/certs
 CONF_DIR      = /spiffe/conf
@@ -54,22 +54,5 @@ run:
 	@echo "Run container: $(NAME)"
 	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) /bin/bash
 
-
 last_build_date:
 	docker inspect -f '{{ .Created }}' $(NAME):$(VERSION)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
