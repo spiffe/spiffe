@@ -1,19 +1,21 @@
 #==========================
 #-------------------------- 
-NAME = spiffe/gen/bash
+NAME = spiffe/verify/bash
 
 VERSION = 0.1.1
 
 MKDIR_P = mkdir -p 
 
 MY_PWD = $(shell pwd)
-SRC_CERTS_DIR = $(MY_PWD)/../.certs
+SRC_CERTS_DIR = $(MY_PWD)/../../generate/.certs
 SRC_CONF_DIR  = $(MY_PWD)/conf
 
 CERTS_DIR     = /spiffe/certs
 CONF_DIR      = /spiffe/conf
-GEN_DIR       = /spiffe/svid/gen
+VERIFY_DIR    = /spiffe/svid/verify
 
+ORG_NAME     ?= acme.com
+SERVICE_NAME ?= blog
 
 .PHONY: all build
 
@@ -23,18 +25,11 @@ build:
 	@echo "----------------------"
 	docker build -t $(NAME):$(VERSION) --rm  .
 
-
 setup:
 	@echo "======================"
 	@echo "Setup directories"
 	@echo "----------------------"
 	$(MKDIR_P) $(SRC_CERTS_DIR)
-
-clean:
-	@echo "======================"
-	@echo "Cleanup certs: $(SRC_CERTS_DIR)"
-	@echo "----------------------"
-	rm -Rf $(SRC_CERTS_DIR)/org/*
 
 
 clean_exited:
@@ -45,10 +40,9 @@ tag_latest:
 	docker tag -f $(NAME):$(VERSION) $(NAME):latest
 
 
-generate:
-	@echo "Generate ..."
-	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(GEN_DIR)/generate_ca.sh  $(CERTS_DIR) $(CONF_DIR) 
-
+verify:
+	@echo "Verify ..."
+	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(VERIFY_DIR)/verify_ca.sh  $(CERTS_DIR) $(CONF_DIR) 
 
 run:
 	@echo "Run container: $(NAME)"

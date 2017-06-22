@@ -6,3 +6,4 @@ python/spiffe.key.pem
 scripts/org/*
 *.venv
 *.pyc
+*~

@@ -10,7 +10,6 @@ default_ca        = CA_default
 HOME_INTER = .
 dir = ${ENV::HOME_INTER}
 
-
 certs             = $dir/certs
 crl_dir           = $dir/crl
 new_certs_dir     = $dir/newcerts
@@ -103,7 +102,8 @@ extendedKeyUsage       = serverAuth
 subjectAltName         = @alternate_names
 
 [ alternate_names ]
-URI.0                  = spiffe://dev.acme.com/service/blog
+# TODO: Hardcoded value for SAN SPIFFE name. have to determine how to configure this via CLI
+URI.0                  = {{ SPIFFE_ID }}
 
 [ crl_ext ]
 # Extension for CRLs (`man x509v3_config`).

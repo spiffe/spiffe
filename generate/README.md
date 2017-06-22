@@ -38,9 +38,36 @@ $ cd generate/.certs
 $ openssl x509 -in frontend.dev.acme.com.cert.pem -text -noout
 ```
 
-Which should get you something like
+
+Directory layout for generated certificates 
+
+```bash
+
+$ .certs/
+$ .certs/org/<domain>/
+$ .certs/org/<domain>/ca
+$ .certs/org/<domain>/ca/certs
+$ .certs/org/<domain>/ca/crl
+$ .certs/org/<domain>/ca/newcerts
+$ .certs/org/<domain>/ca/private
+$ .certs/org/<domain>/intermediate
+$ .certs/org/<domain>/leaf
 
 ```
+
+
+The cert bundle is in the directory 
+
+```bash
+
+$ .certs/org/<domain>/intermediate/certs 
+
+```
+
+
+## Leaf Certificate 
+
+```bash
 Certificate:
     Data:
         Version: 3 (0x2)
@@ -119,5 +146,108 @@ Certificate:
          98:14:14:f1:58:4f:39:a4:b6:1a:4f:e2:e0:c7:7a:84:80:cf:
          95:84:62:4a:b4:8b:ef:6c:43:45:08:85:85:5e:88:50:4c:0a:
          a2:27:ed:5c:e5:49:48:33
+
+```
+
+
+## The Intermediate Certificate 
+
+```bash
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 4096 (0x1000)
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=US, O=test1.acme.com, CN=RootCA
+        Validity
+            Not Before: Jun 21 22:55:22 2017 GMT
+            Not After : Sep 29 22:55:22 2017 GMT
+        Subject: C=US, O=test1.acme.com, CN=IntermediaetCA
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (4096 bit)
+                Modulus (4096 bit):
+                    00:cb:a0:1b:2f:20:5b:62:e6:5c:f2:bb:af:e1:3b:
+                    a1:ae:1a:68:96:ab:0b:11:d2:70:db:6e:63:16:38:
+                    0b:51:50:c3:86:8f:67:d3:65:17:f8:2d:62:7a:b5:
+                    12:9f:a6:13:b3:9a:ae:8c:a9:08:9a:ff:0f:50:5c:
+                    83:b9:3f:b1:f1:5e:8a:a0:ff:50:e1:61:4c:98:8c:
+                    fa:bf:c7:2b:06:a9:b2:91:f2:2a:6a:e9:5a:e4:d0:
+                    40:db:91:75:12:e5:88:cc:f7:02:eb:83:44:c4:80:
+                    1c:19:2c:dc:e0:e4:57:5e:a2:80:d2:ed:64:4b:74:
+                    ed:65:d8:22:f0:80:26:37:c2:45:ec:df:ec:f2:d5:
+                    c2:72:1f:a1:f1:7a:2f:ac:a5:78:31:f5:bc:45:b9:
+                    97:2d:e9:4c:9a:13:94:70:97:d6:d6:73:78:43:c6:
+                    70:ef:71:e9:f8:ca:af:b0:0f:e0:9d:22:6c:73:99:
+                    85:89:35:d6:7c:25:57:83:93:75:9f:5f:8b:af:af:
+                    68:b1:32:a7:f2:f5:a9:c7:be:2a:28:90:4b:9c:19:
+                    02:be:e5:e2:8c:e9:57:54:90:9b:db:7f:2f:19:7b:
+                    e0:76:5c:28:f2:77:2c:d5:7e:f3:2d:3f:e1:4c:54:
+                    38:26:6e:be:f4:ac:3e:5f:19:ee:4c:35:9b:b1:0c:
+                    46:23:67:8c:77:dc:5b:3b:56:17:3e:d6:08:7a:a8:
+                    df:62:86:85:d9:73:27:30:fb:1a:f7:9b:13:76:5b:
+                    f6:eb:ee:65:e9:65:66:3d:8a:7b:b1:ed:1c:64:0b:
+                    8d:3e:a7:1a:7c:b9:ef:4b:eb:c5:f5:cd:57:cb:f0:
+                    7e:2b:53:31:df:18:fb:9f:73:c6:4c:94:39:0b:57:
+                    c3:7a:d2:58:86:b5:91:7c:67:d8:b8:53:c1:3f:68:
+                    ee:c8:63:33:77:a1:59:31:54:3f:27:ed:fd:b7:63:
+                    74:98:6f:95:ca:ab:f9:85:6a:9b:ee:94:1c:0f:79:
+                    f0:19:ef:d1:74:5a:ca:7f:f4:5b:69:ec:09:92:52:
+                    94:6e:80:34:11:a0:b0:be:7c:8d:90:92:fd:eb:dd:
+                    2c:42:d8:2a:28:41:36:01:9c:71:c9:bc:a0:c7:90:
+                    25:d0:65:ef:1c:2a:71:be:d4:d6:bb:70:13:1b:08:
+                    0b:8a:eb:6a:4e:08:c9:6e:4a:28:0a:36:c0:31:39:
+                    9d:34:f1:2b:d6:19:0c:51:8c:6d:2f:5e:ad:74:f2:
+                    0d:22:c3:22:c3:fb:60:73:28:e7:6f:ac:00:75:44:
+                    d1:e5:95:47:31:81:84:45:32:32:75:f8:16:f8:ef:
+                    42:f3:23:0d:8b:79:15:27:5b:76:3a:6d:2b:97:d4:
+                    bf:69:4d
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                E0:FF:0F:D6:A3:2D:C1:78:06:D8:61:37:CA:B7:B6:63:B5:E2:0F:05
+            X509v3 Authority Key Identifier: 
+                keyid:6D:FA:F9:2A:B8:6C:5D:7B:B4:C3:07:E1:B4:DE:39:34:22:1C:FA:26
+
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Key Usage: critical
+                Digital Signature, Certificate Sign, CRL Sign
+            X509v3 Name Constraints: critical
+                Permitted:
+                  URI:.dev.acme.com
+                  URI:dev.acme.com
+
+    Signature Algorithm: sha256WithRSAEncryption
+        4b:52:3f:8c:9d:8b:df:6a:ac:2b:e4:83:3c:46:e4:0d:12:24:
+        82:74:73:ec:1f:93:50:cc:0f:30:21:2a:1a:b7:00:34:a4:22:
+        8b:ae:af:a0:f7:fe:fe:44:0d:88:7e:f4:83:ef:2a:4e:e4:af:
+        ae:29:6f:15:d5:0b:ee:15:4b:a1:5d:53:16:c3:ad:17:7d:fb:
+        1b:09:0b:9a:9a:0f:68:2a:9b:f5:d1:f4:f5:99:a0:44:a3:04:
+        85:ae:cb:f2:f7:a3:d9:b6:90:af:52:35:98:e6:2b:eb:52:ed:
+        2b:89:b9:ea:2b:9a:be:50:4a:cf:2a:83:37:63:7f:f7:71:94:
+        89:d4:28:96:93:64:7a:9e:f3:e8:88:aa:e7:af:2a:a1:44:22:
+        25:a7:dc:d3:28:6d:14:92:65:85:34:4d:d7:05:3a:66:dd:5c:
+        39:33:bf:11:0c:ca:e0:97:1f:c9:96:1d:20:3f:4d:83:68:89:
+        a2:d6:70:f5:6d:29:35:1f:98:5c:ec:8e:21:01:98:98:ce:88:
+        e6:bf:cc:89:f0:47:49:f4:b0:8b:f1:ca:89:77:b7:3c:69:3f:
+        c8:57:f3:fc:02:d0:44:25:9c:b2:4a:9b:df:e9:0a:4a:15:f7:
+        7c:41:e1:df:3e:69:85:b0:d9:ec:95:cf:07:be:f5:09:3a:75:
+        dc:ee:1c:fb:c1:ba:ec:9f:66:fc:e4:a4:5e:0e:46:cb:4c:42:
+        53:20:0c:87:cb:2c:c9:ca:2b:4c:41:f7:a8:6d:9c:54:48:c9:
+        77:87:b7:70:11:af:ff:a3:b3:2e:b7:e8:ed:9f:2f:1e:67:bb:
+        f6:b5:7c:df:77:7c:ca:0d:de:c2:da:f3:4e:6a:85:72:d3:25:
+        0e:4b:77:ec:cb:ca:27:f2:a5:66:ba:b5:92:78:ef:e9:73:96:
+        31:c6:2f:c1:91:8f:a8:52:5a:58:28:e7:26:53:7a:74:fc:dd:
+        43:94:30:52:1b:b1:a2:73:d6:56:7f:66:68:1f:14:aa:7f:96:
+        04:f3:c5:5e:06:d3:f0:33:03:1b:b0:c0:50:8b:68:19:06:e0:
+        ed:f3:0f:e2:24:a6:d4:15:f6:78:e1:08:4e:45:34:60:5c:c6:
+        c0:a7:a1:72:6a:e6:99:dd:92:2a:7a:10:99:6d:14:97:9a:5b:
+        04:8d:21:0c:e9:77:59:7b:86:96:f7:a4:fc:76:f7:f3:f7:78:
+        36:bf:e0:ab:5e:4d:4d:96:c2:28:63:18:7c:00:cf:24:58:82:
+        38:a7:cb:03:78:6c:00:36:93:c3:1c:b5:d8:52:65:71:ff:f4:
+        39:9f:c1:13:e6:35:e2:1a:d5:aa:c3:17:60:70:c6:d1:9f:8e:
+        cd:dc:70:5c:14:61:b8:6
 
 ```

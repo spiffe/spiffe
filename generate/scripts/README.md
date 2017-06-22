@@ -60,3 +60,10 @@ spiffe//.acme.com
 
 
 
+## Libraries 
+
+
+| mustache | https://github.com/mustache/spec.git spec | Library to handle Mustache templates in Bash |
+| csv | https://github.com/geoffroy-aubry/awk-csv-parser.git | | 
+
+

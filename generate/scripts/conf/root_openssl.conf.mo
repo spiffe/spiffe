@@ -1,16 +1,15 @@
-# OpenSSL intermediate CA configuration file.
-# Copy to `/root/ca/intermediate/openssl.cnf`.
+# OpenSSL root CA configuration file.
+# Copy to `/root/ca/openssl.cnf`.
+
+HOME = .
+dir = ${ENV::HOME_CA}
 
 [ ca ]
 # `man ca`
-default_ca        = CA_default
+default_ca = CA_default
 
 [ CA_default ]
 # Directory and file locations.
-HOME_INTER = .
-dir = ${ENV::HOME_INTER}
-
-
 certs             = $dir/certs
 crl_dir           = $dir/crl
 new_certs_dir     = $dir/newcerts
@@ -19,12 +18,12 @@ serial            = $dir/serial
 RANDFILE          = $dir/private/.rand
 
 # The root key and root certificate.
-private_key       = $dir/private/intermediate.key.pem
-certificate       = $dir/certs/intermediate.cert.pem
+private_key       = $dir/private/ca.key.pem
+certificate       = $dir/certs/ca.cert.pem
 
 # For certificate revocation lists.
 crlnumber         = $dir/crlnumber
-crl               = $dir/crl/intermediate.crl.pem
+crl               = $dir/crl/ca.crl.pem
 crl_extensions    = crl_ext
 default_crl_days  = 30
 
@@ -33,21 +32,20 @@ default_md        = sha256
 
 name_opt          = ca_default
 cert_opt          = ca_default
-default_days      = 375
+default_days      = 365
 preserve          = no
-policy            = policy_loose
+policy            = policy_strict
 
 #=================================
 # Configuration
 #---------------------------------
 
-[ policy_loose ]
-# Allow the intermediate CA to sign a more diverse range of certificates.
-# See the POLICY FORMAT section of the `ca` man page.
+[ policy_strict ]
+# The root CA should only sign intermediate certificates that match.
+# See the POLICY FORMAT section of `man ca`.
 countryName             = optional
 stateOrProvinceName     = optional
-localityName            = optional
-organizationName        = optional
+organizationName        = match
 organizationalUnitName  = optional
 commonName              = supplied
 emailAddress            = optional
@@ -92,18 +90,17 @@ subjectKeyIdentifier   = hash
 authorityKeyIdentifier = keyid:always,issuer
 basicConstraints       = critical, CA:true
 keyUsage               = critical, digitalSignature, cRLSign, keyCertSign
+nameConstraints        = critical, {{ SPIFFE_ROOT_NS }}
 
-[ server_cert ]
-# Extensions for server certificates (`man x509v3_config`).
-basicConstraints       = CA:FALSE
+[ v3_intermediate_ca ]
+# Extensions for a typical intermediate CA (`man x509v3_config`).
 subjectKeyIdentifier   = hash
-authorityKeyIdentifier = keyid,issuer:always
-keyUsage               = critical, digitalSignature, keyEncipherment, keyAgreement
-extendedKeyUsage       = serverAuth
-subjectAltName         = @alternate_names
+authorityKeyIdentifier = keyid:always,issuer
 
-[ alternate_names ]
-URI.0                  = spiffe://dev.acme.com/service/blog
+# TODO: No pathLenConstraint, just True for CA, does this suffice
+basicConstraints       = critical, CA:true
+keyUsage               = critical, digitalSignature, cRLSign, keyCertSign
+nameConstraints        = critical, {{ SPIFFE_INTER_NS }}
 
 [ crl_ext ]
 # Extension for CRLs (`man x509v3_config`).
