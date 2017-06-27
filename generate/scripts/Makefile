@@ -7,11 +7,13 @@ VERSION = 0.1.1
 MKDIR_P = mkdir -p 
 
 MY_PWD = $(shell pwd)
-SRC_CERTS_DIR = $(MY_PWD)/../.certs
-SRC_CONF_DIR  = $(MY_PWD)/conf
+SRC_CERTS_DIR = $(MY_PWD)/../../.certs
+SRC_CONF_DIR  = $(MY_PWD)/../../conf
+SRC_TEMPLATES_DIR = $(MY_PWD)/templates
 
 CERTS_DIR     = /spiffe/certs
 CONF_DIR      = /spiffe/conf
+TEMPLATES_DIR = /spiffe/templates
 GEN_DIR       = /spiffe/svid/gen
 
 
@@ -47,12 +49,17 @@ tag_latest:
 
 generate:
 	@echo "Generate ..."
-	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(GEN_DIR)/generate_ca.sh  $(CERTS_DIR) $(CONF_DIR) 
+	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) \
+	-v $(SRC_CONF_DIR):$(CONF_DIR) \
+	-v $(SRC_TEMPLATES_DIR):$(TEMPLATES_DIR) \
+	-it $(NAME):$(VERSION) $(GEN_DIR)/generate_ca.sh  $(CERTS_DIR) $(CONF_DIR) $(TEMPLATES_DIR)
 
 
 run:
 	@echo "Run container: $(NAME)"
-	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) /bin/bash
+	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) \
+	-v $(SRC_TEMPLATES_DIR):$(TEMPLATES_DIR) \
+	-v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) /bin/bash
 
 last_build_date:
 	docker inspect -f '{{ .Created }}' $(NAME):$(VERSION)
