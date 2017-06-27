@@ -3,7 +3,6 @@
 # Go to the script's directory
 cd "$(dirname "$0")"
 
-
 # The return value of a pipeline is the value of the last (rightmost) command to exit with a non-zero status,
 # or zero if all commands in the pipeline exit successfully:
 set -o pipefail
@@ -13,7 +12,6 @@ BASH_XTRACEFD="5"
 PS4='$LINENO: '
 
 MO=./.lib/mo/mo
-
 
 # TODO: Move to a lib ?
 VERBOSITY=4
@@ -71,11 +69,9 @@ function esilent_exec() {
     "$@" 2>/dev/null
 }
 
-
-
 function usage  {
    esilent "Usage ./generate_ca.sh <org_domain> <service_name> <base_directory> <config_directory>"
-   esilent "eg. ./generate_ca.sh acme.com blogserver ./.certs/ ./conf"
+   esilent "eg. ./generate_ca.sh acme.com blogserver ./.certs/ ./templates"
 
 }
 
@@ -86,32 +82,16 @@ function description {
    esilent "certificate keypair, intermediate cert keypair, and a final"
    esilent "SPIFFE certificate suitable for use in mTLS"
    esilent "  BASE:        ${BASE}"
-   esilent "  CONF_BASE: ${COND_BASE}"
+   esilent "  CONF_BASE: ${CONF_BASE}"
+   esilent "  TEMPLATES BASE: ${TEMPLATES_BASE} "
    esilent "----------------------------------------------------------------"
-}
-
-function setup_confs {
-
-    local base_ca=${1}
-    local base_inter=${2}
-    local conf_source=${3}
-
-    einfo "Setup OpenSSL configuration files."
-
-    if [ ! -e "${base_ca}/openssl.conf" ]; then
-        cp ${conf_source}/root_openssl.conf ${base_ca}/openssl.conf
-    fi
-
-    if [ ! -e "${base_inter}/openssl.conf" ]; then
-        cp ${conf_source}/intermediate_openssl.conf ${base_inter}/openssl.conf
-    fi
 }
 
 function setup_confs_templates {
 
     local base_ca=${1}
     local base_inter=${2}
-    local conf_source=${3}
+    local templates_source=${3}
     local ns_root=${4}
     local ns_inter=${5}
     local spiffe_id=${6}
@@ -121,21 +101,20 @@ function setup_confs_templates {
     einfo "Setup OpenSSL configuration files."
     einfo "------------------------"
 
-    if [ ! -e "${base_ca}/openssl.conf" ]; then
+    if [ ! -e "${base_ca}/openssl.templates" ]; then
         # Namespace are delimited with |
         export SPIFFE_ROOT_NS="${ns_root/|/,}"
         export SPIFFE_INTER_NS="${ns_inter/|/,}"
 
-        cat ${conf_source}/root_openssl.conf.mo | $MO > ${base_ca}/openssl.conf
+        cat ${templates_source}/root_openssl.conf.mo | $MO > ${base_ca}/openssl.conf
     fi
 
-    if [ ! -e "${base_inter}/openssl.conf" ]; then
+    if [ ! -e "${base_inter}/openssl.templates" ]; then
         export SPIFFE_ID=${spiffe_id}
 
-        cat ${conf_source}/intermediate_openssl.conf.mo | $MO > ${base_inter}/openssl.conf
+        cat ${templates_source}/intermediate_openssl.conf.mo | $MO > ${base_inter}/openssl.conf
     fi
 }
-
 
 function _setup_dirs {
 
@@ -163,7 +142,6 @@ function setup_root_dirs {
 
     local base_dir=${1}
     _setup_dirs  ${base_dir} serial
-
 }
 
 function setup_intermediate_dirs {
@@ -367,7 +345,7 @@ function create_leaf {
 #================================
 # Check input parameters
 #--------------------------------
-if [ $# -ne 2 ]; then
+if [ $# -ne 3 ]; then
   usage
   exit
 fi
@@ -377,6 +355,7 @@ fi
 #--------------------------------
 BASE=${1}
 CONF_BASE=${2}
+TEMPLATES_BASE=${3}
 
 # TODO Hardcoded pass phrases for testing
 ROOT_PASS=blah
@@ -413,7 +392,7 @@ description
         setup_intermediate_dirs ${dir_base_inter}
         setup_leaf_dirs ${dir_base_leaf}
 
-        setup_confs_templates ${dir_base_ca} ${dir_base_inter} ${CONF_BASE} "${col_root_ns}" "${col_inter_ns}" ${col_spiffe_id} ${col_san}
+        setup_confs_templates ${dir_base_ca} ${dir_base_inter} ${TEMPLATES_BASE} "${col_root_ns}" "${col_inter_ns}" ${col_spiffe_id} ${col_san}
 
         create_trust_root ${dir_base_ca} ${ROOT_PASS} ${col_org}
 
@@ -421,6 +400,5 @@ description
 
         create_leaf ${dir_base_inter} ${dir_base_leaf} ${INTER_PASS} ${LEAF_PASS} ${col_org} ${col_service_name}
 
-        # exit
     done
 } < ${CONF_BASE}/cert_conf.csv

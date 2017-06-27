@@ -7,6 +7,9 @@ set -e
 
 BASH_XTRACEFD="5"
 PS4='$LINENO: '
+EXEC_MSG="------------ NONE --------------"
+OPENSSL_RC=0
+_RESULT_FILE="openssl.csv"
 
 VERBOSITY=8
 
@@ -50,9 +53,13 @@ function elog_plain() {
     fi
 }
 
+function esilent_exec() {
+    EXEC_MSG=$( "$@" 2>/dev/null )
+}
+
 function usage  {
-    esilent "Usage ./verify_ca.sh <service_name> <base_directory> <config_directory>"
-    esilent "eg.   ./verify_ca.sh acme.com blogserver ./.certs/ ./conf"
+    esilent "Usage ./verify_ca.sh <service_name> <certs_directory> <config_directory> <output_directory>"
+    esilent "eg.   ./verify_ca.sh acme.com blogserver ./.certs/ ./templates ./results"
 
 }
 
@@ -75,45 +82,68 @@ function verify {
     local service_name=${3}
 
     set +e
-    ( exec openssl verify -CAfile ${dir_base_inter}/certs/ca-chain.cert.pem \
-        ${dir_base_leaf}/certs/${service_name}.cert.pem )
+    esilent_exec openssl verify -CAfile ${dir_base_inter}/certs/ca-chain.cert.pem \
+           ${dir_base_leaf}/certs/${service_name}.cert.pem
+    OPENSSL_RC=$?
     set -e
-
 }
 
-function clean_up {
+function setup_result_file {
 
-    einfo "EXIT ==============="
+    local result_base=${1}
+
+    # check if the file exists.
+    if [ ! -f "${result_base}/${RESULT_FILE}" ] ;  then
+        # if file does not exist create
+        touch ${result_base}/${RESULT_FILE}
+    fi
 }
 
 #================================
 # Check input parameters
 #--------------------------------
-if [ $# -ne 2 ]; then
-  usage
-  exit
+if [ $# -ne 3 ] ; then
+    usage
+    exit
 fi
 
-BASE=${1}
+CERTS_BASE=${1}
 CONF_BASE=${2}
+RESULTS_BASE=${3}
+OPENSSL_VERSION=$(openssl version)
+
+RESULT_FILE=${RESULTS_BASE}/${_RESULT_FILE}
 
 trap clean_up SIGHUP SIGINT SIGTERM
 
-
 description
 
+setup_result_file ${RESULT_BASE}
 
 {
+    # Read off the first line describing Columns
     read
-    while IFS=, read col_org col_service; do
 
-        dir_base_inter="${BASE}/org/${col_org}/intermediate"
-        dir_base_leaf="${BASE}/org/${col_org}/leaf"
+    # Print out Header file
+    echo "\"OPENSSL VERSION\", \"ROOT Name Constraint\", \"Intermediate Name Constraint\", \"SPIFFE_ID\", \"FAIL|PASS\", \"MSG\"" > "${RESULT_FILE}"
 
-        einfo $col_org
-        einfo $col_service
+    while IFS=, read col_org col_service col_root_ns col_inter_ns col_spiffe_id ; do
+
+        dir_base_inter="${CERTS_BASE}/org/${col_org}/intermediate"
+        dir_base_leaf="${CERTS_BASE}/org/${col_org}/leaf"
 
         verify ${dir_base_inter} ${dir_base_leaf} ${col_service}
+
+        if [ "${OPENSSL_RC}" -eq 0 ] ; then
+            einfo "pass"
+            echo "\"${OPENSSL_VERSION}\", \"${col_root_ns}\", \"${col_inter_ns}\", \"${col_spiffe_id}\", \"PASS\", \"NO MSG\"" >> "${RESULT_FILE}"
+        else
+            eerror "fail"
+            echo  "\"${OPENSSL_VERSION}\", \"${col_root_ns}\", \"${col_inter_ns}\", \"${col_spiffe_id}\", \"FAIL\", \"${EXEC_MSG}\"" >> "${RESULT_FILE}"
+
+
+        fi
+
 
     done
 

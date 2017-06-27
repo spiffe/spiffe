@@ -4,15 +4,18 @@ NAME = spiffe/verify/bash
 
 VERSION = 0.1.1
 
-MKDIR_P = mkdir -p 
+MKDIR_P = mkdir -p
+RMDIR   = rmdir -Rf 
 
 MY_PWD = $(shell pwd)
-SRC_CERTS_DIR = $(MY_PWD)/../../generate/.certs
-SRC_CONF_DIR  = $(MY_PWD)/conf
+SRC_CERTS_DIR = $(MY_PWD)/../../.certs
+SRC_CONF_DIR  = $(MY_PWD)/../../conf
+SRC_RESULTS_DIR = $(MY_PWD)/../../.results/bash/openssl
 
 CERTS_DIR     = /spiffe/certs
 CONF_DIR      = /spiffe/conf
 VERIFY_DIR    = /spiffe/svid/verify
+RESULTS_DIR   = /spiffe/results
 
 ORG_NAME     ?= acme.com
 SERVICE_NAME ?= blog
@@ -27,9 +30,16 @@ build:
 
 setup:
 	@echo "======================"
-	@echo "Setup directories"
+	@echo "Setup directory: $(SRC_RESULTS_DIR) "
 	@echo "----------------------"
-	$(MKDIR_P) $(SRC_CERTS_DIR)
+	$(MKDIR_P) $(SRC_RESULTS_DIR)
+
+cleanup:
+	@echo "======================"
+	@echo "Cleaup results directory $(SRC_RESULTS_DIR)"
+	@echo "----------------------"
+	$(RMDIR) $(SRC_RESULTS_DIR)
+
 
 
 clean_exited:
@@ -42,11 +52,17 @@ tag_latest:
 
 verify:
 	@echo "Verify ..."
-	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) $(VERIFY_DIR)/verify_ca.sh  $(CERTS_DIR) $(CONF_DIR) 
+	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) \
+	-v $(SRC_CONF_DIR):$(CONF_DIR) \
+	-v $(SRC_RESULTS_DIR):$(RESULTS_DIR) \
+	-it $(NAME):$(VERSION) $(VERIFY_DIR)/verify_ca.sh  $(CERTS_DIR) $(CONF_DIR)  $(RESULTS_DIR) 
 
 run:
 	@echo "Run container: $(NAME)"
-	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) -v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) /bin/bash
+	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) \
+	-v $(SRC_CONF_DIR):$(CONF_DIR) \
+	-v $(SRC_RESULTS_DIR):$(RESULTS_DIR) \
+	-it $(NAME):$(VERSION) /bin/bash
 
 last_build_date:
 	docker inspect -f '{{ .Created }}' $(NAME):$(VERSION)
