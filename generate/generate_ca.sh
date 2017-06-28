@@ -307,19 +307,19 @@ function create_leaf {
             einfo "Create service ${service_name} keypair..."
 
             esilent_exec openssl genrsa \
-                -out private/${service_name}.key.pem \
+                -out private/leaf.key.pem \
                 -passout pass:${leaf_passphrase} \
                 2048
 
-            chmod 700 private/${service_name}.key.pem
+            chmod 700 private/leaf.key.pem
 
             esilent_exec openssl req \
                 -config ${dir_base_inter}/openssl.conf \
                 -passin pass:${leaf_passphrase} \
-                -key private/${service_name}.key.pem \
+                -key private/leaf.key.pem \
                 -new \
                 -sha256 \
-                -out csr/${service_name}.csr.pem \
+                -out csr/leaf.csr.pem \
                 -subj "/C=US/O=${org_name}/CN=${service_name}"
 
             # CA sign the csr and return a certificate
@@ -331,12 +331,12 @@ function create_leaf {
                 -notext \
                 -md sha256 \
                 -passin pass:${inter_passphrase} \
-                -in csr/${service_name}.csr.pem \
-                -out certs/${service_name}.cert.pem \
+                -in csr/leaf.csr.pem \
+                -out certs/leaf.cert.pem \
                 -subj "/C=US/O=${org_name}/CN=${service_name}"
 
             einfo_exec openssl x509 -noout -text \
-                -in certs/${service_name}.cert.pem
+                -in certs/leaf.cert.pem
         popd
     fi
 
@@ -369,9 +369,13 @@ description
     # Get rid of the first line, Header file in the CSV file
     read
     # while IFS= read -r line; do
-    while IFS=, read col_org col_service_name col_root_ns col_inter_ns col_spiffe_id; do
+    while IFS=, read col_org col_service_name col_root_ns col_inter_ns col_spiffe_id col_expected_result; do
 
-        dir_base="${BASE}/org/${col_org}"
+        if [ ${col_expected_result} == "PASS" ]; then
+            dir_base="${BASE}/good/${col_org}"
+        else
+            dir_base="${BASE}/bad/${col_org}"
+        fi
 
         dir_base_ca=${dir_base}/ca
         dir_base_inter=${dir_base}/intermediate

@@ -1,4 +1,3 @@
-
 FROM alpine:latest
 
 MAINTAINER Emiliano Berenbaum "emiliano@scytale.io"
@@ -13,7 +12,7 @@ RUN apk update && apk upgrade && \
     apk add --no-cache bash git
 
 
-ADD ./bash /spiffe/svid/gen
+ADD ./generate_ca.sh /spiffe/svid/gen/generate_ca.sh
 
 WORKDIR /spiffe/svid/gen
 

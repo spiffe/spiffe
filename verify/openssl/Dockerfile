@@ -13,8 +13,8 @@ RUN apk add --update openssl && \
 RUN apk update && apk upgrade && \
     apk add --no-cache bash
 
-ADD ./bash /spiffe/svid/verify
+ADD ./verify_ca.sh /
 
-WORKDIR /spiffe/svid/verify
+WORKDIR /
 
-# ENTRYPOINT [ "/spiffe/svid/verify/verify_ca.sh" ]
+ENTRYPOINT [ "/verify_ca.sh" ]
