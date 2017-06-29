@@ -11,7 +11,7 @@ all: .venv generate verify
 	.venv/bin/pip install pytest-xdist
 	.venv/bin/pip install docker
 
-generate: .certs
+generate:
 	make -C generate setup build generate clean_exited
 
 verify: .venv
