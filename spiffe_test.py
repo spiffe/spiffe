@@ -87,17 +87,8 @@ class TestSuite:
 	_helper = SuiteHelper(docker.from_env())
 	_helper.prepare()
 
-	# def setup_class(cls):
-	# 	_helper.prepare()
-
 	def teardown_class(cls):
 		TestSuite._helper.cleanup()
-	# @pytest.fixture(scope="module")
-	# def suite_helper():
-	# 	helper = SuiteHelper(docker.from_env())
-	# 	helper.prepare()
-	# 	yield helper
-	# 	helper.cleanup
 
 	@pytest.mark.parametrize("orgPath", _helper.good_orgs)
 	@pytest.mark.parametrize("image", _helper.images)
