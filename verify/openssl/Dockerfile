@@ -3,8 +3,8 @@
 FROM alpine:latest
 
 MAINTAINER Emiliano Berenbaum "emiliano@scytale.io"
-LABEL Description="OpenSSL shell SVID generation"
-LABEL vendor="Spiffe"
+LABEL Description="OpenSSL SVID test"
+LABEL vendor="SPIFFE"
 
 # install openssl
 RUN apk add --update openssl && \

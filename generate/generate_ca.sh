@@ -342,6 +342,15 @@ function create_leaf {
 
 }
 
+# Copy instead of link just in case link poses portability problems
+function copy_certs_to_root {
+
+    local org_base=${1}
+
+    cp ${org_base}/intermediate/certs/ca-chain.cert.pem ${org_base}
+    cp ${org_base}/leaf/certs/leaf.cert.pem ${org_base}
+}
+
 #================================
 # Check input parameters
 #--------------------------------
@@ -403,6 +412,8 @@ description
         create_intermediate ${dir_base_ca} ${dir_base_inter} ${ROOT_PASS} ${INTER_PASS} ${col_org}
 
         create_leaf ${dir_base_inter} ${dir_base_leaf} ${INTER_PASS} ${LEAF_PASS} ${col_org} ${col_service_name}
+
+        copy_certs_to_root ${dir_base}
 
     done
 } < ${CONF_BASE}/cert_conf.csv

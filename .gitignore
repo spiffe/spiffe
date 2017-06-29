@@ -1,10 +1,5 @@
 .idea
-*.certs
-python/venv
-python/spiffe.cert.pem
-python/spiffe.key.pem
-scripts/org/*
-*.venv
+.certs
+.venv
 *.pyc
 *~
-.results
