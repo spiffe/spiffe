@@ -1,7 +1,9 @@
 import docker
+import glob
+import os
 import pytest
 
-class ImageBuilder
+class ImageBuilder:
 	"""A class to build test modules images"""
 	def __init__(self, docker, modules):
 		"""Initialize with docker client and a list of modules"""
@@ -12,51 +14,54 @@ class ImageBuilder
 	def run(self):
 		"""Discover available modules and build each one"""
 		for module in self._modules:
+			if not os.path.isfile(os.path.join(module, "Dockerfile")):
+				continue
 			self.build(module)
 
 	def build(self, modulePath):
 		"""Build an image for the requested module"""
 		buildParams = {
 			"path": os.path.abspath(modulePath),
-			"rm": true,
-			"forcerm": true
+			"rm": True,
+			"forcerm": True
 		}
-		new_image = self._docker.images.build(buildParams)
+		new_image = self._docker.images.build(**buildParams)
 		self._images.append(new_image)
 
 	def cleanup(self):
 		"""Remove all module images"""
-		for image in self._images:
-			self._docker.images.remove(image)
+		for image in list(self._images):
+			self._docker.images.remove(image.short_id)
+			self._images.remove(image)
 
 	@property
 	def images(self):
 		"""Accessor containing all built images"""
 		return self._images	
 
-class SuiteHelper
+class SuiteHelper:
 	"""A class which exposes helper methods for the test suite"""
 	def __init__(self, docker, modulePath="verify", certPath=".certs"):
 		"""Initialize with docker client and path to the modules"""
-		self._path = path
+		self._module_path = modulePath
+		self._cert_path = certPath
 		self._docker = docker
-	
-	# def run(self):
-	# 	"""Run the full suite"""
-	# 	self.prepare
-	# 	self.cleanup	
 
 	def prepare(self):
 		"""Build data necessary to run the tests"""
-		self._modules = glob.glob(os.path.join(self._path, "*"))
-		self._goodCerts = glob.glob(os.path.join(self._path, "good", "*"))
-		self._badCerts = glob.glob(os.path.join(self._path, "bad", "*"))
+		self._modules = glob.glob(os.path.join(self._module_path, "*"))
+		self._goodCerts = glob.glob(os.path.join(self._cert_path, "good", "*"))
+		self._badCerts = glob.glob(os.path.join(self._cert_path, "bad", "*"))
 		self._imageBuilder = ImageBuilder(self._docker, self._modules)
-		self._imageBuilder.run
+		self._imageBuilder.run()
+
+	def runc(self, image, params):
+		"""Expose docker run"""
+		self._docker.containers.run(image, **params)
 
 	def cleanup(self):
-		"""Dont leave shit laying around"""
-		self._imageBuilder.cleanup
+		"""Remove the images we built"""
+		self._imageBuilder.cleanup()
 
 	@property
 	def images(self):
@@ -73,42 +78,59 @@ class SuiteHelper
 		"""Returns list of all "bad" org paths"""
 		return self._badCerts
 
-class TestSuite
-	# FIXME: Need to figure out how to init SuiteHelper and manage lifecycle
-	@pytest.mark.parametrize("orgPath", SuiteHelper().good_orgs)
-	@pytest.mark.parametrize("image", SuiteHelper().images)
+	@property
+	def builder(self):
+		"""Returns the helper's ImageBuilder instance"""
+		return self._imageBuilder
+
+class TestSuite:
+	_helper = SuiteHelper(docker.from_env())
+	_helper.prepare()
+
+	# def setup_class(cls):
+	# 	_helper.prepare()
+
+	def teardown_class(cls):
+		TestSuite._helper.cleanup()
+	# @pytest.fixture(scope="module")
+	# def suite_helper():
+	# 	helper = SuiteHelper(docker.from_env())
+	# 	helper.prepare()
+	# 	yield helper
+	# 	helper.cleanup
+
+	@pytest.mark.parametrize("orgPath", _helper.good_orgs)
+	@pytest.mark.parametrize("image", _helper.images)
 	def test_good_cert(self, orgPath, image):
 		"""Test the given cert and module, assert that it passes"""
 		runParams = {
-			"detach": true,
-			"image": image,
+			"remove": True,
 			"volumes": {
-				orgPath: {
+				os.path.abspath(orgPath): {
 					"bind": "/certs",
 					"mode": "ro"
 				}
 			}
 		}
 		try:
-			container = self._docker.containers.run(runParams)
-			assert true
-		except self._docker.errors.ContainerError:
-			assert false, "Validation failed with %s".format(result)
+			result = TestSuite._helper.runc(image, runParams)
+			assert True
+		except docker.errors.ContainerError:
+			assert False, "Validation failed with %s".format(result)
 
-	@pytest.mark.parametrize("orgPath", SuiteHelper().bad_orgs)
-	@pytest.mark.parametrize("image", SuiteHelper().images)
+	@pytest.mark.parametrize("orgPath", _helper.bad_orgs)
+	@pytest.mark.parametrize("image", _helper.images)
 	def test_bad_cert(self, orgPath, image):
 		"""Test the given cert and module, assert that it fails"""
 		runParams = {
-			"image": image,
-			"auto_remove": true,
+			"remove": True,
 			"volumes": {
-				orgPath: {
+				os.path.abspath(orgPath): {
 					"bind": "/certs",
 					"mode": "ro"
 				}
 			}
 		}
 		msg = "Invalid cert succeeded validation!"
-		with pytest.raises(self._docker.errors.ContainerError, msg)
-			self._docker.containers.run(runParams)
+		with pytest.raises(docker.errors.ContainerError, message=msg):
+			TestSuite._helper.runc(image, runParams)

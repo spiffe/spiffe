@@ -270,7 +270,7 @@ function create_intermediate {
             -in csr/intermediate.csr.pem \
             -out certs/intermediate.cert.pem
 
-            chmod 444 certs/intermediate.cert.pem
+            chmod 744 certs/intermediate.cert.pem
 
             einfo_exec openssl x509 -noout -text \
                 -in certs/intermediate.cert.pem

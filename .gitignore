@@ -1,5 +1,7 @@
 .idea
 .certs
 .venv
+.cache
+__pycache__
 *.pyc
 *~
