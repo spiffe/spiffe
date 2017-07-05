@@ -1,5 +1,6 @@
 # Generate Intermediate Certificates 
 
+This directory creates code to *generate* SVIDs using a range of tools.
 
 ## Create Dockerfile
 
@@ -24,44 +25,7 @@ $ docker run -v ${PWD}/../.certs:/spiffe/certs  -v ${PWD}/conf:/spiffe/conf -it 
 $ ./generate_ca.sh acme.com blog ${PWD}/../.certs ${PWD}/conf
 ```
 
-## Next steps
-
-Right now the configuration files are hard coded to the acme.com 
-domain.
-
-Need to determine how to pass the SPIFFE id configuration to the
-(SAN name and name constraints) into the OpenSSL CLI and or OpenSSL configuration files
- 
- 
-```bash
-
-$ generate_ca.sh  acme.com blog /spiffe/certs /spiffe/conf 
-
-```  
-
-
-OpenSSL parsing.
-
-Name Constraints for URI should not have a scheme, the current 
-parsing will not remove the "scheme" from the name constraint string 
-when matching it. 
- 
-Wild cards are "." symbol 
-
-```bash
-scheme:[//[user[:password]@]host[:port]][/path][?query][#fragment]
-
-example
-spiffe://acme.com 
-
-spiffe//.acme.com
-
-```
-
-
-
 ## Libraries 
-
 
 | mustache | https://github.com/mustache/spec.git spec | Library to handle Mustache templates in Bash |
 | csv | https://github.com/geoffroy-aubry/awk-csv-parser.git | | 
