@@ -8,7 +8,6 @@ cd "$(dirname "$0")"
 set -o pipefail
 set -e
 
-BASH_XTRACEFD="5"
 PS4='$LINENO: '
 
 MO=./.lib/mo/mo
