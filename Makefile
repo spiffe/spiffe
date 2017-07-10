@@ -13,7 +13,7 @@ all: .venv generate verify
 	.venv/bin/pip install docker
 
 lint:
-	.venv/bin/pyflakes spiffe_test.py
+	.venv/bin/pyflakes *.py
 
 generate:
 	make -C generate setup build generate clean_exited
