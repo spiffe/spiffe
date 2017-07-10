@@ -1,4 +1,4 @@
-.PHONY: all generate verify
+.PHONY: all generate verify clean
 export PYTHONDONTWRITEBYTECODE = 1
 
 default: all
