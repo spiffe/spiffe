@@ -9,7 +9,11 @@ all: .venv generate verify
 	virtualenv .venv
 	.venv/bin/pip install pytest
 	.venv/bin/pip install pytest-xdist
+	.venv/bin/pip install pyflakes
 	.venv/bin/pip install docker
+
+lint:
+	.venv/bin/pyflakes spiffe_test.py
 
 generate:
 	make -C generate setup build generate clean_exited
