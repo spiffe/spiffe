@@ -1,5 +1,10 @@
 # Contributing
 
+## Adding Test Modules
+Each test module has a dedicated subdirectory which stores a Dockerfile and any other required files or config. The suite will build each docker container and execute its entrypoint.
+
+Generated SPIFFE certificates will be mounted into the `/certs` directory. The CA chain is located at `/certs/ca-chain.cert.pem` and the leaf cert to validate is located at `/certs/leaf.cert.pem`. If the certificate validates successfully, the container should exit 0. Otherwise, print the error and exit non-zero.
+
 ## Submit a Pull Request
 1. Fork this repo
 1. Make your changes in a feature branch
