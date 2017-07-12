@@ -6,7 +6,7 @@ default: all
 all: .venv generate verify
 
 .venv:
-	virtualenv .venv
+	virtualenv .venv --always-copy
 	.venv/bin/pip install pytest
 	.venv/bin/pip install pytest-xdist
 	.venv/bin/pip install pyflakes
@@ -19,7 +19,9 @@ generate:
 	make -C generate setup build generate clean_exited
 
 verify: .venv
-	.venv/bin/pytest -n 4 --junitxml=test_report.xml --tb=line
+	.venv/bin/pytest -n 4 \
+	--tb=line \
+	--junitxml=test_report.xml
 
 clean:
 	rm -r ./.venv
