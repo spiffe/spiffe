@@ -33,7 +33,6 @@ For more information, see [the documentation on certificate generation](generate
 To test that the certificates you just generated can actually be verified, run:
 
 ```
-make .venv
 make verify
 ```
 
