@@ -3,7 +3,7 @@ import glob
 import os
 import pytest
 
-class ImageBuilder:
+class ImageBuilder(object):
 	"""A class to build test modules images"""
 	def __init__(self, docker, modules):
 		"""Initialize with docker client and a list of modules"""
@@ -20,10 +20,12 @@ class ImageBuilder:
 
 	def build(self, module_path):
 		"""Build an image for the requested module"""
+		module_name = os.path.basename(module_path)
 		build_params = {
 			"path": os.path.abspath(module_path),
 			"rm": True,
-			"forcerm": True
+			"forcerm": True,
+			"tag": "spiffe:{0}".format(module_name)
 		}
 		new_image = self._docker.images.build(**build_params)
 		self._images.append(new_image)
@@ -42,7 +44,7 @@ class ImageBuilder:
 		"""Accessor containing all built images"""
 		return self._images
 
-class SuiteHelper:
+class SuiteHelper(object):
 	"""A class which exposes helper methods for the test suite"""
 	def __init__(self, docker, module_path="verify", cert_path=".certs"):
 		"""Initialize with docker client and path to the modules"""

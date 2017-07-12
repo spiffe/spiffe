@@ -31,6 +31,10 @@ class TestSuite:
 				}
 			}
 		}
-		msg = "Invalid cert succeeded validation!"
+
+		cert_name = os.path.basename(bad_org)
+		msg = "Invalid cert {0} succeeded validation in module {1}!"
+		msg = msg.format(cert_name, image.tags[0])
+
 		with pytest.raises(docker.errors.ContainerError, message=msg):
 			runner(image, run_params)
