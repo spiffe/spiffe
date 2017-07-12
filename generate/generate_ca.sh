@@ -414,5 +414,7 @@ description
 
         copy_certs_to_root ${dir_base}
 
+        echo -n ${col_spiffe_id} > "${dir_base}/spiffe-id.txt"
+
     done
 } < ${CONF_BASE}/cert_conf.csv

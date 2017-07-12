@@ -62,7 +62,12 @@ class SuiteHelper(object):
 		self._imageBuilder.run()
 
 	def runc(self, image, params):
-		"""Expose docker run"""
+		"""Wrap docker run to inject SPIFFE ID as arg"""
+		org_path = params["volumes"].keys()[0]
+		id_file = open(os.path.join(org_path, "spiffe-id.txt"), "r")
+		spiffe_id = id_file.read()
+		params["command"] = spiffe_id
+
 		self._docker.containers.run(image, **params)
 
 	def cleanup(self):

@@ -14,11 +14,15 @@ class TestSuite(object):
 				}
 			}
 		}
+
 		try:
-			result = runner(image, run_params)
+			runner(image, run_params)
 			assert True
 		except docker.errors.ContainerError:
-			assert False, "Validation failed with %s".format(result)
+			cert_name = os.path.basename(good_org)
+			msg = "Valid cert {0} failed validation in module {1}!"
+			msg = msg.format(cert_name, image.tags[0])
+			assert False, msg
 
 	def test_bad_cert(self, bad_org, image, runner):
 		"""Test the given org cert and module, assert that it fails"""

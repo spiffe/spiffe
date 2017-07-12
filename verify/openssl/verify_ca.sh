@@ -12,7 +12,7 @@ function esilent_exec() {
 }
 
 function usage  {
-    esilent "Usage ./verify_ca.sh"
+    echo "Usage ./verify_ca.sh"
 }
 
 function verify {
@@ -26,9 +26,9 @@ function verify {
 #================================
 # Check input parameters
 #--------------------------------
-if [ $# -gt 0 ] ; then
+if [ $# -gt 1 ] ; then
     usage
-    exit
+    exit 1
 fi
 
 OPENSSL_VERSION=$(openssl version)
