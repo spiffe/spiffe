@@ -1,10 +1,8 @@
+test_report.xml
 .idea
-*.certs
-python/venv
-python/spiffe.cert.pem
-python/spiffe.key.pem
-scripts/org/*
-*.venv
+.certs
+.venv
+.cache
+__pycache__
 *.pyc
 *~
-.results

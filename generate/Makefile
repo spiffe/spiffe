@@ -1,24 +1,21 @@
 #==========================
 #-------------------------- 
-NAME = spiffe/verify/bash
+NAME = spiffe/gen/bash
 
 VERSION = 0.1.1
 
-MKDIR_P = mkdir -p
-RMDIR   = rmdir -Rf 
+MKDIR_P = mkdir -p 
 
 MY_PWD = $(shell pwd)
-SRC_CERTS_DIR = $(MY_PWD)/../../.certs
-SRC_CONF_DIR  = $(MY_PWD)/../../conf
-SRC_RESULTS_DIR = $(MY_PWD)/../../.results/bash/openssl
+SRC_CERTS_DIR = $(MY_PWD)/../.certs
+SRC_CONF_DIR  = $(MY_PWD)/conf
+SRC_TEMPLATES_DIR = $(MY_PWD)/templates
 
 CERTS_DIR     = /spiffe/certs
 CONF_DIR      = /spiffe/conf
-VERIFY_DIR    = /spiffe/svid/verify
-RESULTS_DIR   = /spiffe/results
+TEMPLATES_DIR = /spiffe/templates
+GEN_DIR       = /spiffe/svid/gen
 
-ORG_NAME     ?= acme.com
-SERVICE_NAME ?= blog
 
 .PHONY: all build
 
@@ -28,18 +25,18 @@ build:
 	@echo "----------------------"
 	docker build -t $(NAME):$(VERSION) --rm  .
 
+
 setup:
 	@echo "======================"
-	@echo "Setup directory: $(SRC_RESULTS_DIR) "
+	@echo "Setup directories"
 	@echo "----------------------"
-	$(MKDIR_P) $(SRC_RESULTS_DIR)
+	$(MKDIR_P) $(SRC_CERTS_DIR)
 
-cleanup:
+clean:
 	@echo "======================"
-	@echo "Cleaup results directory $(SRC_RESULTS_DIR)"
+	@echo "Cleanup certs: $(SRC_CERTS_DIR)"
 	@echo "----------------------"
-	$(RMDIR) $(SRC_RESULTS_DIR)
-
+	rm -Rf $(SRC_CERTS_DIR)/org/*
 
 
 clean_exited:
@@ -50,19 +47,19 @@ tag_latest:
 	docker tag -f $(NAME):$(VERSION) $(NAME):latest
 
 
-verify:
-	@echo "Verify ..."
+generate:
+	@echo "Generate ..."
 	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) \
 	-v $(SRC_CONF_DIR):$(CONF_DIR) \
-	-v $(SRC_RESULTS_DIR):$(RESULTS_DIR) \
-	-it $(NAME):$(VERSION) $(VERIFY_DIR)/verify_ca.sh  $(CERTS_DIR) $(CONF_DIR)  $(RESULTS_DIR) 
+	-v $(SRC_TEMPLATES_DIR):$(TEMPLATES_DIR) \
+	-it $(NAME):$(VERSION) $(GEN_DIR)/generate_ca.sh  $(CERTS_DIR) $(CONF_DIR) $(TEMPLATES_DIR)
+
 
 run:
 	@echo "Run container: $(NAME)"
 	docker run -v $(SRC_CERTS_DIR):$(CERTS_DIR) \
-	-v $(SRC_CONF_DIR):$(CONF_DIR) \
-	-v $(SRC_RESULTS_DIR):$(RESULTS_DIR) \
-	-it $(NAME):$(VERSION) /bin/bash
+	-v $(SRC_TEMPLATES_DIR):$(TEMPLATES_DIR) \
+	-v $(SRC_CONF_DIR):$(CONF_DIR) -it $(NAME):$(VERSION) /bin/bash
 
 last_build_date:
 	docker inspect -f '{{ .Created }}' $(NAME):$(VERSION)

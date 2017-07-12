@@ -3,8 +3,8 @@
 FROM alpine:latest
 
 MAINTAINER Emiliano Berenbaum "emiliano@scytale.io"
-LABEL Description="OpenSSL shell SVID generation"
-LABEL vendor="Spiffe"
+LABEL Description="OpenSSL SVID test"
+LABEL vendor="SPIFFE"
 
 # install openssl
 RUN apk add --update openssl && \
@@ -13,8 +13,8 @@ RUN apk add --update openssl && \
 RUN apk update && apk upgrade && \
     apk add --no-cache bash
 
-ADD ./bash /spiffe/svid/verify
+ADD ./verify_ca.sh /
 
-WORKDIR /spiffe/svid/verify
+WORKDIR /
 
-# ENTRYPOINT [ "/spiffe/svid/verify/verify_ca.sh" ]
+ENTRYPOINT [ "/verify_ca.sh" ]

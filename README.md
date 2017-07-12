@@ -11,6 +11,9 @@ that the two can be versioned in lock-step.
 ## Installing the test suite
 
 Running this test suite will require:
+* Make
+* Python 2.7+
+* Virtualenv
 * Docker (17.03.1-ce or higher reccomnded)
 
 To install, clone this repository into a suitable location.
@@ -20,9 +23,7 @@ To install, clone this repository into a suitable location.
 First, you need to generate a set of SVIDs. To do this:
 
 ```
-make -f generate/scripts/Makefile setup
-make -f generate/scripts/Makefile build
-make -f generate/scripts/Makefile generate
+make generate
 ```
 
 For more information, see [the documentation on certificate generation](generate/README.md)
@@ -32,9 +33,7 @@ For more information, see [the documentation on certificate generation](generate
 To test that the certificates you just generated can actually be verified, run:
 
 ```
-make -f verify/scripts/Makefile setup
-make -f verify/scripts/Makefile build
-make -f verify/scripts/Makefile verify
+make verify
 ```
 
 The output of this should be a report showing which tests succeeeded. For more information,
@@ -42,9 +41,8 @@ refer to [the documentation on the test suite](verify/README.md).
 
 ## Cleaning up
 
-To remove generated certificates, run:
+To remove generated certificates and python virtualenv, run:
 
 ```
-make -f generate/scripts/Makefile clean_exited
-make -f verify/scripts/Makefile clean_exited
+make clean
 ```

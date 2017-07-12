@@ -1,8 +1,0 @@
-ORG_NAME, SERVICE_NAME, ROOT NAME CONSTRAINT, INTERMEDIATE NAME CONSTRAINT, SPIFFE_ID
-test1.acme.com, blog, permitted;URI:.acme.com|permitted;URI:acme.com, permitted;URI:.dev.acme.com|permitted;URI:dev.acme.com, spiffe://dev.acme.com/path/service
-test2.acme.com, blog, permitted;URI:.dev.acme.com|permitted;URI:dev.acme.com, permitted;URI:.dev.acme.com|permitted;URI:dev.acme.com, spiffe://blog.prod.acme.com/path/service
-test3.acme.com, blog, permitted;URI:acme.com|permitted;URI:.acme.com, permitted;URI:dev.acme.com|permitted;URI:.dev.acme.com, spiffe://blog.dev.acme.com/path/service
-test4.acme.com, blog, permitted;URI:.corp.com, permitted;URI:dev.corp.com, spiffe://blog.dev.acme.com/path/service
-test5.acme.com, blog, permitted;URI:.corp.com|permitted;URI:corp.com, permitted;URI:.dev.corp.com, spiffe://blog.dev.acme.com/path/service
-test6.acme.com, blog, permitted;DNS:acme.com|permitted;DNS:.acme.com, permitted;DNS:.dev.acme.com|permitted;DNS:dev.acme.com, spiffe://blog.dev.acme.com/path/service
-test7.acme.com, blog, permitted;DNS:.acme.com, permitted;DNS:blog.dev.acme.com, spiffe://blog.dev.acme.com/path/service
