@@ -2,7 +2,7 @@ import docker
 import os
 import pytest
 
-class TestSuite:
+class TestSuite(object):
 	def test_good_cert(self, good_org, image, runner):
 		"""Test the given org cert and module, assert that it passes"""
 		run_params = {

@@ -37,6 +37,7 @@ class ImageBuilder(object):
 				self._docker.images.remove(image.short_id)
 				self._images.remove(image)
 			except docker.errors.ImageNotFound:
+				self._images.remove(image)
 				continue
 
 	@property
