@@ -5,4 +5,5 @@ test_report.xml
 .cache
 __pycache__
 *.pyc
+*.swp
 *~
