@@ -46,3 +46,22 @@ To remove generated certificates and python virtualenv, run:
 ```
 make clean
 ```
+
+## Running on Windows
+
+### Requirements
+
+[VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
+[Vagrant](https://www.vagrantup.com/downloads.html)
+
+### Starting your environment
+
+```bash
+vagrant up
+# wait for it...
+vagrant ssh
+cd /vagrant
+# from this point you will be at the root of the svid-test directory
+# and be able to run any of the make rules without having to worry about the requirements.
+```
