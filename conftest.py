@@ -3,47 +3,62 @@ import glob
 import os
 import pytest
 
-class ImageBuilder(object):
+class ModuleBuilder(object):
 	"""A class to build test modules images"""
 	def __init__(self, docker, modules):
-		"""Initialize with docker client and a list of modules"""
+		"""Initialize with docker client and a list of module paths"""
 		self._docker = docker
-		self._modules = modules
-		self._images = []
+		self._modules = {}
+		for module in modules:
+			self._modules[module] = {}
 
 	def run(self):
 		"""Discover available modules and build each one"""
-		for module in self._modules:
-			if not os.path.isfile(os.path.join(module, "Dockerfile")):
+		for module_path in self._modules.keys():
+			if not os.path.isfile(os.path.join(module_path, "Dockerfile")):
 				continue
-			self.build(module)
+			self.build(module_path)
 
 	def build(self, module_path):
 		"""Build an image for the requested module"""
-		module_name = os.path.basename(module_path)
+		module = {}
+		tag = "spiffe:{0}".format(os.path.basename(module_path))
 		build_params = {
 			"path": os.path.abspath(module_path),
 			"rm": True,
 			"forcerm": True,
-			"tag": "spiffe:{0}".format(module_name)
+			"tag": tag
 		}
+
 		new_image = self._docker.images.build(**build_params)
-		self._images.append(new_image)
+		expected_failures = self.load_expected_failures(module_path)
+		module["image"] = new_image
+		module["expected_failures"] = expected_failures
+		self._modules[module_path] = module
+
+	def load_expected_failures(self, module_path):
+		expected_failures = []
+		ef_file_path = os.path.join(module_path, "expected_failures")
+		if os.path.isfile(ef_file_path):
+			ef_file = open(ef_file_path, "r")
+			expected_failures = ef_file.read().splitlines()
+		return expected_failures
 
 	def cleanup(self):
 		"""Remove all module images"""
-		for image in list(self._images):
+		for name, module in list(self._modules.items()):
+			image = module["image"]
 			try:
 				self._docker.images.remove(image.short_id)
-				self._images.remove(image)
+				del self._modules[name]
 			except docker.errors.ImageNotFound:
-				self._images.remove(image)
+				del self._modules[name]
 				continue
 
 	@property
-	def images(self):
+	def modules(self):
 		"""Accessor containing all built images"""
-		return self._images
+		return self._modules
 
 class SuiteHelper(object):
 	"""A class which exposes helper methods for the test suite"""
@@ -58,8 +73,8 @@ class SuiteHelper(object):
 		self._modules = glob.glob(os.path.join(self._module_path, "*"))
 		self._goodCerts = glob.glob(os.path.join(self._cert_path, "good", "*"))
 		self._badCerts = glob.glob(os.path.join(self._cert_path, "bad", "*"))
-		self._imageBuilder = ImageBuilder(self._docker, self._modules)
-		self._imageBuilder.run()
+		self._moduleBuilder = ModuleBuilder(self._docker, self._modules)
+		self._moduleBuilder.run()
 
 	def runc(self, image, params):
 		"""Wrap docker run to inject SPIFFE ID as arg"""
@@ -75,12 +90,12 @@ class SuiteHelper(object):
 
 	def cleanup(self):
 		"""Remove the images we built"""
-		self._imageBuilder.cleanup()
+		self._moduleBuilder.cleanup()
 
 	@property
-	def images(self):
-		"""Returns list of all built images"""
-		return self._imageBuilder.images
+	def modules(self):
+		"""Returns list of all built modules"""
+		return self._moduleBuilder.modules
 
 	@property
 	def good_orgs(self):
@@ -94,8 +109,8 @@ class SuiteHelper(object):
 
 	@property
 	def builder(self):
-		"""Returns the helper's ImageBuilder instance"""
-		return self._imageBuilder
+		"""Returns the helper's ModuleBuilder instance"""
+		return self._moduleBuilder
 
 # Begin test config
 helper = SuiteHelper(docker.from_env())
@@ -107,7 +122,7 @@ def pytest_unconfigure(config):
 	helper.cleanup()
 
 def pytest_generate_tests(metafunc):
-	metafunc.parametrize("image", helper.images)
+	metafunc.parametrize("module", helper.modules.values())
 	if "good_org" in metafunc.fixturenames:
 		metafunc.parametrize("good_org", helper.good_orgs)
 	elif "bad_org" in metafunc.fixturenames:
