@@ -8,82 +8,58 @@ cd "$(dirname "$0")"
 set -o pipefail
 set -e
 
-PS4='$LINENO: '
+# Set this var to enable debug logging
+DEBUG=
 
 MO=./.lib/mo/mo
 
-# TODO: Move to a lib ?
-VERBOSITY=4
-
-colblk='\033[0;30m' # Black - Regular
-colred='\033[0;31m' # Red
-colgrn='\033[0;32m' # Green
-colylw='\033[0;33m' # Yellow
-colpur='\033[0;35m' # Purple
-colrst='\033[0m'    # Text Reset
-
-# Verbosity levels
-silent_lvl=0
-crt_lvl=1
-err_lvl=2
-wrn_lvl=3
-ntf_lvl=4
-inf_lvl=5
-dbg_lvl=6
-
-
-function esilent () { verb_lvl=$silent_lvl elog_plain "$@" ;}
-function enotify () { verb_lvl=$ntf_lvl elog "$@" ;}
-function eok ()    { verb_lvl=$ntf_lvl elog "SUCCESS - $@" ;}
-function ewarn ()  { verb_lvl=$wrn_lvl elog "${colylw}WARNING${colrst} - $@" ;}
-function einfo ()  { verb_lvl=$inf_lvl elog "${colwht}INFO${colrst} ---- $@" ;}
-function edebug () { verb_lvl=$dbg_lvl elog "${colgrn}DEBUG${colrst} --- $@" ;}
-function eerror () { verb_lvl=$err_lvl elog "${colred}ERROR${colrst} --- $@" ;}
-function ecrit ()  { verb_lvl=$crt_lvl elog "${colpur}FATAL${colrst} --- $@" ;}
-function edumpvar () { for var in $@ ; do edebug "$var=${!var}" ; done }
-
 function elog() {
-        if [ ${VERBOSITY} -ge ${verb_lvl} ]; then
-                datestring=`date +"%Y-%m-%d %H:%M:%S"`
-                echo -e "${datestring} - $@"
-        fi
+    datestring=`date +"%Y-%m-%d %H:%M:%S"`
+    echo -e "${datestring} - $@"
 }
 
-function elog_plain() {
-    if [ ${VERBOSITY} -ge ${verb_lvl} ]; then
-        echo -e "$@"
+function edebug_log() {
+    if [[ $DEBUG ]]; then
+        datestring=`date +"%Y-%m-%d %H:%M:%S"`
+        echo -e "${datestring} - $@"
     fi
 }
 
-function einfo_exec() {
-    if [ ${VERBOSITY} -ge ${inf_lvl} ]; then
-        set -x;
-        "$@"
-        set +x;
+function edebug_exec() {
+    if [[ $DEBUG ]]; then
+        datestring=`date +"%Y-%m-%d %H:%M:%S"`
+        echo -n "${datestring} - "
+        set -x; "$@"; set +x
+    else
+        "$@" >/dev/null 2>&1
+        echo -n '.'
     fi
-
 }
 
-function esilent_exec() {
-    "$@" 2>/dev/null
+function pushd () {
+    command pushd "$@" > /dev/null
+}
+
+function popd () {
+    command popd "$@" > /dev/null
 }
 
 function usage  {
-   esilent "Usage ./generate_ca.sh <org_domain> <service_name> <base_directory> <config_directory>"
-   esilent "eg. ./generate_ca.sh acme.com blogserver ./.certs/ ./templates"
+   echo "Usage ./generate_ca.sh <org_domain> <service_name> <base_directory> <config_directory>"
+   echo "eg. ./generate_ca.sh acme.com blogserver ./.certs/ ./templates"
 
 }
 
 function description {
 
-   esilent "================================================================"
-   esilent "This script will lead you through the generation of a root "
-   esilent "certificate keypair, intermediate cert keypair, and a final"
-   esilent "SPIFFE certificate suitable for use in mTLS"
-   esilent "  BASE:        ${BASE}"
-   esilent "  CONF_BASE: ${CONF_BASE}"
-   esilent "  TEMPLATES BASE: ${TEMPLATES_BASE} "
-   esilent "----------------------------------------------------------------"
+   echo "================================================================"
+   echo "This script will lead you through the generation of a root "
+   echo "certificate keypair, intermediate cert keypair, and a final"
+   echo "SPIFFE certificate suitable for use in mTLS"
+   echo "  BASE:        ${BASE}"
+   echo "  CONF_BASE: ${CONF_BASE}"
+   echo "  TEMPLATES BASE: ${TEMPLATES_BASE} "
+   echo "----------------------------------------------------------------"
 }
 
 function setup_confs_templates {
@@ -96,9 +72,7 @@ function setup_confs_templates {
     local spiffe_id=${6}
     local san=${7}
 
-    einfo "========================"
-    einfo "Setup OpenSSL configuration files."
-    einfo "------------------------"
+    edebug_log "Setting up OpenSSL configuration files"
 
     if [ ! -e "${base_ca}/openssl.templates" ]; then
         # Namespace are delimited with |
@@ -134,21 +108,11 @@ function _setup_dirs {
 }
 
 function setup_root_dirs {
-
-    einfo "========================="
-    einfo "Building Root CA"
-    einfo "-------------------------"
-
     local base_dir=${1}
     _setup_dirs  ${base_dir} serial
 }
 
 function setup_intermediate_dirs {
-
-    einfo "========================"
-    einfo "Building Intermediate CA"
-    einfo "------------------------"
-
    local base_dir=${1}
 
    _setup_dirs ${base_dir} crlnumber
@@ -162,11 +126,6 @@ function setup_intermediate_dirs {
 }
 
 function setup_leaf_dirs {
-
-    einfo "========================"
-    einfo "Building Leaf key and cert"
-    einfo "------------------------"
-
     local base_dir=${1}
 
     _setup_dirs ${base_dir} crlnumber
@@ -191,12 +150,10 @@ function create_trust_root {
         exit 0
     fi
 
-    einfo "==============================="
-    einfo "Create ROOT of trust"
-    einfo "-------------------------------"
+    edebug_log "Ceating root CA cert"
 
     pushd ${dir_base_ca}
-        esilent_exec openssl genrsa \
+        edebug_exec openssl genrsa \
            -aes256 \
            -out private/ca.key.pem \
            -passout pass:${passphrase} \
@@ -204,7 +161,7 @@ function create_trust_root {
 
         chmod 700 private/ca.key.pem
 
-        esilent_exec openssl req \
+        edebug_exec openssl req \
           -config openssl.conf \
           -key private/ca.key.pem \
           -new \
@@ -217,8 +174,6 @@ function create_trust_root {
           -subj "/C=US/O=${org_name}/CN=RootCA"
 
         chmod 744 certs/ca.cert.pem
-
-        einfo_exec openssl x509 -noout -text -in certs/ca.cert.pem
     popd
 }
 
@@ -236,11 +191,9 @@ function create_intermediate {
     if [ ! -e "${dir_base_inter}/certs/ca-chain.cert.pem" ]; then
 
         pushd ${dir_base_inter}
-            einfo "==============================="
-            einfo "Create intermediate keypair..."
-            einfo "-------------------------------"
+            edebug_log "Creating intermediate CA cert"
 
-            esilent_exec openssl genrsa \
+            edebug_exec openssl genrsa \
                 -aes256 \
                 -out private/intermediate.key.pem \
                 -passout pass:${inter_passphrase} \
@@ -248,7 +201,7 @@ function create_intermediate {
 
             chmod 700 private/intermediate.key.pem
 
-            esilent_exec openssl req \
+            edebug_exec openssl req \
                 -config openssl.conf \
                 -new \
                 -sha256 \
@@ -258,7 +211,7 @@ function create_intermediate {
                 -subj "/C=US/O=${org_name}/CN=IntermediaetCA" \
 
             # sign the intermediate with the root
-            esilent_exec openssl ca \
+            edebug_exec openssl ca \
             -batch \
             -config ${dir_base_ca}/openssl.conf \
             -extensions v3_intermediate_ca \
@@ -270,9 +223,6 @@ function create_intermediate {
             -out certs/intermediate.cert.pem
 
             chmod 744 certs/intermediate.cert.pem
-
-            einfo_exec openssl x509 -noout -text \
-                -in certs/intermediate.cert.pem
 
             # create the ca cert chain
             cat certs/intermediate.cert.pem  \
@@ -296,23 +246,18 @@ function create_leaf {
 
     export HOME_INTER=${dir_base_inter}
 
-    einfo "==============================="
-    einfo "Building Server and Client example certificates"
-    einfo "-------------------------------"
+    edebug_log "Creating leaf cert"
 
     if [ ! -e "${dir_base_leaf}/certs/${service_name}.pem" ]; then
         pushd ${dir_base_leaf}
-            # create server and client certificate
-            einfo "Create service ${service_name} keypair..."
-
-            esilent_exec openssl genrsa \
+            edebug_exec openssl genrsa \
                 -out private/leaf.key.pem \
                 -passout pass:${leaf_passphrase} \
                 2048
 
             chmod 700 private/leaf.key.pem
 
-            esilent_exec openssl req \
+            edebug_exec openssl req \
                 -config ${dir_base_inter}/openssl.conf \
                 -passin pass:${leaf_passphrase} \
                 -key private/leaf.key.pem \
@@ -322,7 +267,7 @@ function create_leaf {
                 -subj "/C=US/O=${org_name}/CN=${service_name}"
 
             # CA sign the csr and return a certificate
-            esilent_exec openssl ca \
+            edebug_exec openssl ca \
                 -batch \
                 -config ${dir_base_inter}/openssl.conf \
                 -extensions server_cert \
@@ -333,9 +278,6 @@ function create_leaf {
                 -in csr/leaf.csr.pem \
                 -out certs/leaf.cert.pem \
                 -subj "/C=US/O=${org_name}/CN=${service_name}"
-
-            einfo_exec openssl x509 -noout -text \
-                -in certs/leaf.cert.pem
         popd
     fi
 
@@ -378,6 +320,8 @@ description
     read
     # while IFS= read -r line; do
     while IFS=, read col_org col_service_name col_root_ns col_inter_ns col_spiffe_id col_expected_result; do
+        echo
+        elog "Processing certs for org ${col_org}"
 
         if [ ${col_expected_result} == "PASS" ]; then
             dir_base="${BASE}/good/${col_org}"
@@ -389,16 +333,16 @@ description
         dir_base_inter=${dir_base}/intermediate
         dir_base_leaf=${dir_base}/leaf
 
-        einfo "============================"
-        einfo "org -       " $col_org
-        einfo "service_name - " $col_service_name
-        einfo "ns root -   "  $col_root_ns
-        einfo "ns inter -  " $col_inter_ns
-        einfo "spiffe_id - " $col_spiffe_id
-        einfo "dir ca -    " ${dir_base_ca}
-        einfo "dir inter - " ${dir_base_inter}
-        einfo "dir leaf -  " ${dir_base_leaf}
-        einfo "----------------------------"
+        edebug_log "============================"
+        edebug_log "org -       " $col_org
+        edebug_log "service_name - " $col_service_name
+        edebug_log "ns root -   "  $col_root_ns
+        edebug_log "ns inter -  " $col_inter_ns
+        edebug_log "spiffe_id - " $col_spiffe_id
+        edebug_log "dir ca -    " ${dir_base_ca}
+        edebug_log "dir inter - " ${dir_base_inter}
+        edebug_log "dir leaf -  " ${dir_base_leaf}
+        edebug_log "----------------------------"
 
         setup_root_dirs ${dir_base_ca}
         setup_intermediate_dirs ${dir_base_inter}
@@ -413,6 +357,8 @@ description
         create_leaf ${dir_base_inter} ${dir_base_leaf} ${INTER_PASS} ${LEAF_PASS} ${col_org} ${col_service_name}
 
         copy_certs_to_root ${dir_base}
+
+        echo -n ${col_spiffe_id} > "${dir_base}/spiffe-id.txt"
 
     done
 } < ${CONF_BASE}/cert_conf.csv
