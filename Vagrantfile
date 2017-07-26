@@ -9,5 +9,10 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
   config.vm.hostname = "spiffe.svid-test.windows"
   config.vm.provision "docker"
-  config.vm.provision "shell", path: "provisioning.sh"
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-get install -y build-essential python3-pip
+    pip3 install --upgrade pip
+    pip3 install virtualenv
+  SHELL
 end
