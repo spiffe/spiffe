@@ -3,6 +3,8 @@ test_report.xml
 .certs
 .venv
 .cache
+.vagrant
+*.log
 __pycache__
 *.pyc
 *.swp
