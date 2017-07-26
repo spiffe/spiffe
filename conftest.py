@@ -37,11 +37,14 @@ class ModuleBuilder(object):
 		self._modules[module_path] = module
 
 	def load_expected_failures(self, module_path):
-		expected_failures = []
+		expected_failures = {}
 		ef_file_path = os.path.join(module_path, "expected_failures")
 		if os.path.isfile(ef_file_path):
 			ef_file = open(ef_file_path, "r")
-			expected_failures = ef_file.read().splitlines()
+			lines = ef_file.read().splitlines()
+			for line in lines:
+				org, reason = line.split(';')
+				expected_failures[org] = reason
 		return expected_failures
 
 	def cleanup(self):

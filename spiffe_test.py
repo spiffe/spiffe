@@ -22,8 +22,8 @@ class TestSuite(object):
 
 		# Check for expected failure
 		if cert_name in expected_failures:
-			msg = "Skipping cert {0} for module {1}; failure expected"
-			msg = msg.format(cert_name, image.tags[0])
+			msg = "Skipping cert {0} for module {1}; reason: {2}"
+			msg = msg.format(cert_name, image.tags[0], expected_failures[cert_name])
 			pytest.xfail(msg)
 
 		try:
@@ -52,8 +52,8 @@ class TestSuite(object):
 
 		# Check for expected failure
 		if cert_name in expected_failures:
-			msg = "Skipping cert {0} for module {1}; failure expected"
-			msg = msg.format(cert_name, image.tags[0])
+			msg = "Skipping cert {0} for module {1}; reason: {2}"
+			msg = msg.format(cert_name, image.tags[0], expected_failures[cert_name])
 			pytest.xfail(msg)
 
 		msg = "Invalid cert {0} succeeded validation in module {1}!"
