@@ -5,6 +5,13 @@ Each test module has a dedicated subdirectory which stores a Dockerfile and any 
 
 The CA chain is located at `/certs/ca-chain.cert.pem` and the leaf cert to validate is located at `/certs/leaf.cert.pem`. If the certificate validates successfully against the trust chain and ID argument, the container should exit 0. Otherwise, print the error and exit non-zero.
 
+Occasionally, we wish to test libraries that are known to fail under certain conditions. The suite has a feature to mark such failures as expected. In order to do so, write the name of the failing org(s), along with a description, into a file named `expected_failures` inside the relevant test module.
+
+```
+$ echo 'test1.acme.com; REASON 1' >> verify/openssl/expected_failures
+$ echo 'test3.acme.com; REASON 2' >> verify/openssl/expected_failures
+```
+
 ## Submit a Pull Request
 1. Fork this repo
 1. Make your changes in a feature branch

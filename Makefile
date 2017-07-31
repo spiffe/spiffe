@@ -19,7 +19,7 @@ generate:
 	make -C generate setup build generate clean_exited
 
 verify: .venv
-	.venv/bin/pytest -n 4 \
+	.venv/bin/pytest -n 1 \
 	--tb=line \
 	--junitxml=test_report.xml
 
