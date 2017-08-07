@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"log"
-	// "github.com/spiffe/go-spiffe"
 )
 
 func ReadLeafCert(leafPath string) (*x509.Certificate, error) {
