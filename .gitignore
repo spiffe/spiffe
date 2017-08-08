@@ -1,11 +1,10 @@
-test_results
-.idea
-.certs
-.venv
-.cache
-.vagrant
-*.log
 __pycache__
 *.pyc
 *.swp
 *~
+
+svid-test/test_results
+svid-test/.certs
+svid-test/.venv
+svid-test/.cache
+svid-test/.vagrant
