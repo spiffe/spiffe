@@ -1,0 +1,14 @@
+version: 2
+
+jobs:
+  build:
+    machine: true
+    working_directory: ~/svid-test
+    steps:
+      - checkout
+      - run: make generate
+      - run: make verify
+      - store_test_results:
+          path: test_results
+
+      
