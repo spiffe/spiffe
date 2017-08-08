@@ -1,0 +1,13 @@
+version: 2
+
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run: make -C svid-test generate
+      - run: make -C svid-test verify
+      - store_test_results:
+          path: svid-test/test_results
+
+      
