@@ -1,26 +1,32 @@
 # What is SPIFFE?
 
-The Secure Production Identity Framework For Everyone (SPIFFE) is a new set of protocols and
-conventions for identifying and securing communications between services. At its heart, SPIFFE is:
+The Secure Production Identity Framework For Everyone (SPIFFE) is a new framework and set of
+standards for identifying and securing communications between services. At its heart, SPIFFE is:
 
-* An standard for how services identify themselves to each other. These are called *SPIFFE IDs* and
-  are implemented as URIs.
+* A [standard](standards/SPIFFE.md) which defines how services identify themselves to each other. These are called
+  *SPIFFE IDs* and are implemented as URIs.
 
-* An standard for encoding SPIFFE IDs in the Subject Alternative Name (SAN) field of x.509
-  certificates. These certificates are called SPIFFE Verifiable Service Identity Documents or
-  *SVIDs*
+* A standard for encoding SPIFFE IDs in a cryptographically verifiable document called a
+  SPIFFE Verifiable Identity Document or *SVIDs*
 
-* An API specification for signing SVIDs. This is the *Workload API*
+* An API specification for issuing and/or retrieving SVIDs. This is the *Workload API*
 
-In addition, the SPIFFE project is producing a reference implementation that, in addition to the
-above, will securely issue and frequently renew SVIDs.
+The SPIFFE project is also producing a reference implementation that, in addition to the
+above, will:
+
+* Perform node and workload attestation
+
+* Implement a signing framework for securely issuing and renewing SVIDs
+
+* Provide an API for registering nodes and workloads, along with their designated SPIFFE IDs
 
 # The Project
 
-## The Design
+## The Standards
 
-* The SVID specification
-* The workload API
+* [Secure Production Infrastructure Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
+* The X.509 SVID specification
+* The Workload API
 
 
 ## Explore
