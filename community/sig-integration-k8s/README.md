@@ -5,7 +5,7 @@ A Special Interest Group (SIG) for running SPIFFE in Kubernetes. We encourage at
 ### Meetings:
 * Meetings: Every Friday from 10:00-11:00am PST
 * [Meetings Notes](https://docs.google.com/document/d/1Dq4kSlfOpewnisItipTWx3Q8qCelbNP85yjMnSrdomE/edit)
-* [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_enlt6qi4n2isljgqh8f1dt3gj8%40group.calendar.google.com/private-b313c12f541080f7246da941313381c4/basic.ics)
+* [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_enlt6qi4n2isljgqh8f1dt3gj8%40group.calendar.google.com/public/basic.ics)
 
 ### Contact:
 * [Slack Channel](https://spiffe.slack.com/messages/sig-integration-k8s/)

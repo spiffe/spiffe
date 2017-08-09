@@ -41,11 +41,11 @@ above, will:
 
 ## Communicate
 
-  * [Slack](https://spiffe.slack.com) (Contact <hello@spiffe.io> for an invite)
+  * [Slack](https://spiffe.slack.com) (Join [here](https://slack.spiffe.io))
   * <dev-discussion@spiffe.io> (View or join
-    [online](https://groups.google.com/a/spiffe.io/forum/#!forum/dev-discussion)).
+    [here](https://groups.google.com/a/spiffe.io/forum/#!forum/dev-discussion)).
   * <user-discussion@spiffe.io> (View or join
-    [online](https://groups.google.com/a/spiffe.io/forum/#!forum/user-discussion)).
+    [here](https://groups.google.com/a/spiffe.io/forum/#!forum/user-discussion)).
 
 
 ## Contribute
