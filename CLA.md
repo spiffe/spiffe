@@ -11,21 +11,24 @@ Only original contributions from CLA signatories can be accepted into SPIFFE.
 * [CLA for corporations](#corporations) to sign as a corporation representative and manage signups
   from your organization.
 
-#### 2. Contact
+#### 2. Request
 
-Email <hello@spiffe.io> with:
+**Individuals**
 
-* Individuals:
-  * Your GitHub UserID
-  * The email addresses associated with your GitHub account
+Please fill out [this form](https://goo.gl/forms/P0938KfmXzUIQy2x2)
 
-* Organizations:
-  * Your GitHub UserID
-  * The email addresses associated with your GitHub account
+**Organizations**
+
+Email <cla@spiffe.io> with the following information:
+
   * Corporation name
-  * Corporate point-of-contact:
+  * Signer's name
+  * Signer's email
+  * Signer's phone number
+  * Signer's GitHub username (if applicable)
+  * Corporate point-of-contact (if different from above)
     * Name
-    * Email address
+    * Email
     * Phone number
 
 
@@ -225,4 +228,4 @@ Corporation Name:
 
 Corporation Point of Contact E-Mail:
 
-Çorporation Point of Contact Phone Number:
+Corporation Point of Contact Phone Number:
