@@ -14,7 +14,7 @@
   Conference](community/README.md) to discuss.  Please report summary of SIG activities there.
 * Add the meeting to the community meeting calendar by inviting {TODO}@group.calendar.google.com.  
 * Announce new SIG on spiffe-dev@googlegroups.com
-* Submit a PR to add a row for the SIG to the table in the [sig-list.md] file, to create a
+* Submit a PR to add a row for the SIG to the table in the [README](../README.md) file, to create a
   spiffe/community directory, and to add any SIG-releated docs, schedules, roadmaps, etc. to your
   new spiffe/community/SIG-foo directory.
 
