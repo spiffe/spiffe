@@ -3,7 +3,7 @@
 The Secure Production Identity Framework For Everyone (SPIFFE) is a new framework and set of
 standards for identifying and securing communications between services. At its heart, SPIFFE is:
 
-* A [standard](standards/SPIFFE.md) which defines how services identify themselves to each other. These are called
+* A standard which defines how services identify themselves to each other. These are called
   *SPIFFE IDs* and are implemented as URIs.
 
 * A standard for encoding SPIFFE IDs in a cryptographically verifiable document called a
