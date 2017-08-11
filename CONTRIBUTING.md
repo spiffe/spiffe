@@ -14,6 +14,7 @@ broader group.
 
 1. Fork the repo
 1. Commit changes to your fork
+1. Update the docs, if necessary
 1. Ensure your branch is based on the latest commit in `master`
 1. Ensure all tests pass (see project docs for more information)
 1. Open a [pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)
@@ -59,26 +60,10 @@ these conventions when reviewing pull requests.
 * **Python**
   * [PEP8](https://www.python.org/dev/peps/pep-0008/)
 
-#### Logging conventions
-
-| Level | Description |
-| :---: | :--- |
-| ERROR | Always an error |
-| WARNING | Something unexpected, but probably not an error |
-| INFO | Has multiple levels |
-| V(0) | Generally useful for this to ALWAYS be visible to an operator  <ul><li>Programer Errors</li><li>Logging extra info about a panic</li><li>CLI argument handling</li></ul> |
-| V(1) | A reasonable default log level if you don't want verbosity <ul><li>Information about config (listening on X, watching Y )</li><li>Errors that repeat frequently that relate to conditions that can be corrected.</li></ul>|
-| V(2) | Useful steady state information about the service and important log messages that may correlate to significant changes in the system. <ul><li>Logging HTTP requests and their exit code</li><li>System state changing (killing pod)</li><li>Controller state change events</li></ul>|
-| V(3) | More info about system state changes |  
-| V(4) | Debug level verbosity |
-
-The practical default level is V(2). Developers and QE environments
-may wish to run at V(3) or V(4).  
-
 #### Third-party code
 
-When third-party code must me included, all licenses must be preserved. This includes modified
-third-party code and excerpts, as well
+When third-party code must be included, all licenses must be preserved. This includes modified
+third-party code and excerpts, as well.
 
 #### Repositories and Licenses
 
