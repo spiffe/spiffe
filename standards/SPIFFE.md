@@ -11,88 +11,39 @@ Further, modern developers are expected to understand and play a role in how app
 The SPIFFE standard provides a specification for a framework capable of bootstrapping and issuing identity to services across heterogeneous environments and organizational boundaries.
 
 ## Table of Contents
-TODO
+1\. [Introduction](#1.-introduction)  
+2\. [The SPIFFE ID](#2.-the-spiffe-id)  
+3\. [The SPIFFE Verifiable Identity Document](#3.-the-spiffe-verifiable-identity-document)  
+4\. [The Workload API](#4.-the-workload-api)  
+5\. [Conclusion](#5.-conclusion)  
+Appendix A. [List of SPIFFE Specifications](#appendix-a.-list-of-spiffe-specifications)  
 
 ## 1. Introduction
 The SPIFFE standard comprises three major components - one which standardizes an identity namespace, one which dictates the manner in which an issued identity may be presented and verified, and another which specifies an API through which identity may be retrieved and/or issued. These components are known as the SPIFFE ID, the SPIFFE Verifiable Identity Document (SVID) and the Workload API, respectively.
 
-Section 2 outlines the SPIFFE ID and its namespace. The SPIFFE ID is a structured string used to identify a resource or caller, and is the cornerstone of the SPIFFE standard. All other SPIFFE components focus on the issuance and verification of the SPIFFE IDs themselves.
+While each of these components has a dedicated specification, the remainder of this document will explore them at a high level, and explain how they fit together.
 
-Section 3 describes the SPIFFE Verifiable Identity Document (or SVID). An SVID is a mechanism through which a compute endpoint can present its SPIFFE ID in a way that can be cryptographically verified and deemed trustworthy. SVIDs, which reference an associated asymmetric key pair, can additionally be used to form a secure communication channel.
+## 2. The SPIFFE ID
+A SPIFFE ID is a structured string (represented as a URI) which serves as the "name" of an entity. Although just a string, it is the component around which everything else is built. It is defined in the "SPIFFE Identity and Verifiable Identity Document" specification.
 
-Section 4 acknowledges a standardized API (the Workload API) which may be used to retrieve a SPIFFE SVID, though the API itself stands independently, and is fully defined in a separate specification.
+## 3. The SPIFFE Verifiable Identity Document
+A SPIFFE Verifiable Identity Document (SVID) is a document which carries the SPIFFE ID itself. It is the functional equivalent of a passport - a document which is presented that carries the identity of the presenter. Of course, similar to passports, they must be resistant to forgery, and it must be obvious that the document belongs to the presenter. In order to achieve this, an SVID includes cryptographic properties which allow it to be 1) proven as authentic, and 2) proven to belong to the presenter.
 
-## 2. SPIFFE Identity
-In order to communicate an identity, we must first define an identity namespace. A SPIFFE Identity (or SPIFFE ID) is defined as a URI comprising a “trust domain” and an associated path. The trust domain stands as the authority component of the URI, and serves to identify the system in which a given identity is issued. The following example demonstrates how a SPIFFE ID is constructed:
+An SVID itself is not a document type. Instead, we define 1) the properties required of an SVID, and 2) the method by which SVID information can be encoded and validated in various existing document types. Currently, the only supported document type is an X.509 certificate.
 
-```spiffe://trust-domain/path```
+The SPIFFE SVID is defined in the "SPIFFE Identity and Verifiable Identity Document" specification.
 
-Valid SPIFFE IDs MUST be prefixed with the `spiffe://` scheme.
+## 4. The Workload API
+The SPIFFE Workload API is the method through which workloads, or compute processes, obtain their SVID(s). It is typically exposed locally, and is unauthenticated. It is up to the implementor of the Workload API to authenticate the caller via an out-of-band method.
 
-### 2.1. Trust Domain
-The trust domain corresponds to the trust root of a system, that is it can be assumed that the infrastructure that assigned identities under that domain has had trust pre-established prior to issuing those identities. A trust domain could represent an individual, organization, environment or department running their own independent SPIFFE infrastructure.
+In addition to providing a workload with its necessary SVIDs, the Workload API delivers the CA bundles which the workload should outwardly trust. These bundles are associated with trust domains outside of the issued SVID, and are used for federation.
 
-trust domains are nominally self-registered, unlike public DNS there is no delegating authority that acts to assert and register a base domain to an actual legal real-world entity, or assert that legal entity has fair and due rights to any particular trust domain.
-
-### 2.2. Path
-The path component of a SPIFFE name allows for the unique identification of a given workload. The meaning behind the path is left open ended and the responsibility of the administrator to define.
-
-Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of paths is reserved as an exercise to the implementer and are outside the SVID specification. However some examples and conventions are expressed below.
-
-* Identifying services directly
-
-  Often it is valuable to identify services directly. For example, an administrator may decree that any process running on a particular set of nodes should be able to present itself as a particular identity. For example:
-
-  ```spiffe://staging.acme.com/payments/mysql```
-  or
-  ```spiffe://staging.acme.com/payments/web-fe```
-
-  The two SPIFFE IDs above refer to two different components - the mysql database service and a web front-end - of a payments service running in a staging environment. The meaning of ‘staging’ as an environment, ‘payments’ as a high level service collection is defined by the implementer.
-
-* Identifying service owners
-
-  Often higher level orchestrators and platforms may have their own identity concepts built in (such as Kubernetes service accounts, or AWS/GCP service accounts) and it is helpful to be able to directly map SPIFFE identities to those identities. For example:
-
-  ```spiffe://k8s-west.acme.com/ns/staging/sa/default```
-
-  In this example, the administrator of acme.com is running a Kubernetes cluster k8s-west.acme.com, which has a ‘staging’ namespace, and within this a service account (sa) called ‘default’. These are conventions defined by the SPIFFE administrator, not assertions guaranteed by this specification.
-
-
-* Opaque SPIFFE idenity
-
-  The above examples are illustrative and, in the most general case, the SPIFFE path may be left opaque, carrying no visible hierarchical information. Metadata, such as geographic location, logical system partitioning and/or service name, may be provided by a secondary system, where identities and their attributes are registered. that can be queried to retrieve any metadata associated with the SPIFFE identifier. For example:
-
-  ```spiffe://acme.com/9eebccd2-12bf-40a6-b262-65fe0487d453```
-
-## 3. SPIFFE Verifiable Identity Document
-A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if
-it has been signed by an authority within the SPIFFE IDs trust domain, and the presenter can prove ownership of the associated private key.
-
-### 3.1. SVID Trust
-As covered in Section 2.1, SPIFFE trust is rooted in a given ID's trust domain. A signing authority MUST exist in each trust domain, and this signing authority MUST carry an SVID of its own. The SPIFFE ID of the signing authority SHOULD reside in the trust domain in which it is authoritative, and SHOULD NOT have a path component. The SVID of the signing authority then forms the basis of trust for a given trust domain.
-
-Chaining of trust, if desired, can be achieved by signing the authority’s SVID with the private key of a foreign trust domain’s authority. In the event that trust is not being chained, then the authority’s SVID is self-signed.
-
-### 3.2. SVID Components
-An SVID is a fairly simple construct, and comprises three basic components:
-
-* A SPIFFE ID
-* A public key
-* A valid signature
-
-The SPIFFE ID and the public key MUST be included in a portion of the payload which is signed. The corresponding private key is retained by the entity to which the SVID has been issued, and is used to prove ownership of the SVID itself.
-
-An SVID MAY include information beyond what is described here. It is assumed, however, that the SPIFFE signing authority has validated all information contained within the SVID prior to issuing it.
-
-### 3.3. SVID Format
-An SVID is not itself a document type. Many document formats exist already which fulfil the needs of a SPIFFE SVID, and we do not wish to re-invent those formats. Instead, we define a set of format-specific specifications which standardize the encoding of SVID information.
-
-In order for an SVID to be considered valid, it MUST leverage a document type for which a corresponding specification has been defined. At the time of this writing, the only supported document type is X.509. Please see X.509 SPIFFE Verifiable Identity Document specification for more information.
-
-## 4. Workload API
-The SPIFFE Workload API is a standardized interface through which an entity may request an SVID. It is referenced in this document for completeness, however the Workload API need not be implemented for compliance with this standard, and is defined separately. Please see the SPIFFE Workload API specification for more information.
+The Workload API is defined in the "SPIFFE Workload API" specification, please see that document for more information.
 
 ## 5. Conclusion
-The specifications contained within this document cover, at a high level, what it means to be SPIFFE compliant. While other specifications will need to be referenced in order to build a complete implementation, conformance to this document is sufficient for compliance purposes.
+This document covered, at a high level, the various components that make up the SPIFFE specification as a whole. Together, these components solve many of the authentication and traffic security challenges presented in modern, heterogeneous environments, particularly those which are highly dynamic. For more detailed information, please see the specification(s) related to the component of interest.
 
-By conforming to the SPIFFE standard, we can begin to address modern identity and authentication challenges. Namely, the issuance and consumption of identity in dynamic, heterogeneous environments. Furthermore, by defining a standardized way to encode identity into a provable document, we can bridge the identity gap between organizations and systems with disparate authentication mechanisms.
+## Appendix A. List of SPIFFE Specifications
+* The SPIFFE Identity and Verifiable Identity Document
+* The X.509 SPIFFE Verifiable Identity Document
+* The SPIFFE Workload API
