@@ -1,4 +1,4 @@
-# What is SPIFFE?
+# What is the SPIFFE Project
 
 The Secure Production Identity Framework For Everyone (SPIFFE) is a new framework and set of
 standards for identifying and securing communications between services. At its heart, SPIFFE is:
@@ -11,7 +11,7 @@ standards for identifying and securing communications between services. At its h
 
 * An API specification for issuing and/or retrieving SVIDs. This is the *Workload API*
 
-The SPIFFE project is also producing a reference implementation that, in addition to the
+The SPIFFE Project is also producing a reference implementation that, in addition to the
 above, will:
 
 * Perform node and workload attestation
@@ -34,7 +34,7 @@ above, will:
 * [spiffe](https://github.com/spiffe/spiffe) - This repository includes the SPIFFE, SVID, and
   Workload API specification, example code, and tests as well as project governance, policies, and
   processes    
-* [spiffe-ri](https://github.com/spiffe/spiffe-ri) - The SPIFFE Reference Implementation
+* [sri](https://github.com/spiffe/sri) - The SPIFFE Reference Implementation
 * [spiffe-examples](https://github.com/spiffe/spiffe-examples) - Examples and demonstrations
 * [go-spiffe](https://github.com/spiffe/go-spiffe) - Golang client libraries
 
@@ -71,5 +71,5 @@ in the [/sigs](/sigs) directory of this repository.
 | [Integration: Kubernetes](/community/sig-integration-k8s/README.md) | [Vipin Jain](https://github.com/jainvipin) (Independent), [Tao Li](https://github.com/wattli) (Google Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-integration-k8s) | [Here](https://spiffe.slack.com/messages/sig-integration-k8s) | [Agenda](https://docs.google.com/document/d/1Dq4kSlfOpewnisItipTWx3Q8qCelbNP85yjMnSrdomE/edit) |
 
 
-**Follow SPIFFE** You can find us on [Github](https://github.com/spiffe/) and
+**Follow the SPIFFE Project** You can find us on [Github](https://github.com/spiffe/) and
   [Twitter](https://twitter.com/SPIFFEio)
