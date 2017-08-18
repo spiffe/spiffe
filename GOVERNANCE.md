@@ -37,7 +37,7 @@ Maintainers are documented in each repository's [CODEOWNERS](https://help.github
 
 * Work in a helpful and collaborative way with the community
 * Have a track record of providing constructive feedback on others' PRs
-* Have submitted at least 50 PRs themselves
+* Have submitted at least 20 PRs themselves
 
 The process for nominating and approving Maintainers is:
 
@@ -56,7 +56,7 @@ The TSC adheres to the following:
 
 * The TSC is comprised of at least five (5) members.
 * No more than 2 TSC members may be affiliated with the same organization.
-* At least 40% of the TSC must be represented by organizations who currently have a SPIFFE reference implementation deployed in production.
+* At least 40% of the TSC must be represented by organizations that currently have a SPIFFE implementation deployed in production.
 * Each TSC member's term is nine (9) months.
 * There is no limit to the number of terms a TSC member can serve.
 * TSC members are added (or removed) by the consensus of the existing TSC members.
