@@ -22,11 +22,12 @@ above, will:
 
 # The Project
 
-## The Standards
+## The Specifications
 
 * [Secure Production Infrastructure Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
-* The X.509 SVID specification
-* The Workload API
+* [The SPIFFE Identity and Verifiable Identity Document](standards/SPIFFE-ID.md)
+* [The X.509 SPIFFE Verifiable Identity Document](standards/X509-SVID.md)
+* The Workload API (TBD)
 
 ## Explore
 
