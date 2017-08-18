@@ -24,14 +24,14 @@ The SPIFFE standard comprises three major components - one which standardizes an
 While each of these components has a dedicated specification, the remainder of this document will explore them at a high level, and explain how they fit together.
 
 ## 2. The SPIFFE ID
-A SPIFFE ID is a structured string (represented as a URI) which serves as the "name" of an entity. Although just a string, it is the component around which everything else is built. It is defined in the "SPIFFE Identity and Verifiable Identity Document" specification.
+A SPIFFE ID is a structured string (represented as a URI) which serves as the "name" of an entity. Although just a string, it is the component around which everything else is built. It is defined in the [SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md) specification.
 
 ## 3. The SPIFFE Verifiable Identity Document
 A SPIFFE Verifiable Identity Document (SVID) is a document which carries the SPIFFE ID itself. It is the functional equivalent of a passport - a document which is presented that carries the identity of the presenter. Of course, similar to passports, they must be resistant to forgery, and it must be obvious that the document belongs to the presenter. In order to achieve this, an SVID includes cryptographic properties which allow it to be 1) proven as authentic, and 2) proven to belong to the presenter.
 
 An SVID itself is not a document type. Instead, we define 1) the properties required of an SVID, and 2) the method by which SVID information can be encoded and validated in various existing document types. Currently, the only supported document type is an X.509 certificate.
 
-The SPIFFE SVID is defined in the "SPIFFE Identity and Verifiable Identity Document" specification.
+The SPIFFE SVID is defined in the [SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md) specification. The X.509 SVID specification is defined in [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md)
 
 ## 4. The Workload API
 The SPIFFE Workload API is the method through which workloads, or compute processes, obtain their SVID(s). It is typically exposed locally, and is unauthenticated. It is up to the implementor of the Workload API to authenticate the caller via an out-of-band method.
@@ -44,6 +44,6 @@ The Workload API is defined in the "SPIFFE Workload API" specification, please s
 This document covered, at a high level, the various components that make up the SPIFFE specification as a whole. Together, these components solve many of the authentication and traffic security challenges presented in modern, heterogeneous environments, particularly those which are highly dynamic. For more detailed information, please see the specification(s) related to the component of interest.
 
 ## Appendix A. List of SPIFFE Specifications
-* The SPIFFE Identity and Verifiable Identity Document
-* The X.509 SPIFFE Verifiable Identity Document
-* The SPIFFE Workload API
+* [The SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md)
+* [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md)
+* The SPIFFE Workload API (TBD)
