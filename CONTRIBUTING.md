@@ -1,10 +1,20 @@
-# Contributing to SPIFFE
+# Contributing to the SPIFFE Project
 
-* First, [README](/README.md) to become familiar with how the SPIFFE project is managed
+The change management process for the SPIFFE Project is designed to be transparent, fair, and
+efficient. Anyone may contribute to a project in the SPIFFE repositories that they have read access
+to, provided they:
+
+* Abide by the CNCF [code of conduct](/CODE-OF-CONDUCT.md)
+* Have accepted the project's [Contributor License Agreement](/CLA.md).
+
+To get started:
+
+* First, [README](/README.md) to become familiar with how the SPIFFE Project is managed
 * Make sure you're familiar with our [Coding Conventions](#conventions) when appropriate
 * Make sure you've signed the SPIFFE [CLA](/CLA.md)
 
-If you're new to SPIFFE, we recommend that you join us on the mailing lists and Slack to discuss any potential changes you'd like to see made.
+If you're new to the SPIFFE Project, we recommend that you join us on the mailing lists and Slack to
+discuss any potential changes you'd like to see made.
 
 If your proposal comes under the purview of a SIG, reach out to the SIG lead and seek their feedback
 first (bugfixes and changes with minor impact don't need this). The SIG lead may refer you to the
@@ -34,7 +44,7 @@ Once your pull request is submitted, it's your responsibility to:
 * Respond to reviewer's feedback
 * Keep it merge-ready at all times until it has been approved and actually merged.
 
-Following approval, the PR will be merged by the last maintainer to approve the request.
+Following approval, the pull request will be merged by the last maintainer to approve the request.
 
 ## Coding Conventions <a name="conventions"></a>
 
