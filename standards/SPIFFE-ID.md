@@ -38,9 +38,9 @@ In order to communicate an identity, we must first define an identity namespace.
 Valid SPIFFE IDs MUST be prefixed with the `spiffe://` scheme.
 
 ### 2.1. Trust Domain
-The trust domain corresponds to the trust root of a system, that is it can be assumed that the infrastructure that assigned identities under that domain has had trust pre-established prior to issuing those identities. A trust domain could represent an individual, organization, environment or department running their own independent SPIFFE infrastructure.
+The trust domain corresponds to the trust root of a system. A trust domain could represent an individual, organization, environment or department running their own independent SPIFFE infrastructure.
 
-trust domains are nominally self-registered, unlike public DNS there is no delegating authority that acts to assert and register a base domain to an actual legal real-world entity, or assert that legal entity has fair and due rights to any particular trust domain.
+Trust domains are nominally self-registered, unlike public DNS there is no delegating authority that acts to assert and register a base domain to an actual legal real-world entity, or assert that legal entity has fair and due rights to any particular trust domain.
 
 ### 2.2. Path
 The path component of a SPIFFE name allows for the unique identification of a given workload. The meaning behind the path is left open ended and the responsibility of the administrator to define.
@@ -73,8 +73,7 @@ Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of
   ```spiffe://acme.com/9eebccd2-12bf-40a6-b262-65fe0487d453```
 
 ## 3. SPIFFE Verifiable Identity Document
-A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if
-it has been signed by an authority within the SPIFFE IDs trust domain, and the presenter can prove ownership of the associated private key.
+A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE IDs trust domain, and the presenter can prove ownership of the associated private key.
 
 ### 3.1. SVID Trust
 As covered in Section 2.1, SPIFFE trust is rooted in a given ID's trust domain. A signing authority MUST exist in each trust domain, and this signing authority MUST carry an SVID of its own. The SPIFFE ID of the signing authority SHOULD reside in the trust domain in which it is authoritative, and SHOULD NOT have a path component. The SVID of the signing authority then forms the basis of trust for a given trust domain.
@@ -95,7 +94,9 @@ An SVID MAY include information beyond what is described here. It is assumed, ho
 ### 3.3. SVID Format
 An SVID is not itself a document type. Many document formats exist already which fulfil the needs of a SPIFFE SVID, and we do not wish to re-invent those formats. Instead, we define a set of format-specific specifications which standardize the encoding of SVID information.
 
-In order for an SVID to be considered valid, it MUST leverage a document type for which a corresponding specification has been defined. At the time of this writing, the only supported document type is X.509. Please see X.509 SPIFFE Verifiable Identity Document specification for more information.
+In order for an SVID to be considered valid, it MUST leverage a document type for which a corresponding specification has been defined. At the time of this writing, the only supported document type is X.509. Note that format-specific SVID specifications may upgrade the requirements set forth in this document.
+
+Please see the X.509 SPIFFE Verifiable Identity Document (X.509-SVID) specification for more information.
 
 ## 4. Conclusion
 The specifications contained within this document cover what it means to be SPIFFE compliant. While other specifications will need to be referenced in order to build a complete implementation, conformance to this document is sufficient for compliance purposes.
