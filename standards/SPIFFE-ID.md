@@ -73,7 +73,7 @@ Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of
   ```spiffe://acme.com/9eebccd2-12bf-40a6-b262-65fe0487d453```
 
 ## 3. SPIFFE Verifiable Identity Document
-A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE IDs trust domain, and the presenter can prove ownership of the associated private key.
+A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE ID's trust domain, and the presenter can prove ownership of the associated private key.
 
 ### 3.1. SVID Trust
 As covered in Section 2.1, SPIFFE trust is rooted in a given ID's trust domain. A signing authority MUST exist in each trust domain, and this signing authority MUST carry an SVID of its own. The SPIFFE ID of the signing authority SHOULD reside in the trust domain in which it is authoritative, and SHOULD NOT have a path component. The SVID of the signing authority then forms the basis of trust for a given trust domain.
