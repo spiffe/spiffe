@@ -60,7 +60,7 @@ Accordingly, a maintainer also has the following responsibilities:
   of merging the change in (however the author of the PR is expected to ensure the change is
   merge-ready).
 
-Maintainers are documents in each repository's
+Maintainers are documented in each repository's
 [CODEOWNERS](https://help.github.com/articles/about-codeowners/) file.
 
 To become a maintainer, one must:
