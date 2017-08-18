@@ -19,7 +19,6 @@ our community tremendously and we'd like to keep cultivating a friendly and coll
 environment for our contributors and users. We want everyone in the community to have positive
 experiences.
 
-
 # Project Roles
 
 ## Users
@@ -32,7 +31,7 @@ comments. They can follow along as the SIGs do their work.
 ## Contributors
 
 Contributors are those who wish to contribute code or ideas to the SPIFFE projects. Contributors
-submit code and ideas through GitHub pull requests (PRs) and Issues.  To contribute code for
+submit code and ideas through GitHub pull requests (PRs) and Issues. To contribute code for
 consideration for inclusion in the project, they or their organization must have a signed Contributor
 License Agreement on file.
 
@@ -40,7 +39,7 @@ License Agreement on file.
 
 A SPIFFE Maintainer has a specific set of rights and responsibilities. Maintainers have the ability
 to merge changes into the project codebases and at least one maintainer's approval is required on
-any pull request (PR) for that change to be accepted.
+any PR for that change to be accepted.
 
 Accordingly, a maintainer also has the following responsibilities:
 
@@ -48,7 +47,7 @@ Accordingly, a maintainer also has the following responsibilities:
   attendance of SPIFFE community meetings and Special Interest Groups relevant to the components
   they are a maintainer of.
 * They should respond to review requests in a timely manner. Generally, a response is expected
-  within 24 hours of a review being submitted.
+  within 24 hours of a review being requested.
 * They must ensure that any code changes they approve:
   * Meet the [coding conventions](/CONTRIBUTING.md) required by the project. This includes ensuring
     the code is sufficiently well tested, follows the appropriate standards, and of course - doesn't
@@ -60,8 +59,20 @@ Accordingly, a maintainer also has the following responsibilities:
   of merging the change in (however the author of the PR is expected to ensure the change is
   merge-ready).
 
-Maintainers are documented in each repository's
+Although maintainers can authorize merges to a codebase directly, any chances a maintainer proposes
+must be submitted as a PR, and approved by at least one _other_ maintainer.
+
+A list of maintainers is documented in each repository's
 [CODEOWNERS](https://help.github.com/articles/about-codeowners/) file.
+
+Maintainers may reject a PR if they don't feel it is consistent with the project's architecture,
+the goals of the project, or meets the project's standards for code quality. If this happens,
+the maintainer should clearly and concisely explain the reasoning behind the rejection. 
+
+In rare cases where maintainers formally disagree (that is, where at least one maintainer
+_rejects_ a PR, and at least one maintainer _approves_ the same PR), and the disagreement
+can't be worked out, a member of the Technical Steering Committee should be solicited for a tie
+breaking decision.
 
 To become a maintainer, one must:
 
@@ -69,11 +80,18 @@ To become a maintainer, one must:
 * Have a track record of providing constructive feedback on other's PRs
 * Have submitted a minimum of 50 PRs themselves
 
-The process for nominating and approving Maintainers is:
+You may nominate yourself as a maintainer for all or part of a repository by:
 
-* Open a PR against the CODEOWNERS file that covers the parts of the project you wish to
-  nominate someone (or yourself) for
-* A consensus of existing Maintainers must approve your PR
+* Nominating yourself by submitting a PR against the `CODEOWNERS` file that covers the parts of the
+  project you wish to nominate yourself for
+* By having at least one existing Maintainer, _and_ a member of the Technical Steering Committee
+  approve the PR. 
+
+Similarly, a Maintainer may be removed from a repository by:
+
+* Submitting a PR to the `CODEOWNERS` file.
+* Except in cases where the removal is voluntary, both an existing maintainer
+  and a member of the TSC must approve the change.
 
 ## Technical Steering Committee (TSC)
 
@@ -81,25 +99,37 @@ The SPIFFE Project is governed by a Technical Steering Committee (TSC) which is 
 responsible for the SPIFFE Standards (https://github.com/spiffe/spiffe/tree/master/standards) as
 well as  the high-level direction of the project.
 
-In addition to the rights and privileges of Maintainers, the TSC has final authority over this project including:
+In addition to the rights and privileges of Maintainers, the TSC has final authority over
+this project including:
 
-* Technical direction
-* Project governance and process (this document)
-* Contribution policy
+* Technical direction, including the proposal and revision of any standards proposed by 
+  the SPIFFE project
+* Project governance and process (described in the contents of this repository)
+* Arbitrating concerns that cannot be resolved by the project maintainers
+* Approving nominations and removals of maintainers to SPIFFE projects
 
-TSC size nor terms are limited. Committee members are added (or removed ) by the consensus of the
-existing TSC members. TSC members may remove themselves voluntarily at any time.
+A list of maintainers is documented in this repository's
+[CODEOWNERS](CODEOWNERS) file.
+
+A TSC member may propose a change to the governance charter of the SPIFFE project, 
+a revision to any proposed standards, and any of it's policies, by submitting a pull 
+request to this repository. If the change is non-trivial (that is, changes or extends
+the the interpretation of any of the above), then it must be approved by a majority
+of the TSC.
+
+Neither the size of the TSC nor length of terms are limited. An user may nominate 
+themselves as a TSC member by submitting a pull request that adds their Github user
+ID to the `CODEOWNERS` file of this repository. 
+
+Similarly, a TSC member may propose to remove themselves or another  TSC member by 
+submitting a pull request that removes their ID from the `CODEOWNERS` file of this
+repository.
+
+With the exception of voluntary resignations, all proposed changes to TSC membership must
+be expressly approved by an absolute majority of the existing TSC membership, excluding 
+the nominee under consideration.
 
 No more than 2 TSC members may be affiliated with the same employer.
-
-
-# Decision making
-
-Maintainer and TSC decisions are made by a lazy consensus approach.
-
-When formal voting is required, members may abstain. Negative votes must be accompanied by an
-explanation or alternative proposal.
-
 
 # Change review process
 
@@ -119,7 +149,6 @@ must be approved by one maintainer.
 
 New or changed functionality require two maintainer approvals. It is the first reviewer's
 responsibility to determine if a second reviewer is required.
-
 
 # Special Interest Groups (SIGs)<a name="sigs"></a>
 
