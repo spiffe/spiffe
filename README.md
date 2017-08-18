@@ -28,13 +28,14 @@ above, will:
 * The X.509 SVID specification
 * The Workload API
 
-
 ## Explore
 
-* [spiffe](https://github.com/spiffe/spiffe) - This repository includes the SPIFFE, SVID, and
-  Workload API specification, example code, and tests as well as project governance, policies, and
-  processes    
-* [sri](https://github.com/spiffe/sri) - The SPIFFE Reference Implementation
+* [spiffe](https://github.com/spiffe/spiffe) - This repository includes the SPIFFE ID, SPIFFE
+  Verifiable Identity Document (SVID), and  Workload API specification, example code, and tests
+  as well as project governance, policies, and processes    
+* [sri](https://github.com/spiffe/sri) - The SPIFFE Reference Implementation, a software 
+  implementation of the SPIFFE Workload API that can be run on and accross a range of
+  different hosting environments.
 * [spiffe-examples](https://github.com/spiffe/spiffe-examples) - Examples and demonstrations
 * [go-spiffe](https://github.com/spiffe/go-spiffe) - Golang client libraries
 
@@ -52,7 +53,6 @@ above, will:
 
 * [CONTRIBUTING](/CONTRIBUTING.md)
 * [GOVERNANCE](/GOVERNANCE.md)
-
 
 #### SIGs & Working Groups<a name="sigs"></a>
 
