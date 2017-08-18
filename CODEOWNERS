@@ -1,1 +1,18 @@
+# This file lists those users who have the ability to approve changes
+# to this repository, as described in 
+# https://help.github.com/articles/about-codeowners/.
+#
+# These users may approve changes to the project as described in
+# the SPIFFE project governance charter, which can be found at:
+# https://github.com/spiffe/spiffe/blob/master/GOVERNANCE.md
+
+# The following users are members of the Technical Steering Committee,
+# the composition, roles and responsibilities of which are also outlined 
+# in the SPIFFE project governance charter.
+
+# TBD
+
+# These additional users have legacy rights as maintainers to the 
+# spiffe/spiffe project, but are **not** considered part of the TSC.
+
 * @drrt @ajessup @y2bishop2y @evan2645
