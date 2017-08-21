@@ -96,7 +96,7 @@ An SVID is not itself a document type. Many document formats exist already which
 
 In order for an SVID to be considered valid, it MUST leverage a document type for which a corresponding specification has been defined. At the time of this writing, the only supported document type is X.509. Note that format-specific SVID specifications may upgrade the requirements set forth in this document.
 
-Please see the [X.509 SPIFFE Verifiable Identity Document](X509-SVID) specification for more information.
+Please see the [X.509 SPIFFE Verifiable Identity Document](X509-SVID.md) specification for more information.
 
 ## 4. Conclusion
 The specifications contained within this document cover what it means to be SPIFFE compliant. While other specifications will need to be referenced in order to build a complete implementation, conformance to this document is sufficient for compliance purposes.
