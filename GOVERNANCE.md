@@ -62,6 +62,7 @@ The TSC adheres to the following:
 * TSC members are added (or removed) by the consensus of the existing TSC members.
 * TSC members may remove themselves voluntarily at any time.
 
+The current TSC members can be found at https://github.com/spiffe/spiffe/blob/master/CODEOWNERS
 
 # Decision Making
 
