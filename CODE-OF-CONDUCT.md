@@ -1,43 +1,19 @@
-## CNCF Community Code of Conduct
-
 ### Contributor Code of Conduct
 
-As contributors and maintainers of this project, and in the interest of fostering
-an open and welcoming community, we pledge to respect all people who contribute
-through reporting issues, posting feature requests, updating documentation,
-submitting pull requests or patches, and other activities.
+We follow the [CNCF Contributor Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md). Additionally, we are committed to the following guidelines adapted from the [Rust Code of Conduct](https://www.rust-lang.org/en-US/conduct.html):
 
-We are committed to making participation in this project a harassment-free experience for
-everyone, regardless of level of experience, gender, gender identity and expression,
-sexual orientation, disability, personal appearance, body size, race, ethnicity, age,
-religion, or nationality.
+### Community Guidelines
 
-Examples of unacceptable behavior by participants include:
+Our goal is to foster an inclusive and diverse community of technology enthusiasts.
 
-* The use of sexualized language or imagery
-* Personal attacks
-* Trolling or insulting/derogatory comments
-* Public or private harassment
-* Publishing other's private information, such as physical or electronic addresses,
- without explicit permission
-* Other unethical or unprofessional conduct.
+Try to be your best self. Treat your fellow community members with kindness and empathy. We welcome disagreements when they are conducted respectfully and without personal attacks.
 
-Project maintainers have the right and responsibility to remove, edit, or reject
-comments, commits, code, wiki edits, issues, and other contributions that are not
-aligned to this Code of Conduct. By adopting this Code of Conduct, project maintainers
-commit themselves to fairly and consistently applying these principles to every aspect
-of managing this project. Project maintainers who do not follow or enforce the Code of
-Conduct may be permanently removed from the project team.
+We ask that you keep unstructured critique to a minimum. Disparaging remarks about the project are unnecessary and a drain on community morale. Feedback should be constructive and relevant. Having passionately held opinions on what should improve is encouraged! We hope you will use that enthusiasm to roll up your sleeves and get involved by submitting pull requests. We have additional guidelines on [how to ask constructive questions](https://github.com/linkerd/linkerd/wiki/How-To-Ask-Questions-in-Slack).
 
-This code of conduct applies both within project spaces and in public spaces
-when an individual is representing the project or its community.
+We don't tolerate insults, spamming, trolling, flaming, baiting, or harassment. We don't tolerate sexual language, imagery, or unwanted advances. Private harassment is also unacceptable.
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting a CNCF project maintainer, Sarah Novotny <sarahnovotny@google.com>, and/or Dan Kohn <dan@linuxfoundation.org>.
+We do our best to avoid [subtle-isms](https://www.recurse.com/manual#sub-sec-social-rules): small actions that make others feel uncomfortable. If you witness a subtle-ism, you may respectfully point it out to the person publicly or privately, or you may ask a moderator to say something. Accidentally saying something biased is common, expected, and readily forgiven. It is not in and of itself a bannable offense.
 
-This Code of Conduct is adapted from the Contributor Covenant
-(http://contributor-covenant.org), version 1.2.0, available at
-http://contributor-covenant.org/version/1/2/0/
+### Moderation
 
-### CNCF Events Code of Conduct
-
-CNCF events are governed by the Linux Foundation [Code of Conduct](http://events.linuxfoundation.org/events/cloudnativecon/attend/code-of-conduct) available on the event page. This is designed to be compatible with the above policy and also includes more details on responding to incidents.
+If you feel any of SPIFFE's Slack channels require moderation, please e-mail slack-moderators@spiffe.io. Moderators will issue a warning to users who don't follow this code of conduct. A second offense results in a temporary ban. A third offense warrants a permanent ban. It is at the moderator's discretion to un-ban offending users, or to immediately ban a toxic user without warning.
