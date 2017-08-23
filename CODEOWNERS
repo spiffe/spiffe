@@ -24,10 +24,28 @@
 # https://github.com/mlakewood
 # https://www.linkedin.com/in/marklakewood
 
-* @evan2645 @jondb @jbeda @mlakewood @y2bishop2y
+/standards          @evan2645 @jondb @jbeda @mlakewood @y2bishop2y
+/GOVERNANCE.md      @evan2645 @jondb @jbeda @mlakewood @y2bishop2y
+/CODE-OF-CONDUCT.md @evan2645 @jondb @jbeda @mlakewood @y2bishop2y
 
 ##
-## SIG Maintainers
+## Community
 ##
 
-/community -* @drrt @ajessup @y2bishop2y @evan2645
+/community/         @drrt @ajessup @y2bishop2y @evan2645
+/README.md          @drrt @ajessup @y2bishop2y @evan2645
+/CLA.md             @drrt @ajessup @y2bishop2y @evan2645
+/CONTRIBUTING.md    @drrt @ajessup @y2bishop2y @evan2645
+
+##
+## SVID Test Suite
+##
+
+/svid-test/         @drrt @evan2645
+
+##
+## Misc
+##
+
+/.travis.yml        @drrt @evan2645
+/CODEOWNERS         @drrt @evan2645
