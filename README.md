@@ -1,66 +1,48 @@
-# What is the SPIFFE Project
+## About SPIFFE
 
-The Secure Production Identity Framework For Everyone (SPIFFE) is a new framework and set of
-standards for identifying and securing communications between services. At its heart, SPIFFE is:
+The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
+standards for identifying and securing communications between web-based services. At its heart, SPIFFE is:
 
-* A standard which defines how services identify themselves to each other. These are called
-  *SPIFFE IDs* and are implemented as URIs.
+* A standard defining how services identify themselves to each other. These are called *SPIFFE IDs* and are implemented as [Uniform Resource Identifiers (URIs)](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier).
 
-* A standard for encoding SPIFFE IDs in a cryptographically verifiable document called a
-  SPIFFE Verifiable Identity Document or *SVIDs*
+* A standard for encoding SPIFFE IDs in a cryptographically-verifiable document called a SPIFFE Verifiable Identity Document or *SVIDs*.
 
-* An API specification for issuing and/or retrieving SVIDs. This is the *Workload API*
+* An API specification for issuing and/or retrieving SVIDs. This is the *Workload API*.
 
-The SPIFFE Project is also producing a reference implementation that, in addition to the
-above, will:
+The SPIFFE Project is also producing a reference implementation that, in addition to the above, will:
 
-* Perform node and workload attestation
+* Perform node and workload attestation.
+* Implement a signing framework for securely issuing and renewing SVIDs.
+* Provide an API for registering nodes and workloads, along with their designated SPIFFE IDs.
 
-* Implement a signing framework for securely issuing and renewing SVIDs
-
-* Provide an API for registering nodes and workloads, along with their designated SPIFFE IDs
-
-# The Project
-
-## The Specifications
+## SPIFFE Standards
 
 * [Secure Production Infrastructure Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
 * [The SPIFFE Identity and Verifiable Identity Document](standards/SPIFFE-ID.md)
 * [The X.509 SPIFFE Verifiable Identity Document](standards/X509-SVID.md)
 * The Workload API (TBD)
 
-## Explore
+## Getting Started
 
-* [spiffe](https://github.com/spiffe/spiffe) - This repository includes the SPIFFE ID, SPIFFE
-  Verifiable Identity Document (SVID), and  Workload API specification, example code, and tests
-  as well as project governance, policies, and processes    
-* [sri](https://github.com/spiffe/sri) - The SPIFFE Reference Implementation, a software 
-  implementation of the SPIFFE Workload API that can be run on and accross a range of
-  different hosting environments.
-* [spiffe-examples](https://github.com/spiffe/spiffe-examples) - Examples and demonstrations
-* [go-spiffe](https://github.com/spiffe/go-spiffe) - Golang client libraries
+* [spiffe](https://github.com/spiffe/spiffe): This repository includes the SPIFFE ID, SVID and Workload API specifications, example code, and tests, as well as project governance, policies, and processes.    
+* [sri](https://github.com/spiffe/sri): This details a reference implementation of the SPIFFE Workload API that can be run on and accross varying hosting environments.
+* [spiffe-examples](https://github.com/spiffe/spiffe-examples): Examples and demonstrations.
+* [go-spiffe](https://github.com/spiffe/go-spiffe): Golang client libraries.
 
+### Communications
 
-## Communicate
+  * [Slack](https://spiffe.slack.com) (Join [here](https://slack.spiffe.io)).
+  * <dev-discussion@spiffe.io> (View or join [here](https://groups.google.com/a/spiffe.io/forum/#!forum/dev-discussion)).
+  * <user-discussion@spiffe.io> (View or join [here](https://groups.google.com/a/spiffe.io/forum/#!forum/user-discussion)).
 
-  * [Slack](https://spiffe.slack.com) (Join [here](https://slack.spiffe.io))
-  * <dev-discussion@spiffe.io> (View or join
-    [here](https://groups.google.com/a/spiffe.io/forum/#!forum/dev-discussion)).
-  * <user-discussion@spiffe.io> (View or join
-    [here](https://groups.google.com/a/spiffe.io/forum/#!forum/user-discussion)).
-
-
-## Contribute
+### Contribute
 
 * [CONTRIBUTING](/CONTRIBUTING.md)
 * [GOVERNANCE](/GOVERNANCE.md)
 
-#### SIGs & Working Groups<a name="sigs"></a>
+### SIGs & Working Groups<a name="sigs"></a>
 
-Most community activity is organized into Special Interest Groups (SIGs), time-bounded Working
-Groups, and the community meeting. SIGs follow these [guidelines](GOVERNANCE.md#sigs), although each
-may operate differently depending on their needs and workflows. Each group's material can be found
-in the [/sigs](/sigs) directory of this repository.
+Most community activity is organized into Special Interest Groups (SIGs), time-bounded working groups, and our monthly community-wide meetings. SIGs follow these [guidelines](GOVERNANCE.md#sigs), although each may operate differently depending on their needs and workflows. Each group's material can be found in the [/sigs](/sigs) directory of this repository.
 
 | Name | Leads | Group | Slack Channel | Meetings |
 |:------:|:-------:|:-------:|:---------------:|:----------:|
@@ -71,6 +53,4 @@ in the [/sigs](/sigs) directory of this repository.
 | [Integration: gRPC](/community/sig-integration-grpc/README.md) | [Lizan Zhou](https://github.com/lizan) (Google Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-integration-grpc) | [Here](https://spiffe.slack.com/messages/sig-integration-grpc/) | TBD by Leads |
 | [Integration: Kubernetes](/community/sig-integration-k8s/README.md) | [Vipin Jain](https://github.com/jainvipin) (Independent), [Tao Li](https://github.com/wattli) (Google Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-integration-k8s) | [Here](https://spiffe.slack.com/messages/sig-integration-k8s) | [Agenda](https://docs.google.com/document/d/1Dq4kSlfOpewnisItipTWx3Q8qCelbNP85yjMnSrdomE/edit) |
 
-
-**Follow the SPIFFE Project** You can find us on [Github](https://github.com/spiffe/) and
-  [Twitter](https://twitter.com/SPIFFEio)
+**Follow the SPIFFE Project** You can find us on [Github](https://github.com/spiffe/) and [Twitter](https://twitter.com/SPIFFEio).
