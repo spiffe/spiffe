@@ -77,9 +77,10 @@ Leaf SVIDs MUST set `keyEncipherment`, `keyAgreement`, and `digitalSignature`. T
 ### 4.4. Extended Key Usage
 This extension indicates one or more purposes for which the key contained in the certificate may be used, in addition to or in place of the basic purposes indicated in the key usage extension. It is defined in [RFC 5280, section 4.2.1.2][6].
 
-The extended key usage extension applies to leaf certificates only. Leaf SVIDs SHOULD include this extension, and it MAY be marked as critical. When included, fields `id-kp-serverAuth` and `id-kp-clientAuth` MUST be set, and all other fields MUST NOT be set.
+Leaf SVIDs SHOULD include this extension, and it MAY be marked as critical. When included, fields `id-kp-serverAuth` and `id-kp-clientAuth` MUST be set.
 
-Signing certificates MUST NOT include an Extended Key Usage extension.
+Signing certificates SHOULD NOT include an Extended Key Usage extension because the processing of the Extended Key Usage extension
+in intermediate CA certificates varies widely across X.509 certificate validation libraries.
 
 ## 5. Validation
 This section describes how an X.509 SVID is validated. The procedure uses standard X.509 validation, in addition to a small set of SPIFFE-specific validation steps.
