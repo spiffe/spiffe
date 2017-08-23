@@ -90,13 +90,22 @@ The validation of trust in a given SVID is based on standard X.509 path validati
 In order to perform path validation, it is necessary to possess the public portion of at least one signing certificate. The set of signing certificates required for validation is known as the CA bundle. The mechanism through which an entity can retrieve the relevant CA bundle(s) is out of scope for this document, and is instead defined in the SPIFFE Workload API specification.
 
 ### 5.2. Leaf Validation
-When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
+When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) the signing authority was authorized to issue it, and 3) all signatures use secure algorithms.
 
 When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`.
 
 It is the responsibility of the validator to ensure that the certificate used to sign the leaf is in fact an authority for the trust domain that the leaf resides in. Specifically, the SPIFFE ID of the signing certificate MUST be equal to the leaf certificate’s SPIFFE trust domain. In the context of X.509, the leaf’s signing certificate is the one with a Subject Key Identifier (SKID) equal to the Authority Key Identifier (AKID) set on the leaf certificate. This validation step is only performed between the leaf and its immediate signing certificate. That is to say, it does not proceeed all the way up the trust chain.
 
 Validation of the signing authority in this manner is necessary due to lack of widespread support for X.509 URI name constraints (see [section 4.2](#4.2.-name-constraints)). As support for URI name constraints becomes more widespread, future versions this document may update the requirements set forth in this section in order to better leverage name constraint validation.
+
+When verifying signatures (e.g. when verifying the signature of a certificate using its issuer's public key, and when verifying a signature in a TLS handshake using the leaf certificate's public key) the validator MUST ensure that the signature uses a secure signature algorithm. In particular, all signatures MUST use one of the following signature algorithms:
+
+* ECDSA using the P-256 curve and using SHA-256 as the digest algorithm.
+* ECDSA using the P-384 curve and using SHA-384 as the digest algorithm.
+* RSA using PSS (not PKCS#1), with an RSA public key having a modulus of at least 2047 bits and at most 8192 bits, and an odd public exponent of at least 65537, and using one of SHA-256, SHA-384, or SHA-512 as the digest algorithm.
+* Ed25519 (using SHA-512) as specified in https://tools.ietf.org/html/draft-ietf-curdle-pkix-05.
+
+In particular, validators MUST NOT accept signatures with weak keys (e.g. RSA keys smaller than 2047 bits or a public exponent of 3) and validators MUST NOT accept signatures using weak digest algorithms (e.g. MD5 or SHA-1).
 
 ## 6. Conclusion
 This document set forth conventions and standards for the issuance and validation of X.509-based SPIFFE Verifiable Identity Documents. It forms the basis for real world SPIFFE service authentication and SVID validation. By conforming to the X.509 SVID standard, it is possible to build an identity and authentication system which is interoperable and platform agnostic.
