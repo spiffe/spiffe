@@ -56,7 +56,7 @@ Leaf and signing certificates carry different X.509 properties - some for securi
 ### 4.1. Basic Constraints
 The basic constraints X.509 extension identifies whether the certificate is a signing certificate, as well as the maximum depth of valid certification paths that include this certificate. It is defined in [RFC 5280, section 4.2.1.9][3].
 
-Valid X.509 SVIDs (both leaf and signing certificates) MUST NOT set the `pathLenConstraint` field. Signing certificates MUST set the `CA` field to `true`, and leaf certificates MUST set the `CA` field to `false`.
+SVID signing certificates MUST set the `CA` field to `true` and MUST NOT set the `pathLenConstraint` field. Leaf certificates MUST either omit the basic constraints extension or have an empty basic constraints field (an empty basic constraints field is the only correct encoding of a basic constraint with `CA` set to false.)
 
 ### 4.2. Name Constraints
 Name constraints indicate a namespace within which all SPIFFE IDs in subsequent certificates in a certification path MUST be located. They are used to limit the blast radius of a compromised signing certificate to the named trust domain(s), and are defined in [RFC 5280, section 4.2.1.10][4]. This section applies to signing certificates only.
@@ -92,7 +92,7 @@ In order to perform path validation, it is necessary to possess the public porti
 ### 5.2. Leaf Validation
 When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
 
-When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`.
+When validating an X.509 SVID (leaf), the validator MUST ensure that the `CA` field in the basic constraints extension, if present, is NOT set to `true`. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`.
 
 It is the responsibility of the validator to ensure that the certificate used to sign the leaf is in fact an authority for the trust domain that the leaf resides in. Specifically, the SPIFFE ID of the signing certificate MUST be equal to the leaf certificate’s SPIFFE trust domain. In the context of X.509, the leaf’s signing certificate is the one with a Subject Key Identifier (SKID) equal to the Authority Key Identifier (AKID) set on the leaf certificate. This validation step is only performed between the leaf and its immediate signing certificate. That is to say, it does not proceeed all the way up the trust chain.
 
