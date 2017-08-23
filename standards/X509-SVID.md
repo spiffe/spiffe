@@ -87,7 +87,7 @@ This section describes how an X.509 SVID is validated. The procedure uses standa
 ### 5.1. Path Validation
 The validation of trust in a given SVID is based on standard X.509 path validation, and MUST follow [RFC 5280][1] path validation semantics.
 
-In order to perform path validation, it is necessary to possess the public portion of at least one signing certificate. The set of signing certificates required for validation is known as the CA bundle. The mechanism through which an entity can retrieve the relevant CA bundle(s) is out of scope for this document, and is instead defined in the SPIFFE Workload API specification.
+Certificate path validation requires the leaf SVID certificate and one or more SVID signing certificates. The set of signing certificates required for validation is known as the CA bundle. The mechanism through which an entity can retrieve the relevant CA bundle(s) is out of scope for this document, and is instead defined in the SPIFFE Workload API specification.
 
 ### 5.2. Leaf Validation
 When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
