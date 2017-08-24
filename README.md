@@ -1,4 +1,4 @@
-<img src="logo/64x256.png" width="256" height="64">
+<img src="community/logo/64x256.png" width="256" height="64">
 
 ## About SPIFFE
 
