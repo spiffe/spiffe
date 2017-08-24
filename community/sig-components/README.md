@@ -22,4 +22,5 @@ SPIFFE deployment
 * Accomodate specific platform integrations
 
 ### Leads:
+* Madhukesh Wali (Scytale)
 * Oliver Liu (Google)
