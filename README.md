@@ -1,3 +1,5 @@
+<img src="logo/64x256.png" width="256" height="64">
+
 ## About SPIFFE
 
 The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
