@@ -20,5 +20,5 @@ A Special Interest Group (SIG) for the different components that make up a SPIFF
 * Accommodate specific platform integrations.
 
 ### Leads:
-* [Madhukesh Wali (Scytale)](https://github.com/walmav)
-* [Oliver Liu (Google)](https://github.com/myidpt)
+* Madhukesh Wali ([GitHub](https://github.com/walmav) / [LinkedIn](https://www.linkedin.com/in/mavwali/))
+* Oliver Liu ([GitHub](https://github.com/myidpt) / [LinkedIn](https://www.linkedin.com/in/yonggang-oliver-liu-bbbb399/))
