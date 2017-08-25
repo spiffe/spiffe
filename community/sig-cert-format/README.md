@@ -5,7 +5,7 @@ A Special Interest Group for setting up the SPIFFE certificate and SPIFFE ID for
 ### Meetings:
 * Time: Every other Monday @ 4:00pm PDT
     * [Meeting Notes](https://docs.google.com/document/d/1YaUwEbP9Vs22oTsuy79pd7IYfIMZL5ZwCYRa8GTewRo/)
-    * [Calendar](https://calendar.google.com/calendar/ical/scytale.io_12jcf9iatb8ljkk5rbt3v3slbc%40group.calendar.google.com/public/basic.ics) (See this [Google support page](https://support.google.com/calendar/answer/37100?co=GENIE.Platform%3DDesktop&hl=en) to learn more about importing .ics files)
+    * [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_12jcf9iatb8ljkk5rbt3v3slbc%40group.calendar.google.com/public/basic.ics) (See this [Google support page](https://support.google.com/calendar/answer/37100?co=GENIE.Platform%3DDesktop&hl=en) to learn more about importing .ics files)
 
 ### Contact:
 * [Slack Channel](https://spiffe.slack.com/messages/sig-cert-format/)
