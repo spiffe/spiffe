@@ -5,7 +5,7 @@ A Special Interest Group (SIG) for running SPIFFE in AWS. We encourage attendees
 ### Meetings:
 * Every other Thursday @ 2:00pm PDT
     * [Meetings Notes](https://goo.gl/xBfMQ8)
-    * [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_86ue2u4jf0v5cqt06gdfg7dotg%40group.calendar.google.com/public/basic.ics)
+    * [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_86ue2u4jf0v5cqt06gdfg7dotg%40group.calendar.google.com/public/basic.ics) (See this [Google support page](https://support.google.com/calendar/answer/37100?co=GENIE.Platform%3DDesktop&hl=en) to learn more about importing .ics files)
 
 ### Contact:
 * [Slack Channel](https://spiffe.slack.com/messages/sig-integration-aws/)
