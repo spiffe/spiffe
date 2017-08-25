@@ -33,7 +33,7 @@ Perhaps the most important function of SPIFFE is to secure process to process co
 This specification addresses the encoding of SVID information into an X.509 certificate, the constraints which must be set, as well as how to validate X.509 SVIDs.
 
 ## 2. SPIFFE ID
-In an X.509 SVID, the corresponding SPIFFE ID is set as a URI type in the Subject Alternative Name extension (SAN extension, see [RFC 5280 section 4.2.16][2]). An X.509 SVID MUST contain one URI SAN. It MAY contain any number of other SAN fields, including DNS SANs.
+In an X.509 SVID, the corresponding SPIFFE ID is set as a URI type in the Subject Alternative Name extension (SAN extension, see [RFC 5280 section 4.2.16][2]). An X.509 SVID MUST contain exactly one URI SAN. It MAY contain any number of other SAN fields, including DNS SANs.
 
 ## 3. Hierarchy
 This section discusses the relationship between leaf, root, and intermediate certificates, as well as the requirements placed upon each.
