@@ -5,7 +5,7 @@ A Special Interest Group (SIG) for the different components that make up a SPIFF
 ### Meetings:
 * Every Thursday @ 09:00am PDT
     * [Meetings Notes](https://docs.google.com/document/d/1uJCb9e932ponaKvln1PQkg72zJnEjbn-fJlZ5iZbTPk)
-    * [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_4qu8v9e1fhkq38ioh8tku7gf8o%40group.calendar.google.com/public/basic.ics)
+    * [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_4qu8v9e1fhkq38ioh8tku7gf8o%40group.calendar.google.com/public/basic.ics) (See this [Google support page](https://support.google.com/calendar/answer/37100?co=GENIE.Platform%3DDesktop&hl=en) to learn more about importing .ics files)
 
 ### Contact:
 * [Slack Channel](https://spiffe.slack.com/messages/sig-components/)
