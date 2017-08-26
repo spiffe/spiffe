@@ -92,8 +92,7 @@ In order to perform path validation, it is necessary to possess the public porti
 ### 5.2. Leaf Validation
 When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
 
-When validating an X.509 SVID (leaf), the validator MUST ensure that the X509 version is 3 (encoded as 0x02). The validator MUST ensure
-that the `CA` field in the basic constraints extension, if present, is NOT set to `true`. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`.
+When validating an X.509 SVID (leaf), the validator MUST ensure that the X509 version is 3 (encoded as 0x02). The validator MUST ensure that the `CA` field in the basic constraints extension, if present, is NOT set to `true`. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`.
 
 It is the responsibility of the validator to ensure that the certificate used to sign the leaf is in fact an authority for the trust domain that the leaf resides in. Specifically, the SPIFFE ID of the signing certificate MUST be equal to the leaf certificate’s SPIFFE trust domain. In the context of X.509, the leaf’s signing certificate is the one with a Subject Key Identifier (SKID) equal to the Authority Key Identifier (AKID) set on the leaf certificate. This validation step is only performed between the leaf and its immediate signing certificate. That is to say, it does not proceeed all the way up the trust chain.
 
