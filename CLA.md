@@ -13,7 +13,7 @@ Only original contributions from CLA signatories can be accepted into SPIFFE.
 
 #### 2. Request
 
-**Individuals**
+**Individuals or employees of an organization that has signed a CLA**
 
 Please fill out [this form](https://goo.gl/forms/P0938KfmXzUIQy2x2)
 
