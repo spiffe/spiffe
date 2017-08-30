@@ -34,6 +34,7 @@ The SPIFFE Project is also producing a reference implementation that, in additio
 ### Communications
 
   * [Slack](https://spiffe.slack.com) (Join [here](https://slack.spiffe.io)).
+  * <announce@spiffe.io> (View or join [here](https://groups.google.com/a/spiffe.io/forum/#!forum/announce)).
   * <dev-discussion@spiffe.io> (View or join [here](https://groups.google.com/a/spiffe.io/forum/#!forum/dev-discussion)).
   * <user-discussion@spiffe.io> (View or join [here](https://groups.google.com/a/spiffe.io/forum/#!forum/user-discussion)).
 
