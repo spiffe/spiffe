@@ -53,7 +53,7 @@ The SPIFFE Project is governed by a [TSC](https://github.com/spiffe/spiffe/blob/
 
 The TSC adheres to the following:
 
-* The TSC meets the first Wednesday of each month ([Meeting Notes](https://docs.google.com/document/d/14Kttz1g-S-DdK0i_0JTjr8LDEImlSvCPT2qRSf6zGSY/edit))
+* The TSC meets the first Wednesday of each month ([Meeting Notes](https://docs.google.com/document/d/14Kttz1g-S-DdK0i_0JTjr8LDEImlSvCPT2qRSf6zGSY/edit) | [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_k02mh5on54t6jjof5s6932ebgs%40group.calendar.google.com/public/basic.ics))
 * The TSC is comprised of at least five (5) members.
 * No more than 2 TSC members may be affiliated with the same organization.
 * At least 40% of the TSC must be represented by organizations that currently have a SPIFFE implementation deployed in production.
