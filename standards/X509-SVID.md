@@ -79,7 +79,7 @@ This extension indicates one or more purposes for which the key contained in the
 
 Leaf SVIDs SHOULD include this extension, and it MAY be marked as critical. When included, fields `id-kp-serverAuth` and `id-kp-clientAuth` MUST be set.
 
-Signing certificates SHOULD NOT include an Extended Key Usage extension because the processing of the Extended Key Usage extension in intermediate CA certificates varies widely across X.509 certificate validation libraries. Some X.509 implementations will impose EKU constraints in intermediate CA certificates on all certificates below them in the trust chain, and others will not.
+Signing certificates MAY include an Extended Key Usage extension. Note that the processing of the Extended Key Usage extension in intermediate CA certificates varies widely across X.509 certificate validation libraries. Some X.509 implementations will impose EKU constraints in intermediate CA certificates on all certificates below them in the trust chain, and others will not.
 
 ## 5. Validation
 This section describes how an X.509 SVID is validated. The procedure uses standard X.509 validation, in addition to a small set of SPIFFE-specific validation steps.
