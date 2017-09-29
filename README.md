@@ -27,7 +27,7 @@ The SPIFFE Project is also producing a reference implementation that, in additio
 ## Getting Started
 
 * [spiffe](https://github.com/spiffe/spiffe): This repository includes the SPIFFE ID, SVID and Workload API specifications, example code, and tests, as well as project governance, policies, and processes.    
-* [sri](https://github.com/spiffe/sri): This details a reference implementation of the SPIFFE Workload API that can be run on and accross varying hosting environments.
+* [spire](https://github.com/spiffe/spire): This is a reference implementation of SPIFFE and the SPIFFE Workload API that can be run on and accross varying hosting environments.
 * [spiffe-examples](https://github.com/spiffe/spiffe-examples): Examples and demonstrations.
 * [go-spiffe](https://github.com/spiffe/go-spiffe): Golang client libraries.
 
