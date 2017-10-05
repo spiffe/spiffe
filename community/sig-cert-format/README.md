@@ -1,4 +1,6 @@
-# SIG Certificate Format
+# DEPRECATED - See [SIG-Spec](../sig-spec/README.md)
+
+## SIG Certificate Format
 
 A Special Interest Group for setting up the SPIFFE certificate and SPIFFE ID format.
 
