@@ -1,6 +1,4 @@
-# DEPRECATED - See [SIG-Spec](../sig-spec/README.md)
-
-## SIG Components
+# SIG Components
 
 A Special Interest Group (SIG) for the different components that make up a SPIFFE deployment.
 

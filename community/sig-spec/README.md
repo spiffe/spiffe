@@ -16,6 +16,7 @@ A Special Interest Group (SIG) concerning the official SPIFFE specifications.
 	* Ensure that Pull Requests and Issues are addressed
 	* Make recommendations for changes and updates
 	* Ensure wide interoperability
+	* Own creation and maintenance of SPIFFE conformance test suites
 
 ### Non-Goals:
 * SPIRE maintenance

@@ -24,9 +24,15 @@
 # https://github.com/mlakewood
 # https://www.linkedin.com/in/marklakewood
 
-/standards          @evan2645 @jondb @jbeda @mlakewood @y2bishop2y
 /GOVERNANCE.md      @evan2645 @jondb @jbeda @mlakewood @y2bishop2y
 /CODE-OF-CONDUCT.md @evan2645 @jondb @jbeda @mlakewood @y2bishop2y
+
+##
+## SPIFFE Maintainers
+##
+
+# TODO: Missing Davi Ottenheimer
+/standards          @evan2645  @justinburke @mattmoyer @pragashjj @diogomonica
 
 ##
 ## Community
