@@ -70,9 +70,9 @@ The key usage extension defines the purpose of the key contained in the certific
 
 The key usage extension MUST be set on all SVIDs, and MUST be marked critical.
 
-SVID signing certificates MUST set `keyCertSign` and `cRLSign`. They MUST NOT set `keyEncipherment` or `keyAgreement`. This helps ensure that they cannot be used for authentication purposes.
+SVID signing certificates MUST set `keyCertSign`. They MAY set `cRLSign`.
 
-Leaf SVIDs MUST set `keyEncipherment`, `keyAgreement`, and `digitalSignature`. They MUST NOT set `keyCertSign` or `cRLSign`.
+Leaf SVIDs MUST set `digitalSignature`. They MAY set `keyEncipherment` and/or `keyAgreement`; these mostly make sense only for certificates for RSA keys, and usually they aren't needed even then. Leaf SVIDs MUST NOT set `keyCertSign` or `cRLSign`.
 
 ### 4.4. Extended Key Usage
 This extension indicates one or more purposes for which the key contained in the certificate may be used, in addition to or in place of the basic purposes indicated in the key usage extension. It is defined in [RFC 5280, section 4.2.1.2][6].
