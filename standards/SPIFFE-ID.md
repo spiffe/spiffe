@@ -8,7 +8,7 @@ The SPIFFE standard provides a specification for a framework capable of bootstra
 
 This document, in particular, serves as the core specification for the SPIFFE standard. While there are other specifications falling under the SPIFFE umbrella, conformance with this document is sufficient for achieving SPIFFE compliance, and gaining the interoperability benefit of the SPIFFE standard itself.
 
-For more general information about SPIFFE, please see the "Secure Production Identity Framework for Everyone (SPIFFE)" specification.
+For more general information about SPIFFE, please see the [Secure Production Infrastructure Framework for Everyone (SPIFFE)](SPIFFE.md) standard.
 
 ## Table of Contents
 1\. [Introduction](#1.-introduction)  
@@ -66,7 +66,7 @@ Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of
   In this example, the administrator of acme.com is running a Kubernetes cluster k8s-west.acme.com, which has a ‘staging’ namespace, and within this a service account (sa) called ‘default’. These are conventions defined by the SPIFFE administrator, not assertions guaranteed by this specification.
 
 
-* Opaque SPIFFE idenity
+* Opaque SPIFFE identity
 
   The above examples are illustrative and, in the most general case, the SPIFFE path may be left opaque, carrying no visible hierarchical information. Metadata, such as geographic location, logical system partitioning and/or service name, may be provided by a secondary system, where identities and their attributes are registered. that can be queried to retrieve any metadata associated with the SPIFFE identifier. For example:
 
