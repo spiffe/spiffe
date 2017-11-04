@@ -22,7 +22,7 @@ The SPIFFE Project is also producing a reference implementation that, in additio
 * [Secure Production Infrastructure Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
 * [The SPIFFE Identity and Verifiable Identity Document](standards/SPIFFE-ID.md)
 * [The X.509 SPIFFE Verifiable Identity Document](standards/X509-SVID.md)
-* The Workload API (TBD)
+* The Workload API ([WIP](https://github.com/spiffe/spire/blob/master/proto/api/workload/workload.proto))
 
 ## Getting Started
 
