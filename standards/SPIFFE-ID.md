@@ -11,15 +11,15 @@ This document, in particular, serves as the core specification for the SPIFFE st
 For more general information about SPIFFE, please see the [Secure Production Infrastructure Framework for Everyone (SPIFFE)](SPIFFE.md) standard.
 
 ## Table of Contents
-1\. [Introduction](#1.-introduction)  
-2\. [SPIFFE Identity](#2.-spiffe-identity)  
-2.1. [Trust Domain](#2.1.-trust-domain)  
-2.2. [Path](#2.2.-path)  
-3\. [SPIFFE Verifiable Identity Document](#3.-spiffe-verifiable-identity-document)  
-3.1. [SVID Trust](#3.1.-svid-trust)  
-3.2. [SVID Components](#3.2.-svid-components)  
-3.3. [SVID Format](#3.3.-svid-format)  
-4\. [Conclusion](#4.-conclusion)  
+1\. [Introduction](#1-introduction)
+2\. [SPIFFE Identity](#2-spiffe-identity)
+2.1. [Trust Domain](#21-trust-domain)
+2.2. [Path](#22-path)
+3\. [SPIFFE Verifiable Identity Document](#3-spiffe-verifiable-identity-document)
+3.1. [SVID Trust](#31-svid-trust)
+3.2. [SVID Components](#32-svid-components)
+3.3. [SVID Format](#33-svid-format)
+4\. [Conclusion](#4-conclusion)
 
 ## 1. Introduction
 This document sets forth the official SPIFFE specification. It defines the two most fundamental components of the SPIFFE standard: the SPIFFE Identity and the SPIFFE Verifiable Identity document.
