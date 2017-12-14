@@ -34,7 +34,7 @@ An SVID itself is not a document type. Instead, we define 1) the properties requ
 The SPIFFE SVID is defined in the [SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md) specification. The X.509 SVID specification is defined in [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md)
 
 ## 4. The Workload API
-The SPIFFE Workload API is the method through which workloads, or compute processes, obtain their SVID(s). It is typically exposed locally, and is unauthenticated. It is up to the implementor of the Workload API to authenticate the caller via an out-of-band method.
+The SPIFFE Workload API is the method through which workloads, or compute processes, obtain their SVID(s). It is typically exposed locally (eg. via a Unix domain socket), and explicitly does not include an authentication handshake or authenticating token from the workload. Implementors can verify the authenticity of the caller to the Workload API via an out-of-band method, such as inspecting the properties of the process calling the Unix domain socket that are provided by the operating system.
 
 In addition to providing a workload with its necessary SVIDs, the Workload API delivers the CA bundles which the workload should outwardly trust. These bundles are associated with trust domains outside of the issued SVID, and are used for federation.
 
