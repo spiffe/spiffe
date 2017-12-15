@@ -56,7 +56,7 @@ Leaf and signing certificates carry different X.509 properties - some for securi
 ### 4.1. Basic Constraints
 The basic constraints X.509 extension identifies whether the certificate is a signing certificate, as well as the maximum depth of valid certification paths that include this certificate. It is defined in [RFC 5280, section 4.2.1.9][3].
 
-Valid X.509 SVIDs (both leaf and signing certificates) MUST NOT set the `pathLenConstraint` field. Signing certificates MUST set the `CA` field to `true`, and leaf certificates MUST set the `CA` field to `false`.
+Valid X.509 SVIDs (both leaf and signing certificates) MAY set the `pathLenConstraint` field. Signing certificates MUST set the `CA` field to `true`, and leaf certificates MUST set the `CA` field to `false`.
 
 ### 4.2. Name Constraints
 Name constraints indicate a namespace within which all SPIFFE IDs in subsequent certificates in a certification path MUST be located. They are used to limit the blast radius of a compromised signing certificate to the named trust domain(s), and are defined in [RFC 5280, section 4.2.1.10][4]. This section applies to signing certificates only.
@@ -104,7 +104,7 @@ Extension | Field | Description
 ----------|-------|------------
 Subject Alternate Name | uniformResourceIdentifier | This field is set equal to the SPIFFE ID. Only one instance of this field is permitted.
 Basic Constraints | CA | This field must be set to `true` if and only if the SVID is a signing certificate.
-Basic Constraints | pathLenConstraint | This field must not be set.
+Basic Constraints | pathLenConstraint | This field may be be set if the implementor wishes to enforce a finite CA hierarchy depth, for example, if inherited from an existing private key infrastructure (PKI).
 Name Constraints | permittedSubtrees | This field may be set if the implementor wishes to use URI name constraints. It will be required in a future version of this document.
 Key Usage | keyCertSign | This field must be set if and only if the SVID is a signing certificate.
 Key Usage | cRLSign | This field must be set if and only if the SVID is a signing certificate.

@@ -97,7 +97,6 @@ nameConstraints        = critical, {{ SPIFFE_ROOT_NS }}
 subjectKeyIdentifier   = hash
 authorityKeyIdentifier = keyid:always,issuer
 
-# TODO: No pathLenConstraint, just True for CA, does this suffice
 basicConstraints       = critical, CA:true
 keyUsage               = critical, digitalSignature, cRLSign, keyCertSign
 nameConstraints        = critical, {{ SPIFFE_INTER_NS }}
