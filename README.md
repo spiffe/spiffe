@@ -2,7 +2,7 @@
 
 ## About SPIFFE
 
-The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
+Hello World ... The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
 standards for identifying and securing communications between web-based services. At its heart, SPIFFE is:
 
 * A standard defining how services identify themselves to each other. These are called *SPIFFE IDs* and are implemented as [Uniform Resource Identifiers (URIs)](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier).
