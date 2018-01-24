@@ -102,7 +102,7 @@ This document set forth conventions and standards for the issuance and validatio
 ## Appendix A. X.509 Field Reference
 Extension | Field | Description
 ----------|-------|------------
-Subject Alternate Name | uniformResourceIdentifier | This field is set equal to the SPIFFE ID. Only one instance of this field is permitted.
+Subject Alternate Name | uniformResourceIdentifier | This field is set equal to the SPIFFE ID. Only one instance of this field is permitted. If a Subject field is also set in the certificate, then this field MAY be marked as criticial. If a Subject field is not set, then this field MUST be marked critical.  
 Basic Constraints | CA | This field must be set to `true` if and only if the SVID is a signing certificate.
 Basic Constraints | pathLenConstraint | This field may be be set if the implementor wishes to enforce a finite CA hierarchy depth, for example, if inherited from an existing private key infrastructure (PKI).
 Name Constraints | permittedSubtrees | This field may be set if the implementor wishes to use URI name constraints. It will be required in a future version of this document.
