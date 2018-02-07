@@ -75,7 +75,7 @@ SVID signing certificates MUST set `keyCertSign`. They MAY set `cRLSign`.
 Leaf SVIDs MUST set `digitalSignature`. They MAY set `keyEncipherment` and/or `keyAgreement`; these mostly make sense only for certificates for RSA keys, and usually they aren't needed even then. Leaf SVIDs MUST NOT set `keyCertSign` or `cRLSign`.
 
 ### 4.4. Extended Key Usage
-This extension indicates one or more purposes for which the key contained in the certificate may be used, in addition to or in place of the basic purposes indicated in the key usage extension. It is defined in [RFC 5280, section 4.2.1.2][6].
+This extension indicates one or more purposes for which the key contained in the certificate may be used, in addition to or in place of the basic purposes indicated in the key usage extension. It is defined in [RFC 5280, section 4.2.1.12][6].
 
 Leaf SVIDs SHOULD include this extension, and it MAY be marked as critical. When included, fields `id-kp-serverAuth` and `id-kp-clientAuth` MUST be set.
 
@@ -107,12 +107,12 @@ Basic Constraints | CA | This field must be set to `true` if and only if the SVI
 Basic Constraints | pathLenConstraint | This field may be be set if the implementor wishes to enforce a finite CA hierarchy depth, for example, if inherited from an existing private key infrastructure (PKI).
 Name Constraints | permittedSubtrees | This field may be set if the implementor wishes to use URI name constraints. It will be required in a future version of this document.
 Key Usage | keyCertSign | This field must be set if and only if the SVID is a signing certificate.
-Key Usage | cRLSign | This field must be set if and only if the SVID is a signing certificate.
-Key Usage | keyAgreement | This field must be set if and only if the SVID is a leaf certificate.
-Key Usage | keyEncipherment | This field must be set if and only if the SVID is a leaf certificate.
+Key Usage | cRLSign | This field may be set if and only if the SVID is a signing certificate.
+Key Usage | keyAgreement | This field may be set if and only if the SVID is a leaf certificate.
+Key Usage | keyEncipherment | This field may be set if and only if the SVID is a leaf certificate.
 Key Usage | digitalSignature | This field must be set if and only if the SVID is a leaf certificate.
-Extended Key Usage | id-kp-serverAuth | This field may be set if and only if the SVID is a leaf certificate.
-Extended Key Usage | id-kp-clientAuth | This field may be set if and only if the SVID is a leaf certificate.
+Extended Key Usage | id-kp-serverAuth | This field may be set for either leaf or signing certificates.
+Extended Key Usage | id-kp-clientAuth | This field may be set for either leaf or signing certificates.
 
 [1]: https://tools.ietf.org/html/rfc5280
 [2]: https://tools.ietf.org/html/rfc5280#section-4.2.1.6
