@@ -1,4 +1,4 @@
-# Secure Production Infrastructure Framework for Everyone (SPIFFE)
+# Secure Production Identity Framework for Everyone (SPIFFE)
 
 ## Status of this Memo
 This document specifies an experimental identity and identity issuance standard for the internet community, and requests discussion and suggestions for improvements. It is a work in progress. Distribution of this document is unlimited.
