@@ -31,19 +31,21 @@ Section 3 describes the SPIFFE Verifiable Identity Document (or SVID). An SVID i
 Conformance with this document is sufficient for the purposes of SPIFFE compliance.
 
 ## 2. SPIFFE Identity
-In order to communicate an identity, we must first define an identity namespace. A SPIFFE Identity (or SPIFFE ID) is defined as a URI comprising a “trust domain” and an associated path. The trust domain stands as the authority component of the URI, and serves to identify the system in which a given identity is issued. The following example demonstrates how a SPIFFE ID is constructed:
+In order to communicate an identity, we must first define an identity namespace. A SPIFFE Identity (or SPIFFE ID) is defined as an [RFC 3986](https://tools.ietf.org/html/rfc3986) compliant URI comprising a “trust domain” and an associated path. The trust domain stands as the authority component of the URI, and serves to identify the system in which a given identity is issued. The following example demonstrates how a SPIFFE ID is constructed:
 
 ```spiffe://trust-domain/path```
 
-Valid SPIFFE IDs MUST be prefixed with the `spiffe://` scheme.
+Valid SPIFFE IDs MUST use the `spiffe` scheme, include a non-zero trust domain, and MUST NOT include a query or fragment component. In other words, a SPIFFE ID is defined in its entirety by the `spiffe` scheme and a site-specific `hier-part` which includes an authority component and an optional path.
 
 ### 2.1. Trust Domain
 The trust domain corresponds to the trust root of a system. A trust domain could represent an individual, organization, environment or department running their own independent SPIFFE infrastructure.
 
 Trust domains are nominally self-registered, unlike public DNS there is no delegating authority that acts to assert and register a base domain to an actual legal real-world entity, or assert that legal entity has fair and due rights to any particular trust domain.
 
+The trust domain is defined as the authority component of the URI - specifically, the `host` part of the authority. The `userinfo` and `port` parts of the authority component MUST NOT be set, and the `:` delimiter MUST NOT be present. Please see section 3.2 of [RFC 3986](https://tools.ietf.org/html/rfc3986) for more information.
+
 ### 2.2. Path
-The path component of a SPIFFE name allows for the unique identification of a given workload. The meaning behind the path is left open ended and the responsibility of the administrator to define.
+The path component of a SPIFFE ID allows for the unique identification of a given workload. The meaning behind the path is left open ended and the responsibility of the administrator to define.
 
 Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of paths is reserved as an exercise to the implementer and are outside the SVID specification. However some examples and conventions are expressed below.
 
@@ -51,9 +53,9 @@ Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of
 
   Often it is valuable to identify services directly. For example, an administrator may decree that any process running on a particular set of nodes should be able to present itself as a particular identity. For example:
 
-  ```spiffe://staging.acme.com/payments/mysql```
+  ```spiffe://staging.example.com/payments/mysql```
   or
-  ```spiffe://staging.acme.com/payments/web-fe```
+  ```spiffe://staging.example.com/payments/web-fe```
 
   The two SPIFFE IDs above refer to two different components - the mysql database service and a web front-end - of a payments service running in a staging environment. The meaning of ‘staging’ as an environment, ‘payments’ as a high level service collection is defined by the implementer.
 
@@ -61,16 +63,16 @@ Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of
 
   Often higher level orchestrators and platforms may have their own identity concepts built in (such as Kubernetes service accounts, or AWS/GCP service accounts) and it is helpful to be able to directly map SPIFFE identities to those identities. For example:
 
-  ```spiffe://k8s-west.acme.com/ns/staging/sa/default```
+  ```spiffe://k8s-west.example.com/ns/staging/sa/default```
 
-  In this example, the administrator of acme.com is running a Kubernetes cluster k8s-west.acme.com, which has a ‘staging’ namespace, and within this a service account (sa) called ‘default’. These are conventions defined by the SPIFFE administrator, not assertions guaranteed by this specification.
+  In this example, the administrator of example.com is running a Kubernetes cluster k8s-west.example.com, which has a ‘staging’ namespace, and within this a service account (sa) called ‘default’. These are conventions defined by the SPIFFE administrator, not assertions guaranteed by this specification.
 
 
 * Opaque SPIFFE identity
 
-  The above examples are illustrative and, in the most general case, the SPIFFE path may be left opaque, carrying no visible hierarchical information. Metadata, such as geographic location, logical system partitioning and/or service name, may be provided by a secondary system, where identities and their attributes are registered. that can be queried to retrieve any metadata associated with the SPIFFE identifier. For example:
+  The above examples are illustrative and, in the most general case, the SPIFFE path may be left opaque, carrying no visible hierarchical information. Metadata, such as geographic location, logical system partitioning and/or service name, may be provided by a secondary system, where identities and their attributes are registered. That can be queried to retrieve any metadata associated with the SPIFFE identifier. For example:
 
-  ```spiffe://acme.com/9eebccd2-12bf-40a6-b262-65fe0487d453```
+  ```spiffe://example.com/9eebccd2-12bf-40a6-b262-65fe0487d453```
 
 ## 3. SPIFFE Verifiable Identity Document
 A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE ID's trust domain, and the presenter can prove ownership of the associated private key.
