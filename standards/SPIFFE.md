@@ -38,7 +38,7 @@ The SPIFFE Workload API is the method through which workloads, or compute proces
 
 In addition to providing a workload with its necessary SVIDs, the Workload API delivers the CA bundles which the workload should outwardly trust. These bundles are associated with trust domains outside of the issued SVID, and are used for federation.
 
-The Workload API is defined in the "SPIFFE Workload API" specification, please see that document for more information.
+The Workload API is defined in the [SPIFFE Workload API](SPIFFE_Workload_API.md) specification, please see that document for more information.
 
 ## 5. Conclusion
 This document covered, at a high level, the various components that make up the SPIFFE specification as a whole. Together, these components solve many of the authentication and traffic security challenges presented in modern, heterogeneous environments, particularly those which are highly dynamic. For more detailed information, please see the specification(s) related to the component of interest.

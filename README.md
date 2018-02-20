@@ -22,7 +22,8 @@ The SPIFFE Project is also producing a reference implementation that, in additio
 * [Secure Production Infrastructure Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
 * [The SPIFFE Identity and Verifiable Identity Document](standards/SPIFFE-ID.md)
 * [The X.509 SPIFFE Verifiable Identity Document](standards/X509-SVID.md)
-* The Workload API ([WIP](https://github.com/spiffe/spire/blob/master/proto/api/workload/workload.proto))
+* [The SPIFFE Workload Endpoint](standards/SPIFFE_Workload_Endpoint.md)
+* [The SPIFFE Workload API](standards/SPIFFE_Workload_API.md)
 
 ## Getting Started
 
