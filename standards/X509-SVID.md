@@ -11,21 +11,21 @@ An SVID on its own does not represent a new document type. Rather, we set forth 
 This document defines a standard in which an X.509 certificate is used as an SVID. Basic understanding of X.509 is assumed. Please reference [RFC 5280][1] for information specific to X.509.
 
 ## Table of Contents
-1\. [Introduction](#1.-introduction)  
-2\. [SPIFFE ID](#2.-spiffe-id)  
-3\. [Hierarchy](#3.-hierarchy)  
-3.1. [Leaf Certificates](#3.1.-leaf-certificates)  
-3.2. [Signing Certificates](#3.2.-signing-certificates)  
-4\. [Constraints and Usage](#4.-constraints-and-usage)  
-4.1. [Basic Constraints](#4.1.-basic-constraints)  
-4.2. [Name Constraints](#4.2.-name-constraints)  
-4.3. [Key Usage](#4.3.-key-usage)  
-4.4. [Extended Key Usage](#4.4.-extended-key-usage)  
-5\. [Validation](#5.-validation)  
-5.1. [Path Validation](#5.1.-path-validation)  
-5.2. [Leaf Validation](#5.2.-leaf-validation)  
-6\. [Conclusion](#6.-conclusion)  
-Appendix A. [X.509 Field Reference](#appendix-a.-x.509-field-reference)  
+1\. [Introduction](#1-introduction)  
+2\. [SPIFFE ID](#2-spiffe-id)  
+3\. [Hierarchy](#3-hierarchy)  
+3.1. [Leaf Certificates](#31-leaf-certificates)  
+3.2. [Signing Certificates](#32-signing-certificates)  
+4\. [Constraints and Usage](#4-constraints-and-usage)  
+4.1. [Basic Constraints](#41-basic-constraints)  
+4.2. [Name Constraints](#42-name-constraints)  
+4.3. [Key Usage](#43-key-usage)  
+4.4. [Extended Key Usage](#44-extended-key-usage)  
+5\. [Validation](#5-validation)  
+5.1. [Path Validation](#51-path-validation)  
+5.2. [Leaf Validation](#52-leaf-validation)  
+6\. [Conclusion](#6-conclusion)  
+Appendix A. [X.509 Field Reference](#appendix-a-x509-field-reference)  
 
 ## 1. Introduction
 Perhaps the most important function of SPIFFE is to secure process to process communication. The core standard allows for authentication, however leveraging cryptographic identity to build a secure communication channel is also highly desirable. With TLS being widely adopted, and implemented using X.509-based authentication, the use of X.509 as a SPIFFE SVID is clearly advantageous.
