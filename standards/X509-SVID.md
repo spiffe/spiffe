@@ -33,7 +33,9 @@ Perhaps the most important function of SPIFFE is to secure process to process co
 This specification addresses the encoding of SVID information into an X.509 certificate, the constraints which must be set, as well as how to validate X.509 SVIDs.
 
 ## 2. SPIFFE ID
-In an X.509 SVID, the corresponding SPIFFE ID is set as a URI type in the Subject Alternative Name extension (SAN extension, see [RFC 5280 section 4.2.16][2]). An X.509 SVID MUST contain exactly one URI SAN. It MAY contain any number of other SAN fields, including DNS SANs.
+In an X.509 SVID, the corresponding SPIFFE ID is set as a URI type in the Subject Alternative Name extension (SAN extension, see [RFC 5280 section 4.2.16][2]). An X.509 SVID MUST contain exactly one URI SAN, and by extension, exactly one SPIFFE ID. SVIDs containing more than one SPIFFE ID introduce challenges related to auditing and authorizaion logic. Validators encountering an SVID containing more than one SPIFFE ID will reject the SVID. Please see the [Validation](#5-validation) section for more information.
+
+An X.509 SVID MAY contain any number of other SAN field types, including DNS SANs.
 
 ## 3. Hierarchy
 This section discusses the relationship between leaf, root, and intermediate certificates, as well as the requirements placed upon each.
@@ -87,12 +89,14 @@ This section describes how an X.509 SVID is validated. The procedure uses standa
 ### 5.1. Path Validation
 The validation of trust in a given SVID is based on standard X.509 path validation, and MUST follow [RFC 5280][1] path validation semantics.
 
-Certificate path validation requires the leaf SVID certificate and one or more SVID signing certificates. The set of signing certificates required for validation is known as the CA bundle. The mechanism through which an entity can retrieve the relevant CA bundle(s) is out of scope for this document, and is instead defined in the SPIFFE Workload API specification.
+Certificate path validation requires the leaf SVID certificate and one or more SVID signing certificates. The set of signing certificates required for validation is known as the CA bundle. While a leaf SVID's signing certificate must itself be an SVID, validators MAY skip SVID-specific checks on signing certificates due to the difficulties that would be introduced in leveraging existing path building logic/libraries.
+
+The mechanism through which an entity can retrieve the relevant CA bundle(s) is out of scope for this document, and is instead defined in the SPIFFE Workload API specification.
 
 ### 5.2. Leaf Validation
 When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
 
-When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`.
+When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`. SVIDs containing more than one SPIFFE ID MUST be rejected.
 
 As support for URI name constraints becomes more widespread, future versions this document may update the requirements set forth in this section in order to better leverage name constraint validation.
 
