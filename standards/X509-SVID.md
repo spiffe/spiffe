@@ -41,7 +41,7 @@ This section discusses the relationship between leaf, root, and intermediate cer
 ### 3.1. Leaf Certificates
 A leaf certificate is an SVID which serves to identify a caller or resource. They are signed by the signing authority of the trust domain in which they reside, and are suitable for use in authentication processes. A leaf certificate (as opposed to a signing certificate, [section 3.2](#3.2.-signing-certificates)) is the only type which may serve to identify a resource or caller.
 
-Leaf certificate SPIFFE IDs MUST have a non-root path component. See [section 4.1](#4.1.-basic-constraints) for information on X.509-specific properties which distinguish a leaf certificate from a signing certificate.
+Leaf certificate SPIFFE IDs MUST have a non-root path component. The Subject field is not required, however the URI SAN extension MUST be marked as critical if it is omitted, per section 4.1.2.6 of [RFC 5280][1]. See [section 4.1](#4.1.-basic-constraints) for information on X.509-specific properties which distinguish a leaf certificate from a signing certificate.
 
 ### 3.2. Signing Certificates
 An X.509 SVID signing certificate is one which has set `keyCertSign` in the key usage extension. It additionally has the `CA` flag set to `true` in the basic constraints extension (see [section 4.1](#4.1.-basic-constraints)). That is to say, it is a CA certificate.
