@@ -17,6 +17,8 @@ The SPIFFE Project is also producing a reference implementation that, in additio
 * Implement a signing framework for securely issuing and renewing SVIDs.
 * Provide an API for registering nodes and workloads, along with their designated SPIFFE IDs.
 
+SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CNCF) as a sandbox level project. If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF. For details read the CNCF [announcement](https://www.cncf.io/blog/2018/03/29/cncf-to-host-the-spiffe-project/).
+
 ## SPIFFE Standards
 
 * [Secure Production Infrastructure Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
