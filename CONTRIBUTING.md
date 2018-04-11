@@ -5,13 +5,12 @@ efficient. Anyone may contribute to a project in the SPIFFE repositories that th
 to, provided they:
 
 * Abide by the CNCF [code of conduct](/CODE-OF-CONDUCT.md)
-* Have accepted the project's [Contributor License Agreement](/CLA.md).
+* Can certify the clauses in the [Developer Certificate of Origin](/DCO).
 
 To get started:
 
 * First, [README](/README.md) to become familiar with how the SPIFFE Project is managed
 * Make sure you're familiar with our [Coding Conventions](#conventions) when appropriate
-* Make sure you've signed the SPIFFE [CLA](/CLA.md)
 
 If you're new to the SPIFFE Project, we recommend that you join us on the mailing lists and Slack to
 discuss any potential changes you'd like to see made.
@@ -27,6 +26,7 @@ broader group.
 1. Update the docs, if necessary
 1. Ensure your branch is based on the latest commit in `master`
 1. Ensure all tests pass (see project docs for more information)
+2. Make sure your commit messages contain a `Signed-off-by:` line (see `git-commit --signoff`) to certify the DCO
 1. Open a [pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)
   against the upstream `master` branch
 
