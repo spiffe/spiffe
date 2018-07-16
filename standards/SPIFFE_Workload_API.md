@@ -113,7 +113,8 @@ message X509SVIDResponse {
 // The X509SVID message carries a single SVID and all associated
 // information, including CA bundles.
 message X509SVID {
-    // The SPIFFE ID of the SVID in this entry
+    // The SPIFFE ID of the SVID in this entry. MUST match the SPIFFE ID
+    // encoded in the `x509_svid` certificate.
     string spiffe_id = 1;
 
     // ASN.1 DER encoded certificate chain. MAY include intermediates,
