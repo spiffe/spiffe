@@ -5,7 +5,7 @@ efficient. Anyone may contribute to a project in the SPIFFE repositories that th
 to, provided they:
 
 * Abide by the CNCF [code of conduct](/CODE-OF-CONDUCT.md)
-* Can certify the clauses in the [Developer Certificate of Origin](/DCO).
+* Can certify the clauses in the [Developer Certificate of Origin](/DCO) (DCO).
 
 To get started:
 
@@ -26,7 +26,7 @@ broader group.
 1. Update the docs, if necessary
 1. Ensure your branch is based on the latest commit in `master`
 1. Ensure all tests pass (see project docs for more information)
-2. Make sure your commit messages contain a `Signed-off-by:` line (see `git-commit --signoff`) to certify the DCO
+2. Make sure your commit messages contain a `Signed-off-by: <your-email-address>` line (see `git-commit --signoff`) to certify the [DCO](/DCO).
 1. Open a [pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)
   against the upstream `master` branch
 
