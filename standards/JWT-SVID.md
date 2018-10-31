@@ -28,7 +28,7 @@ Appendix A. [Validation Reference](#appendix-a-validation-reference)
 ## 1. Introduction
 JWT-SVID is the first token-based SVID in the SPIFFE specification set. Aimed at providing immediate value in solving difficulties associated with asserting identity across Layer 7 boundaries, compatibility with existing applications and libraries is a core requirement.
 
-JWT-SVIDs are standard JWT tokens with a handful of restrictions applied. JWTs have historically proven difficult to get right, gaining a reputation in the security community as a technology which is likely to introduce vulnerabilities in its deployments and implementations. JWT-SVID takes steps to mitigate these problems as much as possible without breaking compatibility with existing applications and libraries.
+JWT-SVIDs are standard JOSE-protected JWT tokens with a handful of restrictions applied. JOSE has historically proven difficult to implement securely, gaining a reputation in the security community as a technology which is likely to introduce vulnerabilities in its deployments and implementations. JWT-SVID takes steps to mitigate these problems as much as possible without breaking compatibility with existing applications and libraries.
 
 ## 2. JOSE Header
 Historically, complexity introduced by the cryptographic agility of the JOSE header has led to a series of vulnerabilities in popular JWT implementations. To avoid such pitfalls, this specification greatly restricts the allowances originally afforded. This section describes the permitted registered headers, as well as their values. Any header not described here, registered or private, MUST NOT be included in the JWT-SVID JOSE Header.
@@ -59,7 +59,7 @@ This section outlines the requirements and restrictions placed upon existing reg
 The `sub` claim MUST be set to the SPIFFE ID of the workload to which it is issued. This is the primary claim against which workload identity is asserted.
 
 ### 3.2. Audience
-The `aud` claim MUST be present, containing one or more values. Validators MUST reject tokens without an `aud` claim set. It is strongly recommended that the number of values be limited to one in normal cases. Please see the Security Considerations section for more information.
+The `aud` claim MUST be present, containing one or more values. Validators MUST reject tokens without an `aud` claim set, or if the value that the validator identifies with is not present as an `aud` element. It is strongly recommended that the number of values be limited to one in normal cases. Please see the Security Considerations section for more information.
 
 The values chosen are site-specific, and SHOULD be scoped to the service which it is intended to be presented to. For example, `reports` or `spiffe://example.org/reports` are suitable values for tokens which are presented to the reports service. Values such as `production` or `spiffe://example.org/` are discouraged due to their wide scope, opening the possibility for impersonation if just a single service in `production` is compromised.
 
@@ -90,6 +90,8 @@ This section outlines the security considerations that implementers and users sh
 Being a bearer token, JWT-SVIDs are susceptible to replay attacks. By requiring that the `aud` and `exp` claims be set, this specification has taken steps to improve the situation, but is unable to solve it completely while retaining validation compatibility with [RFC 7515][1]. It is very important to understand this risk. Use of an aggressive value for the `exp` claim is recommended. Some users may wish to leverage the `jti` claim despite the added overhead. While use of the `jti` claim is permitted by this specification, it should be noted that JWT-SVID validators are not required to track `jti` uniqueness.
 
 ### 6.2. Audience
+There is an implicit trust granted to recipients of JWT-SVIDs. Tokens sent to one audience can be replayed to another audience should more than one be present. For example, if Alice has a token with audiences Bob and Chuck, and transmits that token to Chuck, then Chuck can impersonate Alice by sending the same token to Bob. As such, care should be taken when minting a JWT-SVID with more than one audience. Single audience JWT-SVID tokens are strongly recommended to limit the scope of replayability.
+
 There is an implicit trust granted to recipients of JWT-SVIDs. Tokens sent to one audience can be replayed to another audience should more than one be present. As such, care should be taken when minting a JWT-SVID with more than one audience. Single audience JWT-SVID tokens are strongly recommended to limit the scope of replayability.
 
 ### 6.3. Transport Security
