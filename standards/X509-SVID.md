@@ -39,7 +39,7 @@ In an X.509 SVID, the corresponding SPIFFE ID is set as a URI type in the Subjec
 This section discusses the relationship between leaf, root, and intermediate certificates, as well as the requirements placed upon each.
 
 ### 3.1. Leaf Certificates
-A leaf certificate is an SVID which serves to identify a caller or resource. They are signed by the signing authority of the trust domain in which they reside, and are suitable for use in authentication processes. A leaf certificate (as opposed to a signing certificate, [section 3.2](#3.2.-signing-certificates)) is the only type which may serve to identify a resource or caller.
+A leaf certificate is an SVID which serves to identify a caller or resource. They are signed by the signing authority responsible for the trust domain in which they reside, and are suitable for use in authentication processes. A leaf certificate (as opposed to a signing certificate, [section 3.2](#3.2.-signing-certificates)) is the only type which may serve to identify a resource or caller.
 
 Leaf certificate SPIFFE IDs MUST have a non-root path component. See [section 4.1](#4.1.-basic-constraints) for information on X.509-specific properties which distinguish a leaf certificate from a signing certificate.
 
