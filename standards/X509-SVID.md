@@ -46,7 +46,7 @@ Leaf certificate SPIFFE IDs MUST have a non-root path component. See [section 4.
 ### 3.2. Signing Certificates
 An X.509 SVID signing certificate is one which has set `keyCertSign` in the key usage extension. It additionally has the `CA` flag set to `true` in the basic constraints extension (see [section 4.1](#4.1.-basic-constraints)). That is to say, it is a CA certificate.
 
-A signing certificate is itself an SVID. The SPIFFE ID of a signing certificate MUST NOT have a path component, and MUST reside in the trust domain of any leaf SVIDs it issues. A signing certificate MAY be used to issue further signing certificates in the same or different trust domains.
+A signing certificate MAY itself an SVID. If present, the SPIFFE ID of a signing certificate MUST NOT have a path component, and MAY reside in the trust domain of any leaf SVIDs it issues. A signing certificate MAY be used to issue further signing certificates in the same or different trust domains.
 
 Signing certificates MUST NOT be used for authentication purposes. They serve as validation material only, and may be chained together in typical X.509 fashion, as described in [RFC 5280][1]. Please see [section 4.3](#4.3.-key-usage) and [section 4.4](#4.4-extended-key-usage) for further information regarding X.509-specific restrictions on signing certificates.
 
