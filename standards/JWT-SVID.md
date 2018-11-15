@@ -100,8 +100,6 @@ Being a bearer token, JWT-SVIDs are susceptible to replay attacks. By requiring 
 ### 6.2. Audience
 There is an implicit trust granted to recipients of JWT-SVIDs. Tokens sent to one audience can be replayed to another audience should more than one be present. For example, if Alice has a token with audiences Bob and Chuck, and transmits that token to Chuck, then Chuck can impersonate Alice by sending the same token to Bob. As such, care should be taken when minting a JWT-SVID with more than one audience. Single audience JWT-SVID tokens are strongly recommended to limit the scope of replayability.
 
-There is an implicit trust granted to recipients of JWT-SVIDs. Tokens sent to one audience can be replayed to another audience should more than one be present. As such, care should be taken when minting a JWT-SVID with more than one audience. Single audience JWT-SVID tokens are strongly recommended to limit the scope of replayability.
-
 ### 6.3. Transport Security
 JWT-SVIDs share the same risks as other bearer token schemes, namely interception of the bearer token grants an attacker the full privileges afforded by the JWT-SVID due to their inherent replay-ability. There are mitigations to limit the impact, such as mandated expiration via the `exp` claim but there will always be a window of vulnerability. For this reason, all hops/links along the communication channels over which JWT-SVIDs are transmitted should provide confidentiality (e.g. from workload to load balancer, from the load balancer to another workload). Notable exceptions are non-network links with reasonable security assumptions regarding exposure, for example a Unix domain socket between two processes within the same host.
 
