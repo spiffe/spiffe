@@ -28,21 +28,29 @@ Appendix A. [Validation Reference](#appendix-a-validation-reference)
 ## 1. Introduction
 JWT-SVID is the first token-based SVID in the SPIFFE specification set. Aimed at providing immediate value in solving difficulties associated with asserting identity across Layer 7 boundaries, compatibility with existing applications and libraries is a core requirement.
 
-JWT-SVIDs are standard JOSE-protected JWT tokens with a handful of restrictions applied. JOSE has historically proven difficult to implement securely, gaining a reputation in the security community as a technology which is likely to introduce vulnerabilities in its deployments and implementations. JWT-SVID takes steps to mitigate these problems as much as possible without breaking compatibility with existing applications and libraries.
+JWT-SVIDs are standard JOSE-protected JWT tokens with a handful of restrictions applied. JOSE has historically proven difficult to implement securely, gaining a reputation in the security community as a technology which is likely to introduce vulnerabilities in its deployments and implementations. JWT-SVID takes steps to mitigate these problems as much as is reasonably possible without breaking compatibility with existing applications and libraries.
 
 ## 2. JOSE Header
-Historically, complexity introduced by the cryptographic agility of the JOSE header has led to a series of vulnerabilities in popular JWT implementations. To avoid such pitfalls, this specification greatly restricts the allowances originally afforded. This section describes the permitted registered headers, as well as their values. Any header not described here, registered or private, MUST NOT be included in the JWT-SVID JOSE Header.
+Historically, complexity introduced by the cryptographic agility of the JOSE header has led to a series of vulnerabilities in popular JWT implementations. To avoid such pitfalls, this specification restricts some of the allowances originally afforded. This section describes the permitted registered headers, as well as their values. Any header not described here, registered or private, MUST NOT be included in the JWT-SVID JOSE Header.
 
 Only JWS is supported, and all header values MUST reside in a JWS Protected Header.
 
 ### 2.1. Algorithm
-The `alg` header MUST be set to `RS256`.
+The `alg` header MUST be set to one of the values defined in [RFC 7518][7] sections [3.3][8], [3.4][9], or [3.5][10]. Validators receiving a token with the `alg` parameter set to a different value MUST reject the token.
 
-Most vulnerabilities in JWT come from mixing and matching of cryptographic techniques, so JWT-SVID defines only a single technique as valid. By taking this approach, we aim to sidestep the pitfalls associated with cryptographic agility. In the event that the above-defined technique needs to be changed, it will be done by releasing a new version of JWT-SVID.
+The supported `alg` values are:
 
-The `RS256` algorithm was chosen for a number of reasons. First, it is a goal of this specification to remain compatible with existing JWT libraries and applications. This largely restricts options to the algorithms defined in [RFC 7518 Section 3.1][5], ruling out the use of more efficient algorithms like those based on the Ed25519 curve.
-
-Second, the `RS256` algorithm is very widely implemented and supported by practically all JWT libraries and consumers that are capable of asymmetric token signing and validation. Finally, the RSA algorithm is less likely to suffer from critical implementation flaws than those based on elliptic curves.
+`alg` Param Value | Digital Signature Algorithm
+------------------|-----------------------------
+RS256 | RSASSA-PKCS1-v1_5 using SHA-256
+RS384 | RSASSA-PKCS1-v1_5 using SHA-384
+RS512 | RSASSA-PKCS1-v1_5 using SHA-512
+ES256 | ECDSA using P-256 and SHA-256
+ES384 | ECDSA using P-384 and SHA-384
+ES512 | ECDSA using P-521 and SHA-512
+PS256 | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
+PS384 | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
+PS512 | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
 
 ### 2.2. Key ID
 The `kid` header is optional.
@@ -67,7 +75,7 @@ The values chosen are site-specific, and SHOULD be scoped to the service which i
 The `exp` claim MUST be set, and validators MUST reject tokens without this claim. Implementers are encouraged to keep the validity period as small as is reasonably possible, however this specification does not set any hard upper limits on its value.
 
 ## 4. Token Signing and Validation
-JWT-SVID signing and validation semantics are the same as regular JWTs. Validators MUST ensure that the `alg` header is set to `RS256` before processing.
+JWT-SVID signing and validation semantics are the same as regular JWTs/JWSs. Validators MUST ensure that the `alg` header is set to a supported value before processing.
 
 JWT-SVID signatures are computed and validated following the steps outlined in [RFC 7515 section 7][2]. The `aud` and `exp` claims MUST be present and processed according to [RFC 7519][1] sections [4.1.3][3] and [4.1.4][4]. Validators receiving tokens without the `aud` and `exp` claims set MUST reject the token.
 
@@ -100,11 +108,13 @@ JWT-SVIDs share the same risks as other bearer token schemes, namely interceptio
 ## Appendix A. Validation Reference
 The following table provides a quick reference for anyone implementing a JWT-SVID validator. If using an off-the-shelf library, it is the responsibility of the implementer to ensure that the following validation steps are being taken.
 
+Additionally, please see the [JWT-SVID Schema](JWT-SVID.schema) for a more formal reference.
+
 Field | Type | Requirement
 ------|------|------------
-`alg` | `Header` | Set to `RS256`. Reject otherwise.
+`alg` | `Header` | Set to one of the values in the table in section [2.1](#21-algorithm). Reject otherwise.
 `aud` | `Claim` | At least one value present. Users should configure at least one acceptable value in advance. Reject otherwise.
-`exp` | `Claim` | Must be set. Must not be in the past (a small amount of leeway is acceptable). Reject if not present.
+`exp` | `Claim` | Must be set. Must not be in the past (a small amount of leeway is acceptable). Reject otherwise.
 
 [1]: https://tools.ietf.org/html/rfc7519
 [2]: https://tools.ietf.org/html/rfc7519#section-7
@@ -112,3 +122,7 @@ Field | Type | Requirement
 [4]: https://tools.ietf.org/html/rfc7519#section-4.1.4
 [5]: https://tools.ietf.org/html/rfc7515#section-3.1
 [6]: https://tools.ietf.org/html/rfc6750#section-2.1
+[7]: https://tools.ietf.org/html/rfc7518
+[8]: https://tools.ietf.org/html/rfc7518#section-3.3
+[9]: https://tools.ietf.org/html/rfc7518#section-3.4
+[10]: https://tools.ietf.org/html/rfc7518#section-3.5
