@@ -47,7 +47,7 @@ The trust domain is defined as the authority component of the URI - specifically
 ### 2.2. Path
 The path component of a SPIFFE ID allows for the unique identification of a given workload. The meaning behind the path is left open ended and the responsibility of the administrator to define.
 
-Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of paths is reserved as an exercise to the implementer and are outside the SVID specification. However, to reduce ambiguity paths must not end with a trailing `/`. Some examples and conventions are expressed below.
+Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of paths is reserved as an exercise to the implementer and are outside the SVID specification. However, to reduce ambiguity, paths should not end with a trailing `/`. Some examples and conventions are expressed below.
 
 * Identifying services directly
 
