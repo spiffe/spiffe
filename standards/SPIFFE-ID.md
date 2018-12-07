@@ -26,7 +26,7 @@ This document sets forth the official SPIFFE specification. It defines the two m
 
 Section 2 outlines the SPIFFE Identity (SPIFFE ID) and its namespace. The SPIFFE ID is a structured string used to identify a resource or caller, and is the cornerstone of the SPIFFE standard. All other SPIFFE components focus on the issuance and verification of the SPIFFE IDs themselves.
 
-Section 3 describes the SPIFFE Verifiable Identity Document (or SVID). An SVID is a mechanism through which a compute endpoint can present its SPIFFE ID in a way that can be cryptographically verified and deemed trustworthy. SVIDs, which reference an associated asymmetric key pair, can additionally be used to form a secure communication channel.
+Section 3 describes the SPIFFE Verifiable Identity Document (or SVID). An SVID is a mechanism through which a compute endpoint can present its SPIFFE ID in a way that can be cryptographically verified and deemed trustworthy. SVIDs, which may reference an associated asymmetric key pair, can additionally be used to form a secure communication channel.
 
 Conformance with this document is sufficient for the purposes of SPIFFE compliance.
 
@@ -75,7 +75,7 @@ Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of
   ```spiffe://example.com/9eebccd2-12bf-40a6-b262-65fe0487d453```
 
 ## 3. SPIFFE Verifiable Identity Document
-A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE ID's trust domain, and the presenter can prove ownership of the associated private key.
+A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE ID's trust domain.
 
 ### 3.1. SVID Trust
 As covered in Section 2.1, SPIFFE trust is rooted in a given ID's trust domain. A signing authority MUST exist in each trust domain, and this signing authority MUST carry an SVID of its own. The SPIFFE ID of the signing authority SHOULD reside in the trust domain in which it is authoritative, and SHOULD NOT have a path component. The SVID of the signing authority then forms the basis of trust for a given trust domain.
@@ -86,19 +86,19 @@ Chaining of trust, if desired, can be achieved by signing the authority’s SVID
 An SVID is a fairly simple construct, and comprises three basic components:
 
 * A SPIFFE ID
-* A public key
 * A valid signature
+* An optional public key
 
-The SPIFFE ID and the public key MUST be included in a portion of the payload which is signed. The corresponding private key is retained by the entity to which the SVID has been issued, and is used to prove ownership of the SVID itself.
+The SPIFFE ID and the public key MUST be included in a portion of the payload which is signed. If a public key is included, then the corresponding private key is retained by the entity to which the SVID has been issued, and is used to prove ownership of the SVID itself.
 
 An SVID MAY include information beyond what is described here. It is assumed, however, that the SPIFFE signing authority has validated all information contained within the SVID prior to issuing it.
 
 ### 3.3. SVID Format
 An SVID is not itself a document type. Many document formats exist already which fulfil the needs of a SPIFFE SVID, and we do not wish to re-invent those formats. Instead, we define a set of format-specific specifications which standardize the encoding of SVID information.
 
-In order for an SVID to be considered valid, it MUST leverage a document type for which a corresponding specification has been defined. At the time of this writing, the only supported document type is X.509. Note that format-specific SVID specifications may upgrade the requirements set forth in this document.
+In order for an SVID to be considered valid, it MUST leverage a document type for which a corresponding specification has been defined. At the time of this writing, the only supported document types are X.509 and JWT. Note that format-specific SVID specifications may upgrade the requirements set forth in this document.
 
-Please see the [X.509 SPIFFE Verifiable Identity Document](X509-SVID.md) specification for more information.
+Please see the [X.509 SPIFFE Verifiable Identity Document](X509-SVID.md) or the [JWT SPIFFE Verifiable Identity Document](JWT-SVID.md) specification for more information.
 
 ## 4. Conclusion
 The specifications contained within this document cover what it means to be SPIFFE compliant. While other specifications will need to be referenced in order to build a complete implementation, conformance to this document is sufficient for compliance purposes.
