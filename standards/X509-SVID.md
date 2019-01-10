@@ -39,14 +39,14 @@ In an X.509 SVID, the corresponding SPIFFE ID is set as a URI type in the Subjec
 This section discusses the relationship between leaf, root, and intermediate certificates, as well as the requirements placed upon each.
 
 ### 3.1. Leaf Certificates
-A leaf certificate is an SVID which serves to identify a caller or resource. They are signed by the signing authority of the trust domain in which they reside, and are suitable for use in authentication processes. A leaf certificate (as opposed to a signing certificate, [section 3.2](#3.2.-signing-certificates)) is the only type which may serve to identify a resource or caller.
+A leaf certificate is an SVID which serves to identify a caller or resource and are suitable for use in authentication processes. A leaf certificate (as opposed to a signing certificate, [section 3.2](#3.2.-signing-certificates)) is the only type which may serve to identify a resource or caller.
 
 Leaf certificate SPIFFE IDs MUST have a non-root path component. The Subject field is not required, however the URI SAN extension MUST be marked as critical if Subject is omitted, per section 4.1.2.6 of [RFC 5280][1]. See [section 4.1](#4.1.-basic-constraints) for information on X.509-specific properties which distinguish a leaf certificate from a signing certificate.
 
 ### 3.2. Signing Certificates
 An X.509 SVID signing certificate is one which has set `keyCertSign` in the key usage extension. It additionally has the `CA` flag set to `true` in the basic constraints extension (see [section 4.1](#4.1.-basic-constraints)). That is to say, it is a CA certificate.
 
-A signing certificate is itself an SVID. The SPIFFE ID of a signing certificate MUST NOT have a path component, and MUST reside in the trust domain of any leaf SVIDs it issues. A signing certificate MAY be used to issue further signing certificates in the same or different trust domains.
+A signing certificate SHOULD itself be an SVID. If present, the SPIFFE ID of a signing certificate MUST NOT have a path component, and MAY reside in the trust domain of any leaf SVIDs it issues. A signing certificate MAY be used to issue further signing certificates in the same or different trust domains.
 
 Signing certificates MUST NOT be used for authentication purposes. They serve as validation material only, and may be chained together in typical X.509 fashion, as described in [RFC 5280][1]. Please see [section 4.3](#4.3.-key-usage) and [section 4.4](#4.4-extended-key-usage) for further information regarding X.509-specific restrictions on signing certificates.
 
