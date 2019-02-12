@@ -11,12 +11,12 @@ Further, modern developers are expected to understand and play a role in how app
 The SPIFFE standard provides a specification for a framework capable of bootstrapping and issuing identity to services across heterogeneous environments and organizational boundaries.
 
 ## Table of Contents
-1\. [Introduction](#1.-introduction)  
-2\. [The SPIFFE ID](#2.-the-spiffe-id)  
-3\. [The SPIFFE Verifiable Identity Document](#3.-the-spiffe-verifiable-identity-document)  
-4\. [The Workload API](#4.-the-workload-api)  
-5\. [Conclusion](#5.-conclusion)  
-Appendix A. [List of SPIFFE Specifications](#appendix-a.-list-of-spiffe-specifications)  
+1\. [Introduction](#1-introduction)  
+2\. [The SPIFFE ID](#2-the-spiffe-id)  
+3\. [The SPIFFE Verifiable Identity Document](#3-the-spiffe-verifiable-identity-document)  
+4\. [The Workload API](#4-the-workload-api)  
+5\. [Conclusion](#5-conclusion)  
+Appendix A. [List of SPIFFE Specifications](#appendix-a-list-of-spiffe-specifications)  
 
 ## 1. Introduction
 The SPIFFE standard comprises three major components - one which standardizes an identity namespace, one which dictates the manner in which an issued identity may be presented and verified, and another which specifies an API through which identity may be retrieved and/or issued. These components are known as the SPIFFE ID, the SPIFFE Verifiable Identity Document (SVID) and the Workload API, respectively.
