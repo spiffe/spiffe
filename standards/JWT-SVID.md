@@ -6,7 +6,7 @@ This document specifies an experimental identity document standard for the inter
 ## Table of Contents
 
 1\. [Introduction](#1-introduction)  
-2\. [JOSE HEader](#2-jose-header)  
+2\. [JOSE Header](#2-jose-header)  
 2.1. [Algorithm](#21-algorithm)  
 2.2. [Key ID](#22-key-id)  
 2.3. [Type](#23-type)  
