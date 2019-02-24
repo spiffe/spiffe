@@ -21,7 +21,7 @@ A Special Interest Group (SIG) for running SPIFFE in AWS. We encourage attendees
   * AWS Tags (map a nonce in a tag to a SPIFFE ID)
   * Auto Scaling Groups (map an ASG/Security group to a SPIFFE ID)
   * Google Cloud Platform (TBD mapped to a SPIFFE ID)
-* Determine how the control plane supports the registation methods to map to a set of SPIFFE IDs
+* Determine how the control plane supports the registration methods to map to a set of SPIFFE IDs
 * End to end POC
 
 ### Non Goals:
