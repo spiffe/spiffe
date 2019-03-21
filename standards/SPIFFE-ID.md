@@ -74,6 +74,10 @@ Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of
 
   ```spiffe://example.com/9eebccd2-12bf-40a6-b262-65fe0487d453```
 
+### 2.3. Maximum SPIFFE ID Length
+
+URIs, as defined by [RFC 3986](https://tools.ietf.org/html/rfc3986), do not have a maximal length. As an interoperability consideration, SPIFFE implementations MUST support SPIFFE URIs of at least 2048 characters in length, but MAY support longer. All URI components contribute to the URI length, including the "spiffe" scheme, "://" separator, trust domain, and path component. Note that [RFC 3986](https://tools.ietf.org/html/rfc3986) defines a maximum length of 255 characters for the "host" component of a URI; therefore a maximum length of a trust domain is 255 characters.
+
 ## 3. SPIFFE Verifiable Identity Document
 A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE ID's trust domain.
 
