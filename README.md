@@ -32,7 +32,6 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 
 * [spiffe](https://github.com/spiffe/spiffe): This repository includes the SPIFFE ID, SVID and Workload API specifications, example code, and tests, as well as project governance, policies, and processes.    
 * [spire](https://github.com/spiffe/spire): This is a reference implementation of SPIFFE and the SPIFFE Workload API that can be run on and accross varying hosting environments.
-* [spiffe-examples](https://github.com/spiffe/spiffe-example): Examples and demonstrations.
 * [go-spiffe](https://github.com/spiffe/go-spiffe): Golang client libraries.
 
 ### Communications
