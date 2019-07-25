@@ -15,6 +15,7 @@ For more general information about SPIFFE, please see the [Secure Production Ide
 2\. [SPIFFE Identity](#2-spiffe-identity)  
 2.1. [Trust Domain](#21-trust-domain)  
 2.2. [Path](#22-path)  
+2.3. [Maximum SPIFFE ID Length](#23-maximum-spiffe-id-length)
 3\. [SPIFFE Verifiable Identity Document](#3-spiffe-verifiable-identity-document)  
 3.1. [SVID Trust](#31-svid-trust)  
 3.2. [SVID Components](#32-svid-components)  
@@ -73,6 +74,12 @@ Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of
   The above examples are illustrative and, in the most general case, the SPIFFE path may be left opaque, carrying no visible hierarchical information. Metadata, such as geographic location, logical system partitioning and/or service name, may be provided by a secondary system, where identities and their attributes are registered. That can be queried to retrieve any metadata associated with the SPIFFE identifier. For example:
 
   ```spiffe://example.com/9eebccd2-12bf-40a6-b262-65fe0487d453```
+
+### 2.3. Maximum SPIFFE ID Length
+
+URIs, as defined by [RFC 3986](https://tools.ietf.org/html/rfc3986), do not have a maximal length. As an interoperability consideration, SPIFFE implementations MUST support SPIFFE URIs up to 2048 bytes in length and SHOULD NOT generate URIs of length greater than 2048 bytes. [RFC 3986](https://tools.ietf.org/html/rfc3986) permits only ASCII characters, thus the maximum length of a SPIFFE ID is 2048 bytes.
+
+All URI components contribute to the URI length, including the "spiffe" scheme, "://" separator, trust domain, and path component. Non-ASCII characters contribute to the URI length after they are percent encoded as ASCII characters. Note that [RFC 3986](https://tools.ietf.org/html/rfc3986) defines a maximum length of 255 characters for the "host" component of a URI; therefore a maximum length of a trust domain is 255 bytes.
 
 ## 3. SPIFFE Verifiable Identity Document
 A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE ID's trust domain.
