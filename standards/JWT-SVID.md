@@ -19,10 +19,13 @@ This document specifies an experimental identity document standard for the inter
 5.1. [Serialization](#51-serialization)  
 5.2. [HTTP](#52-http)  
 5.3. [gRPC](#53-grpc)  
-6\. [Security Considerations](#6-security-considerations)  
-6.1. [Replay Protection](#61-replay-protection)  
-6.2. [Audience](#62-audience)  
-6.3. [Transport Security](#63-transport-security)  
+6\. [Representation in the SPIFFE Bundle](#6-representation-in-the-spiffe-bundle)  
+6.1. [Publishing SPIFFE Bundle Elements](#61-publishing-spiffe-bundle-elements)  
+6.2. [Consuming a SPIFFE Bundle](#62-consuming-a-spiffe-bundle)  
+7\. [Security Considerations](#7-security-considerations)  
+7.1. [Replay Protection](#71-replay-protection)  
+7.2. [Audience](#72-audience)  
+7.3. [Transport Security](#73-transport-security)  
 Appendix A. [Validation Reference](#appendix-a-validation-reference)  
 
 ## 1. Introduction
@@ -91,16 +94,29 @@ JWT-SVIDs transmitted via HTTP SHOULD be transmitted in the “Authorization” 
 ### 5.3. gRPC
 The gRPC protocol uses HTTP/2. As a result, the HTTP transmission guidelines in the [HTTP section](#52-http) equally apply. Concretely, gRPC implementations SHOULD set a metadata key `authorization` with a value of `Bearer <serialized_token>`.
 
-## 6. Security Considerations
+## 6. Representation in the SPIFFE Bundle
+This section describes how JWT-SVID signing keys are published to and consumed from a SPIFFE bundle. Please see the [SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md) specification for more information about SPIFFE bundles.
+
+### 6.1. Publishing SPIFFE Bundle Elements
+JWT-SVID signing keys for a given trust domain are represented in the SPIFFE bundle as [RFC 7517][11]-compliant JWK entries, one entry per signing key.
+
+The `use` parameter of each JWK entry MUST be set to `jwt-svid`. Additionally, the `kid` parameter of each JWK entry MUST be set.
+
+### 6.2. Consuming a SPIFFE Bundle
+SPIFFE bundles may contain JWK entries for many different SVID types. Implementations MUST extract the JWT-SVID specific keys before using them for validation purposes. Entries representing JWT-SVID signing keys can be identified by the value of their `use` parameter, which must be `jwt-svid`. If there are no entries with the `jwt-svid` use value, then the trust domain that the bundle represents does not support JWT-SVID.
+
+Once the JWK entries are extracted, they can be used directly for JWT-SVID validation as described in [RFC 7517][11].
+
+## 7. Security Considerations
 This section outlines the security considerations that implementers and users should take into account when using JWT-SVID.
 
-### 6.1. Replay Protection
+### 7.1. Replay Protection
 Being a bearer token, JWT-SVIDs are susceptible to replay attacks. By requiring that the `aud` and `exp` claims be set, this specification has taken steps to improve the situation, but is unable to solve it completely while retaining validation compatibility with [RFC 7515][1]. It is very important to understand this risk. Use of an aggressive value for the `exp` claim is recommended. Some users may wish to leverage the `jti` claim despite the added overhead. While use of the `jti` claim is permitted by this specification, it should be noted that JWT-SVID validators are not required to track `jti` uniqueness.
 
-### 6.2. Audience
+### 7.2. Audience
 There is an implicit trust granted to recipients of JWT-SVIDs. Tokens sent to one audience can be replayed to another audience should more than one be present. For example, if Alice has a token with audiences Bob and Chuck, and transmits that token to Chuck, then Chuck can impersonate Alice by sending the same token to Bob. As such, care should be taken when minting a JWT-SVID with more than one audience. Single audience JWT-SVID tokens are strongly recommended to limit the scope of replayability.
 
-### 6.3. Transport Security
+### 7.3. Transport Security
 JWT-SVIDs share the same risks as other bearer token schemes, namely interception of the bearer token grants an attacker the full privileges afforded by the JWT-SVID due to their inherent replay-ability. There are mitigations to limit the impact, such as mandated expiration via the `exp` claim but there will always be a window of vulnerability. For this reason, all hops/links along the communication channels over which JWT-SVIDs are transmitted should provide confidentiality (e.g. from workload to load balancer, from the load balancer to another workload). Notable exceptions are non-network links with reasonable security assumptions regarding exposure, for example a Unix domain socket between two processes within the same host.
 
 ## Appendix A. Validation Reference
@@ -124,3 +140,4 @@ Field | Type | Requirement
 [8]: https://tools.ietf.org/html/rfc7518#section-3.3
 [9]: https://tools.ietf.org/html/rfc7518#section-3.4
 [10]: https://tools.ietf.org/html/rfc7518#section-3.5
+[11]: https://tools.ietf.org/html/rfc7517
