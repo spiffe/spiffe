@@ -32,7 +32,7 @@ This document describes the semantics of SPIFFE trust domains, how they are repr
 6.4. [Reusing Cryptographic Keys Across Trust Domains](#64-reusing-cryptographic-keys-across-trust-domains)  
 Appendix A. [SPIFFE Bundle Example](#appendix-a-spiffe-bundle-example)  
 Appendix B. [Bundle Endpoint Authentication Examples](#appendix-b-bundle-endpoint-authentication-examples)  
-Appendix B.1. [Web PKI-based Endpoint Authentication](#appendix-b1-web-pki-based-endpoint-authentication)
+Appendix B.1. [Web PKI-based Endpoint Authentication](#appendix-b1-web-pki-based-endpoint-authentication)  
 Appendix B.2. [SPIFFE-based Endpoint Authentication](#appendix-b2-spiffe-based-endpoint-authentication)
 
 ## 1. Introduction
@@ -133,7 +133,7 @@ Since this field is not mandatory, it is possible to encounter SPIFFE bundles th
 ### 6.3. Using Web PKI on a SPIFFE Bundle Endpoint
 Web PKI provides a convenient way to authenticate remote SPIFFE bundle endpoints as publicly trusted authorities can negate the need for an initial out-of-band bundle exchange (as is the case when using SPIFFE authentication). While largely reliable, there are some tradeoffs and drawbacks that should be considered before its use.
 
-The first and most obvious is that you are assuming trust in the public certificate authorities and in their fulfillment procedures. Any public CA can sign a certificate for the domain name where your bundle endpoint is hosted that will appear valid. While this may be an unacceptable risk to some, most users are OK with it given the convenience it provides and the historical stability of the public CA infrastructure.
+The first and most obvious is that you are assuming trust in the public certificate authorities and in their fulfillment procedures. Publicly trusted CAs have the technical ability to sign certificates which will be broadly trusted and therefore could, in theory, sign a valid certificate for the host name used to serve your bundle endpoint. While this may be an unacceptable risk to some, most users are okay with it given the convenience it provides and the historical stability of the public CA infrastructure.
 
 Second, more importantly, recently introduced automated fulfillment protocols like [ACME][9] make room for attacks that were not previously possible. ACME allows publicly trusted certificates to be issued without manual intervention by performing a challenge which allows a machine to assert that it is authorized by answering an HTTP request made to the DNS name of the certificate being issued. This is significant because it means that anyone that can intercept and answer the challenge is capable of receiving a valid publicly-trusted certificate. While the risk of interception across the open internet is decidedly low, risk of interception by a neighboring machine is high. Concretely, without adequate Layer 2 security controls, SPIFFE bundle endpoints using Web PKI may be subverted by malicious software with access to the same Layer 2 network as the bundle endpoint. Operators should be careful in ensuring that Layer 2 access to SPIFFE bundle endpoints protected by Web PKI is restricted.
 
@@ -182,17 +182,17 @@ The corresponding trust bundle for `example.com`:
 ```
 Trust bundle #1 for example.com:
 {
-	"spiffe_sequence": 1,
+        "spiffe_sequence": 1,
         "spiffe_refresh_hint": 2419200,
-	"keys": [
-		{
-			"kty": "RSA"
-			"use": "x509-svid",
-			"x5c": ["<base64 DER encoding of Certificate #1>"]
-			"n": "<base64urlUint-encoded value>"
-			"e": "AQAB"
-		}
-	]
+        "keys": [
+                {
+                        "kty": "RSA",
+                        "use": "x509-svid",
+                        "x5c": ["<base64 DER encoding of Certificate #1>"],
+                        "n": "<base64urlUint-encoded value>",
+                        "e": "AQAB"
+                }
+        ]
 }
 ```
 
@@ -225,24 +225,24 @@ The updated trust bundle for `example.com` published on Feb 15:
 ```
 Trust bundle #2 for example.com:
 {
-	"spiffe_sequence": 2,
+        "spiffe_sequence": 2,
         "spiffe_refresh_hint": 2419200,
-	"keys": [
-		{
-			"kty": “RSA”
-			"use": "x509-svid",
-			"x5c": ["<base64 DER encoding of Certificate #1>"]
-			"n": "<base64urlUint-encoded value>"
-			"e": "AQAB"
-		},
-		{
-			"kty": “RSA”
-			"use": "x509-svid",
-			"x5c": ["<base64 DER encoding of Certificate #2>"]
-			"n": "<base64urlUint-encoded value>"
-			"e": "AQAB"
-		}
-	]
+        "keys": [
+                {
+                        "kty": “RSA”,
+                        "use": "x509-svid",
+                        "x5c": ["<base64 DER encoding of Certificate #1>"],
+                        "n": "<base64urlUint-encoded value>",
+                        "e": "AQAB"
+                },
+                {
+                        "kty": “RSA”,
+                        "use": "x509-svid",
+                        "x5c": ["<base64 DER encoding of Certificate #2>"],
+                        "n": "<base64urlUint-encoded value>",
+                        "e": "AQAB"
+                }
+        ]
 }
 ```
 
