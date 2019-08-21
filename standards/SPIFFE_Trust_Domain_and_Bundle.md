@@ -45,7 +45,7 @@ A SPIFFE trust domain is an identity namespace which is backed by an issuing aut
 
 Trust domains have a 1:N relationship with the keys that back them. A single trust domain may be represented by multiple keys and key types. For example, the former may be leveraged during root rotation, while the latter is necessary in avoiding multi-protocol attacks should more than one SVID type be in use.
 
-It should be noted that while it is possible to share cryptographic keys amongst many trust domains, it is strongly encouraged to maintain a one-to-one mapping between a trust domain and any given authoritative key. Key reuse can degrade trust domain isolation (e.g. between staging and production) and introduces additional security challenges (e.g. requiring a name constraint system for secondary issuers). Please see the [Security Considerations](#6-security-considerations) section for more information on this topic.
+It should be noted that while it is possible to share cryptographic keys amongst many trust domains, we strongly advise that each authoritative key be used in a single trust domain. Key reuse can degrade trust domain isolation (e.g. between staging and production) and introduces additional security challenges (e.g. requiring a name constraint system for secondary issuers). Please see the [Security Considerations](#6-security-considerations) section for more information on this topic.
 
 For more information about how a trust domain namespace is represented, please see [Section 2][1] of the SPIFFE ID specification.
 
