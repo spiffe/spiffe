@@ -14,7 +14,7 @@ A Special Interest Group (SIG) for running SPIFFE in Kubernetes. We encourage at
 ### Goals:
 * Provide SPIFFE framework (node/workload identity, and attestation service with providers) to adapt to Kubernetes workloads
 * Work with Kubernetes community
-	- [Kubernets Auth SIG](https://github.com/kubernetes/community/tree/master/sig-auth)
+	- [Kubernetes Auth SIG](https://github.com/kubernetes/community/tree/master/sig-auth)
 	- [Kubernetes Identity WG](https://docs.google.com/document/d/1bCK-1_Zy2WfsrMBJkdaV72d2hidaxZBhS5YQHAgscPI/edit)
 
 ### Non Goals:
