@@ -24,7 +24,10 @@ This document defines a standard in which an X.509 certificate is used as an SVI
 5\. [Validation](#5-validation)  
 5.1. [Path Validation](#51-path-validation)  
 5.2. [Leaf Validation](#52-leaf-validation)  
-6\. [Conclusion](#6-conclusion)  
+6\. [Representation in the SPIFFE Bundle](#6-representation-in-the-spiffe-bundle)  
+6.1. [Publishing SPIFFE Bundle Elements](#61-publishing-spiffe-bundle-elements)  
+6.2. [Consuming a SPIFFE Bundle](#62-consuming-a-spiffe-bundle)  
+7\. [Conclusion](#7-conclusion)  
 Appendix A. [X.509 Field Reference](#appendix-a-x509-field-reference)  
 
 ## 1. Introduction
@@ -96,7 +99,24 @@ When validating an X.509 SVID for authentication purposes, the validator MUST en
 
 As support for URI name constraints becomes more widespread, future versions of this document may update the requirements set forth in this section in order to better leverage name constraint validation.
 
-## 6. Conclusion
+## 6. Representation in the SPIFFE Bundle
+This section describes how X509-SVID CA certificates are published to and consumed from a SPIFFE bundle. Please see the [SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md) specification for more information about SPIFFE bundles.
+
+### 6.1. Publishing SPIFFE Bundle Elements
+X509-SVID CA certificates for a given trust domain are represented in the SPIFFE bundle as [RFC 7517-compliant][8] JWK entries, one entry per CA certificate.
+
+The `use` parameter of each JWK entry MUST be set to `x509-svid`. Additionally, the `kid` parameter of each JWK entry MUST NOT be set.
+
+In addition to the parameters required by [RFC 7517][8], each entry representing an X509-SVID CA certificate MUST contain the `x5c` parameter with a value equal to the base64 encoded DER CA certificate that the entry represents. The value MUST include exactly one CA certificate, and the certificate SHOULD be self-signed.
+
+### 6.2. Consuming a SPIFFE Bundle
+When consuming a SPIFFE bundle from a foreign trust domain, it is necessary to extract the X509-SVID CA certificates for practical use. SPIFFE bundles may contain entries for many different SVID types, so the first step is to identify the entries which represent X509-SVID CA certificates.
+
+For every JWK entry in the bundle with the `use` parameter set to `x509-svid`, check that the `x5c` parameter is set and has at least one value. If `x5c` is not set, or is empty, then the entry MUST be ignored.
+
+The first value of the `x5c` parameter is the base64 DER-encoded CA certificate that the entry represents. If the `x5c` parameter contains multiple values, then all but the first MUST be ignored. The X509-SVID CA bundle is then the union of CA certificates extracted from the `x509-svid` JWK entries. If no `x509-svid` JWK entries are present in the bundle, then the trust domain does not support X509-SVID.
+
+## 7. Conclusion
 This document set forth conventions and standards for the issuance and validation of X.509-based SPIFFE Verifiable Identity Documents. It forms the basis for real world SPIFFE service authentication and SVID validation. By conforming to the X.509 SVID standard, it is possible to build an identity and authentication system which is interoperable and platform agnostic.
 
 ## Appendix A. X.509 Field Reference
@@ -120,3 +140,4 @@ Extended Key Usage | id-kp-clientAuth | This field may be set for either leaf or
 [4]: https://tools.ietf.org/html/rfc5280#section-4.2.1.10
 [5]: https://tools.ietf.org/html/rfc5280#section-4.2.1.3
 [6]: https://tools.ietf.org/html/rfc5280#section-4.2.1.2
+[7]: https://tools.ietf.org/html/rfc7517
