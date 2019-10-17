@@ -17,7 +17,7 @@ A Special Interest Group (SIG) for running SPIFFE in AWS. We encourage attendees
 * Protocol that authenticates an ec2 instance to the control plane when the instance first boots
 * Support the following instance to SPIFFE ID mapping methods
   * Only the instance ID (map IID to SPIFFE ID)
-  * AWS IAM roles (map IAM-ROLE to SPIFFEE ID)
+  * AWS IAM roles (map IAM-ROLE to SPIFFE ID)
   * AWS Tags (map a nonce in a tag to a SPIFFE ID)
   * Auto Scaling Groups (map an ASG/Security group to a SPIFFE ID)
   * Google Cloud Platform (TBD mapped to a SPIFFE ID)
