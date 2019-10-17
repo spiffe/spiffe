@@ -70,6 +70,9 @@ these conventions when reviewing pull requests.
 * **Python**
   * [PEP8](https://www.python.org/dev/peps/pep-0008/)
 
+#### Reporting security vulnerabilities
+If you've found a vulnerability or a potential vulnerability in SPIRE please let us know at security@spire.io. We'll send a confirmation email to acknowledge your report, and we'll send an additional email when we've identified the issue positively or negatively.  
+
 #### Third-party code
 
 When third-party code must be included, all licenses must be preserved. This includes modified
