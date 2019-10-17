@@ -1,4 +1,4 @@
-<img src="community/logo/64x256.png" width="256" height="64">
+![SPIFFE Logo](https://github.com/spiffe/spiffe/blob/master/community/logo/256x1024.png?raw=true)
 
 ## About SPIFFE
 
