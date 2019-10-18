@@ -1,6 +1,5 @@
 ![SPIFFE Logo](https://github.com/spiffe/spiffe/blob/master/community/logo/256x1024.png?raw=true)
 
-## About SPIFFE
 
 The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
 standards for identifying and securing communications between web-based services. At its heart, SPIFFE is:
@@ -49,7 +48,7 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 
 ### SIGs & Working Groups<a name="sigs"></a>
 
-Most community activity is organized into Special Interest Groups (SIGs), time-bounded working groups, and our monthly community-wide meetings. SIGs follow these [guidelines](GOVERNANCE.md#sigs), although each may operate differently depending on their needs and workflows. Each group's material can be found in the [/sigs](/sigs) directory of this repository.
+Most community activity is organized into Special Interest Groups (SIGs), time-bounded working groups, and our monthly community-wide meetings. SIGs follow these [guidelines](GOVERNANCE.md#special-interest-groups-sigs), although each may operate differently depending on their needs and workflows. Each group's material can be found in the [/community](/community) directory of this repository.
 
 | Name | Leads | Group | Slack Channel | Meetings |
 |:------:|:-------:|:-------:|:---------------:|:----------:|
