@@ -29,9 +29,9 @@ A SPIFFE ID is a structured string (represented as a URI) which serves as the "n
 ## 3. The SPIFFE Verifiable Identity Document
 A SPIFFE Verifiable Identity Document (SVID) is a document which carries the SPIFFE ID itself. It is the functional equivalent of a passport - a document which is presented that carries the identity of the presenter. Of course, similar to passports, they must be resistant to forgery, and it must be obvious that the document belongs to the presenter. In order to achieve this, an SVID includes cryptographic properties which allow it to be 1) proven as authentic, and 2) proven to belong to the presenter.
 
-An SVID itself is not a document type. Instead, we define 1) the properties required of an SVID, and 2) the method by which SVID information can be encoded and validated in various existing document types. Currently, the only supported document type is an X.509 certificate.
+An SVID itself is not a document type. Instead, we define 1) the properties required of an SVID, and 2) the method by which SVID information can be encoded and validated in various existing document types. The supported document types are an X.509 certificate or a JWT token.
 
-The SPIFFE SVID is defined in the [SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md) specification. The X.509 SVID specification is defined in [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md)
+The SPIFFE SVID is defined in the [SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md) specification. The X.509 SVID specification is defined in [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md). The JWT token SVID specification is defined in [The JWT SPIFFE Verifiable Identity Document](JWT-SVID.md).
 
 ## 4. The Workload API
 The SPIFFE Workload API is the method through which workloads, or compute processes, obtain their SVID(s). It is typically exposed locally (eg. via a Unix domain socket), and explicitly does not include an authentication handshake or authenticating token from the workload. Implementors can verify the authenticity of the caller to the Workload API via an out-of-band method, such as inspecting the properties of the process calling the Unix domain socket that are provided by the operating system.
