@@ -46,5 +46,7 @@ This document covered, at a high level, the various components that make up the 
 ## Appendix A. List of SPIFFE Specifications
 * [The SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md)
 * [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md)
+* [The JWT SPIFFE Verifiable Identity Document](JWT-SVID.md)
 * [The SPIFFE Workload Endpoint](SPIFFE_Workload_Endpoint.md)
 * [The SPIFFE Workload API](SPIFFE_Workload_API.md)
+* [The SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md)
