@@ -96,7 +96,7 @@ An SVID is a fairly simple construct, and comprises three basic components:
 * A valid signature
 * An optional public key
 
-The SPIFFE ID and the public key MUST be included in a portion of the payload which is signed. If a public key is included, then the corresponding private key is retained by the entity to which the SVID has been issued, and is used to prove ownership of the SVID itself.
+The SPIFFE ID and the public key (if present) MUST be included in a portion of the payload which is signed. If a public key is included, then the corresponding private key is retained by the entity to which the SVID has been issued, and is used to prove ownership of the SVID itself.
 
 An SVID MAY include information beyond what is described here. It is assumed, however, that the SPIFFE signing authority has validated all information contained within the SVID prior to issuing it.
 
