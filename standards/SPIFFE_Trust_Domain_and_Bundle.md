@@ -249,20 +249,20 @@ Trust bundle #2 for example.com:
 In trust bundle #2, note that the `spiffe_sequence` parameter has been incremented and the second root certificate for `example.com` has been added. Once this new trust bundle is published to `example.com`’s bundle endpoint, validators will accept SVIDs signed by either the original or the replacement root certificate. By publishing the replacement certificate well ahead of the expiration of the original certificate, validators have ample opportunity to refresh the trust bundle of example.com and learn of the pending replacement certificate.
 
 ## Appendix B. Bundle Endpoint Authentication Examples
-This section provides two worked examples of how to authenticate bundle endpoints, one for each of the recommended authentication methods described in this specification
+This section provides two worked examples of how to authenticate bundle endpoints, one for each of the recommended authentication methods described in this specification.
 
 ### Appendix B.1. Web PKI-based Endpoint Authentication
 Alice wants to federate with Bob using Web PKI so that she can authenticate identities residing in Bob’s trust domain. Alice is an administrator of the `alice.example` trust domain, and Bob is an administrator of the `bob.example` trust domain. To do so securely, the following steps are performed:
 
 1. Bob provides Alice with his trust domain name (`bob.example`) and the HTTPS URL of his bundle endpoint (`https://bob.example.org/spiffe-bundle`)
-1. Alice configures configures her control plane with the information received in the previous step - Bob's trust domain name and the HTTPS endpoint
+1. Alice configures her control plane with the information received in the previous step - Bob's trust domain name and the HTTPS endpoint
 1. Alice's control plane dials `bob.example.org`, and negotiates TLS using Web PKI, ensuring that it receives a server certificate for `bob.example.org`
 1. Alice's control plane issues an HTTP GET request over the authenticated TLS connection for path `/spiffe-bundle`
 1. Bob's control plane answers, transmitting the latest available copy of its SPIFFE bundle
 1. Alice's control plane receives Bob's bundle and stores it, being careful to mark it as the SPIFFE bundle for trust domain `bob.example`
 1. Systems in Alice's trust domain can now validate SVIDs from `bob.example` using the keys contained in the SPIFFE bundle received from Bob
 
-Alice's control plane periodically repeats steps 3-6 to ensure that her copy of Bob's bundle is kept up-to-date as Bob rotates his keys 
+Alice's control plane periodically repeats steps 3-6 to ensure that her copy of Bob's bundle is kept up-to-date as Bob rotates his keys.
 
 ### Appendix B.2. SPIFFE-based Endpoint Authentication
 Alice wants to federate with Bob so that she can authenticate identities residing in Bob's trust domain, however she does not want to rely on Web PKI. Instead, Alice and Bob will use SPIFFE authentication. Alice is an administrator of the `alice.example` trust domain, and Bob is an administrator of the `bob.example` trust domain. To do this securely, the following steps are performed:
