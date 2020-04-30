@@ -84,7 +84,7 @@ Implementers SHOULD NOT include parameters which are defined neither here nor in
 The `kty` parameter MUST be set, and its behavior follows [Section 4.1][6] of RFC 7517. Clients encountering an unknown key type MUST ignore the entire JWK element.
 
 #### 4.2.2. Public Key Use
-The `use` parameter MUST be set. Its value indicates the type of identity document (or SVID) that it is authoritative for. At the time of this writing, only two SVID types are supported: `x509-svid` and `jwt-svid`. The values are case sensitive. Please see the respective SVID specifications for more information about `use` values. Clients encountering unknown `use` values MUST ignore the entire JWK element.
+The `use` parameter MUST be set. Its value indicates the type of identity document (or SVID) that it is authoritative for. At the time of this writing, only two SVID types are supported: `x509-svid` and `jwt-svid`. The values are case sensitive. Please see the respective SVID specifications for more information about `use` values. Clients encountering either a missing `use` parameter or an unknown `use` value MUST ignore the entire JWK element.
 
 ## 5. SPIFFE Bundle Endpoint
 It is often desirable to allow workloads in one trust domain to communicate with workloads in another. In order to accomplish this, it is necessary for the validator to possess the bundle of the foreign trust domain in which the remote workload (or identity) resides. As a result, a mechanism for transferring bundles is necessary.
