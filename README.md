@@ -20,7 +20,7 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 
 ## SPIFFE Standards
 
-* [Secure Production Infrastructure Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
+* [Secure Production Identity Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
 * [The SPIFFE Identity and Verifiable Identity Document](standards/SPIFFE-ID.md)
 * [The X.509 SPIFFE Verifiable Identity Document](standards/X509-SVID.md)
 * [The JWT SPIFFE Verifiable Identity Document](standards/JWT-SVID.md)
