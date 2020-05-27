@@ -11,16 +11,16 @@ This document, in particular, serves as the core specification for the SPIFFE st
 For more general information about SPIFFE, please see the [Secure Production Identity Framework for Everyone (SPIFFE)](SPIFFE.md) standard.
 
 ## Table of Contents
-1\. [Introduction](#1-introduction)  
-2\. [SPIFFE Identity](#2-spiffe-identity)  
-2.1. [Trust Domain](#21-trust-domain)  
-2.2. [Path](#22-path)  
-2.3. [Maximum SPIFFE ID Length](#23-maximum-spiffe-id-length)  
-3\. [SPIFFE Verifiable Identity Document](#3-spiffe-verifiable-identity-document)  
-3.1. [SVID Trust](#31-svid-trust)  
-3.2. [SVID Components](#32-svid-components)  
-3.3. [SVID Format](#33-svid-format)  
-4\. [Conclusion](#4-conclusion)  
+1\. [Introduction](#1-introduction)
+2\. [SPIFFE Identity](#2-spiffe-identity)
+2.1. [Trust Domain](#21-trust-domain)
+2.1.1. [Trust Domain Name Collisions](#211-trust-domain-name-collisions)
+2.2. [Path](#22-path)
+3\. [SPIFFE Verifiable Identity Document](#3-spiffe-verifiable-identity-document)
+3.1. [SVID Trust](#31-svid-trust)
+3.2. [SVID Components](#32-svid-components)
+3.3. [SVID Format](#33-svid-format)
+4\. [Conclusion](#4-conclusion)
 
 ## 1. Introduction
 This document sets forth the official SPIFFE specification. It defines the two most fundamental components of the SPIFFE standard: the SPIFFE Identity and the SPIFFE Verifiable Identity document.
@@ -44,6 +44,15 @@ The trust domain corresponds to the trust root of a system. A trust domain could
 Trust domain names are nominally self-registered, unlike public DNS there is no delegating authority that acts to assert and register a base domain name to an actual legal real-world entity, or assert that legal entity has fair and due rights to any particular trust domain name.
 
 The trust domain name is defined as the authority component of the URI - specifically, the `host` part of the authority. The `userinfo` and `port` parts of the authority component MUST NOT be set, and the `:` delimiter MUST NOT be present. Please see section 3.2 of [RFC 3986](https://tools.ietf.org/html/rfc3986) for more information.
+
+#### 2.1.1. Trust Domain Name Collisions
+
+Trust domain names are self-registered, ie. trust domain operators are free to choose any trust domain name they find suitable. Since there is no centralized authority for regulation or registration of trust domain names, there is no guarantee of global uniqueness nor is there any technical means for preventing distinct trust domains from using identical trust domain names.
+
+To prevent accidental collisions, operators are advised to select trust domain names which are highly likely to be globally unique. When available, using a registered domain name as a suffix of a trust domain name will reduce chances of an accidental collision; for example, if a trust domain operator owns the domain name `example.com`, then using a trust domain name such as `trust_domain_name.example.com` would be reasonable. When trust domain names are automatically generated without operator input, random generating a GUID is strongly advised.
+
+When a collision does occur (ie. two trust domains select identical names), those trust domains will continue to operate independently but will be unable to federate (ie. connect to one and other). Collisions, however, pose no impact to the security of a SPIFFE-compliant trust domain system: SPIFFE-based authenticatation relies on a (cryptographic) mechanism independent of a trust domain name. When performing SPIFFE-based authentication, the public key(s) of the root of a trust domain are used to validate an identity. Further details of SPIFFE authentication are covered in [Section 3.1](#31-svid-trust).
+
 
 ### 2.2. Path
 The path component of a SPIFFE ID allows for the unique identification of a given workload. The meaning behind the path is left open ended and the responsibility of the administrator to define.
