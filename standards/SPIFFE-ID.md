@@ -16,6 +16,7 @@ For more general information about SPIFFE, please see the [Secure Production Ide
 2.1. [Trust Domain](#21-trust-domain)
 2.1.1. [Trust Domain Name Collisions](#211-trust-domain-name-collisions)
 2.2. [Path](#22-path)
+2.3. [Maximum SPIFFE ID Length](#23-maximum-spiffe-id-length)
 3\. [SPIFFE Verifiable Identity Document](#3-spiffe-verifiable-identity-document)
 3.1. [SVID Trust](#31-svid-trust)
 3.2. [SVID Components](#32-svid-components)
