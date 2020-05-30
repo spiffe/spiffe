@@ -61,7 +61,7 @@ The basic constraints X.509 extension identifies whether the certificate is a si
 
 Non-self-issued intermediate X.509 SVID signing certificates MUST set the `pathLenConstraint` field. Signing certificates MUST set the `cA` field to `true`, and leaf certificates MUST set the `cA` field to `false`.
 
-Note that the requirements for basic constraints on X.509 SVID certificates MUST adhere to [RFC 5280, section 4.2.1.9][3]. The above text is included solely as an aid implementors and is explicitly not intended to deviate from [RFC 5280, section 4.2.1.9][3].
+Note that the requirements for basic constraints on X.509 SVID certificates MUST adhere to [RFC 5280, section 4.2.1.9][3]. The above text is included solely as an aid for implementors and is explicitly not intended to deviate from [RFC 5280, section 4.2.1.9][3].
 
 ### 4.2. Name Constraints
 Name constraints indicate a namespace within which all SPIFFE IDs in subsequent certificates in a certification path MUST be located. They are used to limit the blast radius of a compromised signing certificate to the named trust domain(s), and are defined in [RFC 5280, section 4.2.1.10][4]. This section applies to signing certificates only.
