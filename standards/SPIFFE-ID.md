@@ -77,7 +77,7 @@ Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of
 
 ### 2.3. Maximum SPIFFE ID Length
 
-URIs, as defined by [RFC 3986](https://tools.ietf.org/html/rfc3986), do not have a maximal length. As an interoperability consideration, SPIFFE implementations MUST support SPIFFE URIs up to 2048 bytes in length and SHOULD NOT generate URIs of length greater than 2048 bytes. [RFC 3986](https://tools.ietf.org/html/rfc3986) permits only ASCII characters, thus the maximum length of a SPIFFE ID is 2048 bytes.
+URIs, as defined by [RFC 3986](https://tools.ietf.org/html/rfc3986), do not have a maximal length. As an interoperability consideration, SPIFFE implementations MUST support SPIFFE URIs up to 2048 bytes in length and SHOULD NOT generate URIs of length greater than 2048 bytes. [RFC 3986](https://tools.ietf.org/html/rfc3986) permits only ASCII characters, thus the recommended maximum length of a SPIFFE ID is 2048 bytes.
 
 All URI components contribute to the URI length, including the "spiffe" scheme, "://" separator, trust domain name, and path component. Non-ASCII characters contribute to the URI length after they are percent encoded as ASCII characters. Note that [RFC 3986](https://tools.ietf.org/html/rfc3986) defines a maximum length of 255 characters for the "host" component of a URI; therefore a maximum length of a trust domain name is 255 bytes.
 
