@@ -52,7 +52,7 @@ Trust domain operators are free to choose any trust domain name they find suitab
 
 To prevent accidental collisions (two trust domains select identical names), operators are advised to select trust domain names which are highly likely to be globally unique. When available, using a registered domain name as a suffix of a trust domain name will reduce chances of an accidental collision; for example, if a trust domain operator owns the domain name `example.com`, then using a trust domain name such as `trust_domain_name.example.com` would likely not produce a collision. When trust domain names are automatically generated without operator input, random generating a unique name (such as a UUID) is strongly advised.
 
-When a collision does occur, those trust domains will continue to operate independently but will be unable to federate (i.e. connect to one and other).  Because each trust domain uses unique cryptographic roots of trust, identity claims issued by one trust domain will fail validation in the other. Further details of SPIFFE authentication are covered in [Section 3.1](#31-svid-trust).
+When a collision does occur, those trust domains will continue to operate independently but will be unable to federate (connect to one another).  Because each trust domain uses unique cryptographic roots of trust, identity claims issued by one trust domain will fail validation in the other. Further details of SPIFFE authentication are covered in [Section 3.1](#31-svid-trust).
 
 
 ### 2.2. Path
