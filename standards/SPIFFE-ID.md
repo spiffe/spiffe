@@ -48,7 +48,7 @@ The trust domain name is defined as the authority component of the URI - specifi
 
 #### 2.1.1. Trust Domain Name Collisions
 
-Trust domain names are self-registered, ie. trust domain operators are free to choose any trust domain name they find suitable. Since there is no centralized authority for regulation or registration of trust domain names, there is no guarantee of global uniqueness nor is there any technical means for preventing distinct trust domains from using identical trust domain names.
+Trust domain operators are free to choose any trust domain name they find suitable: there is no centralized authority for regulation or registration of trust domain names. Thus, there is no guarantee of global uniqueness nor is there any technical means for preventing distinct trust domains from using identical trust domain names.
 
 To prevent accidental collisions (ie. two trust domains select identical names), operators are advised to select trust domain names which are highly likely to be globally unique. When available, using a registered domain name as a suffix of a trust domain name will reduce chances of an accidental collision; for example, if a trust domain operator owns the domain name `example.com`, then using a trust domain name such as `trust_domain_name.example.com` would likely not produce a collision. When trust domain names are automatically generated without operator input, random generating a unique name (such as a UUID) is strongly advised.
 
