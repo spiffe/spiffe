@@ -2,7 +2,7 @@
 
 
 The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
-standards for identifying and securing communications between web-based services. At its heart, SPIFFE is:
+standards for identifying and securing communications between application services. At its core, SPIFFE is:
 
 * A standard defining how services identify themselves to each other. These are called *SPIFFE IDs* and are implemented as [Uniform Resource Identifiers (URIs)](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier).
 
@@ -10,13 +10,16 @@ standards for identifying and securing communications between web-based services
 
 * An API specification for issuing and/or retrieving SVIDs. This is the *Workload API*.
 
-The SPIFFE Project is also producing a reference implementation that, in addition to the above, will:
+The SPIFFE Project has a reference implementation, the SPIRE (the SPIFFE Runtime Environment), that, in addition to the above, it:
 
-* Perform node and workload attestation.
-* Implement a signing framework for securely issuing and renewing SVIDs.
-* Provide an API for registering nodes and workloads, along with their designated SPIFFE IDs.
+* Performs node and workload attestation.
+* Implements a signing framework for securely issuing and renewing SVIDs.
+* Provides an API for registering nodes and workloads, along with their designated SPIFFE IDs.
+* Provides and manages the rotation of keys and certs for mutual authentication and encryption between workloads.
+* Simplifies access from identified services to secret stores, databases, services meshes and cloud provider services.
+* Interoperability and federation to SPIFFE compatible systems across heterogeneous environments and administrative trust boundaries.
 
-SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CNCF) as a sandbox level project. If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF. For details read the CNCF [announcement](https://www.cncf.io/blog/2018/03/29/cncf-to-host-the-spiffe-project/).
+SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CNCF) as an incubation-level project. If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF. For details read the CNCF [announcement](https://www.cncf.io/blog/2020/06/22/toc-approves-spiffe-and-spire-to-incubation/).
 
 ## SPIFFE Standards
 
@@ -33,6 +36,7 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 * [spiffe](https://github.com/spiffe/spiffe): This repository includes the SPIFFE ID, SVID and Workload API specifications, example code, and tests, as well as project governance, policies, and processes.    
 * [spire](https://github.com/spiffe/spire): This is a reference implementation of SPIFFE and the SPIFFE Workload API that can be run on and across varying hosting environments.
 * [go-spiffe](https://github.com/spiffe/go-spiffe): Golang client libraries.
+* [java-spiffe](https://github.com/spiffe/java-spiffe/tree/v2-api): Java client libraries
 
 ### Communications
 
@@ -50,12 +54,8 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 
 Most community activity is organized into Special Interest Groups (SIGs), time-bounded working groups, and our monthly community-wide meetings. SIGs follow these [guidelines](GOVERNANCE.md#special-interest-groups-sigs), although each may operate differently depending on their needs and workflows. Each group's material can be found in the [/community](/community) directory of this repository.
 
-| Name | Leads | Group | Slack Channel | Meetings |
+| Name | Lead | Group | Slack Channel | Meetings |
 |:------:|:-------:|:-------:|:---------------:|:----------:|
-| [Components](/community/sig-components/README.md) | [Oliver Liu](https://github.com/myidpt) (Google, Inc.)  | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-components) | [Here](https://spiffe.slack.com/messages/sig-components/) |[Notes](https://goo.gl/eCDKva) |
-| [Integration: AWS](/community/sig-integration-aws/README.md) | [Jon Debonis](https://www.linkedin.com/in/jondb) (Blend, Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-integration-aws) | [Here](https://spiffe.slack.com/messages/sig-integration-aws/) | [Notes](https://docs.google.com/document/d/1-QPtuC1_JHNCu6zSrQhbpX_MmNZFXtbU4uNEB-UVH8k) |
-| [Integration: gRPC](/community/sig-integration-grpc/README.md) | [Lizan Zhou](https://github.com/lizan) (Google, Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-integration-grpc) | [Here](https://spiffe.slack.com/messages/sig-integration-grpc/) | [Notes](https://docs.google.com/document/d/1wzW59UUn-7LJo-IGoo7es-I7bovmVC8sa0nGb1e8wLM) |
-| [Integration: Kubernetes](/community/sig-integration-k8s/README.md) | [Vipin Jain](https://github.com/jainvipin) (Pensando, Inc.) & [Tao Li](https://github.com/wattli) (Google, Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-integration-k8s) | [Here](https://spiffe.slack.com/messages/sig-integration-k8s) | [Notes](https://docs.google.com/document/d/1Dq4kSlfOpewnisItipTWx3Q8qCelbNP85yjMnSrdomE) |
 | [Specification](/community/sig-spec/README.md) | [Evan Gilman](https://github.com/evan2645) (Scytale, Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-specification) | [Here](https://spiffe.slack.com/messages/sig-spec) | [Notes](https://docs.google.com/document/d/1p2BbRWN_7z6nkBMj-h1mAJAJxxKqNeFiV4IplZ_wU4c) |
 
 **Follow the SPIFFE Project** You can find us on [Github](https://github.com/spiffe/) and [Twitter](https://twitter.com/SPIFFEio).
