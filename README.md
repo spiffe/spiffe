@@ -10,7 +10,7 @@ standards for identifying and securing communications between application servic
 
 * An API specification for issuing and/or retrieving SVIDs. This is the *Workload API*.
 
-The SPIFFE Project has a reference implementation, the SPIRE (the SPIFFE Runtime Environment), that, in addition to the above, it:
+The SPIFFE Project has a reference implementation, the SPIRE (the SPIFFE Runtime Environment), that in addition to the above, it:
 
 * Performs node and workload attestation.
 
