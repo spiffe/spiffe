@@ -10,13 +10,18 @@ standards for identifying and securing communications between application servic
 
 * An API specification for issuing and/or retrieving SVIDs. This is the *Workload API*.
 
-The SPIFFE Project has a reference implementation, the SPIRE (the SPIFFE Runtime Environment), that, in addition to the above, it:
+The SPIFFE Project has a reference implementation, the SPIRE (the SPIFFE Runtime Environment), that in addition to the above, it:
 
 * Performs node and workload attestation.
+
 * Implements a signing framework for securely issuing and renewing SVIDs.
+
 * Provides an API for registering nodes and workloads, along with their designated SPIFFE IDs.
+
 * Provides and manages the rotation of keys and certs for mutual authentication and encryption between workloads.
+
 * Simplifies access from identified services to secret stores, databases, services meshes and cloud provider services.
+
 * Interoperability and federation to SPIFFE compatible systems across heterogeneous environments and administrative trust boundaries.
 
 SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CNCF) as an incubation-level project. If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF. For details read the CNCF [announcement](https://www.cncf.io/blog/2020/06/22/toc-approves-spiffe-and-spire-to-incubation/).
