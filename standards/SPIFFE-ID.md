@@ -91,6 +91,10 @@ URIs, as defined by [RFC 3986](https://tools.ietf.org/html/rfc3986), do not have
 
 All URI components contribute to the URI length, including the "spiffe" scheme, "://" separator, trust domain name, and path component. Non-ASCII characters contribute to the URI length after they are percent encoded as ASCII characters. Note that [RFC 3986](https://tools.ietf.org/html/rfc3986) defines a maximum length of 255 characters for the "host" component of a URI; therefore a maximum length of a trust domain name is 255 bytes.
 
+### 2.4. SPIFFE ID Parsing
+
+SPIFFE IDs follow the URI specification as defined by [RFC 3986](https://tools.ietf.org/html/rfc3986). The scheme and trust domain name of the SPIFFE ID are case-insensitive. The path is case-sensitive.
+
 ## 3. SPIFFE Verifiable Identity Document
 A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE ID's trust domain.
 
