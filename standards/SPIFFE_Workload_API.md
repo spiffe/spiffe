@@ -84,7 +84,7 @@ For additional clarity, please see [Appendix A](#appendix-a.-sample-implementati
 
 The `FetchX509SVID` RPC will always provide a Trust Bundle for the Trust Domain in which an SVID resides, however, it may also provide bundles for foreign Trust Domains.
 
-The `FetchX509Bundles` RPC returns a set of Trust Bundles keyed by the SPIFFE ID of the trust domain.  Since this RPC does not return an SVID, all bundles are encoded in the same way in the response, whether they are for the trust domain in which the Server resides or are foreign.
+The `FetchX509Bundles` RPC returns a set of Trust Bundles keyed by the SPIFFE ID of the trust domain.  Since this RPC does not return an SVID, all bundles are encoded in the same way in the response, whether they are for the trust domain in which the server resides or are foreign.
 
 Inclusion of foreign bundles enables workloads to communicate *across* Trust Domains, and is the primary mechanism through which federation is enabled. A bundle representing a foreign Trust Domain is known as a *Federated Bundle*.
 
@@ -157,7 +157,7 @@ All fields in the `X509SVID` message are mandatory, and MUST contain a non-defau
 
 The only mandatory field in the `X509SVIDResponse` message is the `svids` field. If the client is not entitled to an SVID, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The `crl` field and the `federated_bundles` field are optional, and may contain a default value.
 
-The `X509BundlesResponse` message MUST contain at least one trust bundle.  If the Client is not entitled to recieve any X509 bundles, the server SHOULD respond with the "PermissionDenied" gRPC status code.
+The `X509BundlesResponse` message MUST contain at least one trust bundle.  If the client is not entitled to receive any X.509 bundles, the server SHOULD respond with the "PermissionDenied" gRPC status code.
 
 ### 5.5 Default Values and Redacted Information
 
@@ -167,7 +167,7 @@ Since every message MUST include the full set of information (see the [Workload 
 
 If the server redacts all SVIDs from a workload, it SHOULD send the "PermissionDenied" gRPC status code (terminating the gRPC response stream). The client SHOULD cease using the redacted SVIDS. The client MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
 
-If the server redacts all trust bundles from a Client using the `FetchX509Bundles` RPC, it SHOULD send the "PermissionDenied" gRPC status code (terminating the gRPC response stream). The client SHOULD cease using the redacted trust bundles. The client MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
+If the server redacts all trust bundles from a client using the `FetchX509Bundles` RPC, it SHOULD send the "PermissionDenied" gRPC status code (terminating the gRPC response stream). The client SHOULD cease using the redacted trust bundles. The client MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
 
 ## Appendix A. Sample Implementation State Machines
 
