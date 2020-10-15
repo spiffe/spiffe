@@ -102,7 +102,7 @@ The X.509-SVID Profile messages are expressed as a Protocol Buffer version 3 (pr
 
 ```protobuf
 // The X509SVIDResponse message carries a set of X.509 SVIDs and their
-// associated information. It also carries a set of global CRLs, and a
+// associated information. It also carries a set of global CRLs and a
 // map of federated bundles the workload should trust.
 message X509SVIDResponse {
     // A list of X509SVID messages, each of which includes a single
@@ -110,7 +110,7 @@ message X509SVIDResponse {
     // and bundle.
     repeated X509SVID svids = 1;
 
-    // ASN.1 DER encoded
+    // ASN.1 DER encoded certificate revocation list.
     repeated bytes crl = 2;
 
     // CA certificate bundles belonging to foreign Trust Domains that the
@@ -139,10 +139,10 @@ message X509SVID {
 
 }
 
-// The X509BundlesResponse message carries a set of global CRLs, and a
+// The X509BundlesResponse message carries a set of global CRLs and a
 // map of trust bundles the workload should trust.
 message X509BundlesResponse {
-    // ASN.1 DER encoded
+    // ASN.1 DER encoded certificate revocation list.
     repeated bytes crl = 1;
 
     // CA certificate bundles belonging to Trust Domains that the
