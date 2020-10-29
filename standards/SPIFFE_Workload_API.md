@@ -47,6 +47,11 @@ service SpiffeWorkloadAPI {
     // well as related information like trust bundles and CRLs. As
     // this information changes, subsequent messages will be sent.
     rpc FetchX509SVID(X509SVIDRequest) returns (stream X509SVIDResponse);
+
+    // Fetch trust bundles and CRLs.  Useful for clients that only
+    // need to validate SVIDs without obtaining an SVID for themself.
+    // As this information changes, subsequent messages will be sent.
+    rpc FetchX509Bundles(X509BundlesRequest) returns (stream X509BundlesResponse);
 }
 ```
 
@@ -77,7 +82,11 @@ For additional clarity, please see [Appendix A](#appendix-a.-sample-implementati
 
 ### 5.2 Federated Bundles
 
-The X.509-SVID Profile will always provide a Trust Bundle for the Trust Domain in which an SVID resides, however, it may also provide bundles for foreign Trust Domains. This enables workloads to communicate *across* Trust Domains, and is the primary mechanism through which federation is enabled. A bundle representing a foreign Trust Domain is known as a *Federated Bundle*.
+The `FetchX509SVID` RPC will always provide a Trust Bundle for the Trust Domain in which an SVID resides, however, it may also provide bundles for foreign Trust Domains.
+
+The `FetchX509Bundles` RPC returns a set of Trust Bundles keyed by the SPIFFE ID of the trust domain.  Since this RPC does not return an SVID, all bundles are encoded in the same way in the response, whether they are for the trust domain in which the server resides or are foreign.
+
+Inclusion of foreign bundles enables workloads to communicate *across* Trust Domains, and is the primary mechanism through which federation is enabled. A bundle representing a foreign Trust Domain is known as a *Federated Bundle*.
 
 When authenticating a client from a foreign trust domain, the authenticator chooses the bundle representing the client’s presented trust domain for validation. Similarly, when authenticating a server, the client uses the bundle representing the server’s trust domain. If no matching bundle is present for the SVID in use, then the peer is untrusted. This approach is required in order to account for the lack of widespread support for SAN URI Name Constraints in common X.509 libraries. Please see [Section 4.2](X509-SVID.md#42-name-constraints) of the X509-SVID specification for more information.
 
@@ -93,15 +102,15 @@ The X.509-SVID Profile messages are expressed as a Protocol Buffer version 3 (pr
 
 ```protobuf
 // The X509SVIDResponse message carries a set of X.509 SVIDs and their
-// associated information. It also carries a set of global CRLs, and a
-// TTL to inform the workload when it should check back next.
+// associated information. It also carries a set of global CRLs and a
+// map of federated bundles the workload should trust.
 message X509SVIDResponse {
     // A list of X509SVID messages, each of which includes a single
     // SPIFFE Verifiable Identity Document, along with its private key
     // and bundle.
     repeated X509SVID svids = 1;
 
-    // ASN.1 DER encoded
+    // ASN.1 DER encoded certificate revocation list.
     repeated bytes crl = 2;
 
     // CA certificate bundles belonging to foreign Trust Domains that the
@@ -129,6 +138,18 @@ message X509SVID {
     bytes bundle = 4;
 
 }
+
+// The X509BundlesResponse message carries a set of global CRLs and a
+// map of trust bundles the workload should trust.
+message X509BundlesResponse {
+    // ASN.1 DER encoded certificate revocation list.
+    repeated bytes crl = 1;
+
+    // CA certificate bundles belonging to Trust Domains that the
+    // workload should trust, keyed by the SPIFFE ID of the trust
+    // domain. Bundles are ASN.1 DER encoded.
+    map<string, bytes> bundles = 2;
+}
 ```
 
 
@@ -136,13 +157,17 @@ All fields in the `X509SVID` message are mandatory, and MUST contain a non-defau
 
 The only mandatory field in the `X509SVIDResponse` message is the `svids` field. If the client is not entitled to an SVID, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The `crl` field and the `federated_bundles` field are optional, and may contain a default value.
 
+The `X509BundlesResponse` message MUST contain at least one trust bundle.  If the client is not entitled to receive any X.509 bundles, the server SHOULD respond with the "PermissionDenied" gRPC status code.
+
 ### 5.5 Default Values and Redacted Information
 
-SPIFFE Workload API clients may at times encounter fields in the `X509SVIDResponse` message that have a default value, or may notice that information included in a previous response is not included in the latest response. For instance, a client may encounter a default value in the `federated_bundles` field after having previously received a federated bundle.
+SPIFFE Workload API clients may at times encounter fields in the response message that have a default value, or may notice that information included in a previous response is not included in the latest response. For instance, a client may encounter a default value in the `federated_bundles` field after having previously received a federated bundle.
 
-Since every message MUST include the full set of information (see the [Workload API Client and Server Behavior](#51-workload-api-client-and-server-behavior) section), clients SHOULD interpret the absence of data as a redaction. As an example, if a client has loaded a federated bundle for `spiffe://foo.bar`, and receives a message that does not include a bundle for `spiffe://foo.bar`, then the bundle SHOULD be unloaded.
+Since every message MUST include the full set of information (see the [Workload API Client and Server Behavior](#51-workload-api-client-and-server-behavior) section), clients SHOULD interpret the absence of data as a redaction. As an example, if a client has loaded a bundle for `spiffe://foo.bar`, and receives a message that does not include a bundle for `spiffe://foo.bar`, then the bundle SHOULD be unloaded.
 
-If the server redacts all SVIDs from a workload, it SHOULD send the "PermissionDenied" gRPC status code (terminating the gRPC response stream). The client SHOULD cease using the redacted SVIDS. The client MAY attempt to reconnect with another call to the FetchX509SVID RPC after a backoff.
+If the server redacts all SVIDs from a workload, it SHOULD send the "PermissionDenied" gRPC status code (terminating the gRPC response stream). The client SHOULD cease using the redacted SVIDS. The client MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
+
+If the server redacts all trust bundles from a client using the `FetchX509Bundles` RPC, it SHOULD send the "PermissionDenied" gRPC status code (terminating the gRPC response stream). The client SHOULD cease using the redacted trust bundles. The client MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
 
 ## Appendix A. Sample Implementation State Machines
 
