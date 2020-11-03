@@ -55,7 +55,7 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 * [CONTRIBUTING](/CONTRIBUTING.md)
 * [GOVERNANCE](/GOVERNANCE.md)
 
-### SIGs & Working Groups
+### SIGs & Working Groups<a name="sigs"></a>
 
 Most community activity is organized into Special Interest Groups (SIGs), time-bounded working groups, and our monthly community-wide meetings. SIGs follow these [guidelines](GOVERNANCE.md#special-interest-groups-sigs), although each may operate differently depending on their needs and workflows. Each group's material can be found in the [/community](/community) directory of this repository.
 
