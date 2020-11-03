@@ -62,7 +62,7 @@ The `kid` header is optional.
 The `typ` header is optional. If set, its value MUST be either `JWT` or `JOSE`.
 
 ## 3. JWT Claims
-The JWT-SVID specification does not introduce any new claims, though it does set some restrictions on the registered claims defined by [RFC 7519][1]. Registered claims not described in this document, in addition to private claims, MAY be used as implementers see fit. It should be noted, however, that reliance on claims which are not defined here may impact interoperability, as the producing and consuming applications must independently agree. Implementers should exercise caution when introducing additional claims and carefully consider the impact on SVID interoperability, particularly in environments where the implementer does not control both the producer and the consumer.
+The JWT-SVID specification does not introduce any new claims, though it does set some restrictions on the registered claims defined by [RFC 7519][1]. Registered claims not described in this document, in addition to private claims, MAY be used as implementers see fit. It should be noted, however, that reliance on claims which are not defined here may impact interoperability, as the producing and consuming applications must independently agree. Implementers should exercise caution when introducing additional claims and carefully consider the impact on SVID interoperability, particularly in environments where the implementer does not control both the producer and the consumer. If the use of additional claims is absolutely necessary, they should be made collision-resistant per [RFC 7519][1] recommendations.
 
 This section outlines the requirements and restrictions placed upon existing registered claims by the JWT-SVID specification.
 
