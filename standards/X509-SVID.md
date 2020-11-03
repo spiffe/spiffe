@@ -103,11 +103,11 @@ As support for URI name constraints becomes more widespread, future versions of 
 This section describes how X509-SVID CA certificates are published to and consumed from a SPIFFE bundle. Please see the [SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md) specification for more information about SPIFFE bundles.
 
 ### 6.1. Publishing SPIFFE Bundle Elements
-X509-SVID CA certificates for a given trust domain are represented in the SPIFFE bundle as [RFC 7517-compliant][8] JWK entries, one entry per CA certificate.
+X509-SVID CA certificates for a given trust domain are represented in the SPIFFE bundle as [RFC 7517-compliant][7] JWK entries, one entry per CA certificate.
 
 The `use` parameter of each JWK entry MUST be set to `x509-svid`. Additionally, the `kid` parameter of each JWK entry MUST NOT be set.
 
-In addition to the parameters required by [RFC 7517][8], each entry representing an X509-SVID CA certificate MUST contain the `x5c` parameter with a value equal to the base64 encoded DER CA certificate that the entry represents. The value MUST include exactly one CA certificate, and the certificate SHOULD be self-signed.
+In addition to the parameters required by [RFC 7517][7], each entry representing an X509-SVID CA certificate MUST contain the `x5c` parameter with a value equal to the base64 encoded DER CA certificate that the entry represents. The value MUST include exactly one CA certificate, and the certificate SHOULD be self-signed.
 
 ### 6.2. Consuming a SPIFFE Bundle
 When consuming a SPIFFE bundle from a foreign trust domain, it is necessary to extract the X509-SVID CA certificates for practical use. SPIFFE bundles may contain entries for many different SVID types, so the first step is to identify the entries which represent X509-SVID CA certificates.
