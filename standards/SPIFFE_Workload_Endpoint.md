@@ -88,4 +88,4 @@ This section enumerates the various error codes that may be returned by a SPIFFE
 | ---- | --------- | -------- |
 | InvalidArgument | The gRPC security header is not present in the client request. Please see the [Transport](#3-transport) section for more information. | Report an error, don't retry. |
 | Unavailable | The SPIFFE Workload Endpoint implementation is unable to handle the request. | Retry with a backoff. |
-| PermissionDenied | The client does not have an identity assigned to it. Depending on the implementation, this may indicate that the workload has started before the identity has been provisioned. | Retry with a backoff. |
+| PermissionDenied | The client is not permitted to perform the requested operation. Depending on the implementation, this may indicate that the workload has started before the identity or trust domain has been provisioned. | Retry with a backoff. |
