@@ -65,3 +65,10 @@ Most community activity is organized into Special Interest Groups (SIGs), time-b
 | [SIG-SPIRE](/community/sig-spire/README.md) | [Andres Vega](https://github.com/anvega) (VMware) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-spire) | [Here](https://spiffe.slack.com/messages/spire) | [Notes](https://docs.google.com/document/d/1IgpCkvSRSoY9Xd16gFQJJ1KP8sLZ7EE39cEjBK_UIg4) |
 
 **Follow the SPIFFE Project** You can find us on [Github](https://github.com/spiffe/) and [Twitter](https://twitter.com/SPIFFEio).
+
+## SPIFFE TSC
+The SPIFFE [Technical Steering Committee](/GOVERNANCE.md#technical-steering-committee-tsc) meets on a regular cadence to review project progress, address maintainer needs, and provide feedback on strategic direction and industry trends. Community members interested in joining this call can find details below.
+
+* Calendar: [iCal](https://calendar.google.com/calendar/ical/c_gck7v87m9obq6n3hpo01l7csus%40group.calendar.google.com/public/basic.ics) or [Browser-based](https://calendar.google.com/calendar/embed?src=c_gck7v87m9obq6n3hpo01l7csus%40group.calendar.google.com&ctz=America%2FChicago)
+* Meeting Notes: [Google Doc](https://docs.google.com/document/d/14YlmMTqwqNdx-CWapwwIBMaakH5Z2UnAvOBQBB8AwQM)
+* Call Details: [Zoom Link](https://zoom.us/j/95959131216?pwd=akw4RzlEUEVCTnFkWE5KdWFPZXpkdz09)
