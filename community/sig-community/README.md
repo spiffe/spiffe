@@ -19,6 +19,7 @@ A Special Interest Group (SIG) concerning the nurture and growth of the SPIFFE c
   * Coordinate the publishing of SPIFFE/SPIRE case studies and related content
   * Strategize industry conference presence
   * Track and report on key community health metrics
+  * Support inclusivity and diversity of the SPIFFE/SPIRE community
 
 ### Non-Goals:
 * Code of Conduct oversight (Please contact the [SPIFFE TSC](https://github.com/spiffe/spiffe#spiffe-tsc) for this purpose)
