@@ -12,13 +12,13 @@ A Special Interest Group (SIG) concerning the nurture and growth of the SPIFFE c
 * [Google Group](https://groups.google.com/a/spiffe.io/d/forum/sig-community)
 
 ### Goals:
+* Help drive SPIFFE adoption and contributor base through awareness and related efforts
 * Nurture and grow the SPIFFE community
   * Plan and execute regular community events
   * Plan and execute social media announcements, blog posts, etc.
   * Coordinate the publishing of SPIFFE/SPIRE case studies and related content
   * Strategize industry conference presence
   * Track and report on key community health metrics
-  * Help drive SPIFFE adoption and contributor base through awareness and related efforts
 
 ### Non-Goals:
 * Code of Conduct oversight (Please contact the [SPIFFE TSC](https://github.com/spiffe/spiffe#spiffe-tsc) for this purpose)
