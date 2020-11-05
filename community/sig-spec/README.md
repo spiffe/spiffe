@@ -4,8 +4,8 @@ A Special Interest Group (SIG) concerning the official SPIFFE specifications.
 
 ### Meetings:
 * Date/Time: Every Thursday @ 1:00pm Pacific
-* [Meetings Notes](https://docs.google.com/document/d/1p2BbRWN_7z6nkBMj-h1mAJAJxxKqNeFiV4IplZ_wU4c)
-* [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_u0dg4c1915nom1fhrs567sihlc%40group.calendar.google.com/public/basic.ics) (See this [Google support page](https://support.google.com/calendar/answer/37100?co=GENIE.Platform%3DDesktop&hl=en) to learn more about importing .ics files)
+* [Meetings Notes](https://docs.google.com/document/d/1f64vbyn5sOb8Mr1H3mGGGul3vTKo4r6cTBcUV3N9OFo)
+* [Calendar ICS](https://calendar.google.com/calendar/ical/spiffe.io_0h88o393t6qi5q55h0v9u66j50%40group.calendar.google.com/public/basic.ics) (See this [Google support page](https://support.google.com/calendar/answer/37100?co=GENIE.Platform%3DDesktop&hl=en) to learn more about importing .ics files)
 
 ### Contact:
 * [Slack Channel](https://spiffe.slack.com/messages/sig-spec/)
