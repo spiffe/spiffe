@@ -13,28 +13,32 @@ Portable and interoperable cryptographic identity for networked workloads is per
 1\. [Introduction](#1-introduction)
 2\. [Extensibility](#2-extensibility)
 3\. [Service Defintion](#3-service-definition)
-4\. [Identifying the Caller](#4-identifying-the-caller)
+4\. [Client and Server Behavior](#4-client-and-server-behavior)
+4.1. [Identifying the Caller](#41-identifying-the-caller)
+4.2. [Connection Lifetime](#42-connection-lifetime)
+4.3. [Stream Responses](#43-stream-responses)
+4.4. [Default Values and Redacted Information](#44-default-values-and-redacted-information)
+4.5. [Mandatory Fields](#45-mandatory-fields)
+4.6. [Federated Bundles](#46-federated-bundles)
 5\. [X.509-SVID Profile](#5-x509-svid-profile)
-5.1. [Workload API Client and Server Behavior](#51-workload-api-client-and-server-behavior)
-5.2. [Federated Bundles](#52-federated-bundles)
+5.1. [Profile Definition](#51-profile-definition)
+5.2. [Profile RPCs](#52-profile-rpcs)
 5.3. [Default Identity](#53-default-identity)
-5.4. [Profile Definition](#54-profile-definition)
-5.5. [Default Values and Redacted Information](#55-default-values-and-redacted-information)
 6\. [JWT-SVID Profile](#6-jwt-svid-profile)
-6.1 [Client and Server Behavior](#61-client-and-server-behavior)
-6.2 [Default Identity](#62-default-identity)
-6.3 [Fetching Bundles](#63-fetching-bundles)
-6.4 [Profile Definition](#64-profile-definition)
-6.5. [Default Values and Redacted Information](#65-default-values-and-redacted-information)
+6.1. [Profile Definition](#61-profile-definition)
+6.2. [Profile RPCs](#62-profile-rpcs)
+6.3. [JWT-SVID Validation](#63-jwt-svid-validation)
 
 ## 1. Introduction
 
 The SPIFFE Workload API is an API which provides information and services that enable workloads, or compute processes, to leverage SPIFFE identities and SPIFFE-based authentication systems. It is served by the [SPIFFE Workload Endpoint](SPIFFE_Workload_Endpoint.md), and comprises a number of services, or *profiles*.
 
-Currently, there are two profiles, both of which are mandatory:
+Currently, there are two profiles:
 
 - [X.509-SVID Profile](#5-x509-svid-profile)
 - [JWT-SVID Profile](#6-jwt-svid-profile)
+
+Both profiles are mandatory and MUST be implemented. However, one or the other MAY be administratively disabled.
 
 Future versions of this specification may introduce additional profiles or make one or more profiles optional.
 
@@ -46,49 +50,53 @@ The SPIFFE Workload API MUST NOT be extended beyond this specification. Implemen
 
 The SPIFFE Workload API is defined by a Protocol Buffer (version 3) service definition. The complete definition is found in [workloadapi.proto](workloadapi.proto).
 
-All profiles are implemented as a group of related RPCs within a single `WorkloadAPI` service.
+Profiles are implemented as a group of related RPCs within a single `WorkloadAPI` service.
 
-## 4. Identifying the Caller
+## 4. Client and Server Behavior
+
+### 4.1 Identifying the Caller
 
 The SPIFFE Workload API supports any number of local clients, allowing it to bootstrap the identity of any process that can reach it. Typically, it is desirable to assign identities on a per-process basis, where certain processes are granted certain identities. In order to do this, the SPIFFE Workload API implementation must be able to ascertain the identity of the caller.
 
-The SPIFFE Workload Endpoint specification mandates the absence of direct client authentication, instead relying on out-of-band authenticity checks. As a result, it is the responsibility of the SPIFFE Workload Endpoint implementation to identify the caller. Information about the caller can then be used by the SPIFFE Workload API to determine the appropriate identities to serve. For more information, please see the [Authentication](SPIFFE_Workload_Endpoint.md#5-authentication) section of the SPIFFE Workload Endpoint specification.
+The SPIFFE Workload Endpoint specification mandates the absence of direct client authentication, instead relying on out-of-band authenticity checks. As a result, it is the responsibility of the SPIFFE Workload Endpoint implementation to identify the caller. Information about the caller can then be used by the SPIFFE Workload API to determine the appropriate content to serve. For more information, please see the [Authentication](SPIFFE_Workload_Endpoint.md#5-authentication) section of the SPIFFE Workload Endpoint specification.
 
-## 5. X.509-SVID Profile
+### 4.2 Connection Lifetime
 
-The X.509-SVID Profile of the SPIFFE Workload API provides a set of gRPC methods which can be used by workloads to retrieve [X.509-SVIDs](X509-SVID.md) and their related trust bundles. This profile outlines the signature of these methods, as well as related client and server behavior.
+Clients of the SPIFFE Workload API SHOULD maintain an open connection for as long as is reasonably possible, waiting on server response messages to be received on the stream. The connection may, at any time, be terminated by either the server or the client. In this case, the client SHOULD immediately establish a new connection. This helps ensure that the workload retains the most up-to-date set of identity related materials. SPIFFE Workload API server implementors may assume this property, and by not receiving messages in a timely manner, the workload may fall out-of-date, potentially impacting its availability.
 
-### 5.1 Workload API Client and Server Behavior
+### 4.3 Stream Responses
 
-The SPIFFE Workload API is implemented as a gRPC server-side stream in order to facilitate rapid propagation of updates like revocations and CA certificate introductions. This enables clients to loop over server responses, accepting updated responses as they occur.
+The SPIFFE Workload API includes RPCs utilizing gRPC server-side streams in order to facilitate rapid propagation of updates like revocations and CA certificate introductions. This enables clients to loop over server responses, accepting updated responses as they occur.
 
-Every response message sent by the server MUST include the full set of information, and not just the information which has changed. This avoids complexity associated with state tracking on both Client and Server implementations, including the need for anti-entropy mechanisms.
+Every stream response message sent by the server MUST include the full set of information, and not just the information which has changed. This avoids complexity associated with state tracking on both Client and Server implementations, including the need for anti-entropy mechanisms.
 
 The exact timing of server response messages is implementation-specific, and SHOULD be dictated by events which change the response, such as an SVID rotation, a CRL update, etc. Receiving a request message from the client MUST be considered a response-generating event. In other words, the first response message of the server response stream (on a connection-by-connection basis) MUST be sent as soon as possible, without delay.
-
-Clients of the SPIFFE Workload API SHOULD maintain an open connection for as long as is reasonably possible, waiting on server response messages to be received on the stream. The connection may, at any time, be terminated by either the server or the client. In this case, the client SHOULD immediately establish a new connection. This helps ensure that the workload retains the most up-to-date set of SVIDs, CRLs, and Bundles. SPIFFE Workload API server implementors may assume this property, and by not receiving messages in a timely manner, the workload may fall out-of-date, potentially impacting its availability.
 
 Finally, implementers of SPIFFE Workload API servers should be careful about pushing updated response messages *too* rapidly. Some software may reload automatically upon receiving new information, potentially causing a period of unavailability should all instances reload at once. As a result, implementers may introduce some splay/jitter in the transmission of widespread updates.
 
 For additional clarity, please see [Appendix A](#appendix-a.-sample-implementation-state-machines) for sample implementation state machines.
 
-### 5.2 Federated Bundles
+### 4.4 Default Values and Redacted Information
 
-The `FetchX509SVID` RPC will always provide a Trust Bundle for the Trust Domain in which an SVID resides, however, it may also provide bundles for foreign Trust Domains.
+SPIFFE Workload API clients may at times encounter fields in the response message that have a default value, or may notice that information included in a previous response is not included in the latest response. For instance, a client may encounter a default value in the `federated_bundles` field after having previously received a federated bundle.
 
-The `FetchX509Bundles` RPC returns a set of Trust Bundles keyed by the SPIFFE ID of the trust domain.  Since this RPC does not return an SVID, all bundles are encoded in the same way in the response, whether they are for the trust domain in which the server resides or are foreign.
+Since every message MUST include the full set of information (see the [Stream Responses](#42-stream-responses) section), clients SHOULD interpret the absence of data as a redaction. As an example, if a client has loaded a bundle for `spiffe://foo.bar`, and receives a message that does not include a bundle for `spiffe://foo.bar`, then the bundle SHOULD be unloaded.
 
-Inclusion of foreign bundles enables workloads to communicate *across* Trust Domains, and is the primary mechanism through which federation is enabled. A bundle representing a foreign Trust Domain is known as a *Federated Bundle*.
+### 4.5 Mandatory Fields
+
+Messages exchanged for the profile RPCs are comprised of both mandatory and optional fields. Servers receiving a message in which a mandatory field has a default value SHOULD respond with the "InvalidArgument" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). Clients receiving a message in which a mandatory field has a default value SHOULD report an error and discard the message.
+
+### 4.6 Federated Bundles
+
+Various RPCs defined in this specification can return trust bundles for foreign trust domains. Inclusion of foreign bundles enables workloads to communicate *across* trust domains, and is the primary mechanism through which federation is enabled. A bundle representing a foreign trust domain is known as a *Federated Bundle*.
 
 When authenticating a client from a foreign trust domain, the authenticator chooses the bundle representing the client’s presented trust domain for validation. Similarly, when authenticating a server, the client uses the bundle representing the server’s trust domain. If no matching bundle is present for the SVID in use, then the peer is untrusted. This approach is required in order to account for the lack of widespread support for SAN URI Name Constraints in common X.509 libraries. Please see [Section 4.2](X509-SVID.md#42-name-constraints) of the X509-SVID specification for more information.
 
-### 5.3 Default Identity
+## 5. X.509-SVID Profile
 
-It is often the case that a workload doesn’t know what identity it should assume. Determining when to assume what identity is a site-specific concern, and as a result, the SPIFFE specifications don’t reason about how to do this.
+The X.509-SVID Profile of the SPIFFE Workload API provides a set of gRPC methods which can be used by workloads to retrieve [X.509-SVIDs](X509-SVID.md) and their related trust bundles. This profile outlines the signature of these methods, as well as related client and server behavior.
 
-In order to support the widest variety of use cases, the X.509-SVID Profile supports the issuance of multiple identities, while also defining a default identity. It is expected that workloads which are aware of multiple identities can handle decision making on their own. Workloads which don’t understand how to leverage multiple identities may use the default identity. The default identity is the first in the list. Protocol buffers ensure that the order of the list is preserved.
-
-### 5.4 Profile Definition
+### 5.1 Profile Definition
 
 The X.509-SVID Profile RPCs and associated messages are defined below. For the complete Workload API service definition, see [workloadapi.proto](workloadapi.proto).
 
@@ -108,8 +116,9 @@ service SpiffeWorkloadAPI {
     // information changes, subsequent messages will be sent.
     rpc FetchX509Bundles(X509BundlesRequest) returns (stream X509BundlesResponse);
 
-    // ... other profiles RPCs ...
+    // ... RPCS for other profiles ...
 }
+
 
 // The X509SVIDRequest message conveys parameters for requesting an X.509-SVID.
 // There are currently no such parameters.
@@ -118,33 +127,33 @@ message X509SVIDRequest {  }
 // The X509SVIDResponse message carries X.509-SVIDs and related information,
 // including a global CRL and list of bundles the workload is federated with.
 message X509SVIDResponse {
-    // A list of X509SVID messages, each of which includes a single
-    // X.509-SVID, its private key, and the X.509 bundle for the Trust Domain.
+    // Required. A list of X509SVID messages, each of which includes a single
+    // X.509-SVID, its private key, and the bundle for the trust domain.
     repeated X509SVID svids = 1;
 
-    // An ASN.1 DER encoded CRL.
+    // Optional. An ASN.1 DER encoded CRL.
     repeated bytes crl = 2;
 
-    // CA certificate bundles belonging to foreign Trust Domains that the
+    // Optional. CA certificate bundles belonging to foreign trust domains that the
     // workload should trust, keyed by the SPIFFE ID of the foreign
     // domain. Bundles are ASN.1 DER encoded.
     map<string, bytes> federated_bundles = 3;
 }
 
 // The X509SVID message carries a single SVID and all associated
-// information, including X.509 bundle for the Trust Domain.
+// information, including X.509 bundle for the trust domain.
 message X509SVID {
-    // The SPIFFE ID of the SVID in this entry
+    // Required. The SPIFFE ID of the SVID in this entry
     string spiffe_id = 1;
 
-    // ASN.1 DER encoded certificate chain. MAY include intermediates,
-    // the leaf certificate (or SVID itself) MUST come first.
+    // Required. ASN.1 DER encoded certificate chain. MAY include
+    // intermediates, the leaf certificate (or SVID itself) MUST come first.
     bytes x509_svid = 2;
 
-    // ASN.1 DER encoded PKCS#8 private key. MUST be unencrypted.
+    // Required. ASN.1 DER encoded PKCS#8 private key. MUST be unencrypted.
     bytes x509_svid_key = 3;
 
-    // ASN.1 DER encoded X.509 bundle for the Trust Domain.
+    // Required. ASN.1 DER encoded X.509 bundle for the trust domain.
     bytes bundle = 4;
 }
 
@@ -156,67 +165,74 @@ message X509BundlesRequest {
 // The X509BundlesResponse message carries a global CRL and a
 // map of trust bundles the workload should trust.
 message X509BundlesResponse {
-    // ASN.1 DER encoded certificate revocation list.
+    // Optional. ASN.1 DER encoded certificate revocation list.
     repeated bytes crl = 1;
 
-    // CA certificate bundles belonging to Trust Domains that the
+    // Required. CA certificate bundles belonging to trust domains that the
     // workload should trust, keyed by the SPIFFE ID of the trust
     // domain. Bundles are ASN.1 DER encoded.
     map<string, bytes> bundles = 2;
 }
+
+message JWTSVIDRequest {
+    // Required. The audience the workload intends to authenticate against.
+    repeated string audience = 1;
+
+    // Optional. The requested SPIFFE ID for the JWT-SVID. If unset, JWT-SVIDs
+    // for all identities the workload is entitled to are returned.
+    string spiffe_id = 2;
+}
+
+// The JWTSVIDResponse message conveys JWT-SVIDs.
+message JWTSVIDResponse {
+    // Required. The list of returned JWT-SVIDs.
+    repeated JWTSVID svids = 1;
+}
 ```
 
-All fields in the `X509SVID` message are mandatory, and MUST contain a non-default value. Clients receiving an `X509SVID` message in which any field has a default value SHOULD report an error and discard the message.
+### 5.2 Profile RPCs
 
-The only mandatory field in the `X509SVIDResponse` message is the `svids` field. If the client is not entitled to an SVID, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The `crl` field and the `federated_bundles` field are optional, and may contain a default value.
+#### 5.2.1 FetchX509SVID
 
-The `X509BundlesResponse` message MUST contain at least one trust bundle.  If the client is not entitled to receive any X.509 bundles, the server SHOULD respond with the "PermissionDenied" gRPC status code.
+The `FetchX509SVID` RPC streams back X509-SVIDs, and X.509 bundles for authenticated X509-SVIDs for both the trust domain in which the server resides and foreign trust domains.
 
-### 5.5 Default Values and Redacted Information
+The `X509SVIDRequest` request message is currently empty and is a placeholder for future expansion.
 
-SPIFFE Workload API clients may at times encounter fields in the response message that have a default value, or may notice that information included in a previous response is not included in the latest response. For instance, a client may encounter a default value in the `federated_bundles` field after having previously received a federated bundle.
+The `X509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client). The `crl` and `federated_bundles` fields are optional. 
 
-Since every message MUST include the full set of information (see the [Workload API Client and Server Behavior](#51-workload-api-client-and-server-behavior) section), clients SHOULD interpret the absence of data as a redaction. As an example, if a client has loaded a bundle for `spiffe://foo.bar`, and receives a message that does not include a bundle for `spiffe://foo.bar`, then the bundle SHOULD be unloaded.
+All fields in the `X509SVID` message are mandatory.
 
-If the server redacts all SVIDs from a workload, it SHOULD send the "PermissionDenied" gRPC status code (terminating the gRPC response stream). The client SHOULD cease using the redacted SVIDS. The client MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
+If the client is not entitled to receive any X509-SVIDs, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). Under such a case, the client MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
 
-If the server redacts all trust bundles from a client using the `FetchX509Bundles` RPC, it SHOULD send the "PermissionDenied" gRPC status code (terminating the gRPC response stream). The client SHOULD cease using the redacted trust bundles. The client MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
+As mentioned in [Stream Responses](#42-stream-responses), each `X509SVIDResponse` message returned on the `FetchX509SVID` stream contains the complete set of authorized SVIDs and bundles for the client at that point in time. As such, if the server redacts SVIDs from a subsequent response (or all SVIDs, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted SVIDS.
+
+#### 5.2.2 FetchX509Bundles
+
+The `FetchX509Bundles` RPC streams back X.509 bundles for authenticated X509-SVIDs for both the trust domain in which the server resides and foreign trust domains.
+
+The `X509BundlesRequest` request message is currently empty and is a placeholder for future expansion.
+
+The `X509BundlesResponse` response message has a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides. The `crl` field is optional.
+
+If the client is not entitled to receive any X.509 bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
+
+As mentioned in [Stream Responses](#42-stream-responses), each `X509BundleResponse` response contains the complete set of authorized X.509 bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
+
+### 5.4 Default Identity
+
+It is often the case that a workload doesn’t know what identity it should assume. Determining when to assume what identity is a site-specific concern, and as a result, the SPIFFE specifications don’t reason about how to do this.
+
+In order to support the widest variety of use cases, the X.509-SVID Profile supports the issuance of multiple identities, while also defining a default identity. It is expected that workloads which are aware of multiple identities can handle decision making on their own. Workloads which don’t understand how to leverage multiple identities may use the default identity. The default identity is the first in the `svids` list returned in the `X509SVIDResponse` message. Protocol buffers ensure that the order of the list is preserved.
 
 ## 6. JWT-SVID Profile
 
 The JWT-SVID Profile of the SPIFFE Workload API provides a set of gRPC methods which can be used by workloads to retrieve JWT-SVIDs and their related trust bundles. This profile outlines the signature of these methods, as well as related client and server behavior.
 
-### 6.1 Client and Server Behavior
-
-The JWT-SVID Workload API profile exposes three gRPC methods: FetchJWTSVID, FetchJWTBundles, and ValidateJWTSVID.
-
-The FetchJWTSVID and ValidateJWTSVID methods operate in a 1:1 request/response pattern. A single request made to the FetchJWTSVID method generates a single response containing the JWT-SVID(s) described in the request. Similarly, a single request made to the ValidateJWTSVID method generates a single response providing information about the token provided in the request. It should be noted that, under some implementations, the cost of creating a new connection may be high. Clients are encouraged to reuse connections when possible.
-
-The FetchJWTBundles method is different. It is implemented as a gRPC server-side stream in order to facilitate rapid propagation of updates, namely key introductions or redactions. Every response message sent by the server MUST include the full set of information, and not just the information which has changed. This avoids complexity associated with state tracking on both Client and Server implementations.
-
-The client and server behavior of FetchJWTBundles is identical to that of the X509-SVID profile. Please see the Client and Server Behavior section of the X509-SVID profile for more detailed information.
-
-### 6.2 Default Identity
-
-It is often the case that a workload doesn’t know what identity it should assume. Determining when to assume what identity is a site-specific concern, and as a result, the SPIFFE specifications don’t reason about how to do this.
-
-In order to support the widest variety of use cases, the JWT-SVID Profile supports the issuance of multiple identities, while also defining a default identity. It is expected that workloads which are aware of multiple identities can handle decision making on their own. Workloads which don’t understand how to leverage multiple identities may use the default identity. The default identity is the first in the list. Protocol buffers ensure that the order of the list is preserved.
-
-### 6.3 Fetching Bundles
-
-The JWT-SVID Workload API profile exposes a method for fetching JWKS bundles that can be used to validate JWT-SVID signatures. This method is exposed for the purpose of supporting legacy JWT validators. For instance, if the SPIFFE Workload API is available but the JWT validating software is not aware of the Workload API, it is possible to write a small shim that can retrieve the bundles and feed them to the legacy workload.
-
-JWT-SVID signing keys may represent only a subset of the keys present in a SPIFFE trust bundle. Implementers of the SPIFFE Workload API MUST NOT include keys with other uses in the returned JWKS bundles. In other words, the SPIFFE Workload API should only provide JWT-SVID validators with bundle members that are valid JWT-SVID signers.
-
-The JWTBundlesResponse message includes a map of JWKS bundles, keyed by trust domain. When validating a JWT-SVID, the validator should use the bundle corresponding to the trust domain of the subject. If a JWT bundle for the specified trust domain is not present, then the token is untrusted.
-
-Please note that nominally, workloads will use the ValidateJWTSVID method for JWT validation, allowing the SPIFFE Workload API to perform validation on their behalf. Doing this removes the need for the workload to implement validation logic, which can be error prone.
-
-### 6.4 Profile Definition
+### 6.1 Profile Definition
 
 The JWT-SVID Profile RPCs and associated messages are defined below. For the complete Workload API service definition, see [workloadapi.proto](workloadapi.proto).
 
-```
+```protobuf
 service SpiffeWorkloadAPI {
     /////////////////////////////////////////////////////////////////////////
     // JWT-SVID Profile
@@ -236,7 +252,7 @@ service SpiffeWorkloadAPI {
     // the SPIFFE ID of the JWT-SVID and JWT claims.
     rpc ValidateJWTSVID(ValidateJWTSVIDRequest) returns (ValidateJWTSVIDResponse);
 
-    // ... other profiles RPCs ...
+    // ... RPCs for other profiles ...
 }
 
 message JWTSVIDRequest {
@@ -250,16 +266,16 @@ message JWTSVIDRequest {
 
 // The JWTSVIDResponse message conveys JWT-SVIDs.
 message JWTSVIDResponse {
-    // The list of returned JWT-SVIDs.
+    // Required. The list of returned JWT-SVIDs.
     repeated JWTSVID svids = 1;
 }
 
 // The JWTSVID message carries the JWT-SVID token and associated metadata.
 message JWTSVID {
-    // The SPIFFE ID of the JWT-SVID.
+    // Required. The SPIFFE ID of the JWT-SVID.
     string spiffe_id = 1;
 
-    // Encoded JWT using JWS Compact Serialization.
+    // Required. Encoded JWT using JWS Compact Serialization.
     string svid = 2;
 }
 
@@ -269,7 +285,8 @@ message JWTBundlesRequest { }
 
 // The JWTBundlesReponse conveys JWT bundles.
 message JWTBundlesResponse {
-    // JWK encoded JWT bundles, keyed by the SPIFFE ID of the Trust Domain.
+    // Required. JWK encoded JWT bundles, keyed by the SPIFFE ID of the Trust
+    // Domain.
     map<string, bytes> bundles = 1;
 }
 
@@ -288,27 +305,56 @@ message ValidateJWTSVIDRequest {
 
 // The ValidateJWTSVIDReponse message conveys the JWT-SVID validation results.
 message ValidateJWTSVIDResponse {
-    // The SPIFFE ID of the validated JWT-SVID.
+    // Required. The SPIFFE ID of the validated JWT-SVID.
     string spiffe_id = 1;
 
-    // Arbitrary claims contained within the payload of the validated JWT-SVID.
+    // Optional. Arbitrary claims contained within the payload of the validated
+    // JWT-SVID.
     google.protobuf.Struct claims = 2;
 }
 ```
 
-All fields in the JWTSVID, JWTSVIDResponse, and ValidateJWTSVIDResponse messages are mandatory. Clients which encounter a field with a default value in any of these messages SHOULD report an error and discard the message.
+### 6.2 Profile RPCs
 
-The `audience` field in the JWTSVIDRequest message is mandatory, as well as the `audience` and `svid` fields in the ValidateJWTSVIDRequest message. Workload API implementations MUST reject requests in which these fields are not set with gRPC error code InvalidArgument.
+#### 6.2.1 FetchJWTSVID
 
-The `JWTBundlesResponse` message MUST contain at least one trust bundle.  If the client is not entitled to receive any JWT bundles, the server SHOULD respond with the "PermissionDenied" gRPC status code.
+The `FetchJWTSVID` RPC allows clients to request one or more short-lived JWT-SVIDs for a specific audience.
 
-### 6.5 Default Values and Redacted Information
+The `JWTSVIDRequest` request message contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the client. 
 
-SPIFFE Workload API clients may at times encounter fields in the response message that have a default value, or may notice that information included in a previous response is not included in the latest response. For instance, a client may encounter a missing bundle value that was previously received in the `bundles` from the `FetchJWTBundles` RPC.
+The `JWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
 
-Since every message MUST include the full set of information (see the [Workload API Client and Server Behavior](#51-workload-api-client-and-server-behavior) section), clients SHOULD interpret the absence of data as a redaction. As an example, if a client has loaded a bundle for `spiffe://foo.bar`, and receives a message that does not include a bundle for `spiffe://foo.bar`, then the bundle SHOULD be unloaded.
+All fields in the `JWTSVID` message are mandatory.
 
-If the server redacts all trust bundles from a client using the `FetchJWTBundles` RPC, it SHOULD send the "PermissionDenied" gRPC status code (terminating the gRPC response stream). The client SHOULD cease using the redacted trust bundles. The client MAY attempt to reconnect with another call to the `FetchJWTBundles` RPC after a backoff.
+If the client is not authorized for any identities, nor the specific identity requested via the `spiffe_id` field, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information).
+
+#### 6.2.2 FetchJWTBundles
+
+The `FetchJWTBundles` RPC streams back JWT bundles for authenticated JWT-SVIDs for both the trust domain in which the server resides and foreign trust domains.
+
+The `JWTBundlesRequest` request message is currently empty and is a placeholder for future expansion.
+
+The `JWTBundlesResponse` response message consists of a mandatory `bundles` field, which MUST contain at least the JWT bundle for the trust domain in which the server resides.
+
+The returned bundles are encoded as a standard JWK Set as defined by [RFC 7517](https://tools.ietf.org/html/rfc7517) containing the JWT-SVID signing keys for the trust domain. These keys may only represent a subset of the keys present in the SPIFFE trust bundle for the trust domain. The server MUST NOT include keys with other uses in the returned JWT bundles.
+
+If the client is not entitled to receive any JWT bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchJWTBundles` RPC after a backoff.
+
+As mentioned in [Stream Responses](#42-stream-responses), each `JWTBundleResponse` response contains the complete set of authorized JWT bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
+
+#### 6.2.3 ValidateJWTSVID
+
+The `ValidateJWTSVID` RPC validates JWT-SVIDs for a specific audience on behalf of a client.
+
+All fields in the `ValidateJWTSVIDRequest` and `ValidateJWTSVIDResponse` message are mandatory.
+
+### 6.3 JWT-SVID Validation
+
+Workload API clients SHOULD use the `ValidateJWTSVID` method for JWT validation if supported by the client, allowing the SPIFFE Workload API to perform validation on their behalf. Doing this removes the need for the workload to implement validation logic, which can be error prone.
+
+When interfacing with legacy JWT validators, the `FetchJWTBundles` method can be used to fetch JWKS bundles that can be used to validate JWT-SVID signatures. For instance, if the SPIFFE Workload API is available but the JWT validating software is not aware of the Workload API, it is possible to write a small shim that can retrieve the bundles and feed them to the legacy workload.
+
+The `FetchJWTBundles` method returns bundles keyed by the SPIFFE ID of the trust domain. When validating a JWT-SVID, the validator should use the bundle corresponding to the trust domain of the subject. If a JWT bundle for the specified trust domain is not present, then the token is untrusted.
 
 ## Appendix A. Sample Implementation State Machines
 
@@ -332,6 +378,6 @@ In order to provide clarity, the authors thought it would be useful to include s
 1. The Workload API client is dialing the SPIFFE Workload Endpoint.
 2. The client is invoking the FetchX509SVID RPC call, sending a request to the server.
 3. The client is blocked on receiving an X509SVIDResponse message from the server.
-4. The client is updating its configuration with the SVIDs, CRLs, and Bundles received in the server response. It may at this time compare the received information to the current configuration to determine if a reload is necessary.
+4. The client is updating its configuration with the SVIDs, CRLs, and bundles received in the server response. It may at this time compare the received information to the current configuration to determine if a reload is necessary.
 5. The client has encountered a fatal condition and must exit.
 6. The client is performing an exponential backoff.
