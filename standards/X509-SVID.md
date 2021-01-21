@@ -59,7 +59,7 @@ Leaf and signing certificates carry different X.509 properties - some for securi
 ### 4.1. Basic Constraints
 The basic constraints X.509 extension identifies whether the certificate is a signing certificate, as well as the maximum depth of valid certification paths that include this certificate. It is defined in [RFC 5280, section 4.2.1.9][3].
 
-Valid X.509 SVIDs (both leaf and signing certificates) MAY set the `pathLenConstraint` field. Signing certificates MUST set the `CA` field to `true`, and leaf certificates MUST set the `CA` field to `false`.
+Valid X.509 SVID signing certificates MAY set the `pathLenConstraint` field. Signing certificates MUST set the `cA` field to `true`, and leaf certificates MUST set the `cA` field to `false`.
 
 ### 4.2. Name Constraints
 Name constraints indicate a namespace within which all SPIFFE IDs in subsequent certificates in a certification path MUST be located. They are used to limit the blast radius of a compromised signing certificate to the named trust domain(s), and are defined in [RFC 5280, section 4.2.1.10][4]. This section applies to signing certificates only.
@@ -103,11 +103,11 @@ As support for URI name constraints becomes more widespread, future versions of 
 This section describes how X509-SVID CA certificates are published to and consumed from a SPIFFE bundle. Please see the [SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md) specification for more information about SPIFFE bundles.
 
 ### 6.1. Publishing SPIFFE Bundle Elements
-X509-SVID CA certificates for a given trust domain are represented in the SPIFFE bundle as [RFC 7517-compliant][8] JWK entries, one entry per CA certificate.
+X509-SVID CA certificates for a given trust domain are represented in the SPIFFE bundle as [RFC 7517-compliant][7] JWK entries, one entry per CA certificate.
 
 The `use` parameter of each JWK entry MUST be set to `x509-svid`. Additionally, the `kid` parameter of each JWK entry MUST NOT be set.
 
-In addition to the parameters required by [RFC 7517][8], each entry representing an X509-SVID CA certificate MUST contain the `x5c` parameter with a value equal to the base64 encoded DER CA certificate that the entry represents. The value MUST include exactly one CA certificate, and the certificate SHOULD be self-signed.
+In addition to the parameters required by [RFC 7517][7], each entry representing an X509-SVID CA certificate MUST contain the `x5c` parameter with a value equal to the base64 encoded DER CA certificate that the entry represents. The value MUST include exactly one CA certificate, and the certificate SHOULD be self-signed.
 
 ### 6.2. Consuming a SPIFFE Bundle
 When consuming a SPIFFE bundle from a foreign trust domain, it is necessary to extract the X509-SVID CA certificates for practical use. SPIFFE bundles may contain entries for many different SVID types, so the first step is to identify the entries which represent X509-SVID CA certificates.

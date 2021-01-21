@@ -64,7 +64,7 @@ The `kid` header is optional.
 The `typ` header is optional. If set, its value MUST be either `JWT` or `JOSE`.
 
 ## 3. JWT Claims
-The JWT-SVID specification does not introduce any new claims, though it does set some restrictions on the registered claims defined by [RFC 7519][1]. Registered claims not described in this document, in addition to private claims, MAY be used as implementers see fit. It should be noted, however, that reliance on claims which are not defined here may impact interoperability, as the producing and consuming applications must independently agree. Implementers should exercise caution when introducing additional claims and carefully consider the impact on SVID interoperability, particularly in environments where the implementer does not control both the producer and the consumer.
+The JWT-SVID specification does not introduce any new claims, though it does set some restrictions on the registered claims defined by [RFC 7519][1]. Registered claims not described in this document, in addition to private claims, MAY be used as implementers see fit. It should be noted, however, that reliance on claims which are not defined here may impact interoperability, as the producing and consuming applications must independently agree. Implementers should exercise caution when introducing additional claims and carefully consider the impact on SVID interoperability, particularly in environments where the implementer does not control both the producer and the consumer. If the use of additional claims is absolutely necessary, they should be made collision-resistant per [RFC 7519][1] recommendations.
 
 This section outlines the requirements and restrictions placed upon existing registered claims by the JWT-SVID specification.
 
@@ -82,7 +82,7 @@ The `exp` claim MUST be set, and validators MUST reject tokens without this clai
 ## 4. Token Signing and Validation
 JWT-SVID signing and validation semantics are the same as regular JWTs/JWSs. Validators MUST ensure that the `alg` header is set to a supported value before processing.
 
-JWT-SVID signatures are computed and validated following the steps outlined in [RFC 7515 section 7][2]. The `aud` and `exp` claims MUST be present and processed according to [RFC 7519][1] sections [4.1.3][3] and [4.1.4][4]. Validators receiving tokens without the `aud` and `exp` claims set MUST reject the token.
+JWT-SVID signatures are computed and validated following the steps outlined in [RFC 7519 section 7][2]. The `aud` and `exp` claims MUST be present and processed according to [RFC 7519][1] sections [4.1.3][3] and [4.1.4][4]. Validators receiving tokens without the `aud` and `exp` claims set MUST reject the token.
 
 ## 5. Token Transmission
 This section describes the manner in which a JWT-SVID may be transmitted from one workload to another.

@@ -2,7 +2,7 @@
 
 
 The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
-standards for identifying and securing communications between web-based services. At its heart, SPIFFE is:
+standards for identifying and securing communications between application services. At its core, SPIFFE is:
 
 * A standard defining how services identify themselves to each other. These are called *SPIFFE IDs* and are implemented as [Uniform Resource Identifiers (URIs)](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier).
 
@@ -10,17 +10,25 @@ standards for identifying and securing communications between web-based services
 
 * An API specification for issuing and/or retrieving SVIDs. This is the *Workload API*.
 
-The SPIFFE Project is also producing a reference implementation that, in addition to the above, will:
+The SPIFFE Project has a reference implementation, the SPIRE (the SPIFFE Runtime Environment), that in addition to the above, it:
 
-* Perform node and workload attestation.
-* Implement a signing framework for securely issuing and renewing SVIDs.
-* Provide an API for registering nodes and workloads, along with their designated SPIFFE IDs.
+* Performs node and workload attestation.
 
-SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CNCF) as a sandbox level project. If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF. For details read the CNCF [announcement](https://www.cncf.io/blog/2018/03/29/cncf-to-host-the-spiffe-project/).
+* Implements a signing framework for securely issuing and renewing SVIDs.
+
+* Provides an API for registering nodes and workloads, along with their designated SPIFFE IDs.
+
+* Provides and manages the rotation of keys and certs for mutual authentication and encryption between workloads.
+
+* Simplifies access from identified services to secret stores, databases, services meshes and cloud provider services.
+
+* Interoperability and federation to SPIFFE compatible systems across heterogeneous environments and administrative trust boundaries.
+
+SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CNCF) as an incubation-level project. If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF. For details read the CNCF [announcement](https://www.cncf.io/blog/2020/06/22/toc-approves-spiffe-and-spire-to-incubation/).
 
 ## SPIFFE Standards
 
-* [Secure Production Infrastructure Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
+* [Secure Production Identity Framework for Everyone (SPIFFE)](standards/SPIFFE.md)
 * [The SPIFFE Identity and Verifiable Identity Document](standards/SPIFFE-ID.md)
 * [The X.509 SPIFFE Verifiable Identity Document](standards/X509-SVID.md)
 * [The JWT SPIFFE Verifiable Identity Document](standards/JWT-SVID.md)
@@ -32,7 +40,8 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 
 * [spiffe](https://github.com/spiffe/spiffe): This repository includes the SPIFFE ID, SVID and Workload API specifications, example code, and tests, as well as project governance, policies, and processes.    
 * [spire](https://github.com/spiffe/spire): This is a reference implementation of SPIFFE and the SPIFFE Workload API that can be run on and across varying hosting environments.
-* [go-spiffe](https://github.com/spiffe/go-spiffe): Golang client libraries.
+* [go-spiffe](https://github.com/spiffe/go-spiffe/tree/master/v2): Golang client libraries.
+* [java-spiffe](https://github.com/spiffe/java-spiffe/tree/v2-api): Java client libraries
 
 ### Communications
 
@@ -50,12 +59,19 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 
 Most community activity is organized into Special Interest Groups (SIGs), time-bounded working groups, and our monthly community-wide meetings. SIGs follow these [guidelines](GOVERNANCE.md#special-interest-groups-sigs), although each may operate differently depending on their needs and workflows. Each group's material can be found in the [/community](/community) directory of this repository.
 
-| Name | Leads | Group | Slack Channel | Meetings |
+| Name | Lead | Group | Slack Channel | Meetings |
 |:------:|:-------:|:-------:|:---------------:|:----------:|
-| [Components](/community/sig-components/README.md) | [Oliver Liu](https://github.com/myidpt) (Google, Inc.)  | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-components) | [Here](https://spiffe.slack.com/messages/sig-components/) |[Notes](https://goo.gl/eCDKva) |
-| [Integration: AWS](/community/sig-integration-aws/README.md) | [Jon Debonis](https://www.linkedin.com/in/jondb) (Blend, Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-integration-aws) | [Here](https://spiffe.slack.com/messages/sig-integration-aws/) | [Notes](https://docs.google.com/document/d/1-QPtuC1_JHNCu6zSrQhbpX_MmNZFXtbU4uNEB-UVH8k) |
-| [Integration: gRPC](/community/sig-integration-grpc/README.md) | [Lizan Zhou](https://github.com/lizan) (Google, Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-integration-grpc) | [Here](https://spiffe.slack.com/messages/sig-integration-grpc/) | [Notes](https://docs.google.com/document/d/1wzW59UUn-7LJo-IGoo7es-I7bovmVC8sa0nGb1e8wLM) |
-| [Integration: Kubernetes](/community/sig-integration-k8s/README.md) | [Vipin Jain](https://github.com/jainvipin) (Pensando, Inc.) & [Tao Li](https://github.com/wattli) (Google, Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-integration-k8s) | [Here](https://spiffe.slack.com/messages/sig-integration-k8s) | [Notes](https://docs.google.com/document/d/1Dq4kSlfOpewnisItipTWx3Q8qCelbNP85yjMnSrdomE) |
-| [Specification](/community/sig-spec/README.md) | [Evan Gilman](https://github.com/evan2645) (Scytale, Inc.) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-specification) | [Here](https://spiffe.slack.com/messages/sig-spec) | [Notes](https://docs.google.com/document/d/1p2BbRWN_7z6nkBMj-h1mAJAJxxKqNeFiV4IplZ_wU4c) |
+| [SIG-Community](/community/sig-community/README.md) | [Umair Khan](https://github.com/umairmkhan) (HPE) | [Here](https://groups.google.com/a/spiffe.io/g/sig-community) | [Here](https://spiffe.slack.com/messages/community) | [Notes](https://docs.google.com/document/d/1tb3lxubwr8IKRd6Smnl83ur14xkOQdjwQqla9OHjwZo) |
+| [SIG-Spec](/community/sig-spec/README.md) | [Evan Gilman](https://github.com/evan2645) (VMware) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-specification) | [Here](https://spiffe.slack.com/messages/sig-spec) | [Notes](https://docs.google.com/document/d/1p2BbRWN_7z6nkBMj-h1mAJAJxxKqNeFiV4IplZ_wU4c) |
+| [SIG-SPIRE](/community/sig-spire/README.md) | [Andres Vega](https://github.com/anvega) (VMware) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-spire) | [Here](https://spiffe.slack.com/messages/spire) | [Notes](https://docs.google.com/document/d/1IgpCkvSRSoY9Xd16gFQJJ1KP8sLZ7EE39cEjBK_UIg4) |
 
 **Follow the SPIFFE Project** You can find us on [Github](https://github.com/spiffe/) and [Twitter](https://twitter.com/SPIFFEio).
+
+## SPIFFE TSC
+The SPIFFE [Technical Steering Committee](/GOVERNANCE.md#technical-steering-committee-tsc) meets on a regular cadence to review project progress, address maintainer needs, and provide feedback on strategic direction and industry trends. Community members interested in joining this call can find details below.
+
+* Calendar: [iCal](https://calendar.google.com/calendar/ical/c_gck7v87m9obq6n3hpo01l7csus%40group.calendar.google.com/public/basic.ics) or [Browser-based](https://calendar.google.com/calendar/embed?src=c_gck7v87m9obq6n3hpo01l7csus%40group.calendar.google.com&ctz=America%2FChicago)
+* Meeting Notes: [Google Doc](https://docs.google.com/document/d/14YlmMTqwqNdx-CWapwwIBMaakH5Z2UnAvOBQBB8AwQM)
+* Call Details: [Zoom Link](https://zoom.us/j/95959131216?pwd=akw4RzlEUEVCTnFkWE5KdWFPZXpkdz09)
+
+To contact the TSC privately, please send an email to [tsc@spiffe.io](mailto:tsc@spiffe.io).

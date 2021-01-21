@@ -54,9 +54,9 @@ A SPIFFE bundle is an object containing a trust domain's cryptographic keys. The
 
 SPIFFE bundles are designed for use within and between SPIFFE control plane implementations. They are not meant for direct consumption by workloads, however this specification does not preclude such use.
 
-When storing or otherwise managing SPIFFE bundles, it is important to independently record the name of the trust domain that the bundle represents, nominally through the use of a `<trust_domain, bundle>` tuple. When validating an SVID, validators must choose the bundle corresponding to the trust domain that the SVID resides in, so maintaining this relationship is required in most scenarios.
+When storing or otherwise managing SPIFFE bundles, it is important to independently record the name of the trust domain that the bundle represents, nominally through the use of a `<trust_domain_name, bundle>` tuple. When validating an SVID, validators must choose the bundle corresponding to the trust domain that the SVID resides in, so maintaining this relationship is required in most scenarios.
 
-Note that the contents of a trust domain's bundle are expected to change over time as the keys it contains are rotated. It is the responsibility of the SPIFFE implementation to distribute bundle content updates to workloads as needed. The exact format and method by which these updates are delivered is out of scope for this specification. Please see the [SPIFFE Bundle Endpoint](#5-spiffe-bundle-endpoint) section for more information about SPIFFE bundle rotation, and the [SPIFFE Workload API][3] specification for information on delivering updates to workloads.
+Note that the contents of a trust domain's bundle are expected to change over time as the keys it contains are rotated. Keys are added and revoked by issuing a new bundle with new keys included and revoked keys omitted. It is the responsibility of the SPIFFE implementation to distribute bundle content updates to workloads as needed. The exact format and method by which these updates are delivered is out of scope for this specification. Please see the [SPIFFE Bundle Endpoint](#5-spiffe-bundle-endpoint) section for more information about SPIFFE bundle rotation, and the [SPIFFE Workload API][3] specification for information on delivering updates to workloads.
 
 ## 4. SPIFFE Bundle Format
 SPIFFE bundles are represented as an [RFC 7517][4] compliant JWK Set. JWK was chosen for two major reasons. First, it provides a flexible format for representing various types of cryptographic keys (and documents like X.509), affording some degree of future proofing in the event that new SVID formats are defined. Second, it is widely supported and deployed, used primarily for inter-domain federation, which is a core goal of the SPIFFE project.
@@ -75,6 +75,8 @@ The parameter `spiffe_refresh_hint` SHOULD be set. The refresh hint indicates ho
 #### 4.1.3. Keys
 The parameter `keys` MUST be present. Its value is an array of JWKs. Clients encountering unknown key types or uses MUST ignore the corresponding JWK element. Please see [Section 5][5] of RFC 7517 for more information about the semantics of the `keys` parameter.
 
+The `keys` parameter may contain an empty array. A trust domain which publishes an empty key array indicates that the trust domain has revoked any previously-published keys. Clients may also encounter bundles which after processing yield no usable keys (i.e. no JWKs pass validation described below), and are effectively empty. This may indicate that the trust domain has migrated to a new key type or use not understood by the client. In both cases, workloads MUST treat all SVIDs from the trust domain as invalid and untrusted.
+
 ### 4.2. JWK
 This section defines high level requirements of the JWK elements which are included as part of the JWK Set. A JWK element represents a single cryptographic key, meant for authenticating a single type of SVID. While the exact requirements for safe use of a JWK vary by SVID type, there are some top level requirements which we outline in this section. SVID specifications MUST define the appropriate value for the `use` parameter (see section `Public Key Use` below), and MAY place further requirements or restrictions on its JWK elements as necessary.
 
@@ -84,7 +86,7 @@ Implementers SHOULD NOT include parameters which are defined neither here nor in
 The `kty` parameter MUST be set, and its behavior follows [Section 4.1][6] of RFC 7517. Clients encountering an unknown key type MUST ignore the entire JWK element.
 
 #### 4.2.2. Public Key Use
-The `use` parameter MUST be set. Its value indicates the type of identity document (or SVID) that it is authoritative for. At the time of this writing, only two SVID types are supported: `x509-svid` and `jwt-svid`. The values are case sensitive. Please see the respective SVID specifications for more information about `use` values. Clients encountering unknown `use` values MUST ignore the entire JWK element.
+The `use` parameter MUST be set. Its value indicates the type of identity document (or SVID) that it is authoritative for. At the time of this writing, only two SVID types are supported: `x509-svid` and `jwt-svid`. The values are case sensitive. Please see the respective SVID specifications for more information about `use` values. Clients encountering either a missing `use` parameter or an unknown `use` value MUST ignore the entire JWK element.
 
 ## 5. SPIFFE Bundle Endpoint
 It is often desirable to allow workloads in one trust domain to communicate with workloads in another. In order to accomplish this, it is necessary for the validator to possess the bundle of the foreign trust domain in which the remote workload (or identity) resides. As a result, a mechanism for transferring bundles is necessary.
@@ -93,7 +95,7 @@ The primary mechanism by which SPIFFE bundles are transferred is similar to, and
 
 All bundle endpoint servers and clients SHOULD support TLS-protected HTTP transport in order to preserve interoperability between SPIFFE implementations and compatibility with OpenID Connect. In cases where public interoperability is not required, such as custom implementations meant for internal consumption, alternative secure transport mechanisms MAY be used.
 
-When communicating with a bundle endpoint, it is critical to know the name of the trust domain that the endpoint represents. SPIFFE implementations MUST securely associate bundle endpoints with their respective trust domain, nominally through explicit configuration of a `<trust_domain, endpoint>` tuple.
+When communicating with a bundle endpoint, it is critical to know the name of the trust domain that the endpoint represents. SPIFFE implementations MUST securely associate bundle endpoints with their respective trust domain, nominally through explicit configuration of a `<trust_domain_name, endpoint>` tuple.
 
 ### 5.1. Endpoint Stability
 By utilizing [sequence number](#411-sequence-number) and [refresh hints](#412-refresh-hint), endpoint implementers have the option of publishing a trust bundle to a single, fixed endpoint URL; clients can utilize the sequence number to quickly determine when a new bundle has been retrieved and the refresh hint to determine how frequently to poll for updates. Whenever the contents of the trust bundle are updated (which includes the sequence number), the endpoint URL should remain unchanged so that clients can continue fetching updates from a stable endpoint without regard to the specific revision of the bundle available at the endpoint.
@@ -104,14 +106,14 @@ It is extremely important for remote bundle endpoints to be appropriately authen
 This section provides an overview of two recommended authentication mechanisms.
 
 #### 5.2.1. Web PKI
-Leveraging publicly trusted authorities provides a low-friction path to authenticating remote bundle endpoints. In this strategy, the bundle endpoint obtains a certificate from a public CA which is bound to its DNS name or IP address. To import the foreign bundle, operators configure their SPIFFE control plane with the URL of the bundle endpoint, as well as the trust domain that the bundle represents.
+Leveraging publicly trusted authorities provides a low-friction path to authenticating remote bundle endpoints. In this strategy, the bundle endpoint obtains a certificate from a public CA which is bound to its DNS name or IP address. To import the foreign bundle, operators configure their SPIFFE control plane with the URL of the bundle endpoint, as well as the name of the trust domain that the bundle represents.
 
 Taking this approach requires little-to-no manual intervention, since we rely on public trust in order to secure the connection. Please see the [Security Considerations](#6-security-considerations) section and the [SPIFFE Authentication](#522-spiffe-authentication) section for more information about the security implications of using Web PKI to protect a SPIFFE bundle endpoint.
 
 #### 5.2.2. SPIFFE Authentication
 By protecting the bundle endpoint with a SPIFFE identity (e.g. an [X509-SVID][8]), it is possible to mitigate certain person-in-the-middle attacks as well as avoid trusting public CAs. In this strategy, the bundle endpoint is served using an identity it has obtained from its own trust domain. To import the bundle, operators configure their SPIFFE control plane with the URL of the bundle endpoint, as well as the SPIFFE ID of the workload serving the bundle endpoint. The operator is additionally required to provide an initial up-to-date bundle from the remote trust domain, obtained through an offline exchange.
 
-Taking this approach has the benefit of being more secure than the Web PKI approach, but comes at the cost of operator responsibility and additional complexity. The SPIFFE control plane authenticates the bundle endpoint using the manually-provided bundle, and subsequent updates can be delivered over the same channel, negating the need for further operator intervention when keys in the bundle rotate. The trust domain that the bundle represents can be derived directly from the operator-configured SPIFFE ID of the bundle endpoint.
+Taking this approach has the benefit of being more secure than the Web PKI approach, but comes at the cost of operator responsibility and additional complexity. The SPIFFE control plane authenticates the bundle endpoint using the manually-provided bundle, and subsequent updates can be delivered over the same channel, negating the need for further operator intervention when keys in the bundle rotate. The name of the trust domain that the bundle represents can be derived directly from the operator-configured SPIFFE ID of the bundle endpoint.
 
 ## 6. Security Considerations
 This section outlines security-related considerations that should be made while implementing and deploying a SPIFFE control plane.
@@ -119,9 +121,9 @@ This section outlines security-related considerations that should be made while 
 ### 6.1. Securing SPIFFE Bundle Transmission
 When fetching a SPIFFE bundle from a bundle endpoint, the use of transport security is required in order to prevent its contents from being modified in flight. In addition to transport security however, it is necessary to securely bind the name of the trust domain to the identity of the workload serving the bundle.
 
-The manner in which this is done is dependent upon the type of authentication and validation used. For instance, if using Web PKI, then an operator-supplied `<trust_domain, endpoint_address>` tuple is sufficient. The trust domain is explicitly bound to the endpoint address through the supplied tuple, and (per standard Web PKI secure naming) the endpoint address is equivalent to the identity of the serving workload. 
+The manner in which this is done is dependent upon the type of authentication and validation used. For instance, if using Web PKI, then an operator-supplied `<trust_domain_name, endpoint_address>` tuple is sufficient. The trust domain is explicitly bound to the endpoint address through the supplied tuple, and (per standard Web PKI secure naming) the endpoint address is equivalent to the identity of the serving workload. 
 
-This can be contrasted to the use of SPIFFE authentication, where the identity of the workload is not the same as the endpoint address. In this case, a different parameter (the SPIFFE ID of the bundle endpoint) is required. The trust domain can be implicitly extracted from the provided SPIFFE ID. Concretely, this translates into an operator-supplied tuple of `<trust_domain, spiffe_id, endpoint_address>` or simply `<spiffe_id, endpoint_address>`.
+This can be contrasted to the use of SPIFFE authentication, where the identity of the workload is not the same as the endpoint address. In this case, a different parameter (the SPIFFE ID of the bundle endpoint) is required. The name of the trust domain can be implicitly extracted from the provided SPIFFE ID. Concretely, this translates into an operator-supplied tuple of `<trust_domain_name, endpoint_spiffe_id, endpoint_address>` or simply `<endpoint_spiffe_id, endpoint_address>`.
 
 Please see the [Authenticating the Bundle Endpoint](#52-authenticating-the-bundle-endpoint) section and the [Bundle Endpoint Authentication Examples](#appendix-b-bundle-endpoint-authentication-examples) appendix item for more information.
 
@@ -138,16 +140,16 @@ The first and most obvious is that you are assuming trust in the public certific
 Second, more importantly, recently introduced automated fulfillment protocols like [ACME][9] make room for attacks that were not previously possible. ACME allows publicly trusted certificates to be issued without manual intervention by performing a challenge which allows a machine to assert that it is authorized by answering an HTTP request made to the DNS name of the certificate being issued. This is significant because it means that anyone that can intercept and answer the challenge is capable of receiving a valid publicly-trusted certificate. While the risk of interception across the open internet is decidedly low, risk of interception by a neighboring machine is high. Concretely, without adequate Layer 2 security controls, SPIFFE bundle endpoints using Web PKI may be subverted by malicious software with access to the same Layer 2 network as the bundle endpoint. Operators should be careful in ensuring that Layer 2 access to SPIFFE bundle endpoints protected by Web PKI is restricted.
 
 ### 6.4. Reusing Cryptographic Keys Across Trust Domains
-This specification discourages sharing cryptographic keys across trust domains since the practice degrades trust domain isolation and introduces additional security challenges. When a root key is shared across multiple trust domains, it becomes critically important that authentication and authorization implementations carefully check the trust domain component of an identity and that the trust domain component be easily and habitually expressed in authorization policies.
+This specification discourages sharing cryptographic keys across trust domains since the practice degrades trust domain isolation and introduces additional security challenges. When a root key is shared across multiple trust domains, it becomes critically important that authentication and authorization implementations carefully check the trust domain name component of an identity and that the trust domain name component be easily and habitually expressed in authorization policies.
 
 Suppose that a naïve implementation imported (ie. fully trusted) a particular root key and that the authentication system were configured to authenticate the SPIFFE identity of any SVID which chained up to the trusted root key. If the naïve implementation is not configured to only trust a specific trust domain, then any identity issued in any trust domain could be authenticated (so long as the SVID chains up to the trusted root key).
 
-Continuing the above example where a naïve implementation imports a particular CA certificate, suppose that the authentication did not disambiguate trust domains and that any SVID which chained up to a trusted root key were accepted by the authentication system. Then it would become incumbent on the authorization system to only authorize specific trust domains. In other words, authorization policies need to be explicitly configured to check the trust domain component of an SVID. The security concern here is that a naïve authorization implementation may blindly trust that the authentication system has filtered out untrusted trust domains.
+Continuing the above example where a naïve implementation imports a particular CA certificate, suppose that the authentication did not disambiguate trust domains and that any SVID which chained up to a trusted root key were accepted by the authentication system. Then it would become incumbent on the authorization system to only authorize specific trust domains. In other words, authorization policies need to be explicitly configured to check the trust domain name component of an SVID. The security concern here is that a naïve authorization implementation may blindly trust that the authentication system has filtered out untrusted trust domains.
 
 In summary, a security-in-depth best practice is to maintain a one-to-one mapping between trust domain and root keys so as to reduce subtle (yet catastrophic) authentication and authorization implementation errors. Systems which do reuse root keys across trust domains should ensure that (a) the SVID-issuing system (eg. CA) correctly implements authorization checks prior to issuing SVIDs and (b) that relying parties (ie. systems consuming the SVIDs) correctly implement robust authentication and authorization systems capable of disambiguating multiple trust domains.
 
 ## Appendix A. SPIFFE Bundle Example
-In the following example, we configure an initial SPIFFE bundle for the trust domain `example.com` and then demonstrate how the bundle is updated during root key rotation.
+In the following example, we configure an initial SPIFFE bundle for the trust domain named `example.com` and then demonstrate how the bundle is updated during root key rotation.
 
 Initial X.509 CA certificate for trust domain `example.com`:
 
@@ -249,27 +251,27 @@ Trust bundle #2 for example.com:
 In trust bundle #2, note that the `spiffe_sequence` parameter has been incremented and the second root certificate for `example.com` has been added. Once this new trust bundle is published to `example.com`’s bundle endpoint, validators will accept SVIDs signed by either the original or the replacement root certificate. By publishing the replacement certificate well ahead of the expiration of the original certificate, validators have ample opportunity to refresh the trust bundle of example.com and learn of the pending replacement certificate.
 
 ## Appendix B. Bundle Endpoint Authentication Examples
-This section provides two worked examples of how to authenticate bundle endpoints, one for each of the recommended authentication methods described in this specification
+This section provides two worked examples of how to authenticate bundle endpoints, one for each of the recommended authentication methods described in this specification.
 
 ### Appendix B.1. Web PKI-based Endpoint Authentication
 Alice wants to federate with Bob using Web PKI so that she can authenticate identities residing in Bob’s trust domain. Alice is an administrator of the `alice.example` trust domain, and Bob is an administrator of the `bob.example` trust domain. To do so securely, the following steps are performed:
 
 1. Bob provides Alice with his trust domain name (`bob.example`) and the HTTPS URL of his bundle endpoint (`https://bob.example.org/spiffe-bundle`)
-1. Alice configures configures her control plane with the information received in the previous step - Bob's trust domain name and the HTTPS endpoint
+1. Alice configures her control plane with the information received in the previous step - Bob's trust domain name and the HTTPS endpoint
 1. Alice's control plane dials `bob.example.org`, and negotiates TLS using Web PKI, ensuring that it receives a server certificate for `bob.example.org`
 1. Alice's control plane issues an HTTP GET request over the authenticated TLS connection for path `/spiffe-bundle`
 1. Bob's control plane answers, transmitting the latest available copy of its SPIFFE bundle
 1. Alice's control plane receives Bob's bundle and stores it, being careful to mark it as the SPIFFE bundle for trust domain `bob.example`
 1. Systems in Alice's trust domain can now validate SVIDs from `bob.example` using the keys contained in the SPIFFE bundle received from Bob
 
-Alice's control plane periodically repeats steps 3-6 to ensure that her copy of Bob's bundle is kept up-to-date as Bob rotates his keys 
+Alice's control plane periodically repeats steps 3-6 to ensure that her copy of Bob's bundle is kept up-to-date as Bob rotates his keys.
 
 ### Appendix B.2. SPIFFE-based Endpoint Authentication
 Alice wants to federate with Bob so that she can authenticate identities residing in Bob's trust domain, however she does not want to rely on Web PKI. Instead, Alice and Bob will use SPIFFE authentication. Alice is an administrator of the `alice.example` trust domain, and Bob is an administrator of the `bob.example` trust domain. To do this securely, the following steps are performed:
 
 1. Bob provides Alice with the SPIFFE ID of his bundle endpoint service (`spiffe://bob.example/control-plane/bundle-endpoint`), and a URL that she can reach it at (`https://bob.example.org/spiffe-bundle`). He also provides an up-to-date copy of his SPIFFE bundle
 1. Alice loads the SPIFFE bundle from the last step into her control plane, being careful to set it as the bundle for the `bob.example` trust domain
-1. Alice configures her control plane with the SPIFFE ID and address that she received in step 1. Her control plane extracts the trust domain from the provided SPIFFE ID, and records this as the bundle endpoint configuration for trust domain `bob.example`
+1. Alice configures her control plane with the SPIFFE ID and address that she received in step 1. Her control plane extracts the trust domain name from the provided SPIFFE ID, and records this as the bundle endpoint configuration for trust domain `bob.example`
 1. Alice's control plane dials `bob.example.org` and negotiates TLS using the X.509 CA certificates in the SPIFFE bundle stored for the `bob.example` trust domain. The server certificate is verified to have the SPIFFE ID configured in step 2
 1. Alice's control plane issues an HTTP GET request over the authenticated TLS connection for `/spiffe-bundle`
 1. Bob's control plane answers, transmitting the latest available copy of its SPIFFE bundle

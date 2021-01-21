@@ -5,7 +5,7 @@ efficient. Anyone may contribute to a project in the SPIFFE repositories that th
 to, provided they:
 
 * Abide by the CNCF [code of conduct](/CODE-OF-CONDUCT.md)
-* Can certify the clauses in the [Developer Certificate of Origin](/DCO) (DCO).
+* Can certify the clauses in the [Developer Certificate of Origin](/DCO) (DCO)
 
 To get started:
 
@@ -26,7 +26,7 @@ broader group.
 1. Update the docs, if necessary
 1. Ensure your branch is based on the latest commit in `master`
 1. Ensure all tests pass (see project docs for more information)
-2. Make sure your commit messages contain a `Signed-off-by: <your-email-address>` line (see `git-commit --signoff`) to certify the [DCO](/DCO).
+2. Make sure your commit messages contain a `Signed-off-by: <your-email-address>` line (see `git-commit --signoff`) to certify the [DCO](/DCO)
 1. Open a [pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)
   against the upstream `master` branch
 
@@ -42,7 +42,7 @@ changes, another independent reviewer must approve it too.
 Once your pull request is submitted, it's your responsibility to:
 
 * Respond to reviewer's feedback
-* Keep it merge-ready at all times until it has been approved and actually merged.
+* Keep it merge-ready at all times until it has been approved and actually merged
 
 Following approval, the pull request will be merged by the last maintainer to approve the request.
 
@@ -56,8 +56,8 @@ these conventions when reviewing pull requests.
   * Plugin and API protobuf comments are expected to be accompanied with markdowns generated with
     [protoc-gen-doc](https://github.com/pseudomuto/protoc-gen-doc)
   * All filenames should be lowercase
-  * Source files and directories use underscores, no dashes (snake case)
-  * Documents directories and filenames should use dashes rather than underscores (kebab case)
+    * Source filenames and directories should use underscores, no dashes (snake case)
+    * Document filenames and directories should use dashes rather than underscores (kebab case)
   * Most significant functionality must come with unit tests
   * Significant features should have integration and/or end-to-end tests
   * Unit tests should be fully hermetic. Only access resources in the test binary
@@ -85,4 +85,4 @@ All repositories under this project should include:
 
 All code projects should use the [Apache License version
 2.0](https://www.apache.org/licenses/LICENSE-2.0), and all documentation repositories should use the
-[Creative Commons License version 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)
+[Creative Commons License version 4.0](https://creativecommons.org/licenses/by/4.0/legalcode).
