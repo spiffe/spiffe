@@ -70,7 +70,7 @@ In the event that the SPIFFE Workload Endpoint implementation is running but una
 
 Finally, in the event that a SPIFFE Workload Endpoint service does not have an identity defined for a given caller/client, the service SHOULD respond with gRPC code "PermissionDenied". Clients receiving this code MAY retry with a backoff, as such a response could be encountered if the service implementation is eventually consistent.
 
-Please see [Appendix A]((#appendix-a-list-of-error-codes)) for a summary of error conditions and codes.
+Please see [Appendix A](#appendix-a-list-of-error-codes) for a summary of error conditions and codes.
 
 ## 7. Extensibility and Services Rendered
 
