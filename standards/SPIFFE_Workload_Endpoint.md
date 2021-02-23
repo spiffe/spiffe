@@ -48,7 +48,7 @@ Clients may be explicitly configured with the socket location, or may utilize th
 
 The value of the `SPIFFE_ENDPOINT_SOCKET` environment variable is structured as an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) URI. The scheme MUST be set to either `unix` or `tcp`, which indicates that the endpoint is served over a Unix Domain Socket or a TCP listen socket, respectively.
 
-If the scheme is set to `unix`, then the authority component MUST NOT be set, and the path component MUST be set to the absolute path of the SPIFFE Workload Endpoint Unix Domain Socket (e.g. `unix:///path/to/endpoint.sock`). The scheme and path components are mandatory, and no other component may be set.
+If the scheme is set to `unix`, then the authority component MUST NOT be set, and the path component MUST be set to the absolute path of the SPIFFE Workload Endpoint Unix Domain Socket (e.g. `unix:/path/to/endpoint.sock`). The scheme and path components are mandatory, and no other component may be set.
 
 If the scheme is set to `tcp`, then the host component of the authority MUST be set to an IP address, and the port component of the authority MUST be set to the TCP port number of the SPIFFE Workload Endpoint TCP listen socket. The scheme, host, and port components are mandatory, and no other component may be set. As an example, `tcp://127.0.0.1:8000` is valid, and `tcp://127.0.0.1:8000/foo` is not.
 
