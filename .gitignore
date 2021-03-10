@@ -2,6 +2,7 @@ __pycache__
 *.pyc
 *.swp
 *~
+.DS_Store
 
 svid-test/test_results
 svid-test/.certs
