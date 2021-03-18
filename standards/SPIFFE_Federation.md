@@ -128,7 +128,7 @@ SPIFFE bundle endpoint servers supporting the `https_web` transport type utilize
 
 As an interoperability concern, servers MUST NOT require client authentication to access the bundle endpoint; this includes both transport layer (e.g. client certificates) and HTTP-layer (e.g. Authentication headers) authentication schemes.
 
-Upon receiving an HTTP GET request for the correct path, the bundle endpoint server MUST respond with the most up-to-date version of the SPIFFE bundle available. The exact path value may be chosen by the operator, and appears as part of the bundle endpoint URL.
+Upon receiving an HTTP GET request for the correct path, the bundle endpoint server MUST respond with the most up-to-date version of the SPIFFE bundle available. The exact path value may be chosen by the operator, and appears as part of the bundle endpoint URL. The bundle endpoint server MUST transmit the bundle encoded as UTF-8 and SHOULD set the `Content-Type` header to `application/json` on the response.
 
 Bundle endpoint servers MAY respond with HTTP redirect (as defined by [RFC 7231 section 6.4][8]) if the authority for serving the requested bundle has moved.  The target URL of the redirect MUST also be a [valid bundle endpoint URL](#5211-endpoint-url-requirements) as defined in this profile. Servers SHOULD use a temporary redirect; support for redirection is intended for operational considerations (e.g. serving a bundle via a CDN) and not as a means to permanently migrate the bundle endpoint URL. See the [Security Considerations](#7-security-considerations) for more information.
 
@@ -178,7 +178,7 @@ SPIFFE bundle endpoint servers supporting the `https_spiffe` transport type util
 
 As an interoperability concern, servers MUST NOT require client authentication to access the bundle endpoint; this includes both transport layer (e.g. client certificates) and HTTP-layer (e.g. Authentication headers) authentication schemes.
 
-Upon receiving an HTTP GET request for the correct path, the bundle endpoint server MUST respond with the most up-to-date version of the SPIFFE bundle available. The exact path value may be chosen by the operator, and appears as part of the bundle endpoint URL.
+Upon receiving an HTTP GET request for the correct path, the bundle endpoint server MUST respond with the most up-to-date version of the SPIFFE bundle available. The exact path value may be chosen by the operator, and appears as part of the bundle endpoint URL.  The bundle endpoint server MUST transmit the bundle encoded as UTF-8 and SHOULD set the `Content-Type` header to `application/json` on the response.
 
 Bundle endpoint servers MAY respond with HTTP redirect (as defined by [RFC 7231 section 6.4][8]) if the authority for serving the requested bundle has moved.  The target URL of the redirect MUST also be a [valid bundle endpoint URL](#5221-endpoint-url-requirements) as defined in this profile, and the server certificate presented by the new target must be a valid X509-SVID with the same SPIFFE ID as the original endpoint. Servers SHOULD use a temporary redirect; support for redirection is intended for operational considerations (e.g. serving a bundle via a CDN) and not as a means to permanently migrate the bundle endpoint URL. See the [Security Considerations](#7-security-considerations) for more information.
 
