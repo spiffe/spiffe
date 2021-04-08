@@ -16,4 +16,4 @@ We follow the [CNCF Contributor Code of Conduct](https://github.com/cncf/foundat
 
 ### Moderation
 
-- If you feel any of SPIFFE's Slack channels require moderation, please e-mail [SPIFFE's Technical Steering Committee (TSC)](mailto:tsc@spiffe.io). The TSC will issue a warning to users who don't follow this code of conduct. A second offense results in a temporary ban. A third offense warrants a permanent ban. It is at the moderator's discretion to un-ban offending users, or to immediately ban a toxic user without warning.
+- If you feel any of SPIFFE's communication channels require moderation, please e-mail the [SPIFFE Steering Committee (SSC)](mailto:ssc@spiffe.io). The SSC will issue a warning to users who don't follow this code of conduct. A second offense results in a temporary ban. A third offense warrants a permanent ban. It is at the moderator's discretion to un-ban offending users, or to immediately ban a toxic user without warning.
