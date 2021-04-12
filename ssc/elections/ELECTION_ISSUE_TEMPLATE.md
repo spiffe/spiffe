@@ -36,7 +36,7 @@ If you'd like to nominate an SSC member for this election cycle, please follow t
 ### Electing an SSC Member
 The SPIFFE project uses the [CIVS](https://civs.cs.cornell.edu/) tool to conduct its elections. Once the polls open, all eligible participants will receive an email from this tool. The email includes a link which can be used to vote. Do not share this link, as it is private.
 
-If you ar in the list of eligible participants, and you don't receive a link on the day the polls open, please contact the SSC at ssc@spiffe.io.
+If you are in the list of eligible participants, and you don't receive a link on the day the polls open, please contact the SSC at ssc@spiffe.io.
 
 Each participant casts a single ranked vote. If more than one SSC seat is available, the top N nominees will be selected.
 
