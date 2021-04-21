@@ -3,6 +3,6 @@ Emily has been a great advocate for cloud native security and is one of the key 
 
 Be sure to preserve the two empty spaces at the end of each line below.  
 **GitHub Handle:** https://github.com/TheFoxAtWork 
-**Email Address:** https://www.linkedin.com/in/themoxiefox/  
-**LinkedIn Profile:** Apple/CNCF-SIG Co-chair  
-**Current Affiliation:** shared privately
+**Email Address:** shared privately 
+**LinkedIn Profile:** https://www.linkedin.com/in/themoxiefox/   
+**Current Affiliation:** Apple, CNCF-SIG
