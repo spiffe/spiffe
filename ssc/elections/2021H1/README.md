@@ -9,7 +9,7 @@ This subdirectory captures the nominees and results of the 2021 H1 SSC election.
 For more information on how to participate, please see the relevant GitHub [tracking issue](https://github.com/spiffe/spiffe/issues/160).
 
 ## Nominations
-* [Geri Jennings](GERI_JENINGS.md)
+* [Geri Jennings](GERI_JENNINGS.md)
 * [Andrew Jessup](ANDREW_JESSUP.md)
 * [Frederick Kautz](FREDERICK_KAUTZ.md)
 * [Eric Lee](ERIC_LEE.md)
