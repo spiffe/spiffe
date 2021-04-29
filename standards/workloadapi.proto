@@ -9,12 +9,14 @@ service SpiffeWorkloadAPI {
 
     // Fetch X.509-SVIDs for all SPIFFE identities the workload is entitled to,
     // as well as related information like trust bundles and CRLs. As this
-    // information changes, subsequent messages will be sent.
+    // information changes, subsequent messages will be streamed from the
+    // server.
     rpc FetchX509SVID(X509SVIDRequest) returns (stream X509SVIDResponse);
 
     // Fetch trust bundles and CRLs. Useful for clients that only need to
     // validate SVIDs without obtaining an SVID for themself. As this
-    // information changes, subsequent messages will be sent.
+    // information changes, subsequent messages will be streamed from the
+    // server.
     rpc FetchX509Bundles(X509BundlesRequest) returns (stream X509BundlesResponse);
 
     /////////////////////////////////////////////////////////////////////////
@@ -28,7 +30,7 @@ service SpiffeWorkloadAPI {
 
     // Fetches the JWT bundles, formatted as JWKS documents, keyed by
     // trust domain. As this information changes, subsequent messages
-    // will be sent.
+    // will be streamed from the server.
     rpc FetchJWTBundles(JWTBundlesRequest) returns (stream JWTBundlesResponse);
 
     // Validates a JWT-SVID against the requested audience. Returns
@@ -37,11 +39,12 @@ service SpiffeWorkloadAPI {
 }
 
 // The X509SVIDRequest message conveys parameters for requesting an X.509-SVID.
-// There are currently no such parameters.
+// There are currently no request parameters.
 message X509SVIDRequest {  }
 
 // The X509SVIDResponse message carries X.509-SVIDs and related information,
-// including a global CRL and list of bundles the workload is federated with.
+// including a global CRL and a list of bundles the workload may use for
+// federating with foreign trust domains.
 message X509SVIDResponse {
     // Required. A list of X509SVID messages, each of which includes a single
     // X.509-SVID, its private key, and the bundle for the Trust Domain.
@@ -91,11 +94,11 @@ message X509BundlesResponse {
 }
 
 message JWTSVIDRequest {
-    // Required. The audience the workload intends to authenticate against.
+    // Required. The audience(s) the workload intends to authenticate against.
     repeated string audience = 1;
 
-    // Optional. The requested SPIFFE ID for the JWT-SVID. If unset, JWT-SVIDs
-    // for all identities the workload is entitled to are returned.
+    // Optional. The requested SPIFFE ID for the JWT-SVID. If unset, all
+    // JWT-SVIDs to which the workload is entitled are requested.
     string spiffe_id = 2;
 }
 

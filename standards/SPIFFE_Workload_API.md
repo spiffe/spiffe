@@ -38,7 +38,7 @@ Currently, there are two profiles:
 - [X.509-SVID Profile](#5-x509-svid-profile)
 - [JWT-SVID Profile](#6-jwt-svid-profile)
 
-Both profiles are mandatory and MUST be implemented. However, one or the other MAY be administratively disabled.
+Both profiles are mandatory and MUST be supported by SPIFFE implementations. However, operators MAY administratively disable a specific profile in their deployment.
 
 Future versions of this specification may introduce additional profiles or make one or more profiles optional.
 
@@ -78,7 +78,7 @@ For additional clarity, please see [Appendix A](#appendix-a.-sample-implementati
 
 ### 4.4 Default Values and Redacted Information
 
-SPIFFE Workload API clients may at times encounter fields in the response message that have a default value, or may notice that information included in a previous response is not included in the latest response. For instance, a client may encounter a default value in the `federated_bundles` field after having previously received a federated bundle.
+SPIFFE Workload API response messages are complete updates to previously sent response messages. When a response message contains fields which are set to default or empty values, clients MUST interpret the values of those fields to have been set to their default or empty values; previously received, non-default or non-empty values MUST NOT be retained by a client after receiving a default or empty value for the fields. For instance, a client receiving a default value in the `federated_bundles` field should discard the previously received `federated_bundles` value.
 
 Since every message MUST include the full set of information (see the [Stream Responses](#42-stream-responses) section), clients SHOULD interpret the absence of data as a redaction. As an example, if a client has loaded a bundle for `spiffe://foo.bar`, and receives a message that does not include a bundle for `spiffe://foo.bar`, then the bundle SHOULD be unloaded.
 
@@ -90,7 +90,7 @@ Messages exchanged for the profile RPCs are comprised of both mandatory and opti
 
 Various RPCs defined in this specification can return trust bundles for foreign trust domains. Inclusion of foreign bundles enables workloads to communicate *across* trust domains, and is the primary mechanism through which federation is enabled. A bundle representing a foreign trust domain is known as a *Federated Bundle*.
 
-When authenticating a client from a foreign trust domain, the authenticator chooses the bundle representing the client’s presented trust domain for validation. Similarly, when authenticating a server, the client uses the bundle representing the server’s trust domain. If no matching bundle is present for the SVID in use, then the peer is untrusted. This approach is required in order to account for the lack of widespread support for SAN URI Name Constraints in common X.509 libraries. Please see [Section 4.2](X509-SVID.md#42-name-constraints) of the X509-SVID specification for more information.
+When authenticating a client, the authenticator chooses the bundle representing the client’s presented trust domain for validation. Similarly, when authenticating a server, the client uses the bundle representing the server’s trust domain. If no matching bundle is present for the SVID in use, then the peer is untrusted. This approach is required in order to account for the lack of widespread support for SAN URI Name Constraints in common X.509 libraries. Please see [Section 4.2](X509-SVID.md#42-name-constraints) of the X509-SVID specification for more information.
 
 ## 5. X.509-SVID Profile
 
@@ -108,12 +108,14 @@ service SpiffeWorkloadAPI {
 
     // Fetch X.509-SVIDs for all SPIFFE identities the workload is entitled to,
     // as well as related information like trust bundles and CRLs. As this
-    // information changes, subsequent messages will be sent.
+    // information changes, subsequent messages will be streamed from the
+    // server.
     rpc FetchX509SVID(X509SVIDRequest) returns (stream X509SVIDResponse);
 
     // Fetch trust bundles and CRLs. Useful for clients that only need to
     // validate SVIDs without obtaining an SVID for themself. As this
-    // information changes, subsequent messages will be sent.
+    // information changes, subsequent messages will be streamed from the
+    // server.
     rpc FetchX509Bundles(X509BundlesRequest) returns (stream X509BundlesResponse);
 
     // ... RPCS for other profiles ...
@@ -125,7 +127,8 @@ service SpiffeWorkloadAPI {
 message X509SVIDRequest {  }
 
 // The X509SVIDResponse message carries X.509-SVIDs and related information,
-// including a global CRL and list of bundles the workload is federated with.
+// including a global CRL and a list of bundles the workload may use for
+// federating with foreign trust domains.
 message X509SVIDResponse {
     // Required. A list of X509SVID messages, each of which includes a single
     // X.509-SVID, its private key, and the bundle for the trust domain.
@@ -175,7 +178,7 @@ message X509BundlesResponse {
 }
 
 message JWTSVIDRequest {
-    // Required. The audience the workload intends to authenticate against.
+    // Required. The audience(s) the workload intends to authenticate against.
     repeated string audience = 1;
 
     // Optional. The requested SPIFFE ID for the JWT-SVID. If unset, JWT-SVIDs
@@ -194,7 +197,7 @@ message JWTSVIDResponse {
 
 #### 5.2.1 FetchX509SVID
 
-The `FetchX509SVID` RPC streams back X509-SVIDs, and X.509 bundles for authenticated X509-SVIDs for both the trust domain in which the server resides and foreign trust domains.
+The `FetchX509SVID` RPC streams back X509-SVIDs, and X.509 bundles for both the trust domain in which the server resides and foreign trust domains. These bundles MUST only be used to authenticate X509-SVIDs.
 
 The `X509SVIDRequest` request message is currently empty and is a placeholder for future expansion.
 
@@ -208,7 +211,7 @@ As mentioned in [Stream Responses](#42-stream-responses), each `X509SVIDResponse
 
 #### 5.2.2 FetchX509Bundles
 
-The `FetchX509Bundles` RPC streams back X.509 bundles for authenticated X509-SVIDs for both the trust domain in which the server resides and foreign trust domains.
+The `FetchX509Bundles` RPC streams back X.509 bundles for both the trust domain in which the server resides and foreign trust domains. These bundles MUST only be used to authenticate X509-SVIDs.
 
 The `X509BundlesRequest` request message is currently empty and is a placeholder for future expansion.
 
@@ -245,7 +248,7 @@ service SpiffeWorkloadAPI {
 
     // Fetches the JWT bundles, formatted as JWKS documents, keyed by
     // trust domain. As this information changes, subsequent messages
-    // will be sent.
+    // will be streamed from the server.
     rpc FetchJWTBundles(JWTBundlesRequest) returns (stream JWTBundlesResponse);
 
     // Validates a JWT-SVID against the requested audience. Returns
@@ -280,7 +283,7 @@ message JWTSVID {
 }
 
 // The JWTBundlesRequest message conveys parameters for requesting JWT bundles.
-// There are currently no such parameters.
+// There are currently no request parameters.
 message JWTBundlesRequest { }
 
 // The JWTBundlesReponse conveys JWT bundles.
@@ -326,11 +329,11 @@ The `JWTSVIDResponse` response message consists of a mandatory `svids` field, wh
 
 All fields in the `JWTSVID` message are mandatory.
 
-If the client is not authorized for any identities, nor the specific identity requested via the `spiffe_id` field, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information).
+If the client is not authorized for any identities, or not authorized for the specific identity requested via the `spiffe_id` field, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information).
 
 #### 6.2.2 FetchJWTBundles
 
-The `FetchJWTBundles` RPC streams back JWT bundles for authenticated JWT-SVIDs for both the trust domain in which the server resides and foreign trust domains.
+The `FetchJWTBundles` RPC streams back JWT bundles for both the trust domain in which the server resides and foreign trust domains. These bundles MUST only be used to authenticate JWT-SVIDs.
 
 The `JWTBundlesRequest` request message is currently empty and is a placeholder for future expansion.
 
