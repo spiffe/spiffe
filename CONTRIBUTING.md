@@ -24,11 +24,11 @@ broader group.
 1. Fork the repo
 1. Commit changes to your fork
 1. Update the docs, if necessary
-1. Ensure your branch is based on the latest commit in `master`
+1. Ensure your branch is based on the latest commit in `main`
 1. Ensure all tests pass (see project docs for more information)
 2. Make sure your commit messages contain a `Signed-off-by: <your-email-address>` line (see `git-commit --signoff`) to certify the [DCO](/DCO)
 1. Open a [pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)
-  against the upstream `master` branch
+  against the upstream `main` branch
 
 All changes to SPIFFE projects must be code reviewed in a pull request (this goes for everyone, even
 those who have merge rights).
@@ -55,6 +55,7 @@ these conventions when reviewing pull requests.
   * Command-line flags should use dashes, not underscores
   * Plugin and API protobuf comments are expected to be accompanied with markdowns generated with
     [protoc-gen-doc](https://github.com/pseudomuto/protoc-gen-doc)
+  * All documentation and code must conform to the [Inclusive Naming Initiative](https://inclusivenaming.org) [guidelines](https://inclusivenaming.org/language/word-list/)
   * All filenames should be lowercase
     * Source filenames and directories should use underscores, no dashes (snake case)
     * Document filenames and directories should use dashes rather than underscores (kebab case)
