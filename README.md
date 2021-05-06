@@ -41,7 +41,7 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 * [spiffe](https://github.com/spiffe/spiffe): This repository includes the SPIFFE ID, SVID and Workload API specifications, example code, and tests, as well as project governance, policies, and processes.    
 * [spire](https://github.com/spiffe/spire): This is a reference implementation of SPIFFE and the SPIFFE Workload API that can be run on and across varying hosting environments.
 * [go-spiffe](https://github.com/spiffe/go-spiffe/tree/master/v2): Golang client libraries.
-* [java-spiffe](https://github.com/spiffe/java-spiffe/tree/v2-api): Java client libraries
+* [java-spiffe](https://github.com/spiffe/java-spiffe): Java client libraries
 
 ### Communications
 
@@ -61,14 +61,17 @@ Most community activity is organized into Special Interest Groups (SIGs), time-b
 
 | Name | Lead | Group | Slack Channel | Meetings |
 |:------:|:-------:|:-------:|:---------------:|:----------:|
+| [SIG-Community](/community/sig-community/README.md) | [Umair Khan](https://github.com/umairmkhan) (HPE) | [Here](https://groups.google.com/a/spiffe.io/g/sig-community) | [Here](https://spiffe.slack.com/messages/community) | [Notes](https://docs.google.com/document/d/1tb3lxubwr8IKRd6Smnl83ur14xkOQdjwQqla9OHjwZo) |
 | [SIG-Spec](/community/sig-spec/README.md) | [Evan Gilman](https://github.com/evan2645) (VMware) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-specification) | [Here](https://spiffe.slack.com/messages/sig-spec) | [Notes](https://docs.google.com/document/d/1p2BbRWN_7z6nkBMj-h1mAJAJxxKqNeFiV4IplZ_wU4c) |
-| [SIG-SPIRE](/community/sig-spire/README.md) | [Andres Vega](https://github.com/anvega) (VMware) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-spire) | [Here](https://spiffe.slack.com/messages/spire) | [Notes](https://docs.google.com/document/d/1IgpCkvSRSoY9Xd16gFQJJ1KP8sLZ7EE39cEjBK_UIg4) |
+| [SIG-SPIRE](/community/sig-spire/README.md) | [Andres Vega](https://github.com/anvega) (VMware) &#124; [Daniel Feldman](https://github.com/dfeldman) (HPE) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-spire) | [Here](https://spiffe.slack.com/messages/spire) | [Notes](https://docs.google.com/document/d/1IgpCkvSRSoY9Xd16gFQJJ1KP8sLZ7EE39cEjBK_UIg4) |
 
 **Follow the SPIFFE Project** You can find us on [Github](https://github.com/spiffe/) and [Twitter](https://twitter.com/SPIFFEio).
 
-## SPIFFE TSC
-The SPIFFE [Technical Steering Committee](/GOVERNANCE.md#technical-steering-committee-tsc) meets on a regular cadence to review project progress, address maintainer needs, and provide feedback on strategic direction and industry trends. Community members interested in joining this call can find details below.
+## SPIFFE SSC
+The [SPIFFE Steering Committee](/GOVERNANCE.md#the-spiffe-steering-committee-ssc) meets on a regular cadence to review project progress, address maintainer needs, and provide feedback on strategic direction and industry trends. Community members interested in joining this call can find details below.
 
 * Calendar: [iCal](https://calendar.google.com/calendar/ical/c_gck7v87m9obq6n3hpo01l7csus%40group.calendar.google.com/public/basic.ics) or [Browser-based](https://calendar.google.com/calendar/embed?src=c_gck7v87m9obq6n3hpo01l7csus%40group.calendar.google.com&ctz=America%2FChicago)
 * Meeting Notes: [Google Doc](https://docs.google.com/document/d/14YlmMTqwqNdx-CWapwwIBMaakH5Z2UnAvOBQBB8AwQM)
 * Call Details: [Zoom Link](https://zoom.us/j/95959131216?pwd=akw4RzlEUEVCTnFkWE5KdWFPZXpkdz09)
+
+To contact the SSC privately, please send an email to [ssc@spiffe.io](mailto:ssc@spiffe.io).
