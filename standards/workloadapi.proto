@@ -43,14 +43,14 @@ service SpiffeWorkloadAPI {
 message X509SVIDRequest {  }
 
 // The X509SVIDResponse message carries X.509-SVIDs and related information,
-// including a global CRL and a list of bundles the workload may use for
-// federating with foreign trust domains.
+// including a set of global CRLs and a list of bundles the workload may use
+// for federating with foreign trust domains.
 message X509SVIDResponse {
     // Required. A list of X509SVID messages, each of which includes a single
     // X.509-SVID, its private key, and the bundle for the Trust Domain.
     repeated X509SVID svids = 1;
 
-    // Optional. An ASN.1 DER encoded CRL.
+    // Optional. ASN.1 DER encoded certificate revocation lists.
     repeated bytes crl = 2;
 
     // Optional. CA certificate bundles belonging to foreign Trust Domains that the
@@ -81,10 +81,10 @@ message X509SVID {
 message X509BundlesRequest {
 }
 
-// The X509BundlesResponse message carries a global CRL and a
+// The X509BundlesResponse message carries a set of global CRLs and a
 // map of trust bundles the workload should trust.
 message X509BundlesResponse {
-    // Optional. ASN.1 DER encoded certificate revocation list.
+    // Optional. ASN.1 DER encoded certificate revocation lists.
     repeated bytes crl = 1;
 
     // Required. CA certificate bundles belonging to Trust Domains that the
