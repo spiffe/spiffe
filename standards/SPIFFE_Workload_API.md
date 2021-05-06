@@ -137,14 +137,14 @@ message X509SVIDResponse {
     // Optional. ASN.1 DER encoded certificate revocation lists.
     repeated bytes crl = 2;
 
-    // Optional. CA certificate bundles belonging to foreign trust domains that the
-    // workload should trust, keyed by the SPIFFE ID of the foreign
+    // Optional. CA certificate bundles belonging to foreign trust domains that
+    // the workload should trust, keyed by the SPIFFE ID of the foreign trust
     // domain. Bundles are ASN.1 DER encoded.
     map<string, bytes> federated_bundles = 3;
 }
 
-// The X509SVID message carries a single SVID and all associated
-// information, including X.509 bundle for the trust domain.
+// The X509SVID message carries a single SVID and all associated information,
+// including the X.509 bundle for the trust domain.
 message X509SVID {
     // Required. The SPIFFE ID of the SVID in this entry
     string spiffe_id = 1;
@@ -165,15 +165,15 @@ message X509SVID {
 message X509BundlesRequest {
 }
 
-// The X509BundlesResponse message carries a set of global CRLs and a
-// map of trust bundles the workload should trust.
+// The X509BundlesResponse message carries a set of global CRLs and a map of
+// trust bundles the workload should trust.
 message X509BundlesResponse {
     // Optional. ASN.1 DER encoded certificate revocation lists.
     repeated bytes crl = 1;
 
     // Required. CA certificate bundles belonging to trust domains that the
-    // workload should trust, keyed by the SPIFFE ID of the trust
-    // domain. Bundles are ASN.1 DER encoded.
+    // workload should trust, keyed by the SPIFFE ID of the trust domain.
+    // Bundles are ASN.1 DER encoded.
     map<string, bytes> bundles = 2;
 }
 
@@ -246,13 +246,13 @@ service SpiffeWorkloadAPI {
     // the JWT-SVID for that SPIFFE ID is returned.
     rpc FetchJWTSVID(JWTSVIDRequest) returns (JWTSVIDResponse);
 
-    // Fetches the JWT bundles, formatted as JWKS documents, keyed by
-    // trust domain. As this information changes, subsequent messages
-    // will be streamed from the server.
+    // Fetches the JWT bundles, formatted as JWKS documents, keyed by the
+    // SPIFFE ID of the trust domain. As this information changes, subsequent
+    // messages will be streamed from the server.
     rpc FetchJWTBundles(JWTBundlesRequest) returns (stream JWTBundlesResponse);
 
-    // Validates a JWT-SVID against the requested audience. Returns
-    // the SPIFFE ID of the JWT-SVID and JWT claims.
+    // Validates a JWT-SVID against the requested audience. Returns the SPIFFE
+    // ID of the JWT-SVID and JWT claims.
     rpc ValidateJWTSVID(ValidateJWTSVIDRequest) returns (ValidateJWTSVIDResponse);
 
     // ... RPCs for other profiles ...
@@ -288,8 +288,8 @@ message JWTBundlesRequest { }
 
 // The JWTBundlesReponse conveys JWT bundles.
 message JWTBundlesResponse {
-    // Required. JWK encoded JWT bundles, keyed by the SPIFFE ID of the Trust
-    // Domain.
+    // Required. JWK encoded JWT bundles, keyed by the SPIFFE ID of the trust
+    // domain.
     map<string, bytes> bundles = 1;
 }
 
