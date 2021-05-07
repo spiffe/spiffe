@@ -18,10 +18,10 @@ Term end: November 3rd, 2021
 [GitHub](https://github.com/evan2645) | [LinkedIn](https://www.linkedin.com/in/evan2645)  
 Term end: May 4th, 2022  
 
-**Andrew Jessup** (@ajessup)
-[GitHub](https://github.com/ajessup) | [LinkedIn](https://www.linkedin.com/in/andrewjessup/)
-Term end: May 3rd, 2023
+**Andrew Jessup** (@ajessup)  
+[GitHub](https://github.com/ajessup) | [LinkedIn](https://www.linkedin.com/in/andrewjessup/)  
+Term end: May 3rd, 2023  
 
-**Frederick Kautz** (@fkautz)
-[GitHub](https://github.com/fkautz) | [LinkedIn](https://www.linkedin.com/in/fkautz/)
-Term end: May 3rd, 2023
+**Frederick Kautz** (@fkautz)  
+[GitHub](https://github.com/fkautz) | [LinkedIn](https://www.linkedin.com/in/fkautz/)  
+Term end: May 3rd, 2023  
