@@ -17,4 +17,5 @@ For more information on how to participate, please see the relevant GitHub [trac
 * [Andrew Moore](ANDREW_MOORE.md)
 
 ## Results
-To be announced.
+* [Andrew Jessup](ANDREW_JESSUP.md)
+* [Frederick Kautz](FREDERICK_KAUTZ.md)
