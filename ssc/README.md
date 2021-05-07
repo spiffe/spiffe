@@ -6,14 +6,6 @@ Please read the [SSC Charter](CHARTER.md) for more information about the SSC's r
 ## SSC Members
 The current members of the SSC, ordered by term,  are as follows:
 
-**Mark Lakewood** (@mlakewood)  
-[GitHub](https://github.com/mlakewood) | [LinkedIn](https://www.linkedin.com/in/marklakewood)  
-Term end: May 5th, 2021
-
-**Jon Debonis** (@jondb)  
-[GitHub](https://github.com/jondb) | [LinkedIn](https://www.linkedin.com/in/jondb)  
-Term end: May 5th, 2021  
-
 **Joe Beda** (@jbeda)  
 [GitHub](https://github.com/jbeda) | [LinkedIn](https://www.linkedin.com/in/jbeda)  
 Term end: November 3rd, 2021  
