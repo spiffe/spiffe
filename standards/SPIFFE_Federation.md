@@ -43,14 +43,14 @@ This document specifies an experimental identity API standard for the internet c
 ## 1. Background
 The SPIFFE specifications define the documents and interfaces necessary for establishing a platform-agnostic workload identity framework that is capable of bridging systems in different domains without the need for implementing identity translation or credential exchange logic. They define a “[trust domain][1]”, which serves as an identity namespace.
 
-SPIFFE is decentralized by nature. Each trust domain acts in its own capacity, under its own authority, and is administratively isolated from systems residing in other trust domains. Although trust domains delineate administrative and/or security domains, a core SPIFFE use case is enabling communication across these same boundaries where needed. Therefore, it is necessary to define a mechanism by which an entity may be introduced to a foreign trust domain, allowing it to authenticate identities issued by “other” SPIFFE authorities and allowing workloads in one trust domain to securely authenticate workloads in a foreign trust domain.
+SPIFFE is decentralized by nature. Each trust domain acts in its own capacity, under its own authority, and is administratively isolated from systems residing in other trust domains. Although trust domains delineate administrative and/or security domains, a core SPIFFE use case is enabling communication across these same boundaries where needed. Therefore, it is necessary to define a mechanism by which an entity may be introduced to a foreign trust domain, allowing it to authenticate credentials issued by “other” SPIFFE authorities and allowing workloads in one trust domain to securely authenticate workloads in a foreign trust domain.
 
-A [SPIFFE bundle][2] is a self-contained resource that contains the public key material needed to authenticate identities in a particular trust domain. This document introduces a specification by which SPIFFE bundles can be securely fetched for the purpose of authenticating identities issued by external authorities. Included is information on how to serve a SPIFFE bundle, how to retrieve SPIFFE bundle, and how to authenticate the endpoints that serve them.
+A [SPIFFE bundle][2] is a resource that contains the public key material needed to authenticate credentials from a particular trust domain. This document introduces a specification by which SPIFFE bundles can be securely fetched for the purpose of authenticating identities issued by external authorities. Included is information on how to serve a SPIFFE bundle, how to retrieve a SPIFFE bundle, and how to authenticate the endpoints that serve them.
 
 ## 2. Introduction
-Possession of a trust domain's bundle is required in order to validate SVIDs from it. Therefore, achieving SPIFFE federation necessitates the exchange of SPIFFE bundles between trust domains. This exchange occurs on a regular basis, allowing the contents of a trust domain's bundle to change over time.
+Possession of a trust domain's bundle is required in order to validate SVIDs from it. Therefore, achieving SPIFFE Federation necessitates the exchange of SPIFFE bundles between trust domains. This exchange should occur on a regular basis, allowing the contents of a trust domain's bundle to change over time.
 
-To achieve this, SPIFFE federation defines a "bundle endpoint", which is a URL that serves up a SPIFFE bundle for a particular trust domain. Also defined are a set of "endpoint profiles", which specify the protocol and authentication semantics used between bundle endpoint servers and clients. Finally, this document further specifies the behavior of bundle endpoint clients and servers, and the management of federation relationships and the resulting bundle data.
+To achieve this, SPIFFE Federation defines a "bundle endpoint", which is a URL that serves up a SPIFFE bundle for a particular trust domain. Also defined are a set of "endpoint profiles", which specify the protocol and authentication semantics used between bundle endpoint servers and clients. Finally, this document further specifies the behavior of bundle endpoint clients and servers, and the management of federation relationships and the resulting bundle data.
 
 ## 3. Targeted Use Cases
 Ultimately, SPIFFE Federation enables workloads to authenticate peers that reside in other trust domains. This functionality is necessary to support a wide range of use cases, however we wish to focus on three core use cases.
@@ -59,12 +59,12 @@ SPIFFE Trust Domains are frequently used to segment environments with differing 
 
 Second, SPIFFE Federation is also used between trust domains residing in different companies or organizations. This case is similar to the first in that we are federating between SPIFFE deployments, however due to potential differences in implementation and administration, coordination is generally limited to the data exchanged in the SPIFFE Federation protocol described herein.
 
-Finally, SPIFFE Federation can also enable use cases for consumers that don't yet have a mature SPIFFE control plane deployed. For example, a hosted product may wish to authenticate its customers using their SPIFFE identities without having to internally implement or deploy SPIFFE. This can be accomplished by allowing a workload to directly fetch the customer's trust domain bundle in order to authenticate their callers, negating the need to commit to a full-blown SPIFFE deployment.
+Finally, SPIFFE Federation can also enable use cases for consumers that don't yet have a mature SPIFFE control plane deployed. For example, a hosted product may wish to authenticate its customers using their SPIFFE identities without having to internally implement or deploy SPIFFE. This can be accomplished by allowing a workload to directly fetch the customer's trust domain bundle in order to authenticate their callers, obviating the need to commit to a full-blown SPIFFE deployment.
 
 ## 4. SPIFFE Bundle Endpoint
 A SPIFFE bundle endpoint is a resource (represented by a URL) that serves a copy of a SPIFFE bundle for a trust domain. SPIFFE control planes may both expose and consume these endpoints in order to transfer bundles between themselves, thereby achieving federation.
 
-The semantics of the SPIFFE bundle endpoint are similar to the `jwks_uri` mechanism defined in the OpenID Connect specification in that the bundle endpoint contains one or more public cryptographic keys used by a trust domain (for certifying identities within the trust domain). The bundle endpoint is an HTTPS URL that responds to an HTTP GET with a SPIFFE bundle. For more information about SPIFFE bundles and how they are encoded, please see the [SPIFFE Trust Domain and Bundle][3] specification.
+The semantics of the SPIFFE bundle endpoint are similar to the `jwks_uri` mechanism defined in the OpenID Connect specification in that the bundle contains one or more public cryptographic keys used by a trust domain (for certifying identities within the trust domain). The bundle endpoint is an HTTPS URL that responds to an HTTP GET with a SPIFFE bundle. For more information about SPIFFE bundles and how they are encoded, please see the [SPIFFE Trust Domain and Bundle][3] specification.
 
 ### 4.1. Adding and Removing Keys
 Operators of a trust domain MAY introduce or remove keys used to issue SVIDs within the trust domain as needed (e.g. as part of an internal key rotation process). When adding new keys, an updated trust bundle containing the keys SHOULD be published at the bundle endpoint sufficiently in advance that foreign trust domains have an opportunity to retrieve and internally disseminate the new bundle contents; the recommended advance time is 3-5 times the bundle’s `spiffe_refresh_hint`. At a minimum, new keys MUST be published at the bundle endpoint prior to the keys being used to issue SVIDs. 
@@ -74,7 +74,7 @@ Deprecated keys SHOULD be removed from the trust bundle after a trust domain no 
 Clients SHOULD periodically poll the endpoint for updates because the contents are expected to [change over time][4] - key validity periods on the order of weeks or even days is commonplace. Clients SHOULD poll at a frequency equal to the value of the bundle’s `spiffe_refresh_hint`, in seconds. If not set, a reasonably low default value should apply - five minutes is recommended.
 
 ### 4.2. Managing Fetched Bundles
-Clients of the bundle endpoint MUST store the latest SPIFFE bundle each time it is retrieved. The sequence number field of the trust bundle SHOULD be used when comparing the freshness or ordering of two trust bundles. If the trust bundle omits the sequence number, operators SHOULD consider the most recently retrieved bundle to be up-to-date.
+Clients of the bundle endpoint SHOULD store the latest SPIFFE bundle each time it is retrieved. The sequence number field of the trust bundle SHOULD be used when comparing the freshness or ordering of two trust bundles. If the trust bundle omits the sequence number, operators SHOULD consider the most recently retrieved bundle to be up-to-date.
 
 Operators MAY locally update the SPIFFE bundle of a foreign trust domain at any time. In this case, the locally updated version of the bundle is considered the latest until replaced by a subsequent refresh.
 
@@ -111,7 +111,7 @@ An endpoint profile describes both the transport protocol and authentication met
 The following sections describe the supported bundle endpoint profiles.
 
 #### 5.2.1. Web PKI (`https_web`)
-The `https_web` profile leverages publicly trusted certificate authorities to provide a low-friction path for configuring SPIFFE federation. It behaves identically to the "https" URLs that most people are familiar with when accessing web pages in their browsers. In this profile, the bundle endpoint server uses a certificate issued by a public CA, obviating the need for additional client configuration; endpoints using the `https_web` profile type are authenticated using the same public CA certificates commonly installed in modern operating systems.
+The `https_web` profile leverages publicly trusted certificate authorities to provide a low-friction path for configuring SPIFFE Federation. It behaves identically to the "https" URLs that most people are familiar with when accessing web pages in their browsers. In this profile, the bundle endpoint server uses a certificate issued by a public CA, obviating the need for additional client configuration; endpoints using the `https_web` profile type are authenticated using the same public CA certificates commonly installed in modern operating systems.
 
 Please see the [Security Considerations](#7-security-considerations) section for more information about the use of public certificate authorities.
 
@@ -128,7 +128,7 @@ SPIFFE bundle endpoint servers supporting the `https_web` transport type utilize
 
 As an interoperability concern, servers MUST NOT require client authentication to access the bundle endpoint; this includes both transport layer (e.g. client certificates) and HTTP-layer (e.g. Authentication headers) authentication schemes.
 
-Upon receiving an HTTP GET request for the correct path, the bundle endpoint server MUST respond with the most up-to-date version of the SPIFFE bundle available. The exact path value may be chosen by the operator, and appears as part of the bundle endpoint URL. The bundle endpoint server MUST transmit the bundle encoded as UTF-8 and SHOULD set the `Content-Type` header to `application/json` on the response.
+Upon receiving an HTTP GET request for the correct path, the bundle endpoint server MUST respond with the most up-to-date version of the SPIFFE bundle available. The response MUST be encoded as UTF-8 and SHOULD set the `Content-Type` header to `application/json` on the response. The path from which the SPIFFE bundle is served is not constrained by this specification.
 
 Bundle endpoint servers MAY respond with HTTP redirect (as defined by [RFC 7231 section 6.4][8]) if the authority for serving the requested bundle has moved.  The target URL of the redirect MUST also be a [valid bundle endpoint URL](#5211-endpoint-url-requirements) as defined in this profile. Servers SHOULD use a temporary redirect; support for redirection is intended for operational considerations (e.g. serving a bundle via a CDN) and not as a means to permanently migrate the bundle endpoint URL. See the [Security Considerations](#7-security-considerations) for more information.
 
@@ -150,7 +150,7 @@ Bundle endpoint URLs utilizing `https_spiffe` MUST have the scheme set to `https
 For example, the URL `https://host.example.com/trust_domain` is a valid SPIFFE bundle endpoint URL for the `https_spiffe` profile type.
 
 ##### 5.2.2.2. Endpoint Parameters
-Bundle endpoint clients using the `https_spiffe` profile MUST be configured with the SPIFFE ID of the bundle endpoint server as well as a secure method for obtaining the trust bundle of the endpoint server's trust domain. A self-serving bundle endpoint is one in which the bundle endpoint server’s SPIFFE ID resides in the same trust domain as the bundle being fetched. Configured bundle endpoints may or may not be self-serving.
+Bundle endpoint clients using the `https_spiffe` profile MUST be configured with the SPIFFE ID of the bundle endpoint server as well as a secure method for obtaining the trust bundle of the endpoint server's trust domain. A **self-serving bundle** endpoint is one in which the bundle endpoint server’s SPIFFE ID resides in the same trust domain as the bundle being fetched. Configured bundle endpoints may or may not be self-serving.
 * If the endpoint is self-serving, clients need to be configured with a single up-to-date bundle in order to bootstrap the federation relationship.  Clients rely on this configured bundle for the first retrieval, but then store the retrieved bundle to validate later connections. See [Consuming a Bundle Endpoint](#5224-consuming-a-bundle-endpoint) below for more information. 
 * If the endpoint is not self-serving, clients MUST be separately configured for the endpoint server’s trust domain.  The endpoint server's trust domain and bundle may be configured in any of the following ways:
   * Endpoint parameters for the trust domain, which configures clients to fetch the bundle using the endpoint profiles as described in this document.  Note that clients MAY use any available profile and are not restricted to `https_spiffe`.
@@ -210,7 +210,7 @@ Once the connection has been successfully established, and a copy of the bundle 
 The exact nature and mechanism by which this distribution occurs is an implementation detail, and is out of scope for this document. For more information on how SPIFFE-aware workloads can receive bundle updates, please see the [SPIFFE Workload API][10] specification.
 
 ### 6.2. Maintaining a Relationship
-SPIFFE bundle endpoint clients poll the bundle endpoint periodically for updates. When an update is detected, the stored bundle representing the endpoint's foreign trust domain is updated to match. The updated content is then distributed so that validators can add new keys and drop revoked keys as necessary. Again, the exact method(s) for distributing this update to validators is out of scope for this document.
+SPIFFE bundle endpoint clients SHOULD poll the bundle endpoint periodically for updates. When an update is detected, the stored bundle representing the endpoint's foreign trust domain is updated to match. The updated content is then distributed so that validators can add new keys and drop revoked keys as necessary. Again, the exact method(s) for distributing this update to validators is out of scope for this document.
 
 If attempts to poll the bundle endpoint fail, bundle endpoint clients SHOULD retry at the next polling interval, rather than immediately or aggressively retrying, as this can overwhelm the bundle endpoint server. As discussed in the [Adding and Removing Keys](#41-adding-and-removing-keys) section, new keys should be published sufficiently in advance of their use such that missing one or two polls does not result in cross-domain authentication failures.
 
@@ -220,7 +220,7 @@ Terminating a federation relationship is as simple as deleting the local copy of
 In the event that the relationship needs to be re-established, this lifecycle is started over.
 
 ### 6.4. Lifecycle Diagram
-![The lifecycle of a SPIFFE federation relationship](https://raw.githubusercontent.com/evan2645/spiffe/2c6d5bd6c9b7e8aafc01ec577e7be53242e18e06/standards/img/spiffe_federation_lifecycle.png)
+![The lifecycle of a SPIFFE Federation relationship](https://raw.githubusercontent.com/evan2645/spiffe/2c6d5bd6c9b7e8aafc01ec577e7be53242e18e06/standards/img/spiffe_federation_lifecycle.png)
 
 ## 7. Security Considerations
 This section contains security-related information and observations related to this specification. It is important that implementers and users alike be familiar with this information.
@@ -250,14 +250,14 @@ Imagine a web hosting company called `spiffyhost.com`, that allows a customer, A
 ![A diagram illustrating the relationships between Alice, Bob, and `spiffyhost.com`](https://raw.githubusercontent.com/evan2645/spiffe/2c6d5bd6c9b7e8aafc01ec577e7be53242e18e06/standards/img/spiffe_federation_spiffyhost_example.png)  
 *Figure 5: A diagram illustrating the relationships between Alice, Bob, and `spiffyhost.com`.*
 
-If Bob’s control plane implicitly gets the trust domain name from the URL, this would then allow Alice to impersonate the trust domain spiffyhost.com!
+If Bob’s control plane implicitly gets the trust domain name from the URL, this would then allow Alice to impersonate the trust domain `spiffyhost.com`!
 
 Additionally, the Endpoint Profile cannot be inferred from the URL.  Both `https_web` and `https_spiffe` use normal HTTPS URLs with the same requirements. There is no secure method to distinguish them.  It is also insufficient to attempt `https_web` and fall back to `https_spiffe`, or vice versa, for similar reasons as outlined above: the ability to host a file with Web PKI at a particular HTTPS endpoint is not equivalent from a security perspective to the ability to host it with a valid SPIFFE SVID.
 
 ### 7.3. Preserving the `<Trust Domain, Bundle>` Binding
 When authenticating an SVID, the verifier must use only the bundle for the trust domain the SPIFFE ID resides in. If we simply pooled all the bundles and accepted an SVID as long as it validates against some bundle, then trust domains could easily impersonate each other’s identities.  Another way to say this is that bundles are scoped to a particular trust domain.
 
-Since bundles are not self-describing in terms of trust domain and are also self-issued, it is critical that the binding between trust domain name and bundle endpoint, configured as part of a SPIFFE federation relationship, is then translated to a binding between trust domain name and bundle when bundles are stored and disseminated. This requirement is unlike traditional Web PKI where a single root certificate store is used to validate all certificates, regardless of which CA system actually issued the certificate being validated.
+Since bundles are not self-describing in terms of trust domain and are also self-issued, it is critical that the binding between trust domain name and bundle endpoint, configured as part of a SPIFFE Federation relationship, is then translated to a binding between trust domain name and bundle when bundles are stored and disseminated. This requirement is unlike traditional Web PKI where a single root certificate store is used to validate all certificates, regardless of which CA system actually issued the certificate being validated.
 
 ### 7.4. Trustworthiness of the Bundle Endpoint Server
 The trustworthiness and integrity of a bundle endpoint server is essential in ensuring the security of the trust domain that the bundle represents. This includes not just the bundle endpoint server itself, but also the platform on which it runs, as well as any entity with administrative control over it or its platform.
