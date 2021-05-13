@@ -74,6 +74,12 @@ message X509SVID {
 
     // Required. ASN.1 DER encoded X.509 bundle for the trust domain.
     bytes bundle = 4;
+
+    // Optional. Arbitrary string usually used to provide guidance on how this
+    // identity should be used by a workload when more than one SVID is returned.
+    // As an interoperability consideration, SPIFFE implementations SHOULD support
+    // labels up to a maximum of 2048 bytes in length.
+    string label = 5;
 }
 
 // The X509BundlesRequest message conveys parameters for requesting X.509
@@ -115,6 +121,12 @@ message JWTSVID {
 
     // Required. Encoded JWT using JWS Compact Serialization.
     string svid = 2;
+
+    // Optional. Arbitrary string usually used to provide guidance on how this
+    // identity should be used by a workload when more than one SVID is returned.
+    // As an interoperability consideration, SPIFFE implementations SHOULD support
+    // labels up to a maximum of 2048 bytes in length.
+    string label = 5;
 }
 
 // The JWTBundlesRequest message conveys parameters for requesting JWT bundles.
