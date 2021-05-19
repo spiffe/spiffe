@@ -10,24 +10,24 @@ Portable and interoperable cryptographic identity for networked workloads is per
 
 ## Table of Contents
 
-1\. [Introduction](#1-introduction)
-2\. [Extensibility](#2-extensibility)
-3\. [Service Defintion](#3-service-definition)
-4\. [Client and Server Behavior](#4-client-and-server-behavior)
-4.1. [Identifying the Caller](#41-identifying-the-caller)
-4.2. [Connection Lifetime](#42-connection-lifetime)
-4.3. [Stream Responses](#43-stream-responses)
-4.4. [Default Values and Redacted Information](#44-default-values-and-redacted-information)
-4.5. [Mandatory Fields](#45-mandatory-fields)
-4.6. [Federated Bundles](#46-federated-bundles)
-5\. [X.509-SVID Profile](#5-x509-svid-profile)
-5.1. [Profile Definition](#51-profile-definition)
-5.2. [Profile RPCs](#52-profile-rpcs)
-5.3. [Default Identity](#53-default-identity)
-6\. [JWT-SVID Profile](#6-jwt-svid-profile)
-6.1. [Profile Definition](#61-profile-definition)
-6.2. [Profile RPCs](#62-profile-rpcs)
-6.3. [JWT-SVID Validation](#63-jwt-svid-validation)
+- 1\. [Introduction](#1-introduction)
+- 2\. [Extensibility](#2-extensibility)
+- 3\. [Service Defintion](#3-service-definition)
+- 4\. [Client and Server Behavior](#4-client-and-server-behavior)
+  - 4.1. [Identifying the Caller](#41-identifying-the-caller)
+  - 4.2. [Connection Lifetime](#42-connection-lifetime)
+  - 4.3. [Stream Responses](#43-stream-responses)
+  - 4.4. [Default Values and Redacted Information](#44-default-values-and-redacted-information)
+  - 4.5. [Mandatory Fields](#45-mandatory-fields)
+  - 4.6. [Federated Bundles](#46-federated-bundles)
+- 5\. [X.509-SVID Profile](#5-x509-svid-profile)
+  - 5.1. [Profile Definition](#51-profile-definition)
+  - 5.2. [Profile RPCs](#52-profile-rpcs)
+  - 5.3. [Default Identity](#53-default-identity)
+- 6\. [JWT-SVID Profile](#6-jwt-svid-profile)
+  - 6.1. [Profile Definition](#61-profile-definition)
+  - 6.2. [Profile RPCs](#62-profile-rpcs)
+  - 6.3. [JWT-SVID Validation](#63-jwt-svid-validation)
 
 ## 1. Introduction
 
@@ -221,7 +221,7 @@ If the client is not entitled to receive any X.509 bundles, then the server SHOU
 
 As mentioned in [Stream Responses](#42-stream-responses), each `X509BundleResponse` response contains the complete set of authorized X.509 bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
-### 5.4 Default Identity
+### 5.3 Default Identity
 
 It is often the case that a workload doesn’t know what identity it should assume. Determining when to assume what identity is a site-specific concern, and as a result, the SPIFFE specifications don’t reason about how to do this.
 
