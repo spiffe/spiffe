@@ -48,6 +48,8 @@ SPIFFE is decentralized by nature. Each trust domain acts in its own capacity, u
 A [SPIFFE bundle][2] is a resource that contains the public key material needed to authenticate credentials from a particular trust domain. This document introduces a specification by which SPIFFE bundles can be securely fetched for the purpose of authenticating identities issued by external authorities. Included is information on how to serve a SPIFFE bundle, how to retrieve a SPIFFE bundle, and how to authenticate the endpoints that serve them.
 
 ## 2. Introduction
+SPIFFE Federation enables the authentication of identity credentials (SVIDs) across trust domains. Specifically, it is the act of obtaining the necessary SPIFFE bundle(s) to authenticate SVIDs issued by a different trust domain, and providing said bundles to the workloads performing the authentication.
+
 Possession of a trust domain's bundle is required in order to validate SVIDs from it. Therefore, achieving SPIFFE Federation necessitates the exchange of SPIFFE bundles between trust domains. This exchange should occur on a regular basis, allowing the contents of a trust domain's bundle to change over time.
 
 To achieve this, SPIFFE Federation defines a "bundle endpoint", which is a URL that serves up a SPIFFE bundle for a particular trust domain. Also defined are a set of "endpoint profiles", which specify the protocol and authentication semantics used between bundle endpoint servers and clients. Finally, this document further specifies the behavior of bundle endpoint clients and servers, and the management of federation relationships and the resulting bundle data.
@@ -243,16 +245,16 @@ Each SPIFFE Federation relationship is configured with the following parameters 
 
 It is important that these three parameters are configured explicitly, the values cannot be securely inferred from each other.
 
-For example, one might be tempted to infer the SPIFFE trust domain name from the host portion of the Endpoint URL. Firstly, we emphasize that a SPIFFE trust domain name need not be a registered DNS name.  Secondly, inferring this as a default is dangerous because it would allow anyone who can get a file served from a particular DNS name to assert trust roots for the SPIFFE trust domain of the same name. 
+For example, one might be tempted to infer the SPIFFE trust domain name from the host portion of the Endpoint URL. Inferring this as a default is dangerous because it could allow anyone who can get a file served from a particular DNS name to assert trust roots for the SPIFFE trust domain of the same name. 
 
-Imagine a web hosting company called `spiffyhost.com`, that allows a customer, Alice, to serve web content at URLs like `https://spiffyhost.com/alice/<filename>`, and further, that `spiffyhost.com` operates an API secured by SPIFFE Federation with the SPIFFE trust domain name `spiffyhost.com`.  Imagine Alice sets up SPIFFE Federation with Bob, who is also a customer of `spiffyhost.com`, and Alice chooses to serve her trust bundle from `https://spiffyhost.com/alice/spiffe-bundle`.
+Imagine a web hosting company called MyPage (`mypage.example.com`), that allows a customer, Alice, to serve web content at URLs like `https://mypage.example.com/alice/<filename>`, and further, that MyPage operates an API secured by SPIFFE Federation with the SPIFFE trust domain name `mypage.example.com`.  Imagine Alice sets up SPIFFE Federation with Bob, who is also a customer of MyPage, and Alice chooses to serve her trust bundle from `https://mypage.example.com/alice/spiffe-bundle`.
 
-![A diagram illustrating the relationships between Alice, Bob, and `spiffyhost.com`](https://raw.githubusercontent.com/evan2645/spiffe/2c6d5bd6c9b7e8aafc01ec577e7be53242e18e06/standards/img/spiffe_federation_spiffyhost_example.png)  
-*Figure 5: A diagram illustrating the relationships between Alice, Bob, and `spiffyhost.com`.*
+![A diagram illustrating the relationships between Alice, Bob, and MyPage](https://raw.githubusercontent.com/evan2645/spiffe/2c6d5bd6c9b7e8aafc01ec577e7be53242e18e06/standards/img/spiffe_federation_mypage_example.png)  
+*Figure 5: A diagram illustrating the relationships between Alice, Bob, and MyPage.*
 
-If Bob’s control plane implicitly gets the trust domain name from the URL, this would then allow Alice to impersonate the trust domain `spiffyhost.com`!
+If Bob’s control plane implicitly gets the trust domain name from the URL, this would then allow Alice to impersonate the trust domain `mypage.example.com`! It is also worth emphasizing that a SPIFFE trust domain name need not be a registered DNS name, which often makes this assumption incorrect to begin with. In this example, Alice's trust domain name is simply `alice`.
 
-Additionally, the Endpoint Profile cannot be inferred from the URL.  Both `https_web` and `https_spiffe` use normal HTTPS URLs with the same requirements. There is no secure method to distinguish them.  It is also insufficient to attempt `https_web` and fall back to `https_spiffe`, or vice versa, for similar reasons as outlined above: the ability to host a file with Web PKI at a particular HTTPS endpoint is not equivalent from a security perspective to the ability to host it with a valid SPIFFE SVID.
+Endpoint Profile cannot be safely inferred from the URL either.  Both `https_web` and `https_spiffe` use normal HTTPS URLs with the same requirements. There is no secure method to distinguish them.  It is also insufficient to attempt `https_web` and fall back to `https_spiffe`, or vice versa, for similar reasons as outlined above: the ability to host a file with Web PKI at a particular HTTPS endpoint is not equivalent from a security perspective to the ability to host it with a valid SPIFFE SVID.
 
 ### 7.3. Preserving the `<Trust Domain, Bundle>` Binding
 When authenticating an SVID, the verifier must use only the bundle for the trust domain the SPIFFE ID resides in. If we simply pooled all the bundles and accepted an SVID as long as it validates against some bundle, then trust domains could easily impersonate each other’s identities.  Another way to say this is that bundles are scoped to a particular trust domain.
