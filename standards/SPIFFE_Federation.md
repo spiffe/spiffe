@@ -249,7 +249,7 @@ For example, one might be tempted to infer the SPIFFE trust domain name from the
 
 Imagine a web hosting company called MyPage (`mypage.example.com`), that allows a customer, Alice, to serve web content at URLs like `https://mypage.example.com/alice/<filename>`, and further, that MyPage operates an API secured by SPIFFE Federation with the SPIFFE trust domain name `mypage.example.com`.  Imagine Alice sets up SPIFFE Federation with Bob, who is also a customer of MyPage, and Alice chooses to serve her trust bundle from `https://mypage.example.com/alice/spiffe-bundle`.
 
-![A diagram illustrating the relationships between Alice, Bob, and MyPage](https://raw.githubusercontent.com/evan2645/spiffe/83985c0e18cad3b3b866e97341b8664b95bb0621/standards/img/spiffe_federation_mypage_example.png)
+![A diagram illustrating the relationships between Alice, Bob, and MyPage](https://raw.githubusercontent.com/evan2645/spiffe/83985c0e18cad3b3b866e97341b8664b95bb0621/standards/img/spiffe_federation_mypage_example.png)  
 *Figure 5: A diagram illustrating the relationships between Alice, Bob, and MyPage.*
 
 If Bob’s control plane implicitly gets the trust domain name from the URL, this would then allow Alice to impersonate the trust domain `mypage.example.com`! It is also worth emphasizing that a SPIFFE trust domain name need not be a registered DNS name, which often makes this assumption incorrect to begin with. In this example, Alice's trust domain name is simply `alice`.
