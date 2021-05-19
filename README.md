@@ -1,4 +1,4 @@
-![SPIFFE Logo](https://github.com/spiffe/spiffe/blob/master/community/logo/256x1024.png?raw=true)
+![SPIFFE Logo](https://github.com/spiffe/spiffe/blob/main/community/logo/256x1024.png?raw=true)
 
 
 The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
@@ -40,7 +40,7 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 
 * [spiffe](https://github.com/spiffe/spiffe): This repository includes the SPIFFE ID, SVID and Workload API specifications, example code, and tests, as well as project governance, policies, and processes.    
 * [spire](https://github.com/spiffe/spire): This is a reference implementation of SPIFFE and the SPIFFE Workload API that can be run on and across varying hosting environments.
-* [go-spiffe](https://github.com/spiffe/go-spiffe/tree/master/v2): Golang client libraries.
+* [go-spiffe](https://github.com/spiffe/go-spiffe/tree/main/v2): Golang client libraries.
 * [java-spiffe](https://github.com/spiffe/java-spiffe): Java client libraries
 
 ### Communications
