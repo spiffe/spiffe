@@ -349,7 +349,9 @@ As mentioned in [Stream Responses](#42-stream-responses), each `JWTBundleRespons
 
 The `ValidateJWTSVID` RPC validates JWT-SVIDs for a specific audience on behalf of a client.
 
-All fields in the `ValidateJWTSVIDRequest` and `ValidateJWTSVIDResponse` message are mandatory.
+All fields in the `ValidateJWTSVIDRequest` request message are mandatory.
+
+The `ValidateJWTSVIDResponse` response message consists of a mandatory `spiffe_id` field, which MUST contain the SPIFFE ID of the validated JWT-SVID. The `claims` field is optional.
 
 ### 6.3 JWT-SVID Validation
 
