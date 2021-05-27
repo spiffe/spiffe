@@ -71,7 +71,9 @@ The semantics of the SPIFFE bundle endpoint are similar to the `jwks_uri` mechan
 ### 4.1. Adding and Removing Keys
 Operators of a trust domain MAY introduce or remove keys used to issue SVIDs within the trust domain as needed (e.g. as part of an internal key rotation process). When adding new keys, an updated trust bundle containing the keys SHOULD be published at the bundle endpoint sufficiently in advance that foreign trust domains have an opportunity to retrieve and internally disseminate the new bundle contents; the recommended advance time is 3-5 times the bundle’s `spiffe_refresh_hint`. At a minimum, new keys MUST be published at the bundle endpoint prior to the keys being used to issue SVIDs. 
 
-Deprecated keys SHOULD be removed from the trust bundle after a trust domain no longer has any active, valid SVIDs issued from those keys. Failure to follow these recommendations as keys are added to and removed from the bundle could result in transient cross-domain authentication failures. Requirements for updating the trust bundle do not apply to keys used to issue SVIDs for internal use only.
+Deprecated keys SHOULD be removed from the trust bundle after a trust domain no longer has any active, valid SVIDs issued from those keys. Failure to follow these recommendations as keys are added to and removed from the bundle could result in transient cross-domain authentication failures.
+
+Requirements for updating the trust bundle do not apply to keys used to issue SVIDs for internal use only.
 
 Clients SHOULD periodically poll the endpoint for updates because the contents are expected to [change over time][4] - key validity periods on the order of weeks or even days is commonplace. Clients SHOULD poll at a frequency equal to the value of the bundle’s `spiffe_refresh_hint`, in seconds. If not set, a reasonably low default value should apply - five minutes is recommended.
 
@@ -245,7 +247,7 @@ Each SPIFFE Federation relationship is configured with the following parameters 
 
 It is important that these three parameters are configured explicitly, the values cannot be securely inferred from each other.
 
-For example, one might be tempted to infer the SPIFFE trust domain name from the host portion of the Endpoint URL. Inferring this as a default is dangerous because it could allow anyone who can get a file served from a particular DNS name to assert trust roots for the SPIFFE trust domain of the same name.
+For example, one might be tempted to infer the SPIFFE trust domain name from the host portion of the Endpoint URL. This is dangerous because it could allow anyone who can get a file served from a particular DNS name to assert trust roots for the SPIFFE trust domain of the same name.
 
 Imagine a web hosting company called MyPage (`mypage.example.com`), that allows a customer, Alice, to serve web content at URLs like `https://mypage.example.com/alice/<filename>`, and further, that MyPage operates an API secured by SPIFFE Federation with the SPIFFE trust domain name `mypage.example.com`.  Imagine Alice sets up SPIFFE Federation with Bob, who is also a customer of MyPage, and Alice chooses to serve her trust bundle from `https://mypage.example.com/alice/spiffe-bundle`.
 
