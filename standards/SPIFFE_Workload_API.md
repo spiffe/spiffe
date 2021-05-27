@@ -311,7 +311,7 @@ message ValidateJWTSVIDResponse {
     // Required. The SPIFFE ID of the validated JWT-SVID.
     string spiffe_id = 1;
 
-    // Optional. Arbitrary claims contained within the payload of the validated
+    // Required. Arbitrary claims contained within the payload of the validated
     // JWT-SVID.
     google.protobuf.Struct claims = 2;
 }
@@ -347,7 +347,7 @@ As mentioned in [Stream Responses](#42-stream-responses), each `JWTBundleRespons
 
 #### 6.2.3 ValidateJWTSVID
 
-The `ValidateJWTSVID` RPC validates JWT-SVIDs for a specific audience on behalf of a client.
+The `ValidateJWTSVID` RPC validates JWT-SVIDs for a specific audience on behalf of a client. Further, the server MUST parse and validate the JWT-SVID according to the rules outlined in the [JWT-SVID](JWT-SVID.md) specification. The claims embedded in the JWT-SVID payload MUST be provided in the `claims` field in the `ValidateJWTSVIDResponse`, however implementations MAY filter those claims before returning them to the client.
 
 All fields in the `ValidateJWTSVIDRequest` and `ValidateJWTSVIDResponse` message are mandatory.
 

@@ -146,7 +146,7 @@ message ValidateJWTSVIDResponse {
     // Required. The SPIFFE ID of the validated JWT-SVID.
     string spiffe_id = 1;
 
-    // Optional. Arbitrary claims contained within the payload of the validated
+    // Required. Arbitrary claims contained within the payload of the validated
     // JWT-SVID.
     google.protobuf.Struct claims = 2;
 }
