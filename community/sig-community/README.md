@@ -22,7 +22,7 @@ A Special Interest Group (SIG) concerning the nurture and growth of the SPIFFE c
   * Support inclusivity and diversity of the SPIFFE/SPIRE community
 
 ### Non-Goals:
-* Code of Conduct oversight (Please contact the [SPIFFE TSC](https://github.com/spiffe/spiffe#spiffe-tsc) for this purpose)
+* Code of Conduct oversight (Please contact the [SSC](https://github.com/spiffe/spiffe#spiffe-ssc) for this purpose)
 * SPIFFE/SPIRE roadmap, feature, or issue consideration
 
 ### Leads:

@@ -1,0 +1,64 @@
+# SSC Elections
+Welcome to the SSC elections. Here you will find information about how SSC elections are conducted, as well as past and current SSC elections.
+
+For information about a specific election, please see the relevant subdirectory.
+
+## SSC Election Process
+Each SSC election has a dedicated subdirectory and tracking issue in this repository. The tracking issue can be subscribed to by interested parties, and will be updated as the election progresses.
+
+All nominees are proposed via GitHub Pull Request, and each nominee gets a dedicated file in the relevant subdirectory (e.g. `2021H1` for the first election of 2021). A list of eligible participants, as well as detailed instructions on how to participate in the election process, are documented in the subdirectory's README.
+
+The rest of this section captures the exact steps necessary to begin and complete an SSC election. These steps are to be performed by an SSC member, or appointed party.
+
+### T-28 Days: Preparation
+1. Identify eligible participants
+	1. Eligible participants MUST have a public email address on their GitHub profile
+1. Open GitHub issue to track election
+	1. The title should be `YYYY [H1,H2] SSC Election`
+	1. Use the text in `ELECTION_ISSUE_TEMPLATE.md` as the issue body, filling in the details as needed
+1. Announce the start of a new election cycle
+	1. Slack #announcements channel
+	1. SIG mailing lists
+
+### T-21 Days: Nomination Opens
+1. Create the election directory (e.g. `ssc/elections/2021H1`)
+	1. Copy in `ELECTION_README_TEMPLATE.md`, renaming to `README.md`
+		1. Fill in details, as appropriate
+	1. Send a PR titled `Open Nominations for YYYY [H1,H2] SSC Election` to add the new directory and README
+	1. Once merged, comment on the tracking issue to announce that nominations are now open
+1. All nomination PRs are to be left OPEN during the nomination period
+	1. GH reactions and comments are welcome
+1. Announce the start of nominations
+	1. Slack #announcements channel
+	1. SIG mailing lists
+
+### T-14 Days: Nomination Closes
+1. Comment on tracking issue that nominations are now closed
+1. SSC members perform due diligence on all nominations
+	1. Each SSC member to take a portion of the nominations
+	1. SSC members to initiate nominee-specific private SSC discussion if concern about qualification arises
+	1. For every qualified nominee, SSC member performing due diligence to merge nomination PR
+
+### T-7 Days: Polling Opens
+1. One SSC member to volunteer as election supervisor
+	1. Election supervisor opens poll on [CIVS](https://civs.cs.cornell.edu/)
+1. Comment on tracking issue that polls are now open
+	1. All eligible participants should have received an email
+1. Announce that the polls are now open
+	1. Slack #announcements channel
+	1. SIG mailing lists
+
+### T-0 Days: Polling Closes and Results Announced
+1. Election supervisor closes [CIVS](https://civs.cs.cornell.edu/) poll
+1. Comment on tracking issue that polls are now closed
+1. Share full poll results privately with SSC
+	1. Check for signs of abuse
+1. Send a PR to add results to the election's README
+	1. Only the new seats are to be named in the results section
+1. Comment on tracking issue with the results
+	1. Link to PR
+	1. Tracking issue to be closed once PR is merged
+1. Announce results
+	1. Slack #announcements channel
+	1. SIG mailing lists
+
