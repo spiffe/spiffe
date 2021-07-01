@@ -46,10 +46,10 @@ The trust domain corresponds to the trust root of a system. A trust domain could
 Trust domain names are nominally self-registered, unlike public DNS there is no delegating authority that acts to assert and register a base domain name to an actual legal real-world entity, or assert that legal entity has fair and due rights to any particular trust domain name.
 
 The trust domain name is defined as the authority component of the URI with the following restrictions applied:
-* The `host` part of the authority MUST be set.
-* The `userinfo` and `port` parts of the authority component MUST NOT be set.
+* The `host` part of the authority MUST NOT be empty.
+* The `userinfo` and `port` parts of the authority component MUST be empty.
 * The `host` part of the authority MUST be lowercase.
-* The `host` part of the authority MUST contain only letters, numbers, dots, and dashes ([a-z1-9.-]).
+* The `host` part of the authority MUST contain only letters, numbers, dots, dashes, and underscores ([a-z0-9.-_]).
 * The `host` part of the authority MUST NOT contain percent-encoded characters.
 
 Please note that this definition does not exclude IPv4 addresses in dotted-quad notation, but does exclude IPv6 addresses. DNS names are a strict subset of valid trust domain names. Implementations MUST NOT process trust domain names differently whether or not they are valid IP addresses and/or valid DNS names.
@@ -64,12 +64,13 @@ When a collision does occur, those trust domains will continue to operate indepe
 
 
 ### 2.2. Path
-The path component of a SPIFFE ID allows for the unique identification of a given workload. The meaning behind the path is left open ended and is the responsibility of the administrator to define.
+The path component of a SPIFFE ID allows for the unique identification of a given workload. The meaning behind the path is left open-ended and is the responsibility of the administrator to define.
 
 Valid SPIFFE ID path components adhere to the following rules:
 * The path component MUST NOT include percent-encoded characters.
-* The path component MUST NOT include empty path segments or relative path modifiers (i.e. `//`, `/./`, or `/../`)
+* The path component MUST NOT include segments that are empty or are relative path modifiers (i.e. `.`, `..`)
 * The path component MUST NOT include a trailing `/`.
+* Individual path segments MUST contain only letters, numbers, dots, dashes, and underscores ([a-zA-Z0-9.-_]).
 
 Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of paths is reserved as an exercise to the implementer and are outside the SVID specification. Some examples and conventions are expressed below.
 
