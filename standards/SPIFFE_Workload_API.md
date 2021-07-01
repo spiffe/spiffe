@@ -347,7 +347,7 @@ As mentioned in [Stream Responses](#42-stream-responses), each `JWTBundleRespons
 
 #### 6.2.3 ValidateJWTSVID
 
-The `ValidateJWTSVID` RPC validates JWT-SVIDs for a specific audience on behalf of a client. Further, the server MUST parse and validate the JWT-SVID according to the rules outlined in the [JWT-SVID](JWT-SVID.md) specification. The claims embedded in the JWT-SVID payload MUST be provided in the `claims` field in the `ValidateJWTSVIDResponse`, however implementations MAY filter those claims before returning them to the client.
+The `ValidateJWTSVID` RPC validates JWT-SVIDs for a specific audience on behalf of a client. Further, the server MUST parse and validate the JWT-SVID according to the rules outlined in the [JWT-SVID](JWT-SVID.md) specification. The claims embedded in the JWT-SVID payload SHOULD be provided in the `claims` field in the `ValidateJWTSVIDResponse`; the claims defined by this specification above are required, however implementations MAY filter non-SPIFFE claims before returning them to the client. SPIFFE claims are required for interoperability.
 
 All fields in the `ValidateJWTSVIDRequest` and `ValidateJWTSVIDResponse` message are mandatory.
 
