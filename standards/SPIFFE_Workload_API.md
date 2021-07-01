@@ -159,11 +159,11 @@ message X509SVID {
     // Required. ASN.1 DER encoded X.509 bundle for the trust domain.
     bytes bundle = 4;
 
-    // Optional. Arbitrary string usually used to provide guidance on how this
+    // Optional. An operator-specified string used to provide guidance on how this
     // identity should be used by a workload when more than one SVID is returned.
-    // As an interoperability consideration, SPIFFE implementations SHOULD support
-    // labels up to a maximum of 2048 bytes in length.
-    string label = 5;
+    // For example, `internal` and `external` to indicate an SVID for internal or
+    // external use, respectively.
+    string hint = 5;
 }
 
 // The X509BundlesRequest message conveys parameters for requesting X.509
@@ -194,6 +194,8 @@ The `X509SVIDRequest` request message is currently empty and is a placeholder fo
 
 The `X509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client). The `crl` and `federated_bundles` fields are optional. 
 
+All fields in the `X509SVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set, its value MUST be unique amongst the set of returned SVIDs in the `X509SVIDResponse` message.
+
 If the client is not entitled to receive any X509-SVIDs, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). Under such a case, the client MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
 
 As mentioned in [Stream Responses](#42-stream-responses), each `X509SVIDResponse` message returned on the `FetchX509SVID` stream contains the complete set of authorized SVIDs and bundles for the client at that point in time. As such, if the server redacts SVIDs from a subsequent response (or all SVIDs, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted SVIDS.
@@ -216,7 +218,7 @@ It is often the case that a workload doesn’t know what identity it should assu
 
 In order to support the widest variety of use cases, the X.509-SVID Profile supports the issuance of multiple identities, while also defining a default identity. It is expected that workloads which are aware of multiple identities can handle decision making on their own. Workloads which don’t understand how to leverage multiple identities may use the default identity. The default identity is the first in the `svids` list returned in the `X509SVIDResponse` message. Protocol buffers ensure that the order of the list is preserved.
 
-As a workload can receive either X.509-SVID or JWT-SVID identities, and multiple identities of either type, the optional `label` field can be used by SPIFFE implementations to deliver guidance to workloads on how a given identity should be used. The SPIFFE specifications do not define the contents of the `label` field.
+Workloads that understand how to use multiple identities may leverage the optional `hint` field, which can be used to disambiguate identities and inform the workload of which identity should be used for what purpose. For example, `internal` and `external` to denote an SVID for internal or external use, respectively. SPIFFE Workload API implementations SHOULD NOT support values of more than 1024 bytes in length. The exact value of the `hint` field is an operator choice and is otherwise unconstrained by this specification.
 
 ## 6. JWT-SVID Profile
 
@@ -272,11 +274,11 @@ message JWTSVID {
     // Required. Encoded JWT using JWS Compact Serialization.
     string svid = 2;
 
-    // Optional. Arbitrary string usually used to provide guidance on how this
+    // Optional. An operator-specified string used to provide guidance on how this
     // identity should be used by a workload when more than one SVID is returned.
-    // As an interoperability consideration, SPIFFE implementations SHOULD support
-    // labels up to a maximum of 2048 bytes in length.
-    string label = 3;
+    // For example, `internal` and `external` to denote an SVID for internal or
+    // external use, respectively.
+    string hint = 3;
 }
 
 // The JWTBundlesRequest message conveys parameters for requesting JWT bundles.
@@ -323,6 +325,8 @@ The `FetchJWTSVID` RPC allows clients to request one or more short-lived JWT-SVI
 The `JWTSVIDRequest` request message contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the client. 
 
 The `JWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
+
+All fields in the `JWTSVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set, its value MUST be unique amongst the set of returned SVIDs in the `JWTSVIDResponse` message.
 
 If the client is not authorized for any identities, or not authorized for the specific identity requested via the `spiffe_id` field, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information).
 
