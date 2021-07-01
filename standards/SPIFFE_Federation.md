@@ -309,15 +309,15 @@ Finally, it should be noted that the "links" in this chain are formed by individ
 
 ### 7.7 Processing claims asserted by foreign trust domains
 
-SPIFFE Federation allows workloads in one trust domain to authenticate SVIDs, and all the claims therein, issued by other trust domains.  By an "authentic" claim, we mean specifically that it can be safely assumed that the foreign trust domain authority _asserted_ the claim.  This is not the same thing as saying that the claim is _true_, or that it is _correctly interpreted_.
+SPIFFE Federation allows workloads in one trust domain to authenticate SVIDs, and all the claims therein, issued by other trust domains. By an "authentic" claim, we mean specifically that it can be safely assumed that the foreign trust domain authority _asserted_ the claim. This is not the same thing as saying that the claim is _true_, or that it is _correctly interpreted_.
 
-Operators should use caution and good judgement in evaluating if and how they should process claims asserted in SVIDs from foreign trust domains.
+Operators should use caution and good judgement in evaluating if and how they should process claims asserted in SVIDs from foreign trust domains. The recommended posture is not to process foreign claims that have not been evaluated accoring to the framework described here (i.e. default deny), then assert exceptions for specific claims from specific trust domains to be allowed if they pass muster.
 
 It bears repeating that implementations should never process any claims from SVIDs that fail authentication (except in a forensic context).
 
 #### 7.7.1 SVID Claims
 
-For the purpose of this discussion, a *claim* is an assertion about some attribute the subject of an SVID, or about the SVID itself.  The canonical SPIFFE claim is the SPIFFE ID, which is a claim about the subject of the SVID.  An example of a claim about the SVID itself is the expiration time.
+For the purpose of this discussion, a *claim* is an assertion about some attribute of the subject of an SVID, or about the SVID itself. The canonical SPIFFE claim is the SPIFFE ID, which is a claim about the subject of the SVID. An example of a claim about the SVID itself is the expiration time.
 
 SVID formats (to date including X.509 and JWT) afford flexibility to encode additional claims, including claims that have not been evaluated by any standards body.
 
@@ -331,13 +331,13 @@ Claims in the first category are well-defined in their meaning, and in many case
 
 Claims in the second category have standardized meaning, but operators have some choice whether to and how to process them.
 
-Claims in the third category are not standarized, so operators need to consider them on a case-by-case basis, possibly including navigating different meanings by different trust domains.  Needless to say, this category should be approached with the highest degree of caution.
+Claims in the third category are not standarized, so operators need to consider them on a case-by-case basis, possibly including navigating different meanings by different trust domains. Needless to say, this category should be approached with the highest degree of caution.
 
 #### 7.7.2 Claim scope
 
-Some claims, like the SPIFFE ID are _explicitly_ scoped to a trust domain by their structure. Because SVIDs are always issued by a particular trust domain authority, _all_ the claims therein are _implicitly_ scoped to that trust domain.  This scoping should be preserved when presenting claims to any decision-making process.
+Some claims, like the SPIFFE ID are _explicitly_ scoped to a trust domain by their structure. Because SVIDs are always issued by a particular trust domain authority, _all_ the claims therein are _implicitly_ scoped to that trust domain. This scoping should be preserved when presenting claims to any decision-making process.
 
-As a hypothetical example, consider a claim about the version number of the control plane software that generated the SVID.  Different trust domain control planes might use entirely different software packages, and as such the version numbers are not directly comparable in an unscoped context.
+As a hypothetical example, consider a claim about the version number of the control plane software that generated the SVID. Different trust domain control planes might use entirely different software packages, and as such the version numbers are not directly comparable in an unscoped context.
 
 
 #### 7.7.3 Interpretation of claims
@@ -346,13 +346,13 @@ If claims are to be processed in making a security decision (such as whether to 
 
 In considering the categories of claims noted in [Section 7.7.1](#771-svid-claims), these should be treated with an increasing level of scrutiny around interpretation.
 
-Also consider exactly who is operating the trust domain making the claim.  Trust domain operators may be able to agree on the meaning of a particular claim.  For example, if an organization operates multiple trust domains for administrative reasons, it may be straightforward to agree on an interpretation of claims within that organization (even if the claims are not publically standardized).  The operator should, however, limit processing of that claim only to the trust domains with which the meaning has been agreed.
+Also consider exactly who is operating the trust domain making the claim. Trust domain operators may be able to agree on the meaning of a particular claim. For example, if an organization operates multiple trust domains for administrative reasons, it may be straightforward to agree on an interpretation of claims within that organization (even if the claims are not publically standardized). The operator should, however, limit processing of that claim only to the trust domains with which the meaning has been agreed.
 
 #### 7.7.4 Veracity of claims
 
-Just because a trust domain authority asserts a claim does not gaurantee the claim is true.  When choosing whether to accept particular claims from particular trust domains, operators may wish to conduct audits, ask for evidence, or otherwise investigate the processes by which the trust domain makes the claim.
+Just because a trust domain authority asserts a claim does not guarantee the claim is true. When choosing whether to accept particular claims from particular trust domains, operators may wish to conduct audits, ask for evidence, or otherwise investigate the processes by which the trust domain makes the claim.
 
-Imagine a hypothetical claim involving whether the peer workload is in a PCI-compliant (Payment Card Industry security specification, a standard for processing credit card data) environment.  If we are going to share credit card data with workloads that are PCI-compliant, we might ask to see evidence of a 3rd party PCI audit and ask how the trust domain authority determines which workloads to issue the claim to. 
+Imagine a hypothetical claim involving whether the peer workload is in a PCI-compliant (Payment Card Industry security specification, a standard for processing credit card data) environment. If we are going to share credit card data with workloads that are PCI-compliant, we might ask to see evidence of a 3rd party PCI audit and ask how the trust domain authority determines which workloads to issue the claim to. 
 
 If we determine we cannot trust core SPIFFE claims, like the SPIFFE ID, from a particular trust domain, it makes little sense to allow federation at all.  Non-required claims can be filtered by control planes and/or workloads if they are not trusted.
 
