@@ -155,7 +155,7 @@ For example, the URL `https://host.example.com/trust_domain` is a valid SPIFFE b
 
 ##### 5.2.2.2. Endpoint Parameters
 Bundle endpoint clients using the `https_spiffe` profile MUST be configured with the SPIFFE ID of the bundle endpoint server as well as a secure method for obtaining the trust bundle of the endpoint server's trust domain. A **self-serving bundle** endpoint is one in which the bundle endpoint server’s SPIFFE ID resides in the same trust domain as the bundle being fetched. Configured bundle endpoints may or may not be self-serving.
-* If the endpoint is self-serving, clients need to be configured with a single up-to-date bundle in order to bootstrap the federation relationship.  Clients rely on this configured bundle for the first retrieval, but then store the retrieved bundle to validate later connections. See [Consuming a Bundle Endpoint](#5224-consuming-a-bundle-endpoint) below for more information. 
+* If the endpoint is self-serving, clients need to be configured with a single up-to-date bundle in order to bootstrap the federation relationship.  Clients MUST support specifying the bundle in [SPIFFE Bundle Format][12] and MAY support other formats (e.g. PEM) provided they provide the necessary root certificate(s) to validate the connection.  Clients rely on this configured bundle for the first retrieval, but then store the retrieved bundle to validate later connections. See [Consuming a Bundle Endpoint](#5224-consuming-a-bundle-endpoint) below for more information.
 * If the endpoint is not self-serving, clients MUST be separately configured for the endpoint server’s trust domain.  The endpoint server's trust domain and bundle may be configured in any of the following ways:
   * Endpoint parameters for the trust domain, which configures clients to fetch the bundle using the endpoint profiles as described in this document.  Note that clients MAY use any available profile and are not restricted to `https_spiffe`.
   * A process, automatic or static, to fetch or otherwise configure the bundle, that is not defined by and outside the scope of this document. Please see the [Security Considerations](#7-security-considerations) section for guidance in securing this approach.
@@ -318,3 +318,4 @@ Finally, it should be noted that the "links" in this chain are formed by individ
 [9]: https://github.com/spiffe/spiffe/blob/master/standards/X509-SVID.md#5-validation
 [10]: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Workload_API.md
 [11]: https://tools.ietf.org/html/rfc6125
+[12]: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Trust_Domain_and_Bundle.md#4-spiffe-bundle-format
