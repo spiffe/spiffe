@@ -20,9 +20,9 @@ This document describes the semantics of SPIFFE trust domains, how they are repr
 4.2. [JWK](#42-jwk)  
 4.2.1. [Key Type](#421-key-type)  
 4.2.2. [Public Key Use](#422-public-key-use)  
-5\. [Security Considerations](#6-security-considerations)  
-5.1. [SPIFFE Bundle Refresh Hint](#62-spiffe-bundle-refresh-hint)  
-5.2. [Reusing Cryptographic Keys Across Trust Domains](#64-reusing-cryptographic-keys-across-trust-domains)  
+5\. [Security Considerations](#5-security-considerations)
+5.1. [SPIFFE Bundle Refresh Hint](#51-spiffe-bundle-refresh-hint)
+5.2. [Reusing Cryptographic Keys Across Trust Domains](#52-reusing-cryptographic-keys-across-trust-domains)
 Appendix A. [SPIFFE Bundle Example](#appendix-a-spiffe-bundle-example)  
 
 ## 1. Introduction
@@ -35,7 +35,7 @@ A SPIFFE trust domain is an identity namespace which is backed by an issuing aut
 
 Trust domains have a 1:N relationship with the keys that back them. A single trust domain may be represented by multiple keys and key types. For example, the former may be leveraged during root rotation, while the latter is necessary in avoiding multi-protocol attacks should more than one SVID type be in use.
 
-It should be noted that while it is possible to share cryptographic keys amongst many trust domains, we strongly advise that each authoritative key be used in a single trust domain. Key reuse can degrade trust domain isolation (e.g. between staging and production) and introduces additional security challenges (e.g. requiring a name constraint system for secondary issuers). Please see the [Security Considerations](#6-security-considerations) section for more information on this topic.
+It should be noted that while it is possible to share cryptographic keys amongst many trust domains, we strongly advise that each authoritative key be used in a single trust domain. Key reuse can degrade trust domain isolation (e.g. between staging and production) and introduces additional security challenges (e.g. requiring a name constraint system for secondary issuers). Please see the [Security Considerations](#5-security-considerations) section for more information on this topic.
 
 For more information about how a trust domain namespace is represented, please see [Section 2][1] of the SPIFFE ID specification.
 
