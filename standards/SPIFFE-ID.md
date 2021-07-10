@@ -45,7 +45,21 @@ The trust domain corresponds to the trust root of a system. A trust domain could
 
 Trust domain names are nominally self-registered, unlike public DNS there is no delegating authority that acts to assert and register a base domain name to an actual legal real-world entity, or assert that legal entity has fair and due rights to any particular trust domain name.
 
-The trust domain name is defined as the authority component of the URI - specifically, the `host` part of the authority. The `userinfo` and `port` parts of the authority component MUST NOT be set, and the `:` delimiter MUST NOT be present. Please see section 3.2 of [RFC 3986](https://tools.ietf.org/html/rfc3986) for more information.
+The trust domain name is defined as the authority component of the URI with the following restrictions applied:
+
+  * The `userinfo` and `port` parts of the authority component MUST NOT be set.
+  * The `host` part of the authority MUST be set to a non-zero-length string.
+  * The `host` part of the authority MUST be a registered name as defined by [section 3.2.2 of RFC 3986](https://tools.ietf.org/html/rfc3986#section-3.2.2).
+
+A registered name is defined as 
+
+```
+reg-name    = *( unreserved / pct-encoded / sub-delims )
+```
+
+where the character classes `unreserved`, `pct-encoded` and `sub-delims` are as defined in [RFC 3986](https://tools.ietf.org/html/rfc3986), and thus this defines the set of acceptable characters for the trust domain name component of the SPIFFE ID.
+
+Please note that this definition does not exclude IPv4 addresses in dotted-quad notation, but does exclude IPv6 addresses. DNS names are a strict subset of valid trust domain names. Implementations MUST NOT process trust domain names differently whether or not they are valid IP addresses and/or valid DNS names.
 
 #### 2.1.1. Trust Domain Name Collisions
 
