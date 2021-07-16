@@ -194,7 +194,7 @@ The `X509SVIDRequest` request message is currently empty and is a placeholder fo
 
 The `X509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client). The `crl` and `federated_bundles` fields are optional. 
 
-All fields in the `X509SVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set, its value MUST be unique amongst the set of returned SVIDs in the `X509SVIDResponse` message.
+All fields in the `X509SVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Workload API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `X509SVIDResponse` message. In the event that a SPIFFE Workload API client encounters more than one `X509SVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
 
 If the client is not entitled to receive any X509-SVIDs, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). Under such a case, the client MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
 
@@ -328,7 +328,7 @@ The `JWTSVIDRequest` request message contains a mandatory `audience` field, whic
 
 The `JWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
 
-All fields in the `JWTSVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set, its value MUST be unique amongst the set of returned SVIDs in the `JWTSVIDResponse` message.
+All fields in the `JWTSVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Workload API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `JWTSVIDResponse` message. In the event that a SPIFFE Workload API client encounters more than one `JWTSVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
 
 If the client is not authorized for any identities, or not authorized for the specific identity requested via the `spiffe_id` field, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information).
 
