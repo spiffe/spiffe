@@ -220,6 +220,8 @@ In order to support the widest variety of use cases, the X.509-SVID Profile supp
 
 Workloads that understand how to use multiple identities may leverage the optional `hint` field, which can be used to disambiguate identities and inform the workload of which identity should be used for what purpose. For example, `internal` and `external` to denote an SVID for internal or external use, respectively. SPIFFE Workload API implementations SHOULD NOT support values of more than 1024 bytes in length. The exact value of the `hint` field is an operator choice and is otherwise unconstrained by this specification.
 
+It is the workload's responsibility to handle the absence of an expected hint, or the presence of an unexpected one (e.g. fail, warn, etc).
+
 ## 6. JWT-SVID Profile
 
 The JWT-SVID Profile of the SPIFFE Workload API provides a set of gRPC methods which can be used by workloads to retrieve JWT-SVIDs and their related trust bundles. This profile outlines the signature of these methods, as well as related client and server behavior.
