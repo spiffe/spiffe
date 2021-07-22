@@ -20,6 +20,5 @@ A Special Interest Group (SIG) concerning SPIRE, the official SPIFFE implementat
 * Day to day SPIRE maintenance
 * Troubleshooting
 
-### Leads:
-* Andres Vega ([GitHub](https://github.com/anvega) / [LinkedIn](https://www.linkedin.com/in/avegaarias))
+### Lead:
 * Daniel Feldman ([GitHub](https://github.com/dfeldman) / [LinkedIn](https://www.linkedin.com/in/dfeldman/))

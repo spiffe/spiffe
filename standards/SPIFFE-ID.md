@@ -38,14 +38,21 @@ In order to communicate an identity, we must first define an identity namespace.
 
 ```spiffe://trust-domain-name/path```
 
-Valid SPIFFE IDs MUST use the `spiffe` scheme, include a non-zero trust domain name, and MUST NOT include a query or fragment component. In other words, a SPIFFE ID is defined in its entirety by the `spiffe` scheme and a site-specific `hier-part` which includes an authority component and an optional path.
+Valid SPIFFE IDs MUST have the scheme set to `spiffe`, include a non-zero trust domain name, and MUST NOT include a query or fragment component. In other words, a SPIFFE ID is defined in its entirety by the `spiffe` scheme and a site-specific `hier-part` which includes an authority component and an optional path.
 
 ### 2.1. Trust Domain
 The trust domain corresponds to the trust root of a system. A trust domain could represent an individual, organization, environment or department running their own independent SPIFFE infrastructure.
 
 Trust domain names are nominally self-registered, unlike public DNS there is no delegating authority that acts to assert and register a base domain name to an actual legal real-world entity, or assert that legal entity has fair and due rights to any particular trust domain name.
 
-The trust domain name is defined as the authority component of the URI - specifically, the `host` part of the authority. The `userinfo` and `port` parts of the authority component MUST NOT be set, and the `:` delimiter MUST NOT be present. Please see section 3.2 of [RFC 3986](https://tools.ietf.org/html/rfc3986) for more information.
+The trust domain name is defined as the authority component of the URI with the following restrictions applied:
+* The `host` part of the authority MUST NOT be empty.
+* The `userinfo` and `port` parts of the authority component MUST be empty.
+* The `host` part of the authority MUST be lowercase.
+* The `host` part of the authority MUST contain only letters, numbers, dots, dashes, and underscores ([a-z0-9.-_]).
+* The `host` part of the authority MUST NOT contain percent-encoded characters.
+
+Please note that this definition does not exclude IPv4 addresses in dotted-quad notation, but does exclude IPv6 addresses. DNS names are a strict subset of valid trust domain names. Implementations MUST NOT process trust domain names differently whether or not they are valid IP addresses and/or valid DNS names.
 
 #### 2.1.1. Trust Domain Name Collisions
 
@@ -57,9 +64,15 @@ When a collision does occur, those trust domains will continue to operate indepe
 
 
 ### 2.2. Path
-The path component of a SPIFFE ID allows for the unique identification of a given workload. The meaning behind the path is left open ended and the responsibility of the administrator to define.
+The path component of a SPIFFE ID allows for the unique identification of a given workload. The meaning behind the path is left open-ended and is the responsibility of the administrator to define.
 
-Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of paths is reserved as an exercise to the implementer and are outside the SVID specification. However, to reduce ambiguity, paths SHOULD NOT end with a trailing `/`. Some examples and conventions are expressed below.
+Valid SPIFFE ID path components adhere to the following rules:
+* The path component MUST NOT include percent-encoded characters.
+* The path component MUST NOT include segments that are empty or are relative path modifiers (i.e. `.`, `..`)
+* The path component MUST NOT include a trailing `/`.
+* Individual path segments MUST contain only letters, numbers, dots, dashes, and underscores ([a-zA-Z0-9.-_]).
+
+Paths MAY be hierarchical - similar to filesystem paths. The specific meaning of paths is reserved as an exercise to the implementer and are outside the SVID specification. Some examples and conventions are expressed below.
 
 * Identifying services directly
 
