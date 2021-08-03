@@ -24,7 +24,10 @@ This document defines a standard in which an X.509 certificate is used as an SVI
 5\. [Validation](#5-validation)  
 5.1. [Path Validation](#51-path-validation)  
 5.2. [Leaf Validation](#52-leaf-validation)  
-6\. [Conclusion](#6-conclusion)  
+6\. [Representation in the SPIFFE Bundle](#6-representation-in-the-spiffe-bundle)  
+6.1. [Publishing SPIFFE Bundle Elements](#61-publishing-spiffe-bundle-elements)  
+6.2. [Consuming a SPIFFE Bundle](#62-consuming-a-spiffe-bundle)  
+7\. [Conclusion](#7-conclusion)  
 Appendix A. [X.509 Field Reference](#appendix-a-x509-field-reference)  
 
 ## 1. Introduction
@@ -41,14 +44,14 @@ An X.509 SVID MAY contain any number of other SAN field types, including DNS SAN
 This section discusses the relationship between leaf, root, and intermediate certificates, as well as the requirements placed upon each.
 
 ### 3.1. Leaf Certificates
-A leaf certificate is an SVID which serves to identify a caller or resource. They are signed by the signing authority of the trust domain in which they reside, and are suitable for use in authentication processes. A leaf certificate (as opposed to a signing certificate, [section 3.2](#3.2.-signing-certificates)) is the only type which may serve to identify a resource or caller.
+A leaf certificate is an SVID which serves to identify a caller or resource and are suitable for use in authentication processes. A leaf certificate (as opposed to a signing certificate, [section 3.2](#3.2.-signing-certificates)) is the only type which may serve to identify a resource or caller.
 
-Leaf certificate SPIFFE IDs MUST have a non-root path component. See [section 4.1](#4.1.-basic-constraints) for information on X.509-specific properties which distinguish a leaf certificate from a signing certificate.
+Leaf certificate SPIFFE IDs MUST have a non-root path component. The Subject field is not required, however the URI SAN extension MUST be marked as critical if Subject is omitted, per section 4.1.2.6 of [RFC 5280][1]. See [section 4.1](#4.1.-basic-constraints) for information on X.509-specific properties which distinguish a leaf certificate from a signing certificate.
 
 ### 3.2. Signing Certificates
 An X.509 SVID signing certificate is one which has set `keyCertSign` in the key usage extension. It additionally has the `CA` flag set to `true` in the basic constraints extension (see [section 4.1](#4.1.-basic-constraints)). That is to say, it is a CA certificate.
 
-A signing certificate is itself an SVID. The SPIFFE ID of a signing certificate MUST NOT have a path component, and MUST reside in the trust domain of any leaf SVIDs it issues. A signing certificate MAY be used to issue further signing certificates in the same or different trust domains.
+A signing certificate SHOULD itself be an SVID. If present, the SPIFFE ID of a signing certificate MUST NOT have a path component, and MAY reside in the trust domain of any leaf SVIDs it issues. A signing certificate MAY be used to issue further signing certificates in the same or different trust domains.
 
 Signing certificates MUST NOT be used for authentication purposes. They serve as validation material only, and may be chained together in typical X.509 fashion, as described in [RFC 5280][1]. Please see [section 4.3](#4.3.-key-usage) and [section 4.4](#4.4-extended-key-usage) for further information regarding X.509-specific restrictions on signing certificates.
 
@@ -58,7 +61,7 @@ Leaf and signing certificates carry different X.509 properties - some for securi
 ### 4.1. Basic Constraints
 The basic constraints X.509 extension identifies whether the certificate is a signing certificate, as well as the maximum depth of valid certification paths that include this certificate. It is defined in [RFC 5280, section 4.2.1.9][3].
 
-Valid X.509 SVIDs (both leaf and signing certificates) MAY set the `pathLenConstraint` field. Signing certificates MUST set the `CA` field to `true`, and leaf certificates MUST set the `CA` field to `false`.
+Valid X.509 SVID signing certificates MAY set the `pathLenConstraint` field. Signing certificates MUST set the `cA` field to `true`, and leaf certificates MUST set the `cA` field to `false`.
 
 ### 4.2. Name Constraints
 Name constraints indicate a namespace within which all SPIFFE IDs in subsequent certificates in a certification path MUST be located. They are used to limit the blast radius of a compromised signing certificate to the named trust domain(s), and are defined in [RFC 5280, section 4.2.1.10][4]. This section applies to signing certificates only.
@@ -89,16 +92,33 @@ This section describes how an X.509 SVID is validated. The procedure uses standa
 ### 5.1. Path Validation
 The validation of trust in a given SVID is based on standard X.509 path validation, and MUST follow [RFC 5280][1] path validation semantics.
 
-Certificate path validation requires the leaf SVID certificate and one or more SVID signing certificates. The set of signing certificates required for validation is known as the CA bundle. The mechanism through which an entity can retrieve the relevant CA bundle(s) is out of scope for this document, and is instead defined in the SPIFFE Workload API specification.
+Certificate path validation requires the leaf SVID certificate and one or more SVID signing certificates. The set of signing certificates required for validation is known as the CA bundle. The mechanism through which an entity can retrieve the relevant CA bundle(s) is out of scope for this document, and is instead defined in the [SPIFFE Workload API](SPIFFE_Workload_API.md) specification.
 
 ### 5.2. Leaf Validation
 When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
 
 When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`. SVIDs containing more than one SPIFFE ID MUST be rejected.
 
-As support for URI name constraints becomes more widespread, future versions this document may update the requirements set forth in this section in order to better leverage name constraint validation.
+As support for URI name constraints becomes more widespread, future versions of this document may update the requirements set forth in this section in order to better leverage name constraint validation.
 
-## 6. Conclusion
+## 6. Representation in the SPIFFE Bundle
+This section describes how X509-SVID CA certificates are published to and consumed from a SPIFFE bundle. Please see the [SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md) specification for more information about SPIFFE bundles.
+
+### 6.1. Publishing SPIFFE Bundle Elements
+X509-SVID CA certificates for a given trust domain are represented in the SPIFFE bundle as [RFC 7517-compliant][7] JWK entries, one entry per CA certificate.
+
+The `use` parameter of each JWK entry MUST be set to `x509-svid`. Additionally, the `kid` parameter of each JWK entry MUST NOT be set.
+
+In addition to the parameters required by [RFC 7517][7], each entry representing an X509-SVID CA certificate MUST contain the `x5c` parameter with a value equal to the base64 encoded DER CA certificate that the entry represents. The value MUST include exactly one CA certificate, and the certificate SHOULD be self-signed.
+
+### 6.2. Consuming a SPIFFE Bundle
+When consuming a SPIFFE bundle from a foreign trust domain, it is necessary to extract the X509-SVID CA certificates for practical use. SPIFFE bundles may contain entries for many different SVID types, so the first step is to identify the entries which represent X509-SVID CA certificates.
+
+For every JWK entry in the bundle with the `use` parameter set to `x509-svid`, check that the `x5c` parameter is set and has at least one value. If `x5c` is not set, or is empty, then the entry MUST be ignored.
+
+The first value of the `x5c` parameter is the base64 DER-encoded CA certificate that the entry represents. If the `x5c` parameter contains multiple values, then all but the first MUST be ignored. The X509-SVID CA bundle is then the union of CA certificates extracted from the `x509-svid` JWK entries. If no `x509-svid` JWK entries are present in the bundle, then the trust domain does not support X509-SVID.
+
+## 7. Conclusion
 This document set forth conventions and standards for the issuance and validation of X.509-based SPIFFE Verifiable Identity Documents. It forms the basis for real world SPIFFE service authentication and SVID validation. By conforming to the X.509 SVID standard, it is possible to build an identity and authentication system which is interoperable and platform agnostic.
 
 ## Appendix A. X.509 Field Reference
@@ -122,3 +142,4 @@ Extended Key Usage | id-kp-clientAuth | This field may be set for either leaf or
 [4]: https://tools.ietf.org/html/rfc5280#section-4.2.1.10
 [5]: https://tools.ietf.org/html/rfc5280#section-4.2.1.3
 [6]: https://tools.ietf.org/html/rfc5280#section-4.2.1.2
+[7]: https://tools.ietf.org/html/rfc7517
