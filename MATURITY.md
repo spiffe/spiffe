@@ -5,7 +5,7 @@ This document provides detailed information about the maturity phases of the var
 
 The SPIFFE project maintains three phases of maturity which indicate the level of reliability and scale at which a particular project or sub-project is known to support:
 - **Development**: The software is still under active development, and many efforts are exploratory. APIs and interfaces may change rapidly and without warning. Use this software for development and proof of concept purposes, but stability and longevity is not guaranteed.
-- **Pre-Production**: The software is relatively stable and being used to solve real problems. APIs and interfaces may change, but effort will be made to consider comptability. Use this software for integration investigation and technology evaluation. Some early adopters may choose to run this software in production, however it is not recommended. Deprecation of this software is unlikely.
+- **Pre-Production**: The software is relatively stable and being used to solve real problems. APIs and interfaces may change, but effort will be made to consider compatibility. Use this software for integration investigation and technology evaluation. Some early adopters may choose to run this software in production, however it is not recommended. Deprecation of this software is unlikely.
 - **Production**: The software is stable and being used in production at scale. APIs and interfaces have compatibility guarantees. Use of this software is safe for mission critical purposes. Deprecation of this software will be performed on a years-long time scale.
 - **Deprecated**: The software is no longer maintained, and may or may not continue to fill its intended purpose. While API stability is assumed due to lack of development, compatibility with other components is not guaranteed and likely to break in due time. Use of this software is not recommended.
 
@@ -48,7 +48,7 @@ Characteristics of software in the **Pre-Production** phase:
 - Software has been fully documented and includes:
   - A clear indication that it is in the **Pre-Production** phase
   - Supported versions of relevant components (e.g. supported SPIRE versions, etc)
-  - Kown limitations
+  - Known limitations
   - Basic troubleshooting
   - API documentation
 
@@ -69,8 +69,8 @@ Characteristics of software in the **Production** phase:
 - A security policy and response process is clearly defined and includes:
   - Acknowledgement time of less than seven days
 - ADOPTERS.md file is present
-- Software documentaiton is complete and includes:
-  - A clear indication that it is in the **Production**
+- Software documentation is complete and includes:
+  - A clear indication that it is in the **Production** phase
   - Working examples exercised by automated test suites
   - Known bugs
   - Comprehensive troubleshooting guide(s)
@@ -85,6 +85,7 @@ Software in the **Deprecated** phase is no longer actively developed. Emergency 
 ### Characteristics
 Characteristics of software in the **Deprecated** phase:
 
+- A clear indication in the documentation that it is in the **Deprecated** phase
 - Apache 2 licensed
 - Zero velocity
 - Not tested or exercised in any official capacity
