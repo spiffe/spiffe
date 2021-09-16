@@ -97,7 +97,7 @@ Certificate path validation requires the leaf SVID certificate and one or more S
 ### 5.2. Leaf Validation
 When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
 
-When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`. SVIDs containing more than one SPIFFE ID MUST be rejected.
+When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`. SVIDs containing more than one URI SAN MUST be rejected.
 
 As support for URI name constraints becomes more widespread, future versions of this document may update the requirements set forth in this section in order to better leverage name constraint validation.
 
