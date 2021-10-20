@@ -1,4 +1,4 @@
-![SPIFFE Logo](https://github.com/spiffe/spiffe/blob/master/community/logo/256x1024.png?raw=true)
+![SPIFFE Logo](https://github.com/spiffe/spiffe/blob/main/community/logo/256x1024.png?raw=true)
 
 
 The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
@@ -35,12 +35,13 @@ SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CN
 * [The SPIFFE Trust Domain and Bundle](standards/SPIFFE_Trust_Domain_and_Bundle.md)
 * [The SPIFFE Workload Endpoint](standards/SPIFFE_Workload_Endpoint.md)
 * [The SPIFFE Workload API](standards/SPIFFE_Workload_API.md)
+* [SPIFFE Federation](standards/SPIFFE_Federation.md)
 
 ## Getting Started
 
 * [spiffe](https://github.com/spiffe/spiffe): This repository includes the SPIFFE ID, SVID and Workload API specifications, example code, and tests, as well as project governance, policies, and processes.    
 * [spire](https://github.com/spiffe/spire): This is a reference implementation of SPIFFE and the SPIFFE Workload API that can be run on and across varying hosting environments.
-* [go-spiffe](https://github.com/spiffe/go-spiffe/tree/master/v2): Golang client libraries.
+* [go-spiffe](https://github.com/spiffe/go-spiffe/tree/main/v2): Golang client libraries.
 * [java-spiffe](https://github.com/spiffe/java-spiffe): Java client libraries
 
 ### Communications
@@ -63,7 +64,7 @@ Most community activity is organized into Special Interest Groups (SIGs), time-b
 |:------:|:-------:|:-------:|:---------------:|:----------:|
 | [SIG-Community](/community/sig-community/README.md) | [Umair Khan](https://github.com/umairmkhan) (HPE) | [Here](https://groups.google.com/a/spiffe.io/g/sig-community) | [Here](https://spiffe.slack.com/messages/community) | [Notes](https://docs.google.com/document/d/1tb3lxubwr8IKRd6Smnl83ur14xkOQdjwQqla9OHjwZo) |
 | [SIG-Spec](/community/sig-spec/README.md) | [Evan Gilman](https://github.com/evan2645) (VMware) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-specification) | [Here](https://spiffe.slack.com/messages/sig-spec) | [Notes](https://docs.google.com/document/d/1p2BbRWN_7z6nkBMj-h1mAJAJxxKqNeFiV4IplZ_wU4c) |
-| [SIG-SPIRE](/community/sig-spire/README.md) | [Andres Vega](https://github.com/anvega) (VMware) &#124; [Daniel Feldman](https://github.com/dfeldman) (HPE) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-spire) | [Here](https://spiffe.slack.com/messages/spire) | [Notes](https://docs.google.com/document/d/1IgpCkvSRSoY9Xd16gFQJJ1KP8sLZ7EE39cEjBK_UIg4) |
+| [SIG-SPIRE](/community/sig-spire/README.md) | [Daniel Feldman](https://github.com/dfeldman) (HPE) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-spire) | [Here](https://spiffe.slack.com/messages/spire) | [Notes](https://docs.google.com/document/d/1IgpCkvSRSoY9Xd16gFQJJ1KP8sLZ7EE39cEjBK_UIg4) |
 
 **Follow the SPIFFE Project** You can find us on [Github](https://github.com/spiffe/) and [Twitter](https://twitter.com/SPIFFEio).
 
