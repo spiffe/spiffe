@@ -4,9 +4,6 @@ I've been working with SPIFFE (and SPIRE) for two and a half years, beginning wi
 I believe I my passion for simplifying IT, and security in particular, to the SPIFFE Steering Committee. Having worked with Kubernetes since 2016, I feel the applicability of SPIFFE across networks, service meshes, and applications. I have previous experience with technical leadership roles at Plexxi, VMWare, Virsto and EMC.
 
 **GitHub Handle:** @bri365  
-
 **Email Address:** bri365@gmail.com  
-
 **LinkedIn Profile:** https://www.linkedin.com/in/mrbrianjmartin/  
-
-**Current Affiliation:** Gradient Technologies
+**Current Affiliation:** Gradient Technologies  
