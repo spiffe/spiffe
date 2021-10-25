@@ -74,6 +74,12 @@ message X509SVID {
 
     // Required. ASN.1 DER encoded X.509 bundle for the trust domain.
     bytes bundle = 4;
+
+    // Optional. An operator-specified string used to provide guidance on how this
+    // identity should be used by a workload when more than one SVID is returned.
+    // For example, `internal` and `external` to indicate an SVID for internal or
+    // external use, respectively.
+    string hint = 5;
 }
 
 // The X509BundlesRequest message conveys parameters for requesting X.509
@@ -115,6 +121,12 @@ message JWTSVID {
 
     // Required. Encoded JWT using JWS Compact Serialization.
     string svid = 2;
+
+    // Optional. An operator-specified string used to provide guidance on how this
+    // identity should be used by a workload when more than one SVID is returned.
+    // For example, `internal` and `external` to indicate an SVID for internal or
+    // external use, respectively.
+    string hint = 3;
 }
 
 // The JWTBundlesRequest message conveys parameters for requesting JWT bundles.
@@ -146,7 +158,7 @@ message ValidateJWTSVIDResponse {
     // Required. The SPIFFE ID of the validated JWT-SVID.
     string spiffe_id = 1;
 
-    // Optional. Arbitrary claims contained within the payload of the validated
-    // JWT-SVID.
+    // Required. Claims contained within the payload of the validated JWT-SVID.
+    // This includes both SPIFFE-required and non-required claims.
     google.protobuf.Struct claims = 2;
 }

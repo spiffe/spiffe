@@ -10,24 +10,24 @@ Portable and interoperable cryptographic identity for networked workloads is per
 
 ## Table of Contents
 
-1\. [Introduction](#1-introduction)
-2\. [Extensibility](#2-extensibility)
-3\. [Service Defintion](#3-service-definition)
-4\. [Client and Server Behavior](#4-client-and-server-behavior)
-4.1. [Identifying the Caller](#41-identifying-the-caller)
-4.2. [Connection Lifetime](#42-connection-lifetime)
-4.3. [Stream Responses](#43-stream-responses)
-4.4. [Default Values and Redacted Information](#44-default-values-and-redacted-information)
-4.5. [Mandatory Fields](#45-mandatory-fields)
-4.6. [Federated Bundles](#46-federated-bundles)
-5\. [X.509-SVID Profile](#5-x509-svid-profile)
-5.1. [Profile Definition](#51-profile-definition)
-5.2. [Profile RPCs](#52-profile-rpcs)
-5.3. [Default Identity](#53-default-identity)
-6\. [JWT-SVID Profile](#6-jwt-svid-profile)
-6.1. [Profile Definition](#61-profile-definition)
-6.2. [Profile RPCs](#62-profile-rpcs)
-6.3. [JWT-SVID Validation](#63-jwt-svid-validation)
+1\. [Introduction](#1-introduction)  
+2\. [Extensibility](#2-extensibility)  
+3\. [Service Defintion](#3-service-definition)  
+4\. [Client and Server Behavior](#4-client-and-server-behavior)  
+4.1. [Identifying the Caller](#41-identifying-the-caller)  
+4.2. [Connection Lifetime](#42-connection-lifetime)  
+4.3. [Stream Responses](#43-stream-responses)  
+4.4. [Default Values and Redacted Information](#44-default-values-and-redacted-information)  
+4.5. [Mandatory Fields](#45-mandatory-fields)  
+4.6. [Federated Bundles](#46-federated-bundles)  
+5\. [X.509-SVID Profile](#5-x509-svid-profile)  
+5.1. [Profile Definition](#51-profile-definition)  
+5.2. [Profile RPCs](#52-profile-rpcs)  
+5.3. [Default Identity](#53-default-identity)  
+6\. [JWT-SVID Profile](#6-jwt-svid-profile)  
+6.1. [Profile Definition](#61-profile-definition)  
+6.2. [Profile RPCs](#62-profile-rpcs)  
+6.3. [JWT-SVID Validation](#63-jwt-svid-validation)  
 
 ## 1. Introduction
 
@@ -158,6 +158,12 @@ message X509SVID {
 
     // Required. ASN.1 DER encoded X.509 bundle for the trust domain.
     bytes bundle = 4;
+
+    // Optional. An operator-specified string used to provide guidance on how this
+    // identity should be used by a workload when more than one SVID is returned.
+    // For example, `internal` and `external` to indicate an SVID for internal or
+    // external use, respectively.
+    string hint = 5;
 }
 
 // The X509BundlesRequest message conveys parameters for requesting X.509
@@ -176,21 +182,6 @@ message X509BundlesResponse {
     // Bundles are ASN.1 DER encoded.
     map<string, bytes> bundles = 2;
 }
-
-message JWTSVIDRequest {
-    // Required. The audience(s) the workload intends to authenticate against.
-    repeated string audience = 1;
-
-    // Optional. The requested SPIFFE ID for the JWT-SVID. If unset, JWT-SVIDs
-    // for all identities the workload is entitled to are returned.
-    string spiffe_id = 2;
-}
-
-// The JWTSVIDResponse message conveys JWT-SVIDs.
-message JWTSVIDResponse {
-    // Required. The list of returned JWT-SVIDs.
-    repeated JWTSVID svids = 1;
-}
 ```
 
 ### 5.2 Profile RPCs
@@ -203,7 +194,7 @@ The `X509SVIDRequest` request message is currently empty and is a placeholder fo
 
 The `X509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client). The `crl` and `federated_bundles` fields are optional. 
 
-All fields in the `X509SVID` message are mandatory.
+All fields in the `X509SVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Workload API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `X509SVIDResponse` message. In the event that a SPIFFE Workload API client encounters more than one `X509SVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
 
 If the client is not entitled to receive any X509-SVIDs, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). Under such a case, the client MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
 
@@ -221,11 +212,15 @@ If the client is not entitled to receive any X.509 bundles, then the server SHOU
 
 As mentioned in [Stream Responses](#42-stream-responses), each `X509BundleResponse` response contains the complete set of authorized X.509 bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
-### 5.4 Default Identity
+### 5.3 Default Identity
 
 It is often the case that a workload doesn’t know what identity it should assume. Determining when to assume what identity is a site-specific concern, and as a result, the SPIFFE specifications don’t reason about how to do this.
 
 In order to support the widest variety of use cases, the X.509-SVID Profile supports the issuance of multiple identities, while also defining a default identity. It is expected that workloads which are aware of multiple identities can handle decision making on their own. Workloads which don’t understand how to leverage multiple identities may use the default identity. The default identity is the first in the `svids` list returned in the `X509SVIDResponse` message. Protocol buffers ensure that the order of the list is preserved.
+
+Workloads that understand how to use multiple identities may leverage the optional `hint` field, which can be used to disambiguate identities and inform the workload of which identity should be used for what purpose. For example, `internal` and `external` to denote an SVID for internal or external use, respectively. SPIFFE Workload API implementations SHOULD NOT support values of more than 1024 bytes in length. The exact value of the `hint` field is an operator choice and is otherwise unconstrained by this specification.
+
+It is the workload's responsibility to handle the absence of an expected hint, or the presence of an unexpected one (e.g. fail, warn, etc).
 
 ## 6. JWT-SVID Profile
 
@@ -280,6 +275,12 @@ message JWTSVID {
 
     // Required. Encoded JWT using JWS Compact Serialization.
     string svid = 2;
+
+    // Optional. An operator-specified string used to provide guidance on how this
+    // identity should be used by a workload when more than one SVID is returned.
+    // For example, `internal` and `external` to denote an SVID for internal or
+    // external use, respectively.
+    string hint = 3;
 }
 
 // The JWTBundlesRequest message conveys parameters for requesting JWT bundles.
@@ -311,8 +312,8 @@ message ValidateJWTSVIDResponse {
     // Required. The SPIFFE ID of the validated JWT-SVID.
     string spiffe_id = 1;
 
-    // Optional. Arbitrary claims contained within the payload of the validated
-    // JWT-SVID.
+    // Required. Claims contained within the payload of the validated JWT-SVID.
+    // This includes both SPIFFE-required and non-required claims.
     google.protobuf.Struct claims = 2;
 }
 ```
@@ -327,7 +328,7 @@ The `JWTSVIDRequest` request message contains a mandatory `audience` field, whic
 
 The `JWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
 
-All fields in the `JWTSVID` message are mandatory.
+All fields in the `JWTSVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Workload API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `JWTSVIDResponse` message. In the event that a SPIFFE Workload API client encounters more than one `JWTSVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
 
 If the client is not authorized for any identities, or not authorized for the specific identity requested via the `spiffe_id` field, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information).
 
@@ -347,7 +348,7 @@ As mentioned in [Stream Responses](#42-stream-responses), each `JWTBundleRespons
 
 #### 6.2.3 ValidateJWTSVID
 
-The `ValidateJWTSVID` RPC validates JWT-SVIDs for a specific audience on behalf of a client.
+The `ValidateJWTSVID` RPC validates JWT-SVIDs for a specific audience on behalf of a client. Further, the server MUST parse and validate the JWT-SVID according to the rules outlined in the [JWT-SVID](JWT-SVID.md) specification. The claims embedded in the JWT-SVID payload SHOULD be provided in the `claims` field in the `ValidateJWTSVIDResponse`; the claims defined by this specification above are required, however implementations MAY filter non-SPIFFE claims before returning them to the client. SPIFFE claims are required for interoperability.
 
 All fields in the `ValidateJWTSVIDRequest` and `ValidateJWTSVIDResponse` message are mandatory.
 
