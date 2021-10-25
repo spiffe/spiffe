@@ -8,5 +8,8 @@ This subdirectory captures the nominees and results of the YYYY [H1,H2] SSC elec
 
 For more information on how to participate, please see the relevant GitHub [tracking issue](LINK_TO_ISSUE).
 
+## Nominees
+To be announced.
+
 ## Results
 To be announced.
