@@ -16,7 +16,7 @@ I've always appreciated and respected the work of the SPIFFE team, and have look
 I'm really grateful to be nominated, and I am excited for the chance to serve on the SPIFFE Steering Committee!
 
 ## Reference
-**GitHub Handle:** @izgeri
+**GitHub Handle:** @izgeri  
 **Email Address:** izbicki@gmail.com  
 **LinkedIn Profile:** https://www.linkedin.com/in/geri-jennings/  
 **Current Affiliation:** Salsify  
