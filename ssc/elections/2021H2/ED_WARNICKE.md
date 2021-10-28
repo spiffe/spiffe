@@ -10,14 +10,14 @@ Here is a brief bio:
 ## Words from Ed
 Ed answered the following questions in support of his nomination.
 
-**What makes you a good fit for the SPIFFE Steering Committee?**
+**What makes you a good fit for the SPIFFE Steering Committee?**  
 Good Steering Committees bring multiple perspectives that enhance their communities. The perspectives I bring are:
 1. A long time user of Spiffe in an Open Source project ([Network Service Mesh](https://networkservicemesh.io/) project at CNCF).  Who has pushed the edges in using Spiffe (Federation, Transitive Identity, etc)
 2. A very experienced member of Open Source Steering Committees (founding TSC Member at OpenDaylight, current TSC Chair at FD.io, LFPH TAC member, CNCF TAG-Network co-chair.  I've seen enough to see some of the things that work and don't, and also so much as to know there is no single right answer and communities needs and personalities vary.
 3. Who still writes a lot of code (currently #52 out of ~20k CNCF contributors on [devstats](https://all.devstats.cncf.io/d/22/prs-authors-table?orgId=1))
 4. Is very interested in ensuring Spiffe/Spire has excellent usability (see [Add Spiffe ID templating for k8s-workload-registrar](https://github.com/spiffe/spire/issues/2280) for one example).
 
-**What aspects of SSC participation are you most excited about?**
+**What aspects of SSC participation are you most excited about?**  
 I'm very interested in bringing my long deep background in Steering committees to bear.   I'm also very interested in continuing to engage on issues of  usability.  That which is hard to use, doesn't get used, or is circumvented.  Security _requires_ usability.
 
 # Reference
