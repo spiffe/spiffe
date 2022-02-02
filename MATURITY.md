@@ -9,6 +9,11 @@ The SPIFFE project maintains three phases of maturity which indicate the level o
 - **Production**: The software is stable and being used in production at scale. APIs and interfaces have compatibility guarantees. Use of this software is safe for mission critical purposes. Deprecation of this software will be performed on a years-long time scale.
 - **Deprecated**: The software is no longer maintained, and may or may not continue to fill its intended purpose. While API stability is assumed due to lack of development, compatibility with other components is not guaranteed and likely to break in due time. Use of this software is not recommended.
 
+## Changing the Maturity of a SPIFFE Project
+When a project is ready to change its maturity level, one of its maintainers raises a PR against it to update the documented level and/or maturity badge. This PR must tag the SSC and remain open for a minimum of two weeks, during which time anyone is welcome to ask questions or object. Any difficult questions or objections are raised to the next regularly scheduled SSC call for discussion.
+
+To merge the PR and effect the change of maturity level, the PR must be approved by at least two active SSC members.
+
 ---
 
 ## Development [![Development Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/dev.svg)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#development)
