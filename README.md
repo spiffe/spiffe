@@ -3,7 +3,7 @@
 
 
 
-[![Production Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/prod.png)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#production)
+[![Production Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/prod.svg)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#production)
 
 The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of
 standards for identifying and securing communications between application services. At its core, SPIFFE is:

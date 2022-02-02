@@ -11,7 +11,7 @@ The SPIFFE project maintains three phases of maturity which indicate the level o
 
 ---
 
-## Development [![Development Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/dev.png)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#development)
+## Development [![Development Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/dev.svg)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#development)
 
 ### Description
 Software in the **Development** phase is being actively developed by the SPIFFE community, and is still in its infancy. The primary audience of this software is developers and technology enthusiasts.
@@ -29,7 +29,7 @@ Characteristics of software in the Development phase:
   - Supported versions of relevant components (e.g. supported SPIRE versions, etc)
   - Known limitations
 
-## Pre-Production [![Pre-Production Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/pre-prod.png)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#pre-production)
+## Pre-Production [![Pre-Production Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/pre-prod.svg)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#pre-production)
 
 ### Description
 Software in the **Pre-Production** phase is still under active development by the SPIFFE community, but is relatively stable and has entered into a more mature phase than software still in the **Development** phase.
@@ -52,7 +52,7 @@ Characteristics of software in the **Pre-Production** phase:
   - Basic troubleshooting
   - API documentation
 
-## Production [![Production Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/prod.png)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#production)
+## Production [![Production Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/prod.svg)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#production)
 
 ### Description
 Software in the **Production** phase is stable and actively maintained. It can be relied upon to operate in production and at scale.
@@ -77,7 +77,7 @@ Characteristics of software in the **Production** phase:
   - Complete API documentation
   - Architecture and deployment guidelines
 
-## Deprecated [![Deprecated Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/deprecated.png)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#deprecated)
+## Deprecated [![Deprecated Phase](https://github.com/spiffe/spiffe/blob/main/.img/maturity/deprecated.svg)](https://github.com/spiffe/spiffe/blob/main/MATURITY.md#deprecated)
 
 ### Description
 Software in the **Deprecated** phase is no longer actively developed. Emergency releases may occur in response to security issues on a case-by-case basis, however such maintenance should not be expected. Do not adopt this software.
