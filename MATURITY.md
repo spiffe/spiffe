@@ -50,6 +50,8 @@ Characteristics of software in the **Pre-Production** phase:
 - Pre-built artifacts are published and made publicly available
 - Supported by both developers and early adopter community
 - A security policy is clearly defined (i.e. SECURITY.md)
+  - A security contact must be specified
+  - A response time must be specified
 - Software has been fully documented and includes:
   - A clear indication that it is in the **Pre-Production** phase
   - Supported versions of relevant components (e.g. supported SPIRE versions, etc)
