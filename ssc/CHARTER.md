@@ -37,11 +37,7 @@ The definition of active engagement is purposefully a loose one, and it is recog
 
 Conversely, it is also recognized that the stated definition is not perfect, and that there may be individuals with contributions to the community and/or projects that do not meet these requirements. The SSC is happy to consider such cases, and will make exceptions when fit. Please email ssc@spiffe.io for more information.
 
-Each voting community member may choose up to two nominees per seat, and cast one ranked vote. The process to elect a new seat is as follows:
-* 21 days prior to election: a call for nominations is distributed to each voting community member
-* 14 days prior to election: call for nominations close
-* 7 days prior to election: a ballot is distributed to each voting community member
-* 0 days prior to election: ballots are counted, and results announced
+Each voting community member may choose up to two nominees per seat, and cast one ranked vote. The process to elect a new seat is detailed in [here](elections/README.md)
 
 ### Nominee Qualification
 SSC nominees must meet a minimum set of qualifications before they're eligible to appear on the election ballot. Each nominee will be evaluated by the existing SSC members for eligibility, wherein a nominee must receive support from a majority of the SSC to be considered eligible. Prior to ballot distribution, nominees will be contacted by an SSC member (or a representative thereof) to discuss the qualification criteria and ensure that the nominee is willing to serve a full term. The SSC nominee qualification criteria are as follows:
