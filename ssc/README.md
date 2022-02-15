@@ -6,14 +6,6 @@ Please read the [SSC Charter](CHARTER.md) for more information about the SSC's r
 ## SSC Members
 The current members of the SSC, ordered by term,  are as follows:
 
-**Joe Beda** (@jbeda)  
-[GitHub](https://github.com/jbeda) | [LinkedIn](https://www.linkedin.com/in/jbeda)  
-Term end: November 3rd, 2021  
-
-**Emiliano Berenbaum** (@y2bishop2y)  
-[GitHub](https://github.com/y2bishop2y) | [LinkedIn](https://www.linkedin.com/in/eberenb)  
-Term end: November 3rd, 2021  
-
 **Evan Gilman** (@evan2645)  
 [GitHub](https://github.com/evan2645) | [LinkedIn](https://www.linkedin.com/in/evan2645)  
 Term end: May 4th, 2022  
@@ -25,3 +17,12 @@ Term end: May 3rd, 2023
 **Frederick Kautz** (@fkautz)  
 [GitHub](https://github.com/fkautz) | [LinkedIn](https://www.linkedin.com/in/fkautz/)  
 Term end: May 3rd, 2023  
+
+**Andres Vega** (@anvega)  
+[GitHub](https://github.com/anvega) | [LinkedIn](https://www.linkedin.com/in/avegaarias/)  
+Term end: November 1st, 2023  
+
+**Andrew Moore** (@amoore877)  
+[GitHub](https://github.com/amoore877) | [LinkedIn](https://www.linkedin.com/in/andrew-moore-681b1114a/)  
+Term end: November 1st, 2023  
+
