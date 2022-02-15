@@ -12,7 +12,7 @@ All nominees are proposed via GitHub Pull Request, and each nominee gets a dedic
 
 The rest of this section captures the exact steps necessary to begin and complete an SSC election. These steps are to be performed by an SSC member, or appointed party.
 
-### Term End-35 Days: Preparation
+### Term Start-35 Days: Preparation
 1. Identify eligible participants
 	1. Eligible participants MUST have a public email address on their GitHub profile
 1. Open GitHub issue to track election
@@ -67,5 +67,5 @@ The rest of this section captures the exact steps necessary to begin and complet
 ### T-0 Days: New Term Starts
 1. Send a PR adjusting the membership list.
 	1. Tracking issue to be closed once PR is merged.
-1. Outgoing member(s) term is officially over, incoming member(s) term has now started.
+1. Any outgoing member(s) term is officially over, incoming member(s) term has now started.
 
