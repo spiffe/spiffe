@@ -79,6 +79,10 @@ INELIGIBLE_VOTERS=""
 echo
 echo
 for VOTER in $ELIGIBLE_VOTERS; do
+    if [ "$VOTER" == "dependabot[bot]" ]; then
+		continue
+	fi
+
 	USER_RESP=`$CURL/users/$VOTER`
 	NAME=`echo "$USER_RESP" | jq '.name' | sed 's/^"//' | sed 's/"$//'`
 	EMAIL=`echo "$USER_RESP" | jq '.email' | sed 's/^"//' | sed 's/"$//'`
