@@ -18,7 +18,7 @@ Eligible participants may nominate up to two candidates per available SSC seat d
 
 If you'd like to nominate an SSC member for this election cycle, please follow these steps:
 1. Verify that your GitHub handle is included in the list of eligible participants below
-1. Verify that, in your best judgement, the nominee meets the criteria specified in the Nominee Qulifications section of the [SSC Charter](https://github.com/spiffe/spiffe/blob/master/ssc/CHARTER.md#nominee-qualification)
+1. Verify that, in your best judgement, the nominee meets the criteria specified in the Nominee Qualifications section of the [SSC Charter](https://github.com/spiffe/spiffe/blob/master/ssc/CHARTER.md#nominee-qualification)
 1. Fork this repository
 1. Copy `ssc/elections/NOMINEE_TEMPLATE.md` into the appropriate subdirectory, and name it after the person to be nominated
 	1. For example, from the root directory:  
