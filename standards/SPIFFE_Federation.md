@@ -1,7 +1,7 @@
 # SPIFFE Federation
 
 ## Status of this Memo
-This document specifies an experimental identity API standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
+This document specifies an identity API standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
 
 ## Table of Contents
 1\. [Background](#1-background)  
