@@ -1,7 +1,7 @@
 # The X.509 SPIFFE Verifiable Identity Document
 
 ## Status of this Memo
-This document specifies an experimental identity document standard for the internet community, and requests discussion and suggestions for improvements. It is a work in progress. Distribution of this document is unlimited.
+This document specifies an identity document standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
 
 ## Abstract
 The SPIFFE standard provides a specification for a framework capable of bootstrapping and issuing identity to services across heterogeneous environments and organizational boundaries. It defines an identity document known as the SPIFFE Verifiable Identity Document (SVID).
