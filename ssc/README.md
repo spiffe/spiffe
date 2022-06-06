@@ -4,11 +4,7 @@ The SPIFFE Steering Committee (or SSC) is a group of volunteers that oversee the
 Please read the [SSC Charter](CHARTER.md) for more information about the SSC's role and mission.
 
 ## SSC Members
-The current members of the SSC, ordered by term,  are as follows:
-
-**Evan Gilman** (@evan2645)  
-[GitHub](https://github.com/evan2645) | [LinkedIn](https://www.linkedin.com/in/evan2645)  
-Term end: May 4th, 2022  
+The current members of the SSC, ordered by term,  are as follows: 
 
 **Andrew Jessup** (@ajessup)  
 [GitHub](https://github.com/ajessup) | [LinkedIn](https://www.linkedin.com/in/andrewjessup/)  
@@ -26,3 +22,6 @@ Term end: November 1st, 2023
 [GitHub](https://github.com/amoore877) | [LinkedIn](https://www.linkedin.com/in/andrew-moore-681b1114a/)  
 Term end: November 1st, 2023  
 
+**Dan Feldman** (@dfeldman)  
+[GitHub](https://github.com/dfeldman) | [LinkedIn](https://www.linkedin.com/in/dfeldman)  
+Term end: May 4th, 2024 

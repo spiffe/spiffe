@@ -9,7 +9,11 @@ This subdirectory captures the nominees and results of the 2022 H1 SSC election.
 For more information on how to participate, please see the relevant GitHub [tracking issue](https://github.com/spiffe/spiffe/issues/216).
 
 ## Nominees
-To be announced.
+* [Agustin Martínez Fayó](AGUSTIN_MARTINEZ_FAYO.md)
+* [Brandon Lum](BRANDON_LUM.md)
+* [Brian Martin](BRIAN_MARTIN.md)
+* [Daniel Feldman](DAN_FELDMAN.md)
+* [Ed Warnicke](ED_WARNICKE.md)
 
 ## Results
-To be announced.
+* [Daniel Feldman](DAN_FELDMAN.md)
