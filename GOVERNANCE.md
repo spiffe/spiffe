@@ -15,11 +15,11 @@ SPIFFE community members represent the project and their fellow contributors. We
 
 ### Users
 
-These are individuals who 1) want to learn more about the SPIFFE Project; or 2) are existing users of SPIFFE and its tools who wish to follow the Project's progress. They may have questions, comments, or suggestions that can be communicated via [e-mail](https://groups.google.com/a/spiffe.io/forum/#!forum/user-discussion), Slack, or GitHub comments. They can follow along as the Project's special interest groups (SIGs) do their work.
+These are individuals who 1) want to learn more about the SPIFFE Project; or 2) are existing users of SPIFFE and its tools who wish to follow the Project's progress. They may have questions, comments, or suggestions that can be communicated via Slack, GitHub, or during community calls and events. They can follow along as the Project's special interest groups (SIGs) do their work.
 
 ### Contributors
 
-These are individuals who wish to contribute code or ideas to SPIFFE projects. Contributors submit code and ideas through GitHub pull requests (PRs) and Issues. To contribute code, they or their employer must have a signed [Contributor License Agreement](/CONTRIBUTING.md) on file.
+These are individuals who wish to contribute code or ideas to SPIFFE projects. Contributors submit code and ideas through GitHub or through participation in SPIFFE's community calls.
 
 ### Maintainers
 
@@ -43,34 +43,35 @@ The process for nominating and approving Maintainers is:
 * Open a PR against the CODEOWNERS file that covers the parts of the project you wish to nominate someone (or yourself) for
 * A consensus of existing Maintainers must approve your PR
 
-### Technical Steering Committee (TSC)
+### The SPIFFE Steering Committee (SSC)
 
-The SPIFFE Project is governed by a [TSC](https://github.com/spiffe/spiffe/blob/master/CODEOWNERS) that is exclusively responsible for SPIFFE's [standards](https://github.com/spiffe/spiffe/tree/master/standards) and the Project's strategic goals and direction. In addition to the rights and privileges of Maintainers, TSC members have final authority over:
+The SPIFFE Project is governed by the [SSC](https://github.com/spiffe/spiffe/blob/master/ssc/README.md) that is exclusively responsible for SPIFFE's [standards](https://github.com/spiffe/spiffe/tree/master/standards) and the Project's strategic goals and direction. SSC members have final authority over:
 
 * Technical direction of the Project.
 * Project governance and process (this document).
 * Contribution policy.
 
-The TSC adheres to the following:
+The SSC adheres to the following:
 
-* The TSC meets the first Wednesday of each month ([Meeting Notes](https://docs.google.com/document/d/14Kttz1g-S-DdK0i_0JTjr8LDEImlSvCPT2qRSf6zGSY/edit) | [Calendar ICS](https://calendar.google.com/calendar/ical/scytale.io_k02mh5on54t6jjof5s6932ebgs%40group.calendar.google.com/public/basic.ics))
-* The TSC is comprised of at least five (5) members.
-* No more than 2 TSC members may be affiliated with the same organization.
-* At least 40% of the TSC must be represented by organizations that currently have a SPIFFE implementation deployed in production.
-* Each TSC member's term is nine (9) months.
-* There is no limit to the number of terms a TSC member can serve.
-* TSC members are added (or removed) by the consensus of the existing TSC members.
-* TSC members may remove themselves voluntarily at any time.
+* The SSC meets the first Wednesday of each month ([Meeting Notes](https://docs.google.com/document/d/14YlmMTqwqNdx-CWapwwIBMaakH5Z2UnAvOBQBB8AwQM) | [Calendar ICS](https://calendar.google.com/calendar/ical/c_gck7v87m9obq6n3hpo01l7csus%40group.calendar.google.com/public/basic.ics))
+* The SSC is comprised of at least five (5) members.
+* No more than 2 SSC members may be affiliated with the same organization.
+* At least 40% of the SSC must be represented by organizations that currently have a SPIFFE implementation deployed in production.
+* Each SSC member's term is 24 months.
+* There is no limit to the number of terms an SSC member can serve.
+* SSC members may remove themselves voluntarily at any time.
+
+For more information about the SSC, please refer to the [SSC Charter](ssc/CHARTER.md).
 
 ## Decision Making
 
-Maintainer and TSC decisions are made by a [lazy consensus](http://rave.apache.org/docs/governance/lazyConsensus.html) approach. When formal voting is required, members may abstain. Negative votes must be accompanied by an explanation or alternative proposal.
+Maintainer and SSC decisions are made by a [lazy consensus](http://rave.apache.org/docs/governance/lazyConsensus.html) approach. When formal voting is required, members may abstain. Negative votes must be accompanied by an explanation or alternative proposal.
 
 ## Change Review Process
 
-**All changes must be submitted as a Github Pull Request (PR)**
+**All changes must be submitted as a GitHub Pull Request (PR)**
 
-The submitter of a PR is responsible for responding to feedback from reviewers and maintainers. While the PR remains open, he or she is also responsible for ensuring the change is always in a state where it can be merged. Guidelines for submitting a PR for approval can be found [here](/CONTRIBUTING.md).
+The submitter of a PR is responsible for responding to feedback from reviewers and maintainers. While the PR remains open, they are also responsible for ensuring the change is always in a state where it can be merged. Guidelines for submitting a PR for approval can be found [here](/CONTRIBUTING.md).
 
 **All minor changes must be approved by at least one other Maintainer**
 

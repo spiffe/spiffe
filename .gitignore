@@ -1,7 +1,9 @@
+.DS_Store
 __pycache__
 *.pyc
 *.swp
 *~
+.DS_Store
 
 svid-test/test_results
 svid-test/.certs

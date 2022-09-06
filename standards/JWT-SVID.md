@@ -1,7 +1,7 @@
 # The JWT SPIFFE Verifiable Identity Document
 
 ## Status of this Memo
-This document specifies an experimental identity document standard for the internet community, and requests discussion and suggestions for improvements. It is a work in progress. Distribution of this document is unlimited.
+This document specifies an identity document standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
 
 ## Table of Contents
 
@@ -31,12 +31,14 @@ Appendix A. [Validation Reference](#appendix-a-validation-reference)
 ## 1. Introduction
 JWT-SVID is the first token-based SVID in the SPIFFE specification set. Aimed at providing immediate value in solving difficulties associated with asserting identity across Layer 7 boundaries, compatibility with existing applications and libraries is a core requirement.
 
-JWT-SVIDs are standard JOSE-protected JWT tokens with a handful of restrictions applied. JOSE has historically proven difficult to implement securely, gaining a reputation in the security community as a technology which is likely to introduce vulnerabilities in its deployments and implementations. JWT-SVID takes steps to mitigate these problems as much as is reasonably possible without breaking compatibility with existing applications and libraries.
+JWT-SVIDs are standard JWT tokens with a handful of restrictions applied. JOSE has historically proven difficult to implement securely, gaining a reputation in the security community as a technology which is likely to introduce vulnerabilities in its deployments and implementations. JWT-SVID takes steps to mitigate these problems as much as is reasonably possible without breaking compatibility with existing applications and libraries.
+
+JWT-SVIDs are JSON Web Signature (JWS) data structures utilizing JWS Compact Serialization in all cases. JWS JSON Serialization MUST NOT be used.
 
 ## 2. JOSE Header
 Historically, complexity introduced by the cryptographic agility of the JOSE header has led to a series of vulnerabilities in popular JWT implementations. To avoid such pitfalls, this specification restricts some of the allowances originally afforded. This section describes the permitted registered headers, as well as their values. Any header not described here, registered or private, MUST NOT be included in the JWT-SVID JOSE Header.
 
-Only JWS is supported, and all header values MUST reside in a JWS Protected Header.
+Only JWS is supported.
 
 ### 2.1. Algorithm
 The `alg` header MUST be set to one of the values defined in [RFC 7518][7] sections [3.3][8], [3.4][9], or [3.5][10]. Validators receiving a token with the `alg` parameter set to a different value MUST reject the token.
@@ -86,7 +88,7 @@ JWT-SVID signatures are computed and validated following the steps outlined in [
 This section describes the manner in which a JWT-SVID may be transmitted from one workload to another.
 
 ### 5.1. Serialization
-JWT-SVIDs MUST be serialized using the JWS Compact Serialization method described in [RFC 7515 Section 3.1][5]. Note that this precludes the use of a JWS Unprotected Header, as mandated in the [JOSE Header](#2-jose-header) section.
+JWT-SVIDs MUST be serialized using the Compact Serialization method described in [RFC 7515 Section 3.1][5], as required by [RFC 7519 Section 1][12]. Note that this precludes the use of a JWS Unprotected Header, as mandated in the [JOSE Header](#2-jose-header) section.
 
 ### 5.2. HTTP
 JWT-SVIDs transmitted via HTTP SHOULD be transmitted in the “Authorization” header (“authorization” for HTTP/2) using the “Bearer” authentication scheme defined in [RFC 6750 section 2.1][6]. For example, `Authorization: Bearer <serialized_token>` in HTTP/1.1 and `authorization: Bearer <serialized_token>` in HTTP/2.
@@ -141,3 +143,4 @@ Field | Type | Requirement
 [9]: https://tools.ietf.org/html/rfc7518#section-3.4
 [10]: https://tools.ietf.org/html/rfc7518#section-3.5
 [11]: https://tools.ietf.org/html/rfc7517
+[12]: https://tools.ietf.org/html/rfc7519#section-1
