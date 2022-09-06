@@ -28,7 +28,8 @@ The SPIFFE Project has a reference implementation, the SPIRE (the SPIFFE Runtime
 
 * Interoperability and federation to SPIFFE compatible systems across heterogeneous environments and administrative trust boundaries.
 
-SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CNCF) as an incubation-level project. If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF. For details read the CNCF [announcement](https://www.cncf.io/blog/2020/06/22/toc-approves-spiffe-and-spire-to-incubation/).
+
+SPIFFE is a [graduated](https://www.cncf.io/projects/spiffe/) project of the [Cloud Native Computing Foundation](https://cncf.io) (CNCF). If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF.
 
 ## SPIFFE Standards
 
