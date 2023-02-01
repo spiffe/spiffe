@@ -4,7 +4,7 @@ Some notes:
 * *If you are coordinating an event and looking for a speaker or other support on SPIFFE, feel free to reach out to any of those listed below. Inclusion on this list is for the convienence of event organizers, and does not imply a commitment by any of the speakers to participate in any particular event.*
 *  *While we strive to ensure all speakers listed below respect and closely follow our [Code of Conduct](../CODE-OF-CONDUCT.md), and will remove those that do not, inclusion in this list does not represent an endorsement of that individual from the SPIFFE community. Please conduct your own due diligence before inviting anyone from this list to an event.*
 
-| Who | Contact | Location | Preferred speaking topics | Preferred duties |
+| Who | Contact | Location | Preferred speaking topics | Preferred duties | Volunteer Notes
 | --- | ------- | -------- | ------------------------- | ----------------- |
 | Andrew Jessup | [Slack Profile](https://spiffe.slack.com/team/U3D29M4JC) | Ann Arbor, USA | Introduction, project history, use cases | Webinars, Speaking or supporting local events |
 | Daniel Feldman | [Slack Profile](https://spiffe.slack.com/team/UA5G0MH62) | Minneapolis, USA | Please ask | Please ask |
