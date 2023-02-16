@@ -10,6 +10,7 @@ Some notes:
 | Daniel Feldman | [Slack Profile](https://spiffe.slack.com/team/UA5G0MH62) | Minneapolis, USA | Please ask | Please ask |
 | Andrew Moore | [Slack Profile](https://spiffe.slack.com/team/UG75JQCR1) | Seattle, USA | Introduction, use cases, operational experience | Webinars, Speaking |
 | Sunil Ravipati | - | Santa Clara, USA | Please ask | Please ask |
+| Matthew Bates | [Slack Profile](https://spiffe.slack.com/team/U019ECLV4NM) | UK | Please ask | Please ask |
 
 In addition to the speakers listed below, you may wish to reach out to [the #community channel](https://spiffe.slack.com/messages/C01DNVCF9CP) on the SPIFFE Slack Workspace.
 
