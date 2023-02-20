@@ -11,6 +11,9 @@ Some notes:
 | Andrew Moore | [Slack Profile](https://spiffe.slack.com/team/UG75JQCR1) | Seattle, USA | Introduction, use cases, operational experience | Webinars, Speaking |
 | Sunil Ravipati | - | Santa Clara, USA | Please ask | Please ask |
 | Matthew Bates | [Slack Profile](https://spiffe.slack.com/team/U019ECLV4NM) | UK | Please ask | Please ask |
+| Andrew Martin | [Slack Profile](https://spiffe.slack.com/team/U9MG9UH5Y)   | London, UK | Security, consulting, training, operational experience, use cases | Webinars, speaking or supporting local events |
+| Ric Featherstone | [Slack Profile](https://spiffe.slack.com/team/U02EHKH26KC) | UK      | Security, consulting, training, operational experience, use cases | Webinars, speaking or supporting local events |
+| James Callaghan | [Slack Profile](https://spiffe.slack.com/team/U04AM93014P) | UK       | Security, consulting, training, operational experience, use cases | Webinars, speaking or supporting local events |
 
 In addition to the speakers listed below, you may wish to reach out to [the #community channel](https://spiffe.slack.com/messages/C01DNVCF9CP) on the SPIFFE Slack Workspace.
 
