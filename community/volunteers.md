@@ -14,6 +14,7 @@ Some notes:
 | Andrew Martin | [Slack Profile](https://spiffe.slack.com/team/U9MG9UH5Y)   | London, UK | Security, consulting, training, operational experience, use cases | Webinars, speaking or supporting local events |
 | Ric Featherstone | [Slack Profile](https://spiffe.slack.com/team/U02EHKH26KC) | UK      | Security, consulting, training, operational experience, use cases | Webinars, speaking or supporting local events |
 | James Callaghan | [Slack Profile](https://spiffe.slack.com/team/U04AM93014P) | UK       | Security, consulting, training, operational experience, use cases | Webinars, speaking or supporting local events |
+| Eli Nesterov | [Slack Profile](https://spiffe.slack.com/team/UQCQJSAGZ) | SF Bay Area, USA | Anything from history, use cases, architecture, produciton use, scalability, integraiton, federation, etc... | Speaking, organizing or supporting events. |
 
 In addition to the speakers listed below, you may wish to reach out to [the #community channel](https://spiffe.slack.com/messages/C01DNVCF9CP) on the SPIFFE Slack Workspace.
 
