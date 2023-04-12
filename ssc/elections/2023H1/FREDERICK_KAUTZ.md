@@ -7,7 +7,6 @@ Frederick has co-created multiple innovative projects, most recently OmniBOR and
 Additionally, Frederick is a strong advocate for empowering patients’ ownership of their health data and democratizing healthcare research. He has pioneered Federated Learning and privacy-preserving technologies, which enable multiple organizations and patients to collaborate without exposing sensitive data to each other.
 
 Frederick co-chairs the CTA ANSI/CTA-2114: Mitigating Cybersecurity Threats in ML-Based Systems Committee. He leads multiple cross-organizational teams to develop industry standards for security and privacy in Machine Learning.
-Be sure to preserve the two empty spaces at the end of each line below.  
 
 **GitHub Handle:** fkautz  
 **Email Address:** frederick@kautz.dev  
