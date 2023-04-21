@@ -28,7 +28,8 @@ The SPIFFE Project has a reference implementation, the SPIRE (the SPIFFE Runtime
 
 * Interoperability and federation to SPIFFE compatible systems across heterogeneous environments and administrative trust boundaries.
 
-SPIFFE is hosted by the [Cloud Native Computing Foundation](https://cncf.io) (CNCF) as an incubation-level project. If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF. For details read the CNCF [announcement](https://www.cncf.io/blog/2020/06/22/toc-approves-spiffe-and-spire-to-incubation/).
+
+SPIFFE is a [graduated](https://www.cncf.io/projects/spiffe/) project of the [Cloud Native Computing Foundation](https://cncf.io) (CNCF). If you are an organization that wants to help shape the evolution of technologies that are container-packaged, dynamically-scheduled and microservices-oriented, consider joining the CNCF.
 
 ## SPIFFE Standards
 
@@ -67,7 +68,7 @@ Most community activity is organized into Special Interest Groups (SIGs), time-b
 | Name | Lead | Group | Slack Channel | Meetings |
 |:------:|:-------:|:-------:|:---------------:|:----------:|
 | [SIG-Community](/community/sig-community/README.md) | [Umair Khan](https://github.com/umairmkhan) (HPE) | [Here](https://groups.google.com/a/spiffe.io/g/sig-community) | [Here](https://spiffe.slack.com/messages/community) | [Notes](https://docs.google.com/document/d/1tb3lxubwr8IKRd6Smnl83ur14xkOQdjwQqla9OHjwZo) |
-| [SIG-Spec](/community/sig-spec/README.md) | [Evan Gilman](https://github.com/evan2645) (VMware) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-specification) | [Here](https://spiffe.slack.com/messages/sig-spec) | [Notes](https://docs.google.com/document/d/1p2BbRWN_7z6nkBMj-h1mAJAJxxKqNeFiV4IplZ_wU4c) |
+| [SIG-Spec](/community/sig-spec/README.md) | [Evan Gilman](https://github.com/evan2645) (VMware) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-specification) | [Here](https://spiffe.slack.com/messages/sig-spec) | [Notes](https://docs.google.com/document/d/1f64vbyn5sOb8Mr1H3mGGGul3vTKo4r6cTBcUV3N9OFo) |
 | [SIG-SPIRE](/community/sig-spire/README.md) | [Daniel Feldman](https://github.com/dfeldman) (HPE) | [Here](https://groups.google.com/a/spiffe.io/forum/#!forum/sig-spire) | [Here](https://spiffe.slack.com/messages/spire) | [Notes](https://docs.google.com/document/d/1IgpCkvSRSoY9Xd16gFQJJ1KP8sLZ7EE39cEjBK_UIg4) |
 
 **Follow the SPIFFE Project** You can find us on [Github](https://github.com/spiffe/) and [Twitter](https://twitter.com/SPIFFEio).

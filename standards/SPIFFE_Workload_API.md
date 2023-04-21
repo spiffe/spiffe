@@ -2,7 +2,7 @@
 
 ## Status of this Memo
 
-This document specifies an experimental identity API standard for the internet community, and requests discussion and suggestions for improvements. It is a work in progress. Distribution of this document is unlimited.
+This document specifies an identity API standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
 
 ## Abstract
 
@@ -12,7 +12,7 @@ Portable and interoperable cryptographic identity for networked workloads is per
 
 1\. [Introduction](#1-introduction)  
 2\. [Extensibility](#2-extensibility)  
-3\. [Service Defintion](#3-service-definition)  
+3\. [Service Definition](#3-service-definition)  
 4\. [Client and Server Behavior](#4-client-and-server-behavior)  
 4.1. [Identifying the Caller](#41-identifying-the-caller)  
 4.2. [Connection Lifetime](#42-connection-lifetime)  

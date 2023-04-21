@@ -1,7 +1,7 @@
 # The SPIFFE Trust Domain and Bundle
 
 ## Status of this Memo
-This document specifies an experimental identity document standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
+This document specifies an identity document standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
 
 ## Abstract
 The SPIFFE standard provides a specification for a framework capable of bootstrapping and issuing interoperable identity to services across heterogeneous environments and organizations. It defines a concept known as "trust domains" which are used to delineate administrative and/or security boundaries. Trust domains isolate issuing authorities and differentiate identity namespaces, but can also be loosely coupled to provide federation.

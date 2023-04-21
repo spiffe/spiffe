@@ -1,7 +1,7 @@
 # Secure Production Identity Framework for Everyone (SPIFFE)
 
 ## Status of this Memo
-This document specifies an experimental identity and identity issuance standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
+This document specifies an identity and identity issuance standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
 
 ## Abstract
 Distributed design patterns and practices such as microservices, container orchestrators, and cloud computing have led to production environments that are increasingly dynamic and heterogenous. Conventional security practices (such as network policies that only allow traffic between particular IP addresses) struggle to scale under this complexity. A first-class identity framework for workloads in an organization becomes necessary.
