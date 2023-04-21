@@ -20,6 +20,7 @@ A Special Interest Group (SIG) concerning SPIRE, the official SPIFFE implementat
 
 #### SPIRE Contributor Sync
 * Date/Time: Every Tuesday @ 11:30am Pacific
+* [Meetings Notes](https://docs.google.com/document/d/1cwbQxTxjyk0UkEtlGVPJjWo9G3b7iA7DN1y2Lsia01M/edit)
 
 ##### Goals:
 * Discuss design and implementation of current SPIRE development efforts
