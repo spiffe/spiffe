@@ -30,12 +30,12 @@ A SPIFFE ID is a structured string (represented as a URI) which serves as the "n
 A SPIFFE Verifiable Identity Document (SVID) is a document which carries the SPIFFE ID itself. It is the functional equivalent of a passport - a document which is presented that carries the identity of the presenter. Of course, similar to passports, they must be resistant to forgery, and it must be obvious that the document belongs to the presenter. In order to achieve this, an SVID includes cryptographic properties which allow it to be:
 
   1) proven as authentic
-  2) proven to belong to the presenter.
+  2) proven to belong to the presenter
 
 An SVID itself is not a document type. Instead, we define:
 
   1) the properties required of an SVID
-  2) the method by which SVID information can be encoded and validated in various existing document types.
+  2) the method by which SVID information can be encoded and validated in various existing document types
 
 The supported document types are an X.509 certificate or a JWT token.
 
