@@ -6,13 +6,13 @@ Please read the [SSC Charter](CHARTER.md) for more information about the SSC's r
 ## SSC Members
 The current members of the SSC, ordered by term,  are as follows: 
 
-**Andrew Jessup** (@ajessup)  
-[GitHub](https://github.com/ajessup) | [LinkedIn](https://www.linkedin.com/in/andrewjessup/)  
-Term end: May 3rd, 2023  
+**Volkan Ozcelik** (@v0lkan)  
+[GitHub](https://github.com/v0lkan) | [LinkedIn](https://www.linkedin.com/in/volkanozcelik)  
+Term end: May 10th, 2025  
 
 **Frederick Kautz** (@fkautz)  
 [GitHub](https://github.com/fkautz) | [LinkedIn](https://www.linkedin.com/in/fkautz/)  
-Term end: May 3rd, 2023  
+Term end: May 10th, 2025  
 
 **Andres Vega** (@anvega)  
 [GitHub](https://github.com/anvega) | [LinkedIn](https://www.linkedin.com/in/avegaarias/)  
