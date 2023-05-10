@@ -50,16 +50,6 @@ The rest of this section captures the exact steps necessary to begin and complet
 	1. Slack #announcements channel
 	1. SIG mailing lists
 
-### T-35 Days: Initial Polling Closes
-We add this buffer in order to account for handling ties.
-1. Check if we have a tie situation in CIVS.
-	1. If no ties, move to the next section.
-	1. For non-tied seats, move to the next section *just for that seat*.
-	1. For tied seats:
-		1. Sync with the tied candidates. First individually confirm that each is still interested in the position.
-		1. Perform a runoff election between those candidates. *No new candidates, and only the candidates which tied in the last voting round who have not dropped out.* In every other way, follow the `Polling Opens` process.
-		1. If there is still a tie, sync with the tied candidates and again confirm interest. If there is still a contest, arrive at consensus with the candidates on a fair random choice measure, such as using Google to roll dice.
-
 ### T-21 Days: Polling Closes and Results Announced
 1. Election supervisor closes [CIVS](https://civs.cs.cornell.edu/) poll
 1. Comment on tracking issue that polls are now closed
