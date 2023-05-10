@@ -9,7 +9,10 @@ This subdirectory captures the nominees and results of the 2023 H1 SSC election.
 For more information on how to participate, please see the relevant GitHub [tracking issue](https://github.com/spiffe/spiffe/issues/244).
 
 ## Nominees
-TBA
+* [Eli Nesterov](ELI_NESTEROV.md)
+* [Frederick Kautz](FREDERICK_KAUTZ.md)
+* [Volkan Ozcelik.md](VOLKAN_OZCELIK.md)
 
 ## Results
-TBA
+* [Frederick Kautz](FREDERICK_KAUTZ.md)
+* [Volkan Ozcelik.md](VOLKAN_OZCELIK.md)
