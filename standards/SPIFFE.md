@@ -27,9 +27,17 @@ While each of these components has a dedicated specification, the remainder of t
 A SPIFFE ID is a structured string (represented as a URI) which serves as the "name" of an entity. Although just a string, it is the component around which everything else is built. It is defined in the [SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md) specification.
 
 ## 3. The SPIFFE Verifiable Identity Document
-A SPIFFE Verifiable Identity Document (SVID) is a document which carries the SPIFFE ID itself. It is the functional equivalent of a passport - a document which is presented that carries the identity of the presenter. Of course, similar to passports, they must be resistant to forgery, and it must be obvious that the document belongs to the presenter. In order to achieve this, an SVID includes cryptographic properties which allow it to be 1) proven as authentic, and 2) proven to belong to the presenter.
+A SPIFFE Verifiable Identity Document (SVID) is a document which carries the SPIFFE ID itself. It is the functional equivalent of a passport - a document which is presented that carries the identity of the presenter. Of course, similar to passports, they must be resistant to forgery, and it must be obvious that the document belongs to the presenter. In order to achieve this, an SVID includes cryptographic properties which allow it to be:
 
-An SVID itself is not a document type. Instead, we define 1) the properties required of an SVID, and 2) the method by which SVID information can be encoded and validated in various existing document types. The supported document types are an X.509 certificate or a JWT token.
+  1) proven as authentic
+  2) proven to belong to the presenter
+
+An SVID itself is not a document type. Instead, we define:
+
+  1) the properties required of an SVID
+  2) the method by which SVID information can be encoded and validated in various existing document types
+
+The supported document types are an X.509 certificate or a JWT token.
 
 The SPIFFE SVID is defined in the [SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md) specification. The X.509 SVID specification is defined in [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md). The JWT token SVID specification is defined in [The JWT SPIFFE Verifiable Identity Document](JWT-SVID.md).
 
