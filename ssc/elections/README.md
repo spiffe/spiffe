@@ -12,7 +12,7 @@ All nominees are proposed via GitHub Pull Request, and each nominee gets a dedic
 
 The rest of this section captures the exact steps necessary to begin and complete an SSC election. These steps are to be performed by an SSC member, or appointed party.
 
-### Term Start-35 Days: Preparation
+### Term Start-84 Days: Preparation
 1. Identify eligible participants
 	1. Eligible participants MUST have a public email address on their GitHub profile
 1. Open GitHub issue to track election
@@ -22,7 +22,7 @@ The rest of this section captures the exact steps necessary to begin and complet
 	1. Slack #announcements channel
 	1. SIG mailing lists
 
-### T-28 Days: Nomination Opens
+### T-70 Days: Nomination Opens
 1. Create the election directory (e.g. `ssc/elections/2021H1`)
 	1. Copy in `ELECTION_README_TEMPLATE.md`, renaming to `README.md`
 		1. Fill in details, as appropriate
@@ -34,14 +34,14 @@ The rest of this section captures the exact steps necessary to begin and complet
 	1. Slack #announcements channel
 	1. SIG mailing lists
 
-### T-21 Days: Nomination Closes
+### T-56 Days: Nomination Closes
 1. Comment on tracking issue that nominations are now closed
 1. SSC members perform due diligence on all nominations
 	1. Each SSC member to take a portion of the nominations
 	1. SSC members to initiate nominee-specific private SSC discussion if concern about qualification arises
 	1. For every qualified nominee, SSC member performing due diligence to merge nomination PR
 
-### T-14 Days: Polling Opens
+### T-49 Days: Polling Opens
 1. One SSC member to volunteer as election supervisor
 	1. Election supervisor opens poll on [CIVS](https://civs.cs.cornell.edu/)
 1. Comment on tracking issue that polls are now open
@@ -50,7 +50,7 @@ The rest of this section captures the exact steps necessary to begin and complet
 	1. Slack #announcements channel
 	1. SIG mailing lists
 
-### T-7 Days: Polling Closes and Results Announced
+### T-21 Days: Polling Closes and Results Announced
 1. Election supervisor closes [CIVS](https://civs.cs.cornell.edu/) poll
 1. Comment on tracking issue that polls are now closed
 1. Share full poll results privately with SSC
