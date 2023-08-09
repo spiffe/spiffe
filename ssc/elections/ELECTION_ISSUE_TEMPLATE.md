@@ -13,7 +13,7 @@ An initial batch of eligible participants discovered via automation is listed be
 For more information about the definition of active engagement, and how this list was compiled, please see the Election and Term Mechanics section of the [SSC Charter](https://github.com/spiffe/spiffe/blob/master/ssc/CHARTER.md#election-and-term-mechanics).
 
 If you feel that you are an active SPIFFE community member or contributor but are not included in the list below, please contact the SSC at ssc-elections@spiffe.io and we will be happy to include you.
-Even if you do not interact with GitHub normally, a GitHub account is required as this is how SSC members gain administrative rights on the SPIFFE projects.
+Even if you do not interact with GitHub normally, to be an election candidate a GitHub account is required as this is how SSC members gain administrative rights on the SPIFFE projects.
 
 ### Nominating an SSC Member
 Eligible participants may nominate up to two candidates per available SSC seat during the nomination period. They may nominate themselves or someone else.
