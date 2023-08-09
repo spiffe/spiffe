@@ -12,13 +12,16 @@ All nominees are proposed via GitHub Pull Request, and each nominee gets a dedic
 
 The rest of this section captures the exact steps necessary to begin and complete an SSC election. These steps are to be performed by an SSC member, or appointed party.
 
+Eligible participants are initially found via a GitHub search, since all other discovery processes would be manual. This is not intended as an exclusion of community members who are not active in GitHub but otherwise do participant in SPIFFE workstreams.
+However, a GitHub account is required as this is how SSC members gain administrative rights on the SPIFFE projects.
+
 ### Term Start-84 Days: Preparation
-1. Identify eligible participants
-	1. Eligible participants MUST have a public email address on their GitHub profile
+1. Identify initial batch of eligible participants using the `script` subfolder.
+	1. Automation of finding eligible participants requires a public email address on participant GitHub profiles
 1. Open GitHub issue to track election
 	1. The title should be `YYYY [H1,H2] SSC Election`
 	1. Use the text in `ELECTION_ISSUE_TEMPLATE.md` as the issue body, filling in the details as needed
-1. Announce the start of a new election cycle
+1. Announce the start of a new election cycle.
 	1. Slack #announcements channel
 	1. SIG mailing lists
 
