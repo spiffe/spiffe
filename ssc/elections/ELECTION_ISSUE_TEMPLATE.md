@@ -8,7 +8,7 @@ This is the official tracking issue for the YYYY [H1,H2] SSC election. The timel
 
 ## How to Participate
 All SPIFFE community members and contributors demonstrating active engagement in the project(s) are invited to both nominate and vote on new SSC members.
-An initial batch of eligible participants discovered via automation are listed below.
+An initial batch of eligible participants discovered via automation is listed below.
 
 For more information about the definition of active engagement, and how this list was compiled, please see the Election and Term Mechanics section of the [SSC Charter](https://github.com/spiffe/spiffe/blob/master/ssc/CHARTER.md#election-and-term-mechanics).
 
