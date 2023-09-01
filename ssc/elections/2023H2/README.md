@@ -6,7 +6,7 @@ This subdirectory captures the nominees and results of the YYYY [H1,H2] SSC elec
 * OCTOBER 11, 2023: Polls close
 * NOVEMBER 1, 2023: Results announced
 
-For more information on how to participate, please see the relevant GitHub [tracking issue](LINK_TO_ISSUE).
+For more information on how to participate, please see the relevant GitHub [tracking issue](https://github.com/spiffe/spiffe/issues/258).
 
 ## Nominees
 To be announced.
