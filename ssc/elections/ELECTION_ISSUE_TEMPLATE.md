@@ -7,11 +7,13 @@ This is the official tracking issue for the YYYY [H1,H2] SSC election. The timel
 * MONTH DAY, YEAR: Results announced
 
 ## How to Participate
-All SPIFFE community members and contributors demonstrating active engagement in the project(s) are invited to both nominate and vote on new SSC members. The eligible participants are listed below. For more information about the definition of active engagement, and how this list was compiled, please see the Election and Term Mechanics section of the [SSC Charter](https://github.com/spiffe/spiffe/blob/master/ssc/CHARTER.md#election-and-term-mechanics).
+All SPIFFE community members and contributors demonstrating active engagement in the project(s) are invited to both nominate and vote on new SSC members.
+An initial batch of eligible participants discovered via automation is listed below.
 
-All eligible participants MUST have an email address publicly associated with their GitHub account. You may be omitted from the participant list if we're unable to determine your email address.
+For more information about the definition of active engagement, and how this list was compiled, please see the Election and Term Mechanics section of the [SSC Charter](https://github.com/spiffe/spiffe/blob/master/ssc/CHARTER.md#election-and-term-mechanics).
 
 If you feel that you are an active SPIFFE community member or contributor but are not included in the list below, please contact the SSC at ssc-elections@spiffe.io and we will be happy to include you.
+Even if you do not interact with GitHub normally, to be an election candidate a GitHub account is required as this is how SSC members gain administrative rights on the SPIFFE projects.
 
 ### Nominating an SSC Member
 Eligible participants may nominate up to two candidates per available SSC seat during the nomination period. They may nominate themselves or someone else.
