@@ -1,5 +1,5 @@
 # Mohamed Omar
-Sunil Ravipati leads SPIFFE/SPIRE efforts at Confluent.
+Mohamed Omar leads SPIFFE/SPIRE efforts at Confluent.
 He has participated in the SPIFFE community for over 2 years and would be an excellent member of the steering committee.
 
 ## Reference
