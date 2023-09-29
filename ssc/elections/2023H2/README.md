@@ -1,4 +1,5 @@
 ## 2023H2 SSC Election
+
 This subdirectory captures the nominees and results of the YYYY [H1,H2] SSC election. The timeline for this election is as follows:
 * AUGUST 23, 2023: Nominations open
 * SEPTEMBER 6, 2023: Nominations close
