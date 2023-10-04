@@ -3,6 +3,8 @@ SPIFFE comprises a handful of software projects, all of which share a common gov
 
 This document provides detailed information about the maturity phases of the various projects that are part of the overarching [SPIFFE project](https://github.com/spiffe).
 
+To be considered as a new SPIFFE project, see instructions at [NEW_PROJECTS](/NEW_PROJECTS.md).
+
 The SPIFFE project maintains three phases of maturity which indicate the level of reliability and scale at which a particular project or sub-project is known to support:
 - **Development**: The software is still under active development, and many efforts are exploratory. APIs and interfaces may change rapidly and without warning. Use this software for development and proof of concept purposes, but stability and longevity is not guaranteed.
 - **Pre-Production**: The software is relatively stable and being used to solve real problems. APIs and interfaces may change, but effort will be made to consider compatibility. Use this software for integration investigation and technology evaluation. Some early adopters may choose to run this software in production, however it is not recommended. Deprecation of this software is unlikely.
