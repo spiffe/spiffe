@@ -36,11 +36,13 @@ The list of initial maintainers of the project, including GitHub handle.
 What need is the project solving for the community? What problem exists or what enhancement will this create?
 
 What is the *direction* of the project? This is similar but distinct from the *purpose* of the project.
+
 While the purpose highlights the "Why" and "What" of the project, the direction should be about the "How".
 This could include:
 - What does "done" mean for the project? What is the idealized vision for the shape of the project? What are the milestones to complete for each level of [maturity](/MATURITY.md)?
 - What are practices or styles that will be encouraged or discouraged?
 - What notable features or options are in-scope or out-of-scope for the project? This especially will help differentiate your project from any similar ones that might already exist.
+
 It's ok if there's not fully fleshed-out answers to each of these, and projects evolve over time. However the more information that can be provided the more easily SSC may understand the proposal, and the more confidence there will be in alignment amongst the maintainers.
 
 #### Governance
@@ -48,7 +50,9 @@ It's ok if there's not fully fleshed-out answers to each of these, and projects 
 The operations of the project.
 
 How will maintainers be added or removed? What is the goal number of maintainers?
+
 How often will the maintainers meet?
+
 How will maintainers interact with contributors and review their Pull Requests and Issues? Slack? Dedicated online meetings? What is the goal turn around time?
 
 #### Similar Projects
