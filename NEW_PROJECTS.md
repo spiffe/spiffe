@@ -49,10 +49,26 @@ What need is the project solving for the community? What problem exists or what 
 What is the *direction* of the project? This is similar but distinct from the *purpose* of the project.
 
 While the purpose highlights the "Why" and "What" of the project, the direction should be about the "How".
-This could include:
+This could include-
+Vision:
+- What specific pain point does the project address?
 - What does "done" mean for the project? What is the idealized vision for the shape of the project? What are the milestones to complete for each level of [maturity](/MATURITY.md)?
-- What are practices or styles that will be encouraged or discouraged?
 - What notable features or options are in-scope or out-of-scope for the project? This especially will help differentiate your project from any similar ones that might already exist.
+- What are the current workarounds or alternative solutions, and why are they inadequate?
+- How does your project align with SPIFFE's overall mission and goals?
+- Who are the primary end-users or beneficiaries of this project?
+
+Direction:
+- What is the project’s roadmap for the next 6-12 months?
+- What are practices or styles that will be encouraged or discouraged?
+- How will the project scale? What are the scalability goals?
+- Are there any legal or ethical considerations?
+- What are potential challenges, and how do you plan to overcome them?
+- What kind of community involvement do you foresee (e.g., are there opportunities for novice contributors, or is the project more suitable for experts in the field?)
+- What technologies will the project leverage, and are they aligned with the larger ecosystem?
+- How will the project maintain data integrity, security, and privacy?
+- Are there any possible collaborations with existing SPIFFE projects?
+- How will your project deal with failure scenarios or fallbacks?
 
 It's ok if there's not fully fleshed-out answers to each of these, and projects evolve over time. However the more information that can be provided the more easily SSC may understand the proposal, and the more confidence there will be in alignment amongst the maintainers.
 
