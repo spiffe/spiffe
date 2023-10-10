@@ -19,8 +19,9 @@ If your project is already under the SPIFFE banner, you may be looking for [MATU
 ## Notice
 
 Maintainer groups are given significant freedom in managing their projects to that we may best foster growth and innovation. There are some elements of SPIFFE subproject ownership to be aware of:
-The [SPIFFE Steering Committee](/ssc/README.md) (SSC) governs the SPIFFE organization as a whole, and has the final authority on acceptance, rejection, or eviction of projects. Additionally, as stewards of community health, the SSC is responsible for intervening in any [Code of Conduct](/CODE-OF-CONDUCT.md) violations or derelictions of maintainer responsibility.
-Note that when contributing a project to SPIFFE, its purpose becomes to serve the SPIFFE community rather than any personal gain. Additionally, we expect a sufficient number of maintainers for a project as it grows, not all of whom may bring the same direction you may originally have had in mind.
+- The [SPIFFE Steering Committee](/ssc/README.md) (SSC) governs the SPIFFE organization as a whole, and has the final authority on acceptance, rejection, or eviction of projects. Additionally, as stewards of community health, the SSC is responsible for intervening in any [Code of Conduct](/CODE-OF-CONDUCT.md) violations or derelictions of maintainer responsibility.
+- Note that when contributing a project to SPIFFE, its purpose becomes to serve the SPIFFE community rather than any personal gain. Additionally, we expect a sufficient number of maintainers for a project as it grows, not all of whom may bring the same direction you may originally have had in mind.
+
 Carefully consider this change in control and purpose.
 
 *Every SPIFFE project* at minimum must follow the [SPIFFE Code of Conduct](/CODE-OF-CONDUCT.md).
