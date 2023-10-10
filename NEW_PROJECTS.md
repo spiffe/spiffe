@@ -79,7 +79,7 @@ The operations of the project.
 - How will maintainers be added or removed? What is the goal number of maintainers?
 - How often will the maintainers meet?
 - How will maintainers interact with contributors and review their Pull Requests and Issues? Slack? Dedicated online meetings? What is the goal turn around time?
-- What conflict resolution mechnisms will the maintainers follow?
+- What conflict resolution mechnisms will the maintainers follow? (e.g., allocated debate time? Majority vote? Unanimous vote for certain topics? What is the SLO for resolution?)
 
 #### Similar Projects
 
