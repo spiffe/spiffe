@@ -1,3 +1,13 @@
+# Introduction
+
+The Secure Production Identity Framework For Everyone (SPIFFE) Project defines a framework and set of standards for identifying and securing communications between application services. You can read more about it at the [README](/README.md).
+
+You may be interested in contributing a project to SPIFFE in order to:
+- Fill some technological or use case gap
+- Enhance UX for operators of a SPIFFE solution such as [SPIRE](https://github.com/spiffe/spire).
+- Build on top of one or multiple existing solutions as a unique offering
+or other possible motivations.
+
 # Creating a new SPIFFE Project
 
 We are grateful for your desire to expand the SPIFFE ecosystem with your contribution!
