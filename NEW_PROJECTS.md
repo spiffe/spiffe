@@ -94,3 +94,5 @@ Has this project existed in the past but was abandoned or closed out? What is di
 The SSC will work with you to schedule a review of the proposal. Ideally all initial maintainers would be present in that review. Anyone not present should at least sign off on the proposal so that we know there is a unified commitment.
 
 The SSC will bring up any concerns around the proposal, but overall we aim to accept proposals that serve even a subsection of the community as long as there is confidence that the project will be healthy.
+
+The SSC meets regularly, and will do its best to come to resolution within a couple sync cycles. Acceptance of a new project into the community is a significant decision, and your patience is appreciated.
