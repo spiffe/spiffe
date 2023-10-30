@@ -8,7 +8,7 @@ You may be interested in contributing a project to SPIFFE in order to:
 - Build on top of one or multiple existing solutions as a unique offering
 or other possible motivations.
 
-# Creating a new SPIFFE Project
+# Creating or donating a new SPIFFE Project
 
 We are grateful for your desire to expand the SPIFFE ecosystem with your contribution!
 
