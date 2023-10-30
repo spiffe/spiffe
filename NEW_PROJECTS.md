@@ -30,7 +30,7 @@ Carefully consider this change in control and purpose.
 
 ### Contact
 
-The SSC can be contacted with proposal details at ssc@spiffe.io or on [our SPIFFE slack channel](https://spiffe.slack.com/archives/C01GQ267JJU).
+The SSC can be contacted with proposal details at ssc@spiffe.io or in [the #ssc channel](https://spiffe.slack.com/archives/C01GQ267JJU) of [SPIFFE slack](https://slack.spiffe.io).
 
 ### Proposal Outline
 
