@@ -14,7 +14,7 @@ Term end: May 10th, 2025
 [GitHub](https://github.com/fkautz) | [LinkedIn](https://www.linkedin.com/in/fkautz/)  
 Term end: May 10th, 2025  
 
-**Mohamed Omar** (@Mohamed Omar)  
+**Mohamed Omar** (@moe-omar)  
 [GitHub](https://github.com/moe-omar) | [LinkedIn](https://www.linkedin.com/in/moeomar/)  
 Term end: November 1st, 2025  
 
