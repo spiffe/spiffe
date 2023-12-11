@@ -14,13 +14,13 @@ Term end: May 10th, 2025
 [GitHub](https://github.com/fkautz) | [LinkedIn](https://www.linkedin.com/in/fkautz/)  
 Term end: May 10th, 2025  
 
-**Andres Vega** (@anvega)  
-[GitHub](https://github.com/anvega) | [LinkedIn](https://www.linkedin.com/in/avegaarias/)  
-Term end: November 1st, 2023  
+**Mohamed Omar** (@Mohamed Omar)  
+[GitHub](https://github.com/moe-omar) | [LinkedIn](https://www.linkedin.com/in/moeomar/)  
+Term end: November 1st, 2025  
 
 **Andrew Moore** (@amoore877)  
 [GitHub](https://github.com/amoore877) | [LinkedIn](https://www.linkedin.com/in/andrew-moore-681b1114a/)  
-Term end: November 1st, 2023  
+Term end: November 1st, 2025  
 
 **Dan Feldman** (@dfeldman)  
 [GitHub](https://github.com/dfeldman) | [LinkedIn](https://www.linkedin.com/in/dfeldman)  
