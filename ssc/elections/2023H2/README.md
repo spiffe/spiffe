@@ -10,7 +10,10 @@ This subdirectory captures the nominees and results of the YYYY [H1,H2] SSC elec
 For more information on how to participate, please see the relevant GitHub [tracking issue](https://github.com/spiffe/spiffe/issues/258).
 
 ## Nominees
-To be announced.
+Andrew Moore
+Mohamed Omar
+Sunil Ravipati
 
 ## Results
-To be announced.
+Andrew Moore
+Mohamed Omar
