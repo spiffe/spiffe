@@ -6,6 +6,8 @@ This is the official tracking issue for the YYYY [H1,H2] SSC election. The timel
 * MONTH DAY, YEAR: Polls close
 * MONTH DAY, YEAR: Results announced
 
+There is/are X seats available.
+
 ## How to Participate
 All SPIFFE community members and contributors demonstrating active engagement in the project(s) are invited to both nominate and vote on new SSC members.
 An initial batch of eligible participants discovered via automation is listed below.
