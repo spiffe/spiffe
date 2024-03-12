@@ -1,0 +1,41 @@
+# SPIFFE Steering Committee Onboarding
+
+Congratulations!
+
+The following is an evolving checklist of administrative items to complete, either by you the new member or by an existing member so that you may execute your responsibilities with as few permission roadblocks as reasonable.
+
+Remember, with great power comes great responsibility.
+
+[ ] Join the #ssc channel in SPIFFE slack.
+[ ] Get invited to the #ssc-private channel in SPIFFE slack.
+[ ] Introductory meeting with the rest of SSC. This could be coordinated as its own event, or could be the next scheduled SSC meeting.
+[ ] Import the calendar event for the SSC meeting schedule from the #ssc channel. The event also contains meeting notes so you can see all recent and historical discussions.
+[ ] Password / account handoff, or entirely new account creation, for Admin powers on the spiffe.io domain in Gsuite. For auditability, each SSC member has their own privileged acount.
+[ ] Ensure (documented membership of SSC)[README.md] is updated, as is the associated GitHub issue for the election.
+[ ] Ensure (membership of SSC in Github)[https://github.com/orgs/spiffe/teams/ssc] is updated.
+[ ] Choose a secure personal email to be added to ssc@spiffe.io in Gsuite.
+[ ] Ensure you have a CNCF service desk account at http://servicedesk.cncf.io/. See (CNCF help)[https://github.com/cncf/servicedesk#i-dont-have-a-servicedesk-account] for steps.
+[ ] Ensure you are added as a SPIFFE Slack Workspace Admin at https://spiffe.slack.com/admin.
+
+## Documentation
+
+Our core document is the meeting notes from our recurring sync above.
+
+## Feedback
+
+Anyone and everyone should always feel empowered to give feedback about these processes or anything else within the SSC's domain.
+
+# SPIFFE Steering Committee Offboarding
+
+Offboarding is largely the opposite of Onboarding:
+
+[ ] Leave the #ssc-private channel in SPIFFE slack.
+[ ] Handoff or ensure deletion of your privileged Gsuite account in the spiffe.io domain.
+[ ] Ensure (documented membership of SSC)[README.md] is updated, as is the associated GitHub issue for the election.
+[ ] Ensure (membership of SSC in Github)[https://github.com/orgs/spiffe/teams/ssc] is updated.
+[ ] Ensure your personal email is removed from ssc@spiffe.io in Gsuite.
+[ ] Ensure you are downgraded to Workspace Member in SPIFFE Slack at https://spiffe.slack.com/admin.
+
+## Exit discussion
+
+At your discretion, we would welcome learning your final thoughts on your time with the SSC, especially if you have any suggestions for improvement.
