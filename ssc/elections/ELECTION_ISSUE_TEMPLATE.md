@@ -1,6 +1,6 @@
 # YYYY [H1,H2] SSC Election
 This is the official tracking issue for the YYYY [H1,H2] SSC election. The timeline for this election is as follows:
-* MONTH DAY, YEAR: Nominations open
+* IMMEDIATELY: Nominations open
 * MONTH DAY, YEAR: Nominations close
 * MONTH DAY, YEAR: Polls open
 * MONTH DAY, YEAR: Polls close
@@ -43,13 +43,8 @@ If you are in the list of eligible participants, and you don't receive a link on
 Each participant casts a single ranked vote. If more than one SSC seat is available, the top N nominees will be selected.
 
 ## Eligible Participants
-This section lists everyone eligible to participate in this SSC election cycle. If you believe you were omitted in error, please contact the SSC at ssc-elections@spiffe.io.
+This section lists everyone eligible to participate in this SSC election cycle. If you believe you were omitted in error, please contact the SSC at ssc-elections@spiffe.io. If you have an `**` next to your username, we do not have a known email address to contact you at for sending a voting link. Please publish an email address to your GitHub profile and contact the SSC at ssc-elections@spiffe.io.
 
 * LAST\_NAME, FIRST\_NAME (@GITHUB\_HANDLE) \<EMAIL\_ADDRESS\>
 * ...
 
-### Eligible Participants with Missing Email Addresses
-The following participants would normally be eligible to participate, but do not have email addresses published on their GitHub account. Please publish an email address and contact the SSC at ssc-elections@spiffe.io to be added to the list of eligible participants.
-
-* @GITHUB\_HANDLE
-* ...
