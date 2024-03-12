@@ -19,7 +19,7 @@ Term end: May 10th, 2025
 Term end: November 1st, 2025  
 
 **Andrew Moore** (@amoore877)  
-[GitHub](https://github.com/amoore877) | [LinkedIn](https://www.linkedin.com/in/andrew-moore-681b1114a/)  
+[GitHub](https://github.com/amoore877) | [LinkedIn](https://www.linkedin.com/in/andrew-smore)  
 Term end: November 1st, 2025  
 
 **Dan Feldman** (@dfeldman)  
