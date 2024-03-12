@@ -1,6 +1,6 @@
 # YYYY [H1,H2] SSC Election
 This is the official tracking issue for the YYYY [H1,H2] SSC election. The timeline for this election is as follows:
-* MONTH DAY, YEAR: Nominations open
+* IMMEDIATELY: Nominations open
 * MONTH DAY, YEAR: Nominations close
 * MONTH DAY, YEAR: Polls open
 * MONTH DAY, YEAR: Polls close
