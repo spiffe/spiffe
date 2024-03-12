@@ -79,7 +79,7 @@ INELIGIBLE_VOTERS=""
 echo
 echo
 for VOTER in $ELIGIBLE_VOTERS; do
-	if [ "$VOTER" == "dependabot[bot]" ]; then
+	if [ "$VOTER" == "dependabot[bot]" ] || [ "$VOTER" == "github-actions[bot]" ] || [ "$VOTER" == "chainguard-alerter" ] ; then
 		continue
 	fi
 
