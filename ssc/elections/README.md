@@ -15,22 +15,16 @@ The rest of this section captures the exact steps necessary to begin and complet
 Eligible participants are initially found via a GitHub search, since all other discovery processes would be manual. This is not intended as an exclusion of community members who are not active in GitHub but otherwise do participate in SPIFFE workstreams.
 However, for candidates a GitHub account is required as this is how SSC members gain administrative rights on the SPIFFE projects.
 
-### Term Start-84 Days: Preparation
+### Term Start-84 Days: Preparation, Nominations Open
 1. Identify initial batch of eligible participants using the `script` subfolder.
 	1. Automation of finding eligible participants requires a public email address on participant GitHub profiles
 1. Open GitHub issue to track election
 	1. The title should be `YYYY [H1,H2] SSC Election`
 	1. Use the text in `ELECTION_ISSUE_TEMPLATE.md` as the issue body, filling in the details as needed
-1. Announce the start of a new election cycle.
-	1. Slack #announcements channel
-	1. SIG mailing lists
-
-### T-70 Days: Nomination Opens
 1. Create the election directory (e.g. `ssc/elections/2021H1`)
 	1. Copy in `ELECTION_README_TEMPLATE.md`, renaming to `README.md`
 		1. Fill in details, as appropriate
 	1. Send a PR titled `Open Nominations for YYYY [H1,H2] SSC Election` to add the new directory and README
-	1. Once merged, comment on the tracking issue to announce that nominations are now open
 1. All nomination PRs are to be left OPEN during the nomination period
 	1. GH reactions and comments are welcome
 1. Announce the start of nominations
