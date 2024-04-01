@@ -9,7 +9,9 @@ By May 3rd, 2024: Results announced
 For more information on how to participate, please see #272
 
 ## Nominees
-To be announced.
+- Daniel Feldman
+- Kevin Fox
+- Mariusz Sabath
 
 ## Results
 To be announced.
