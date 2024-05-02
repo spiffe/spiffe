@@ -14,4 +14,6 @@ For more information on how to participate, please see #272
 - Mariusz Sabath
 
 ## Results
-To be announced.
+
+Kevin Fox has won the election.
+
