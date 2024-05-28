@@ -12,7 +12,7 @@ Remember, with great power comes great responsibility.
 [ ] Ensure (owner on the SPIFFE org)[https://github.com/orgs/spiffe/people?query=role%3Aowner] role is added.
 [ ] Choose a secure personal email to be added to ssc@spiffe.io in Gsuite.
 [ ] Ensure you have a CNCF service desk account at http://servicedesk.cncf.io/. See (CNCF help)[https://github.com/cncf/servicedesk#i-dont-have-a-servicedesk-account] for steps.
-[ ] Ensure you are added as a SPIFFE Slack Workspace Admin at https://spiffe.slack.com/admin.
+[ ] Ensure you are added as a SPIFFE Slack Workspace Owner at https://spiffe.slack.com/admin.
 
 # SPIFFE Steering Committee Offboarding
 
