@@ -13,6 +13,7 @@ Remember, with great power comes great responsibility.
 [ ] Choose a secure personal email to be added to ssc@spiffe.io in Gsuite.
 [ ] Ensure you have a CNCF service desk account at http://servicedesk.cncf.io/. See (CNCF help)[https://github.com/cncf/servicedesk#i-dont-have-a-servicedesk-account] for steps.
 [ ] Ensure you are added as a SPIFFE Slack Workspace Owner at https://spiffe.slack.com/admin.
+[ ] An existing member of SSC needs to send you a (netlify)[app.netlify.com] invite for the SPIFFE org as an owner. Create a netlify account if needed.
 
 # SPIFFE Steering Committee Offboarding
 
@@ -24,3 +25,4 @@ Offboarding is largely the opposite of Onboarding:
 [ ] Ensure (owner on the SPIFFE org)[https://github.com/orgs/spiffe/people?query=role%3Aowner] is removed.
 [ ] Ensure your personal email is removed from ssc@spiffe.io in Gsuite.
 [ ] Ensure you are downgraded to Workspace Member in SPIFFE Slack at https://spiffe.slack.com/admin.
+[ ] Ensure you are removed from the SPIFFE org in (netlify)[app.netlify.com].
