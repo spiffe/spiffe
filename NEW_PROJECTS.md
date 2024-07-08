@@ -35,8 +35,9 @@ Some projects may be very small and yet still:
 There are core overriding changes for such projects:
 - The threshold for rationale of a separate project rather than inclusion in another is likely to be higher
 - There will be more tolerance for lighter core maintainer membership, which may be supplemented by a "tiny projects" maintainer group (today, the SSC) for trivial maintenance actions (ex. dependency updates, minor tidying):
--- If this supplementing is needed, then the documentation, testing, quality bar for the project is likely to be higher. Supplemental maintainers may lack full context for the project and thus require reliable documentation discovery and testing tools.
--- If this supplementing is needed, The project will be more aggressively periodically reviewed for need- whether it is still in-use at all or should be archived
+If this supplementing is needed:
+- the documentation, testing, quality bar for the project is likely to be higher. Supplemental maintainers may lack full context for the project and thus require reliable documentation discovery and testing tools.
+- if this supplementing is needed, the project will be more aggressively periodically reviewed for need- whether it is still in-use at all or should be archived
 
 ## Project Proposal
 
