@@ -10,3 +10,5 @@ svid-test/.certs
 svid-test/.venv
 svid-test/.cache
 svid-test/.vagrant
+
+.idea
