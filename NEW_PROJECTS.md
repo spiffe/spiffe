@@ -45,6 +45,15 @@ If this supplementing is needed:
 
 The SSC can be contacted with proposal details at ssc@spiffe.io or in [the #ssc channel](https://spiffe.slack.com/archives/C01GQ267JJU) of [SPIFFE slack](https://slack.spiffe.io).
 
+### Proposal Delivery Method
+
+Informal conversations can be initiated via above Contact methods.
+
+As the idea takes more shape, we ask for a Google Document to be created with the details listed below. Please share the document with ssc@spiffe.io with Comment access.
+We will ideate/collaborate within the document with you over time.
+
+As the proposal becomes more stable, we will ask for a Pull Request-copy of the proposal to be pushed to [the proposals directory](./proposals).
+
 ### Proposal Outline
 
 The following details are expected for proposals to help us best understand how the project will serve the community.
