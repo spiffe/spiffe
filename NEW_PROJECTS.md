@@ -49,12 +49,12 @@ The SSC can be contacted with proposal details at ssc@spiffe.io or in [the #ssc 
 
 Informal conversations can be initiated via above Contact methods.
 
-As the idea takes more shape, we would prefer something like a Google Document to be created with the details listed below. Please share the document with ssc@spiffe.io with Comment access.
+As the idea takes more shape, we would prefer something like a Google Document to be created with the Proposal Details listed below. Please share the document with ssc@spiffe.io with Comment access.
 We will ideate/collaborate within the document with you over time. If another method of collaboration works best for you, we will work with you.
 
 As the proposal becomes more stable, we will ask for a Pull Request-copy of the proposal to be pushed to [the proposals directory](./proposals).
 
-### Proposal Outline
+### Proposal Details
 
 The following details are expected for proposals to help us best understand how the project will serve the community.
 
