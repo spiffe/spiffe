@@ -1,13 +1,13 @@
-## Procedure for Engaging With SaaS Companies
+## Procedure for Engaging With Vendor Companies
 
 ### Summary
 
-This document outlines the procedure for engaging with SaaS companies, and
-how SaaS companies can represent themselves and their interests in the SPIFFE
+This document outlines the procedure for engaging with vendor companies, and
+how vendor companies can represent themselves and their interests in the SPIFFE
 community.
 
 The goal is to provide a clear and consistent process for engaging with 
-SaaS companies that are included but not limited to those that use SPIFFE and 
+vendor companies that are included but not limited to those that use SPIFFE and 
 SPIRE, provide a proprietary SPIFFE-compatible service, or are interested in 
 contributing to the SPIFFE project.
 
@@ -18,14 +18,15 @@ technical contact designation, and handling potential disruptive participants.
 
 #### Objective
 
-To ensure effective communication and support for SaaS consumers 
-using the SPIFFE specification by designating responsible technical contacts.
+To ensure effective communication and support for vendor product or service
+consumers using the SPIFFE specification by designating responsible technical 
+contacts.
 
 #### Guidelines
 
 ##### Designation of Contacts
 
-* Each SaaS company that directs their customers to the SPIFFE Slack channel 
+* Each vendor company that directs their customers to the SPIFFE Slack channel 
   must designate two technical contacts.
 * These contacts will serve as the primary point of contact for addressing 
   queries and facilitating communication between the customers and the SPIFFE 
@@ -51,8 +52,9 @@ The folder will contain:
 
 #### Objective
 
-To establish clear protocols for interactions between SaaS consumers and the 
-SPIFFE community to ensure a productive and respectful environment.
+To establish clear protocols for interactions between vendor product or service 
+consumers and the SPIFFE community to ensure a productive and respectful 
+environment.
 
 #### Guidelines
 
@@ -75,8 +77,9 @@ SPIFFE community to ensure a productive and respectful environment.
 
 ##### Feedback Mechanism
 
-SPIFFE Steering Committee encourages SaaS consumers to provide feedback on their 
-experience with the SPIFFE specification and the support received.
+SPIFFE Steering Committee encourages vendor product or service consumers to 
+provide feedback on their experience with the SPIFFE specification and the 
+support received.
 
 SPIFFE Steering Committee will use this feedback to improve documentation, 
 support processes, and community guidelines.
