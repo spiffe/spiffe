@@ -14,7 +14,7 @@ contributing to the SPIFFE project.
 More specifically, this document includes guidelines for communication, 
 technical contact designation, and handling potential disruptive participants.
 
-### Technical Contacts
+### Contacts
 
 #### Objective
 
@@ -27,11 +27,37 @@ contacts.
 ##### Designation of Contacts
 
 * Each vendor company that directs their customers to the SPIFFE Slack channel 
-  must designate two technical contacts.
+  must designate two contacts. At least one of these contacts are encouraged
+  (*but not required*) to be a technical contact. See the definition of roles
+  and responsibilities of technical and community contacts in the subsequent
+  **Kinds of Contacts** subsection.
 * These contacts will serve as the primary point of contact for addressing 
   queries and facilitating communication between the customers and the SPIFFE 
   community and provide a mechanism for the SPIFFE community to communicate
   with the company.
+
+##### Kinds of Contacts
+
+Companies should designate two types of contacts: **technical** and 
+**community**.
+
+Companies are *strongly encouraged* to designate at least one technical contact.
+
+A designated contact can serve as both a technical and community contact.
+
+**Technical Contacts** are individuals with extensive knowledge of the vendor's 
+SPIFFE product implementation. They will serve as the primary point of contact 
+for SPIFFE contributors who have questions about the specifics of a vendor's 
+implementation and for handling technical queries.
+
+**Community Contacts** are individuals responsible for developer relations, 
+developer experience, or other community engagement functions for the vendor. 
+Their role includes engaging with and moderating the community associated with 
+the vendor and the SPIFFE project. They will be the primary contact for 
+discussions that benefit both the vendor and the SPIFFE project. This includes 
+creating and sharing content such as case studies, use case statements, 
+blog posts, screencasts, podcasts, tutorials, interviews, and other forms of 
+media.
 
 ##### Documentation of Contacts
 
@@ -61,7 +87,7 @@ environment.
 ##### Communication Etiquette
 
 * All interactions must be professional, respectful, and focused on technical 
-  issues. [Refer to the SPIFFE Code of Conduct for details][coc].
+  issues. [Refer to the **SPIFFE Code of Conduct** for details][coc].
 * Technical contacts are responsible for ensuring that their customers, and 
   anyone who join the community through their reference adhere to the community 
   guidelines and maintain a positive environment.
