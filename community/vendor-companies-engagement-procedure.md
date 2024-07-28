@@ -152,6 +152,31 @@ the SPIFFE Slack channel remains a productive and positive space.
   issues, the company will be removed from the channels and the list of 
   community partners.
 
+##### Channel Removal Process
+
+If a specific vendor's channel consistently experiences disruptive behavior or 
+other persistent issues despite warnings and interventions:
+
+* The SSC will conduct a thorough review of the channel's activity and impact 
+  on the community.
+* If the SSC determines that the channel is detrimental to the community's 
+  well-being or productivity, they will initiate a formal discussion about 
+  potential channel removal.
+* The SSC will notify the vendor's technical and community contacts about the 
+  concerns and the potential for channel removal.
+* The vendor will be given a specified timeframe (e.g., 30 days) to address the 
+  issues and demonstrate improvement.
+* If no significant improvement is observed, the SSC will vote on removing the 
+  channel.
+* A majority vote from the SSC is required to remove a channel.
+* If the vote passes, the channel will be archived, and the vendor will be 
+  notified of the decision and the reasons behind it.
+* The vendor may appeal the decision or request reinstatement after a specified 
+  period (e.g., 6 months), demonstrating how they have addressed the previous 
+  issues.
+* The timelines for removal, appeal, and reinstatement are subject to change 
+  based on the SSC's discretion.
+
 ##### Documentation and Reporting
 
 * SSC will document all incidents of disruptive behavior, including the 
