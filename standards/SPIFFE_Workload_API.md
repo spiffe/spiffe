@@ -80,7 +80,7 @@ For additional clarity, please see [Appendix A](#appendix-a-sample-implementatio
 
 SPIFFE Workload API response messages are complete updates to previously sent response messages. When a response message contains fields which are set to default or empty values, clients MUST interpret the values of those fields to have been set to their default or empty values; previously received, non-default or non-empty values MUST NOT be retained by a client after receiving a default or empty value for the fields. For instance, a client receiving a default value in the `federated_bundles` field should discard the previously received `federated_bundles` value.
 
-Since every message MUST include the full set of information (see the [Stream Responses](#42-stream-responses) section), clients SHOULD interpret the absence of data as a redaction. As an example, if a client has loaded a bundle for `spiffe://foo.bar`, and receives a message that does not include a bundle for `spiffe://foo.bar`, then the bundle SHOULD be unloaded.
+Since every message MUST include the full set of information (see the [Stream Responses](#43-stream-responses) section), clients SHOULD interpret the absence of data as a redaction. As an example, if a client has loaded a bundle for `spiffe://foo.bar`, and receives a message that does not include a bundle for `spiffe://foo.bar`, then the bundle SHOULD be unloaded.
 
 ### 4.5 Mandatory Fields
 
@@ -198,7 +198,7 @@ All fields in the `X509SVID` message are mandatory, with the exception of the `h
 
 If the client is not entitled to receive any X509-SVIDs, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). Under such a case, the client MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
 
-As mentioned in [Stream Responses](#42-stream-responses), each `X509SVIDResponse` message returned on the `FetchX509SVID` stream contains the complete set of authorized SVIDs and bundles for the client at that point in time. As such, if the server redacts SVIDs from a subsequent response (or all SVIDs, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted SVIDS.
+As mentioned in [Stream Responses](#43-stream-responses), each `X509SVIDResponse` message returned on the `FetchX509SVID` stream contains the complete set of authorized SVIDs and bundles for the client at that point in time. As such, if the server redacts SVIDs from a subsequent response (or all SVIDs, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted SVIDS.
 
 #### 5.2.2 FetchX509Bundles
 
@@ -210,7 +210,7 @@ The `X509BundlesResponse` response message has a mandatory `bundles` field, whic
 
 If the client is not entitled to receive any X.509 bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
 
-As mentioned in [Stream Responses](#42-stream-responses), each `X509BundleResponse` response contains the complete set of authorized X.509 bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
+As mentioned in [Stream Responses](#43-stream-responses), each `X509BundleResponse` response contains the complete set of authorized X.509 bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
 ### 5.3 Default Identity
 
@@ -344,7 +344,7 @@ The returned bundles are encoded as a standard JWK Set as defined by [RFC 7517](
 
 If the client is not entitled to receive any JWT bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchJWTBundles` RPC after a backoff.
 
-As mentioned in [Stream Responses](#42-stream-responses), each `JWTBundleResponse` response contains the complete set of authorized JWT bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
+As mentioned in [Stream Responses](#43-stream-responses), each `JWTBundleResponse` response contains the complete set of authorized JWT bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
 #### 6.2.3 ValidateJWTSVID
 
