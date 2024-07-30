@@ -74,7 +74,7 @@ The exact timing of server response messages is implementation-specific, and SHO
 
 Finally, implementers of SPIFFE Workload API servers should be careful about pushing updated response messages *too* rapidly. Some software may reload automatically upon receiving new information, potentially causing a period of unavailability should all instances reload at once. As a result, implementers may introduce some splay/jitter in the transmission of widespread updates.
 
-For additional clarity, please see [Appendix A](#appendix-a.-sample-implementation-state-machines) for sample implementation state machines.
+For additional clarity, please see [Appendix A](#appendix-a-sample-implementation-state-machines) for sample implementation state machines.
 
 ### 4.4 Default Values and Redacted Information
 
