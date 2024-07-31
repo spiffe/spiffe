@@ -119,7 +119,7 @@ For every JWK entry in the bundle with the `use` parameter set to `x509-svid`, c
 The first value of the `x5c` parameter is the base64 DER-encoded CA certificate that the entry represents. If the `x5c` parameter contains multiple values, then all but the first MUST be ignored. The X509-SVID CA bundle is then the union of CA certificates extracted from the `x509-svid` JWK entries. If no `x509-svid` JWK entries are present in the bundle, then the trust domain does not support X509-SVID.
 
 ## 7. Conclusion
-This document set forth conventions and standards for the issuance and validation of X.509-based SPIFFE Verifiable Identity Documents. It forms the basis for real world SPIFFE service authentication and SVID validation. By conforming to the X.509 SVID standard, it is possible to build an identity and authentication system which is interoperable and platform agnostic.
+This document set forth conventions and standards for the issuance and validation of X.509-based SPIFFE Verifiable Identity Documents. It forms the basis for real-world SPIFFE service authentication and SVID validation. By conforming to the X.509 SVID standard, it is possible to build an identity and authentication system which is interoperable and platform agnostic.
 
 ## Appendix A. X.509 Field Reference
 Extension | Field | Description
