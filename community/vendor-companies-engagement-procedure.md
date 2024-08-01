@@ -18,7 +18,7 @@ technical contact designation, and handling potential disruptive participants.
 
 #### Objective
 
-To ensure effective communication and support for vendor product or service
+To ensure effective communication and support for vendor’s product or service
 consumers using the SPIFFE specification by designating responsible technical 
 contacts.
 
@@ -62,7 +62,7 @@ media.
 ##### Documentation of Contacts
 
 A dedicated folder for each company will be created in the SPIFFE repository
-under the `./community/saas-technical-contacts` directory.
+under the `./community/vendor-technical-contacts` directory.
 
 The folder will contain:
 
@@ -78,8 +78,8 @@ The folder will contain:
 
 #### Objective
 
-To establish clear protocols for interactions between vendor product or service 
-consumers and the SPIFFE community to ensure a productive and respectful 
+To establish clear protocols for interactions between the vendor’s product or 
+service consumers and the SPIFFE community to ensure a productive and respectful 
 environment.
 
 #### Guidelines
@@ -103,9 +103,8 @@ environment.
 
 ##### Feedback Mechanism
 
-SPIFFE Steering Committee encourages vendor product or service consumers to 
-provide feedback on their experience with the SPIFFE specification and the 
-support received.
+SPIFFE Steering Committee encourages vendor to provide feedback on their 
+experience with the SPIFFE specification and the support received.
 
 SPIFFE Steering Committee will use this feedback to improve documentation, 
 support processes, and community guidelines.

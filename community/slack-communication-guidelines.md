@@ -4,8 +4,8 @@
 
 To foster a productive and positive community, we have established the 
 following guidelines for professional and respectful communication within the 
-SPIFFE Slack channel. These guidelines apply to all members, including SaaS 
-consumers, maintainers, and contributors.
+SPIFFE Slack channel. These guidelines apply to all members, including consumers, 
+maintainers, and contributors.
 
 ### General Conduct
 
@@ -53,7 +53,7 @@ Provide context and details to facilitate a fair resolution.
 #### Follow the Escalation Process
 
 If disruptive behavior continues, follow the escalation process outlined in the
-[Procedure for Engaging With SaaS Companies](saas-companies-engagement-procedure.md)
+[Procedure for Engaging With Vendor Companies](vendor-companies-engagement-procedure.md)
 documentation.
 
 Respect the decisions made regarding conflict resolution.
