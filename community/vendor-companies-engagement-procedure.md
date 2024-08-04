@@ -89,7 +89,7 @@ environment.
 * All interactions must be professional, respectful, and focused on technical 
   issues. [Refer to the **SPIFFE Code of Conduct** for details][coc].
 * Technical contacts are responsible for ensuring that their customers, and 
-  anyone who join the community through their reference adhere to the community 
+  anyone who joins the community through their reference adhere to the community 
   guidelines and maintain a positive environment.
 
 [coc]: ../CODE-OF-CONDUCT.md "SPIFFE Code of Conduct"

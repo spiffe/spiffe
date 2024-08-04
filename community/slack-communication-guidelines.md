@@ -85,9 +85,9 @@ the behavior and consequences of continued violations.
 #### Permanent Removal
 
 * Severe or repeated violations may result in permanent removal from the Slack 
-channel.
+  channel.
 * Decisions for permanent removal will be made by the SSC team and communicated
-  the interested parties.
+  to the interested parties.
 
 ### Feedback and Improvement
 
