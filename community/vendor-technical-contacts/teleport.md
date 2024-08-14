@@ -12,7 +12,7 @@ OSS users can should seek support via the community Slack: https://goteleport.co
 
 ## Contacts
 
-### Noah Stride (Technical && Community)
+### Noah Stride (Technical and Community)
 
 **Type:** Technical, Community
 
