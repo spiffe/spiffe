@@ -40,7 +40,7 @@ If you feel any of SPIFFE's communication channels require moderation, or any in
 
 The SSC will investigate all reports in a reasonable timeframe.
 The SSC encourages timely reporting so that any potential evidence or other investigations will be more viable.
-The SSC will respond to reporters with the high-level conclusion of any action resulting from their report. If you would like clarity on a decision, the SSC is happy to discuss. If you are unsatisfied and still believe the situation requires escalation, report to [the CNCF Code of Conduct Committee](https://www.cncf.io/conduct/committee/).
+At the end of an investigation, the SSC will respond to reporters with the high-level conclusion of any action resulting from their report. If you would like clarity on a decision, the SSC is happy to discuss. If you are unsatisfied and still believe the situation requires escalation, report to [the CNCF Code of Conduct Committee](https://www.cncf.io/conduct/committee/).
 
 The SSC confidentially tracks all reports centrally, discussing information only with other CoC bodies under CNCF/Linux Foundation and only on an as-needed basis. All past SSC members are expected to continue to respect this confidentiality indefinitely- the SSC will consider it an egregious Code of Conduct violation to expose such information.
 
