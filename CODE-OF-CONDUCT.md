@@ -28,7 +28,7 @@ In this interaction someone was overly reactive. A "knee jerk" reaction to a sta
 Much like subtle-isms, nearly everyone will on occassion dip into Yellow. To err is human. It shows emotional maturity to recognize when this has happened and apologize for the behavior. It is a community concern if the situation keeps repeating, resulting in a warning and eventual banning.
 
 Red:
-Either frequent repeating of Yellow, or outright harassment, insults, etc. as listed non-exhaustively in Principles.
+Either excessive repeating of Yellow, or outright harassment, insults, etc. as listed non-exhaustively in Principles.
 These interactions contribute to a toxic environment, are disruptive to productivity, and cause an unwelcome and unsafe atmosphere.
 Red interactions are likely to result in at least temporary bans.
 
