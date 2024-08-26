@@ -48,7 +48,7 @@ The SSC confidentially tracks all reports centrally, discussing information only
 
 When discussing violations with a user, the SSC will make reasonable attempts to generalize information so that it is still useful but not identifying of the reporter. This will not always be possible (eg., if a report is made regarding a 1-on-1 interaction).
 
-The SSC will issue a warning to users who don't follow this code of conduct. A second offense results in a temporary ban. A third offense warrants a permanent ban. It is at the SSC's discretion to un-ban offending users, or to immediately ban a toxic user without warning.
+The SSC will issue a warning to users who don't follow this code of conduct. A second offense results in a temporary ban. A third offense warrants a permanent ban. It is at the SSC's discretion to un-ban offending users, or to immediately ban a user without warning due to egregious action (violence, threats).
 
 ### References
 
