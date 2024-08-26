@@ -29,7 +29,7 @@ Much like subtle-isms, nearly everyone will on occassion dip into Yellow. To err
 
 Red:
 Either excessive repeating of Yellow, or outright harassment, insults, etc. as listed non-exhaustively in Principles.
-These interactions contribute to a toxic environment, are disruptive to productivity, and cause an unwelcome and unsafe atmosphere.
+These interactions contribute to a toxic environment, are disruptive to productivity, and cause an unwelcoming or unsafe atmosphere.
 Red interactions are likely to result in at least temporary bans.
 
 Threats and violence will result in immediate permanent bans and involvement of law enforcement.
