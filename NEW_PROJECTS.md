@@ -43,7 +43,9 @@ If this supplementing is needed:
 
 ### Contact
 
-The SSC can be contacted with proposal details at ssc@spiffe.io or in [the #ssc channel](https://spiffe.slack.com/archives/C01GQ267JJU) of [SPIFFE slack](https://slack.spiffe.io).
+The SSC is happy to have initial discussions on proposal details at ssc@spiffe.io or in [the #ssc channel](https://spiffe.slack.com/archives/C01GQ267JJU) of [SPIFFE slack](https://slack.spiffe.io).
+
+For the formal proposal, we do ask for a GitHub issue to be made against the SPIFFE project for better community involvement, discovery, and posterity.
 
 ### Proposal Outline
 
