@@ -1,5 +1,5 @@
 <!--
-This is a template for the technical contact information for a vendor companies.
+This is a template for the technical contact information for a vendor company.
 
 It's best to align the format of all the technical contact information in this
 folder similar to this template. This will make it easier for the community 
