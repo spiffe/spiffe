@@ -20,9 +20,12 @@ This document describes the semantics of SPIFFE trust domains, how they are repr
 4.2. [JWK](#42-jwk)  
 4.2.1. [Key Type](#421-key-type)  
 4.2.2. [Public Key Use](#422-public-key-use)  
-5\. [Security Considerations](#5-security-considerations)
-5.1. [SPIFFE Bundle Refresh Hint](#51-spiffe-bundle-refresh-hint)
-5.2. [Reusing Cryptographic Keys Across Trust Domains](#52-reusing-cryptographic-keys-across-trust-domains)
+5\. [SPIFFE Bundle Map](#5-spiffe-bundle-map)  
+5.1. [SPIFFE Bundle Map Format](#51-spiffe-bundle-map-format)  
+5.1.1. [Trust Domains](#511-trust-domains)  
+6\. [Security Considerations](#6-security-considerations)  
+6.1. [SPIFFE Bundle Refresh Hint](#61-spiffe-bundle-refresh-hint)  
+6.2. [Reusing Cryptographic Keys Across Trust Domains](#62-reusing-cryptographic-keys-across-trust-domains)  
 Appendix A. [SPIFFE Bundle Example](#appendix-a-spiffe-bundle-example)  
 
 ## 1. Introduction
@@ -89,7 +92,7 @@ SPIFFE Bundle Maps are JSON-encoded structures, encapsulating one or more SPIFFE
 #### 5.1.1. Trust Domains
 A static “trust_domains” key MUST be set, and MAY be empty. Its contents are a map of SPIFFE Bundles, keyed by the trust domain name. For more information on what constitutes a valid trust domain name, please see [Section 2][1] of the SPIFFE ID specification.
 
-Producers of SPIFFE Bundle Maps MUST ensure uniqueness amongst trust domain names in a given “trust_domains” element. Consumers MUST reject maps in which duplicate trust domain name keys are detected, provided that the underlying libraries are capable of detecting such duplications. Please see the [Security Considerations section](#6-security-considerations) for more information.
+Producers of SPIFFE Bundle Maps MUST ensure uniqueness amongst trust domain names in a given “trust_domains” element. Consumers MUST reject maps in which duplicate trust domain name keys are detected, provided that the underlying libraries are capable of detecting such duplications. Please see the [Security Considerations section](#63-json-key-duplication) for more information.
 
 Producers of SPIFFE Bundle Maps SHOULD omit the “refresh_hint” key from bundles included in the map, as refresh hint applies to individual bundles and the collection. Consumers of SPIFFE Bundle Maps MUST NOT alter SPIFFE Bundle Map refresh behavior based on the value of “refresh_hint” keys present in any individual bundle in the map.
 
@@ -113,7 +116,7 @@ Continuing the above example where a naïve implementation imports a particular 
 In summary, a security-in-depth best practice is to maintain a one-to-one mapping between trust domain and root keys so as to reduce subtle (yet catastrophic) authentication and authorization implementation errors. Systems which do reuse root keys across trust domains should ensure that (a) the SVID-issuing system (eg. CA) correctly implements authorization checks prior to issuing SVIDs and (b) that relying parties (ie. systems consuming the SVIDs) correctly implement robust authentication and authorization systems capable of disambiguating multiple trust domains.
 
 ### 6.3. JSON Key Duplication
-The JavaScript Object Notation (JSON) Data Interchange Format (RFC 8259), which serves as the standard for JSON data format, states that the names within an object SHOULD be unique. Furthermore, it emphasizes that when the names within a JSON object are not unique, the behavior of software that receives such an object is unpredictable. This behavior poses an unacceptable security risk when the JSON format is used to represent SPIFFE Bundle Maps, as the presence of duplicate trust domain names could lead to the incorrect bundle being selected for use in validating SVIDs. As such, it is important that libraries parsing SPIFFE bundle maps employ duplicate key detection.
+[RFC 8259][12], which serves as the standard for JSON data format, states that the names within an object SHOULD be unique. Furthermore, it emphasizes that when the names within a JSON object are not unique, the behavior of software that receives such an object is unpredictable. This behavior poses an unacceptable security risk when the JSON format is used to represent SPIFFE Bundle Maps, as the presence of duplicate trust domain names could lead to the incorrect bundle being selected for use in validating SVIDs. As such, it is important that libraries parsing SPIFFE bundle maps employ duplicate key detection.
 
 ## Appendix A. SPIFFE Bundle Example
 In the following example, we configure an initial SPIFFE bundle for the trust domain named `example.com` and then demonstrate how the bundle is updated during root key rotation.
@@ -260,3 +263,4 @@ SPIFFE Bundle Maps are designed to be loaded and ingested atomically. The entire
 [9]: https://tools.ietf.org/html/rfc8555
 [10]: https://tools.ietf.org/html/rfc7517#section-4.7
 [11]: https://tools.ietf.org/html/rfc7518#section-6
+[12]: https://tools.ietf.org/html/rfc8259
