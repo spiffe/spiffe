@@ -36,7 +36,9 @@ Threats and violence will result in immediate permanent bans and involvement of 
 
 ### Moderation
 
-If you feel any of SPIFFE's communication channels require moderation, or any interaction you witness with other community members online or in-person requires reporting, please e-mail the [SPIFFE Steering Committee (SSC)](mailto:ssc@spiffe.io).
+Please report any Code of Conduct violations to [this confidential google form](https://forms.gle/HipfZoXdciReACDM9) or to the [SPIFFE Steering Committee (SSC) email](mailto:ssc@spiffe.io).
+
+If you feel any of SPIFFE's communication channels require moderation, please e-mail the [SSC](mailto:ssc@spiffe.io).
 
 The SSC will investigate all reports in a reasonable timeframe.
 The SSC encourages timely reporting so that any potential evidence or other investigations will be more viable.
