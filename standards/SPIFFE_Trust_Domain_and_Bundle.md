@@ -227,7 +227,7 @@ The following is a sample SPIFFE Bundle Map:
 {
   “trust_domains”: {
     "example.com": {
-      “sequence_number”: 12035488,
+      “spiffe_sequence”: 12035488,
       "keys": [
         {
           "kty": "RSA",
@@ -250,7 +250,7 @@ The following is a sample SPIFFE Bundle Map:
 ```
 
 ### Appendix B.1. Server/Client Behavior
-SPIFFE Bundle Maps are designed to be loaded and ingested atomically. The entirety of its contents should be loaded by the consumer, and should be considered “state of the world” at this time. If measurement of propagation delay, confirmation of liveness etc, is required, consumers should use the “sequence_number” of the relevant bundles as many failure modes can cause liveness divergence across the bundles represented in the map.
+SPIFFE Bundle Maps are designed to be loaded and ingested atomically. The entirety of its contents should be loaded by the consumer, and should be considered “state of the world” at this time. If measurement of propagation delay, confirmation of liveness etc, is required, consumers should use the “spiffe_sequence” of the relevant bundles as many failure modes can cause liveness divergence across the bundles represented in the map.
 
 [1]: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#2-spiffe-identity
 [2]: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#3-spiffe-verifiable-identity-document
