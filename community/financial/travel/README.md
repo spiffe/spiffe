@@ -30,9 +30,17 @@ At this time, and in conjunction with the above guideline, the SSC also prefers 
 
 ### Process
 
-Once you have all your legible receipts in order, go to the fund link and... TODO
+As early as possible, communicate to the SSC that you would like to be reimbursed for a current or upcoming expense.
+After discussion, you will be added as a `Beneficiary` to the crowdfund (if not already), which will generate emails with instructions on `Expensify` and how to join LFX Crowdfunding and submit requests.
+*At this stage, you are only set up to submit requests. You should not consider your reimbursement request approved fully or in part.*
+
+Once you have all your legible receipts in order, follow Expensify's process for submitting [`Reimbursement`](https://docs.linuxfoundation.org/lfx/crowdfunding/get-reimbursed). Pitfall: do not submit an `Invoice`. `Reimbursement` is what you want to do.
+
+After submission, the SSC will reach out as needed. The SSC will be as fair and reasonable as possible when deliberating about all current and anticipated requests, and decisions regarding use of funds are final.
 
 ## SSC Instructions
+
+On initial contact from a requestor who is verified as legitimate and reasonable (not necessarily that their specific expense should be approved), they can be added to the list of `Beneficiaries` in the crowdfund. This will send them emails to join `Expensify` for the crowdfund and provide steps for usage.
 
 The owner of the crowdfund will receive email notifications for reimbursement applications via LFX and Expensify.
 The owner will bring relevant documentation to the SSC private slack channel, or other private communications within the SSC, to determine reimbursement approval and amounts.
