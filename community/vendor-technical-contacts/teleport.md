@@ -2,7 +2,7 @@
 
 ## Documentation
 
-Documentation for Teleport Workload Identity can be found at https://goteleport.com/docs/enroll-resources/machine-id/workload-identity/
+Documentation for Teleport Workload Identity can be found at https://goteleport.com/docs/enroll-resources/workload-identity/
 
 ## Support
 
