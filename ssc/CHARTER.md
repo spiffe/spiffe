@@ -21,6 +21,7 @@ To ensure the long-term success of SPIFFE by providing leadership, guidance, and
 * Attend all SSC calls and meetings
 * Faithfully uphold the SSC charter, acting in the best interest of the SPIFFE projects
 * Abide by the SPIFFE and CNCF Code of Conduct
+* Manage any applicable finances for the SPIFFE projects, including authority to manage delegation of such responsibilities
 
 ## SSC Seat Election and Term
 The SSC comprises five seats, each of which carry a two year term. All seats are equal in their capacity and requirements. Terms are staggered to avoid a majority churn in any one election cycle.
