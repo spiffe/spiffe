@@ -43,3 +43,5 @@ Offboarding is largely the opposite of Onboarding:
 [ ] Ensure you are removed from the SPIFFE org in [netlify](app.netlify.com).
 
 [ ] If you no longer wish to maintain tiny projects, get removed from the [tiny projects maintainers group](https://github.com/orgs/spiffe/teams/tiny-projects-maintainers/members).
+
+[ ] If you have any other powers, credentials, or other authorization with respect to the SPIFFE organization, ensure handoff / transfer of ownership to another member of SSC. This could include financial accounts, third party applications (such as Orbit or similar community management apps), or third party organizations (such as CNCF or its other projects).
