@@ -3,7 +3,7 @@
 A Special Interest Group (SIG) concerning the official SPIFFE specifications.
 
 ### Meetings:
-* Date/Time: Every Second Thursday @ 9:30AM PST
+* Date/Time: Every Second Thursday  @ 9:30AM PST
 * [Meetings Notes](https://docs.google.com/document/d/1f64vbyn5sOb8Mr1H3mGGGul3vTKo4r6cTBcUV3N9OFo)
 * [Calendar ICS](https://calendar.google.com/calendar/ical/spiffe.io_0h88o393t6qi5q55h0v9u66j50%40group.calendar.google.com/public/basic.ics) (See this [Google support page](https://support.google.com/calendar/answer/37100?co=GENIE.Platform%3DDesktop&hl=en) to learn more about importing .ics files)
 
