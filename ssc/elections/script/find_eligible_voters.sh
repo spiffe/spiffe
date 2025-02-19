@@ -99,4 +99,4 @@ for VOTER in $ELIGIBLE_VOTERS; do
 done
 
 echo
-echo
+echo "COMPLETE"
