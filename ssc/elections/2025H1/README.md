@@ -6,7 +6,7 @@ This subdirectory captures the nominees and results of the 2025 H1 SSC election.
 * Apr 19, 2025: Polls close
 * May 10, 2025: Results announced
 
-For more information on how to participate, please see the relevant GitHub [tracking issue](LINK_TO_ISSUE).
+For more information on how to participate, please see the relevant GitHub [tracking issue](https://github.com/spiffe/spiffe/issues/323).
 
 ## Nominees
 To be announced.
