@@ -45,8 +45,14 @@ If you are in the list of eligible participants, and you don't receive a link on
 Each participant casts a single ranked vote. If more than one SSC seat is available, the top N nominees will be selected.
 
 ## Eligible Participants
-This section lists everyone eligible to participate in this SSC election cycle. If you believe you were omitted in error, please contact the SSC at ssc-elections@spiffe.io. If you have an `**` next to your username, we do not have a known email address to contact you at for sending a voting link. Please publish an email address to your GitHub profile and contact the SSC at ssc-elections@spiffe.io.
+This section lists everyone eligible to participate in this SSC election cycle. If you believe you were omitted in error, please contact the SSC at ssc-elections@spiffe.io.
 
-* LAST\_NAME, FIRST\_NAME (@GITHUB\_HANDLE) \<EMAIL\_ADDRESS\>
-* ...
+- LAST\_NAME, FIRST\_NAME (@GITHUB\_HANDLE) \<EMAIL\_ADDRESS\>
+- ...
 
+The following voters are eligible but missing a public email address.
+If you have an ** next to your username, we do not have a known email address to contact you at for sending a voting link either from GitHub or past voting. Thus if you have ** next to your username, we have no means to send you your voting ballot.
+Please publish an email address to your GitHub profile and contact the SSC at ssc-elections@spiffe.io.
+
+- @GITHUB\_HANDLE
+- ...
