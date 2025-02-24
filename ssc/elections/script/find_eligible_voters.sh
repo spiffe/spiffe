@@ -75,11 +75,10 @@ echo "Total: $NUM_ELIGIBLE_VOTERS"
 #
 # Look up user data
 #
-INELIGIBLE_VOTERS=""
 echo
 echo
 for VOTER in $ELIGIBLE_VOTERS; do
-	if [ "$VOTER" == "dependabot[bot]" ] || [ "$VOTER" == "github-actions[bot]" ] || [ "$VOTER" == "chainguard-alerter" ] ; then
+	if [ "$VOTER" == "dependabot[bot]" ] || [ "$VOTER" == "github-actions[bot]" ] || [ "$VOTER" == "chainguard-alerter" ] || ["$VOTER" == "spire-helm-version-checker[bot]"] ; then
 		continue
 	fi
 
@@ -88,9 +87,8 @@ for VOTER in $ELIGIBLE_VOTERS; do
 	EMAIL=`echo "$USER_RESP" | jq '.email' | sed 's/^"//' | sed 's/"$//'`
 
 	if [ "$EMAIL" == "null" ]; then
-		INELIGIBLE_VOTERS+="- @$VOTER"
-		INELIGIBLE_VOTERS+=$'\n'
-		continue
+		EMAIL=" ** unknown email"
+                continue
 	fi
 
 	if [ "$NAME" == "null" ]; then
@@ -101,6 +99,4 @@ for VOTER in $ELIGIBLE_VOTERS; do
 done
 
 echo
-echo
-echo "The following voters are ineligible due to missing email address:"
-echo "$INELIGIBLE_VOTERS"
+echo "COMPLETE"
