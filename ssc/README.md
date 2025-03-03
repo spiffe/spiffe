@@ -22,6 +22,6 @@ Term end: November 1st, 2025
 [GitHub](https://github.com/amoore877) | [LinkedIn](https://www.linkedin.com/in/andrew-smore)  
 Term end: November 1st, 2025  
 
-**Dan Feldman** (@dfeldman)  
-[GitHub](https://github.com/dfeldman) | [LinkedIn](https://www.linkedin.com/in/dfeldman)  
-Term end: May 4th, 2024 
+**Kevin Fox** (@kfox1111)  
+[GitHub](https://github.com/kfox1111) | [LinkedIn](https://www.pnnl.gov/people/kevin-fox)  
+Term end: May 4th, 2026 
