@@ -27,18 +27,24 @@ Portable and interoperable cryptographic identity for networked workloads is per
 6\. [JWT-SVID Profile](#6-jwt-svid-profile)  
 6.1. [Profile Definition](#61-profile-definition)  
 6.2. [Profile RPCs](#62-profile-rpcs)  
-6.3. [JWT-SVID Validation](#63-jwt-svid-validation)  
+6.3. [JWT-SVID Validation](#63-jwt-svid-validation)
+7\. [WIT-SVID Profile](#7-wit-svid-profile)  
+6.1. [Profile Definition](#71-profile-definition)  
+6.2. [Profile RPCs](#72-profile-rpcs)  
 
 ## 1. Introduction
 
 The SPIFFE Workload API is an API which provides information and services that enable workloads, or compute processes, to leverage SPIFFE identities and SPIFFE-based authentication systems. It is served by the [SPIFFE Workload Endpoint](SPIFFE_Workload_Endpoint.md), and comprises a number of services, or *profiles*.
 
-Currently, there are two profiles:
+Currently, there are three profiles:
 
 - [X.509-SVID Profile](#5-x509-svid-profile)
 - [JWT-SVID Profile](#6-jwt-svid-profile)
+- [WIT-SVID Profile](#7-wit-svid-profile)
 
-Both profiles are mandatory and MUST be supported by SPIFFE implementations. However, operators MAY administratively disable a specific profile in their deployment.
+The X.509-SVID and JWT-SVID profiles are mandatory and MUST be supported by SPIFFE implementations. However, operators MAY administratively disable a specific profile in their deployment.
+
+The WIT-SVID Profile is optional and MAY be supported by SPIFFE implementations.
 
 Future versions of this specification may introduce additional profiles or make one or more profiles optional.
 
@@ -359,6 +365,122 @@ Workload API clients SHOULD use the `ValidateJWTSVID` method for JWT validation 
 When interfacing with legacy JWT validators, the `FetchJWTBundles` method can be used to fetch JWKS bundles that can be used to validate JWT-SVID signatures. For instance, if the SPIFFE Workload API is available but the JWT validating software is not aware of the Workload API (and thus cannot call `ValidateJWTSVID`), implementations can instead individually retrieve each bundle and feed them to the legacy workload for validation.
 
 The `FetchJWTBundles` method returns bundles keyed by the SPIFFE ID of the trust domain. When validating a JWT-SVID, the validator MUST use the bundle corresponding to the trust domain of the subject. If a JWT bundle for the specified trust domain is not present, then the token is untrusted.
+
+## 7. WIT-SVID Profile
+
+The WIT-SVID Profile of the SPIFFE Workload API provides a set of gRPC methods which can be used by workloads to retrieve [WIT-SVIDs](WIT-SVID.md) and their related trust bundles. This profile outlines the signature of these methods, as well as related client and server behavior.
+
+Unlike the X.509-SVID and JWT-SVID profiles, implementation of the WIT-SVID profile is optional. Where a server does not support the WIT-SVID profile, calls to all RPCs defined by the WIT-SVID profile MUST return the "Unimplemented" gRPC status code. If the client receives an "Unimplemented" status code calling a WIT-SVID profile RPC, it SHOULD NOT attempt to reconnect to the server using the WIT-SVID profile.
+
+### 7.1 Profile Definition
+
+The WIT-SVID Profile RPCs and associated messages are defined below. For the complete Workload API service definition, see [workloadapi.proto](workloadapi.proto).
+
+```protobuf
+service SpiffeWorkloadAPI {
+  /////////////////////////////////////////////////////////////////////////
+  // WIT-SVID Profile
+  /////////////////////////////////////////////////////////////////////////
+
+  // Fetch WIT-SVIDs for all SPIFFE identities the workload is entitled to,
+  // as well as related information like trust bundles. As this information
+  // changes, subsequent messages will be streamed from the server.
+  //
+  // Must return Unimplemented where Workload API endpoint does not support the
+  // WIT-SVID profile.
+  rpc FetchWITSVID(WITSVIDRequest) returns (stream WITSVIDResponse);
+
+  // Fetch trust bundles. Useful for clients that only need to validate SVIDs
+  // without obtaining an SVID for themselves. As this information changes,
+  // subsequent messages will be streamed from the server.
+  //
+  // Must return Unimplemented where Workload API endpoint does not support the
+  // WIT-SVID profile.
+  rpc FetchWITBundles(WITBundlesRequest) returns (stream WITBundlesResponse);
+
+  // ... RPCS for other profiles ...
+}
+
+// The WITSVIDRequest message conveys parameters for requesting a WIT-SVID.
+// There are currently no such parameters.
+message WITSVIDRequest {
+  // TODO(noah): Eventually, we may consider introducing workload key generation
+  // here. But this is out of scope for the introduction of WIT-SVID.
+}
+
+// The WITSVIDResponse message carries WIT-SVIDs .
+message WITSVIDResponse {
+  // Required.
+  // A list of WITSVID messages, each of which includes a single WIT-SVID and
+  // its private key.
+  repeated WITSVID svids = 1;
+}
+
+// The WITSVID message carries a single SVID and all associated information,
+// including the WIT bundle for the trust domain.
+message WITSVID {
+  // Required.
+  // The SPIFFE ID of the SVID in this entry
+  string spiffe_id = 1;
+
+  // Required.
+  // Encoded WIT SVID using compact JWS serialization.
+  string wit_svid = 2;
+
+  // Required.
+  // JWK (RFC 7517) encoded private key for the WIT SVID.
+  string wit_svid_key = 3;
+
+  // Optional.
+  // An operator-specified string used to provide guidance on how this identity
+  // should be used by a workload when more than one SVID is returned.
+  // For example, `internal` and `external` to indicate a SVID for internal or
+  // external use, respectively.
+  string hint = 4;
+}
+
+// The WITBundlesRequest message conveys parameters for requesting WIT
+// bundles. There are currently no such parameters.
+message WITBundlesRequest {}
+
+// The WITBundlesResponse message carries a map of trust bundles the workload
+// should trust.
+message WITBundlesResponse {
+  // Required.
+  // WIT trust bundles belonging to trust domains that the workload should
+  // trust, keyed by the SPIFFE ID of the trust domain.
+  // Bundles are encoded in JWK set (RFC 7517) format.
+  map<string, string> bundles = 1;
+}
+```
+
+### 7.2 Profile RPCs
+
+#### 7.2.1 FetchWITSVID
+
+The `FetchWITSVID` RPC streams back WIT-SVIDs. 
+
+The `WITSVIDRequest` request message is currently empty and is a placeholder for future expansion.
+
+The `WITSVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `WITSVID` messages (one for each identity granted to the client).
+
+All fields in the `WITSVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Workload API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `WITSVIDResponse` message. In the event that a SPIFFE Workload API client encounters more than one `WITSVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
+
+If the client is not entitled to receive any WIT-SVIDs, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). Under such a case, the client MAY attempt to reconnect with another call to the `FetchWITSVID` RPC after a backoff.
+
+As mentioned in [Stream Responses](#43-stream-responses), each `WITSVIDResponse` message returned on the `FetchWITSVID` stream contains the complete set of authorized SVIDs for the client at that point in time. As such, if the server redacts SVIDs from a subsequent response (or all SVIDs, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted SVIDS.
+
+#### 7.2.2 FetchWITBundles
+
+The `FetchWITBundles` RPC streams back bundles for both the trust domain in which the server resides and foreign trust domains. These bundles MUST only be used to authenticate WIT-SVIDs.
+
+The `WITBundlesRequest` request message is currently empty and is a placeholder for future expansion.
+
+The `WITBundlesResponse` response message consists of a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides.
+
+If the client is not entitled to receive any WIT bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchWITBundles` RPC after a backoff.
+
+As mentioned in [Stream Responses](#43-stream-responses), each `WITBundleResponse` response contains the complete set of authorized trust bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
 ## Appendix A. Sample Implementation State Machines
 
