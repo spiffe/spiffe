@@ -84,8 +84,9 @@ While all SPIFFE Workload Endpoint implementations MUST expose the SPIFFE Worklo
 
 This section enumerates the various error codes that may be returned by a SPIFFE Workload Endpoint implementation, the conditions under which they may be returned, and how they should be handled. Please see the [Error Codes](#6-error-codes) section as well as the [gRPC Code package documentation](https://godoc.org/google.golang.org/grpc/codes) for more information about these codes.
 
-| Code | Condition | Client Behavior |
-| ---- | --------- | -------- |
-| InvalidArgument | The gRPC security header is not present in the client request. Please see the [Transport](#3-transport) section for more information. | Report an error, don't retry. |
-| Unavailable | The SPIFFE Workload Endpoint implementation is unable to handle the request. | Retry with a backoff. |
+| Code             | Condition | Client Behavior |
+|------------------| --------- | -------- |
+| InvalidArgument  | The gRPC security header is not present in the client request. Please see the [Transport](#3-transport) section for more information. | Report an error, don't retry. |
+| Unavailable      | The SPIFFE Workload Endpoint implementation is unable to handle the request. | Retry with a backoff. |
 | PermissionDenied | The client is not permitted to perform the requested operation. Depending on the implementation, this may indicate that the workload has started before the identity or trust domain has been provisioned. | Retry with a backoff. |
+| Unimplemented    | The requested RPC is not implemented by the server. | Report an error, do not retry.  |
