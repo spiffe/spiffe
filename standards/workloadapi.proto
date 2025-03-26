@@ -8,12 +8,12 @@ service SpiffeWorkloadAPI {
     /////////////////////////////////////////////////////////////////////////
 
     // Fetch X.509-SVIDs for all SPIFFE identities the workload is entitled to,
-    // as well as related information like trust bundles and CRLs. As this
+    // as well as related information like trust bundles. As this
     // information changes, subsequent messages will be streamed from the
     // server.
     rpc FetchX509SVID(X509SVIDRequest) returns (stream X509SVIDResponse);
 
-    // Fetch trust bundles and CRLs. Useful for clients that only need to
+    // Fetch trust bundles. Useful for clients that only need to
     // validate SVIDs without obtaining an SVID for themself. As this
     // information changes, subsequent messages will be streamed from the
     // server.
@@ -42,16 +42,14 @@ service SpiffeWorkloadAPI {
 // There are currently no request parameters.
 message X509SVIDRequest {  }
 
-// The X509SVIDResponse message carries X.509-SVIDs and related information,
-// including a set of global CRLs and a list of bundles the workload may use
-// for federating with foreign trust domains.
+// The X509SVIDResponse message carries X.509-SVIDs and a list of bundles the 
+// workload may use for federating with foreign trust domains.
 message X509SVIDResponse {
     // Required. A list of X509SVID messages, each of which includes a single
     // X.509-SVID, its private key, and the bundle for the trust domain.
     repeated X509SVID svids = 1;
 
-    // Optional. ASN.1 DER encoded certificate revocation lists.
-    repeated bytes crl = 2;
+    reserved 2;
 
     // Optional. CA certificate bundles belonging to foreign trust domains that
     // the workload should trust, keyed by the SPIFFE ID of the foreign trust
@@ -87,11 +85,10 @@ message X509SVID {
 message X509BundlesRequest {
 }
 
-// The X509BundlesResponse message carries a set of global CRLs and a map of
-// trust bundles the workload should trust.
+// The X509BundlesResponse message carries a map of trust bundles the workload
+// should trust.
 message X509BundlesResponse {
-    // Optional. ASN.1 DER encoded certificate revocation lists.
-    repeated bytes crl = 1;
+    reserved 1;
 
     // Required. CA certificate bundles belonging to trust domains that the
     // workload should trust, keyed by the SPIFFE ID of the trust domain.

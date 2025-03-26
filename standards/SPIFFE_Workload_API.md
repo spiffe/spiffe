@@ -70,7 +70,7 @@ The SPIFFE Workload API includes RPCs utilizing gRPC server-side streams in orde
 
 Every stream response message sent by the server MUST include the full set of information, and not just the information which has changed. This avoids complexity associated with state tracking on both Client and Server implementations, including the need for anti-entropy mechanisms.
 
-The exact timing of server response messages is implementation-specific, and SHOULD be dictated by events which change the response, such as an SVID rotation, a CRL update, etc. Receiving a request message from the client MUST be considered a response-generating event. In other words, the first response message of the server response stream (on a connection-by-connection basis) MUST be sent as soon as possible, without delay.
+The exact timing of server response messages is implementation-specific, and SHOULD be dictated by events which change the response, for instance an SVID rotation. Receiving a request message from the client MUST be considered a response-generating event. In other words, the first response message of the server response stream (on a connection-by-connection basis) MUST be sent as soon as possible, without delay.
 
 Finally, implementers of SPIFFE Workload API servers should be careful about pushing updated response messages *too* rapidly. Some software may reload automatically upon receiving new information, potentially causing a period of unavailability should all instances reload at once. As a result, implementers may introduce some splay/jitter in the transmission of widespread updates.
 
@@ -107,12 +107,12 @@ service SpiffeWorkloadAPI {
     /////////////////////////////////////////////////////////////////////////
 
     // Fetch X.509-SVIDs for all SPIFFE identities the workload is entitled to,
-    // as well as related information like trust bundles and CRLs. As this
+    // as well as related information like trust bundles. As this
     // information changes, subsequent messages will be streamed from the
     // server.
     rpc FetchX509SVID(X509SVIDRequest) returns (stream X509SVIDResponse);
 
-    // Fetch trust bundles and CRLs. Useful for clients that only need to
+    // Fetch trust bundles. Useful for clients that only need to
     // validate SVIDs without obtaining an SVID for themself. As this
     // information changes, subsequent messages will be streamed from the
     // server.
@@ -126,16 +126,14 @@ service SpiffeWorkloadAPI {
 // There are currently no such parameters.
 message X509SVIDRequest {  }
 
-// The X509SVIDResponse message carries X.509-SVIDs and related information,
-// including a set of global CRLs and a list of bundles the workload may use
-// for federating with foreign trust domains.
+// The X509SVIDResponse message carries X.509-SVIDs and a list of bundles the
+// workload may use for federating with foreign trust domains.
 message X509SVIDResponse {
     // Required. A list of X509SVID messages, each of which includes a single
     // X.509-SVID, its private key, and the bundle for the trust domain.
     repeated X509SVID svids = 1;
 
-    // Optional. ASN.1 DER encoded certificate revocation lists.
-    repeated bytes crl = 2;
+    reserved 2;
 
     // Optional. CA certificate bundles belonging to foreign trust domains that
     // the workload should trust, keyed by the SPIFFE ID of the foreign trust
@@ -171,11 +169,10 @@ message X509SVID {
 message X509BundlesRequest {
 }
 
-// The X509BundlesResponse message carries a set of global CRLs and a map of
-// trust bundles the workload should trust.
+// The X509BundlesResponse message carries a map of trust bundles the workload
+// should trust.
 message X509BundlesResponse {
-    // Optional. ASN.1 DER encoded certificate revocation lists.
-    repeated bytes crl = 1;
+    reserved 1;
 
     // Required. CA certificate bundles belonging to trust domains that the
     // workload should trust, keyed by the SPIFFE ID of the trust domain.
@@ -192,7 +189,7 @@ The `FetchX509SVID` RPC streams back X509-SVIDs, and X.509 bundles for both the 
 
 The `X509SVIDRequest` request message is currently empty and is a placeholder for future expansion.
 
-The `X509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client). The `crl` and `federated_bundles` fields are optional. 
+The `X509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client). The `federated_bundles` field is optional. 
 
 All fields in the `X509SVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Workload API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `X509SVIDResponse` message. In the event that a SPIFFE Workload API client encounters more than one `X509SVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
 
@@ -206,7 +203,7 @@ The `FetchX509Bundles` RPC streams back X.509 bundles for both the trust domain 
 
 The `X509BundlesRequest` request message is currently empty and is a placeholder for future expansion.
 
-The `X509BundlesResponse` response message has a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides. The `crl` field is optional.
+The `X509BundlesResponse` response message has a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides.
 
 If the client is not entitled to receive any X.509 bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
 
@@ -371,7 +368,7 @@ In order to provide clarity, the authors thought it would be useful to include s
 2. The gRPC server is started with the SPIFFE Workload API handler, and is now accepting connections.
 3. An incoming FetchX509SVIDRequest is being validated. This includes checking for the mandatory security header, and ensuring that the caller has an identity available to it.
 4. The Workload API is sending a FetchX509SVIDResponse to the client.
-5. The Workload API is in a waiting state. Transitioning out of the waiting state requires an interrupt or a cancellation. A typical reason to interrupt the waiting state is that the information contained in the response has been updated (e.g. an SVID has rotated, or a CRL has changed).
+5. The Workload API is in a waiting state. Transitioning out of the waiting state requires an interrupt or a cancellation. A typical reason to interrupt the waiting state is that the information contained in the response has been updated (e.g. an SVID has rotated).
 6. Validation is being performed on a pending response. Ensure that the client is still entitled to an identity and that the request has not been cancelled.
 7. The server is closing the stream, providing the client with the correct error code for the condition encountered.
 8. The server has encountered an fatal condition and must stop. This can occur if the listener could not be created, or if the gRPC server encounters a fatal error.
@@ -382,6 +379,6 @@ In order to provide clarity, the authors thought it would be useful to include s
 1. The Workload API client is dialing the SPIFFE Workload Endpoint.
 2. The client is invoking the FetchX509SVID RPC call, sending a request to the server.
 3. The client is blocked on receiving an X509SVIDResponse message from the server.
-4. The client is updating its configuration with the SVIDs, CRLs, and bundles received in the server response. It may at this time compare the received information to the current configuration to determine if a reload is necessary.
+4. The client is updating its configuration with the SVIDs and bundles received in the server response. It may at this time compare the received information to the current configuration to determine if a reload is necessary.
 5. The client has encountered a fatal condition and must exit.
 6. The client is performing an exponential backoff.

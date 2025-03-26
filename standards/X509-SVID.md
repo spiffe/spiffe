@@ -143,3 +143,9 @@ Extended Key Usage | id-kp-clientAuth | This field may be set for either leaf or
 [5]: https://tools.ietf.org/html/rfc5280#section-4.2.1.3
 [6]: https://tools.ietf.org/html/rfc5280#section-4.2.1.2
 [7]: https://tools.ietf.org/html/rfc7517
+
+## Apendix B. History
+
+### 2025/04/01
+
+* Remove `crl` from X509 profile of SPIFFE. This field has been part of SPIFFE since the beginning but was never picked up by any implementation, nor is it supported in SDKs. The short credential lifetimes and the ability to update SVIDs and bundles in place via the SPIFFE Workload API allow for a cleaner revocation story by issuing new certificates and updating the bundle rather than issuing revocation lists.
