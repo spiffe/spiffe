@@ -403,10 +403,7 @@ service SpiffeWorkloadAPI {
 
 // The WITSVIDRequest message conveys parameters for requesting a WIT-SVID.
 // There are currently no such parameters.
-message WITSVIDRequest {
-  // TODO(noah): Eventually, we may consider introducing workload key generation
-  // here. But this is out of scope for the introduction of WIT-SVID.
-}
+message WITSVIDRequest {}
 
 // The WITSVIDResponse message carries WIT-SVIDs .
 message WITSVIDResponse {
