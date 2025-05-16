@@ -28,6 +28,8 @@ Portable and interoperable cryptographic identity for networked workloads is per
 6.1. [Profile Definition](#61-profile-definition)  
 6.2. [Profile RPCs](#62-profile-rpcs)  
 6.3. [JWT-SVID Validation](#63-jwt-svid-validation)  
+Appendix A. [Sample Implementation State Machines](#appendix-a-sample-implementation-state-machines)  
+Appendix B. [Design Considerations](#appendix-b-design-considerations)  
 
 ## 1. Introduction
 
@@ -385,3 +387,30 @@ In order to provide clarity, the authors thought it would be useful to include s
 4. The client is updating its configuration with the SVIDs, CRLs, and bundles received in the server response. It may at this time compare the received information to the current configuration to determine if a reload is necessary.
 5. The client has encountered a fatal condition and must exit.
 6. The client is performing an exponential backoff.
+
+## Appendix B. Design Considerations 
+
+This section attempts to explain the reasoning for design choices in this specification.
+
+### Why not files?
+
+An alternative approach for workloads to obtain the information necessary to operate in SPIFFE environment is for them to load the information from files.  Particularly in the case of X.509, many existing workloads support loading their certificate, private key, and CA certificate from the filesystem. So why an API?
+
+Support for existing workloads on X.509 is a strong advantage of file-based approaches, but this advantage does not extend much beyond X.509 within a single trust domain. Software designed with Web PKI in mind pool CA certificates and accept as valid any certificate that chains up to any CA root. When multiple federated trust domains are in use, workloads MUST be modified to be SPIFFE-aware so they correctly verify SVIDs chain up to the CA _for their specific trust domain_.
+
+Instead our approach is promote the Workload API for forward looking implementations, and provide example "shim" implementations that request X.509-SVIDs over the API and write them to disk for legacy workloads.
+
+For JWT-SVIDs, the typical use case has a short-lived JWT scoped to a particular audience with which the workload is communicating.  This lends itself naturally to an API where the workload can request a JWT for a particular audience.  In a file-based approach, the control plane would have to proactively know the audiences to write the JWTs to files, which scales poorly for large numbers of possible audiences.
+
+We also consider the Workload API to be more resilient to Server-Side Request Forgery (SSRF) attacks because implementations MUST check for the existence of a specific header before accepting a request. This header would not be present in ordinary HTTP requests. A securely implemented _server_ should disallow `file://` URLs for resources it needs to fetch on behalf of users, but default configurations for HTTP request libraries often allow them.
+
+Lastly, the API allows for atomic updates across multiple objects.  Where workloads that consume files even support updates, it is non-trivial to avoid data races between updates to different files, for example the certificate and private key of an X.509-SVID.
+
+### Why gRPC?
+
+gRPC was chosen as the remote procedure protocol because it has implementations in a large number of programming languages and is simple to use.
+
+An HTTP API with JSON-encoded request/response objects arguably would support a larger number of programming languages, but there is no general way to automate creation of language bindings for the request/response types which makes it more difficult to use.  We also make use of server streaming responses to publish updates, which are complex to implement with standard REST semantics.
+
+
+
