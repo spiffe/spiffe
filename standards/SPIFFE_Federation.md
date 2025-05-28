@@ -104,7 +104,7 @@ Trust Domain:			"prod.example.com"
 
 When a control plane internally distributes trust bundles to workloads, the association between trust domain name and trust bundle MUST be communicated. Please see the [Security Considerations](#7-security-considerations) section for more information about the sensitivity of these parameters.
 
-![SPIFFE bundle distribution](https://raw.githubusercontent.com/evan2645/spiffe/ecb9fb894e1a13fae821c370f7b5ddeee634d1c8/standards/img/spiffe_bundle_distribution.png)  
+![SPIFFE bundle distribution](./img/spiffe_bundle_distribution.png)  
 *Figure 2: After retrieving a foreign SPIFFE trust bundle, control planes distribute both the trust domain name and the corresponding bundle to internal workloads. Workloads use this configuration to validate identities in the foreign trust domain. For details about the trust bundle contents, refer to The [SPIFFE Trust Domain and Bundle][3], specifically the [SPIFFE Bundle Format][6] and [SPIFFE Bundle Example][4] sections.*
 
 The requirements in this section apply to all SPIFFE bundle endpoint servers and clients. Individual SPIFFE bundle endpoint profiles MAY add further requirements.
@@ -224,7 +224,7 @@ Terminating a federation relationship is as simple as deleting the local copy of
 In the event that the relationship needs to be re-established, this lifecycle is started over.
 
 ### 6.4. Lifecycle Diagram
-![The lifecycle of a SPIFFE Federation relationship](https://raw.githubusercontent.com/evan2645/spiffe/2c6d5bd6c9b7e8aafc01ec577e7be53242e18e06/standards/img/spiffe_federation_lifecycle.png)
+![The lifecycle of a SPIFFE Federation relationship](./img/spiffe_federation_lifecycle.png)
 
 ## 7. Security Considerations
 This section contains security-related information and observations related to this specification. It is important that implementers and users alike be familiar with this information.
@@ -251,7 +251,7 @@ For example, one might be tempted to infer the SPIFFE trust domain name from the
 
 Imagine a web hosting company called MyPage (`mypage.example.com`), that allows a customer, Alice, to serve web content at URLs like `https://mypage.example.com/alice/<filename>`, and further, that MyPage operates an API secured by SPIFFE Federation with the SPIFFE trust domain name `mypage.example.com`.  Imagine Alice sets up SPIFFE Federation with Bob, who is also a customer of MyPage, and Alice chooses to serve her trust bundle from `https://mypage.example.com/alice/spiffe-bundle`.
 
-![A diagram illustrating the relationships between Alice, Bob, and MyPage](https://raw.githubusercontent.com/evan2645/spiffe/83985c0e18cad3b3b866e97341b8664b95bb0621/standards/img/spiffe_federation_mypage_example.png)  
+![A diagram illustrating the relationships between Alice, Bob, and MyPage](./img/spiffe_federation_mypage_example.png)  
 *Figure 5: A diagram illustrating the relationships between Alice, Bob, and MyPage.*
 
 If Bob’s control plane implicitly gets the trust domain name from the URL, this would then allow Alice to impersonate the trust domain `mypage.example.com`! It is also worth emphasizing that a SPIFFE trust domain name need not be a registered DNS name, which often makes this assumption incorrect to begin with. In this example, Alice's trust domain name is simply `alice`.
