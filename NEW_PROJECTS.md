@@ -47,7 +47,16 @@ The SSC is happy to have initial discussions on proposal details at ssc@spiffe.i
 
 For the formal proposal, we do ask for a GitHub issue to be made against the SPIFFE project for better community involvement, discovery, and posterity.
 
-### Proposal Outline
+### Proposal Delivery Method
+
+Informal conversations can be initiated via above Contact methods.
+
+As the idea takes more shape, we would prefer something like a Google Document to be created with the Proposal Details listed below. Please share the document with ssc@spiffe.io with Comment access.
+We will ideate/collaborate within the document with you over time. If another method of collaboration works best for you, we will work with you.
+
+As the proposal becomes more stable, we will ask for a Pull Request-copy of the proposal to be pushed to [the proposals directory](./proposals).
+
+### Proposal Details
 
 The following details are expected for proposals to help us best understand how the project will serve the community.
 
