@@ -8,11 +8,11 @@ The current members of the SSC, ordered by term,  are as follows:
 
 **Volkan Ozcelik** (@v0lkan)  
 [GitHub](https://github.com/v0lkan) | [LinkedIn](https://www.linkedin.com/in/volkanozcelik)  
-Term end: May 10th, 2025  
+Term end: May 10th, 2027  
 
-**Frederick Kautz** (@fkautz)  
-[GitHub](https://github.com/fkautz) | [LinkedIn](https://www.linkedin.com/in/fkautz/)  
-Term end: May 10th, 2025  
+**Mariusz Sabath** (@mrsabath)  
+[GitHub](https://github.com/mrsabath) | [LinkedIn](https://www.linkedin.com/in/mariusz-sabath-b36b0b20/)  
+Term end: May 10th, 2027  
 
 **Mohamed Omar** (@moe-omar)  
 [GitHub](https://github.com/moe-omar) | [LinkedIn](https://www.linkedin.com/in/moeomar/)  
