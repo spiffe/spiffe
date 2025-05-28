@@ -44,16 +44,16 @@ An X.509 SVID MAY contain any number of other SAN field types, including DNS SAN
 This section discusses the relationship between leaf, root, and intermediate certificates, as well as the requirements placed upon each.
 
 ### 3.1. Leaf Certificates
-A leaf certificate is an SVID which serves to identify a caller or resource and are suitable for use in authentication processes. A leaf certificate (as opposed to a signing certificate, [section 3.2](#3.2.-signing-certificates)) is the only type which may serve to identify a resource or caller.
+A leaf certificate is an SVID which serves to identify a caller or resource and are suitable for use in authentication processes. A leaf certificate (as opposed to a signing certificate, [section 3.2](#32-signing-certificates)) is the only type which may serve to identify a resource or caller.
 
-Leaf certificate SPIFFE IDs MUST have a non-root path component. The Subject field is not required, however the URI SAN extension MUST be marked as critical if Subject is omitted, per section 4.1.2.6 of [RFC 5280][1]. See [section 4.1](#4.1.-basic-constraints) for information on X.509-specific properties which distinguish a leaf certificate from a signing certificate.
+Leaf certificate SPIFFE IDs MUST have a non-root path component. The Subject field is not required, however the URI SAN extension MUST be marked as critical if Subject is omitted, per section 4.1.2.6 of [RFC 5280][1]. See [section 4.1](#41-basic-constraints) for information on X.509-specific properties which distinguish a leaf certificate from a signing certificate.
 
 ### 3.2. Signing Certificates
-An X.509 SVID signing certificate is one which has set `keyCertSign` in the key usage extension. It additionally has the `cA` flag set to `true` in the basic constraints extension (see [section 4.1](#4.1.-basic-constraints)). That is to say, it is a CA certificate.
+An X.509 SVID signing certificate is one which has set `keyCertSign` in the key usage extension. It additionally has the `cA` flag set to `true` in the basic constraints extension (see [section 4.1](#41-basic-constraints)). That is to say, it is a CA certificate.
 
-A signing certificate SHOULD itself be an SVID. If present, the SPIFFE ID of a signing certificate MUST NOT have a path component, and MAY reside in the trust domain of any leaf SVIDs it issues. A signing certificate MAY be used to issue further signing certificates in the same or different trust domains.
+A signing certificate SHOULD itself be an SVID. If present, the SPIFFE ID of a signing certificate MUST NOT have a path component, and SHOULD reside in the trust domain of any leaf SVIDs it issues. A signing certificate MAY be used to issue further signing certificates in the same or different trust domains.
 
-Signing certificates MUST NOT be used for authentication purposes. They serve as validation material only, and may be chained together in typical X.509 fashion, as described in [RFC 5280][1]. Please see [section 4.3](#4.3.-key-usage) and [section 4.4](#4.4-extended-key-usage) for further information regarding X.509-specific restrictions on signing certificates.
+Signing certificates MUST NOT be used for authentication purposes. They serve as validation material only, and may be chained together in typical X.509 fashion, as described in [RFC 5280][1]. Please see [section 4.3](#43-key-usage) and [section 4.4](#44-extended-key-usage) for further information regarding X.509-specific restrictions on signing certificates.
 
 ## 4. Constraints and Usage
 Leaf and signing certificates carry different X.509 properties - some for security purposes, and some to support their specialized functions. This section describes the constraints and key usage configuration for X.509 SVIDs of both types.
@@ -97,7 +97,7 @@ Certificate path validation requires the leaf SVID certificate and one or more S
 ### 5.2. Leaf Validation
 When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
 
-When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe://`. SVIDs containing more than one URI SAN MUST be rejected.
+When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe`. SVIDs containing more than one URI SAN MUST be rejected.
 
 As support for URI name constraints becomes more widespread, future versions of this document may update the requirements set forth in this section in order to better leverage name constraint validation.
 
@@ -119,7 +119,7 @@ For every JWK entry in the bundle with the `use` parameter set to `x509-svid`, c
 The first value of the `x5c` parameter is the base64 DER-encoded CA certificate that the entry represents. If the `x5c` parameter contains multiple values, then all but the first MUST be ignored. The X509-SVID CA bundle is then the union of CA certificates extracted from the `x509-svid` JWK entries. If no `x509-svid` JWK entries are present in the bundle, then the trust domain does not support X509-SVID.
 
 ## 7. Conclusion
-This document set forth conventions and standards for the issuance and validation of X.509-based SPIFFE Verifiable Identity Documents. It forms the basis for real world SPIFFE service authentication and SVID validation. By conforming to the X.509 SVID standard, it is possible to build an identity and authentication system which is interoperable and platform agnostic.
+This document set forth conventions and standards for the issuance and validation of X.509-based SPIFFE Verifiable Identity Documents. It forms the basis for real-world SPIFFE service authentication and SVID validation. By conforming to the X.509 SVID standard, it is possible to build an identity and authentication system which is interoperable and platform agnostic.
 
 ## Appendix A. X.509 Field Reference
 Extension | Field | Description

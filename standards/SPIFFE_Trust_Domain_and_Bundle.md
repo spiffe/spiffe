@@ -20,9 +20,12 @@ This document describes the semantics of SPIFFE trust domains, how they are repr
 4.2. [JWK](#42-jwk)  
 4.2.1. [Key Type](#421-key-type)  
 4.2.2. [Public Key Use](#422-public-key-use)  
-5\. [Security Considerations](#5-security-considerations)
-5.1. [SPIFFE Bundle Refresh Hint](#51-spiffe-bundle-refresh-hint)
-5.2. [Reusing Cryptographic Keys Across Trust Domains](#52-reusing-cryptographic-keys-across-trust-domains)
+5\. [SPIFFE Bundle Map](#5-spiffe-bundle-map)  
+5.1. [SPIFFE Bundle Map Format](#51-spiffe-bundle-map-format)  
+5.1.1. [Trust Domains](#511-trust-domains)  
+6\. [Security Considerations](#6-security-considerations)  
+6.1. [SPIFFE Bundle Refresh Hint](#61-spiffe-bundle-refresh-hint)  
+6.2. [Reusing Cryptographic Keys Across Trust Domains](#62-reusing-cryptographic-keys-across-trust-domains)  
 Appendix A. [SPIFFE Bundle Example](#appendix-a-spiffe-bundle-example)  
 
 ## 1. Introduction
@@ -44,7 +47,7 @@ A SPIFFE bundle is an object containing a trust domain's cryptographic keys. The
 
 SPIFFE bundles are designed for use within and between SPIFFE control plane implementations. They are not meant for direct consumption by workloads, however this specification does not preclude such use.
 
-When storing or otherwise managing SPIFFE bundles, it is important to independently record the name of the trust domain that the bundle represents, nominally through the use of a `<trust_domain_name, bundle>` tuple. When validating an SVID, validators must choose the bundle corresponding to the trust domain that the SVID resides in, so maintaining this relationship is required in most scenarios.
+When storing or otherwise managing SPIFFE bundles, it is important to independently record the name of the trust domain that the bundle represents, nominally through the use of a [SPIFFE Bundle Map](#5-spiffe-bundle-map) or via a `<trust_domain_name, bundle>` tuple. When validating an SVID, validators must choose the bundle corresponding to the trust domain that the SVID resides in, so maintaining this relationship is required.
 
 Note that the contents of a trust domain's bundle are expected to change over time as the keys it contains are rotated. Keys are added and revoked by issuing a new bundle with new keys included and revoked keys omitted. It is the responsibility of the SPIFFE implementation to distribute bundle content updates to workloads as needed. The exact format and method by which these updates are delivered is out of scope for this specification. Please see the [SPIFFE Workload API][3] specification for information on delivering updates to workloads.
 
@@ -78,15 +81,32 @@ The `kty` parameter MUST be set, and its behavior follows [Section 4.1][6] of RF
 #### 4.2.2. Public Key Use
 The `use` parameter MUST be set. Its value indicates the type of identity document (or SVID) that it is authoritative for. At the time of this writing, only two SVID types are supported: `x509-svid` and `jwt-svid`. The values are case sensitive. Please see the respective SVID specifications for more information about `use` values. Clients encountering either a missing `use` parameter or an unknown `use` value MUST ignore the entire JWK element.
 
-## 5. Security Considerations
+## 5. SPIFFE Bundle Map
+A SPIFFE Bundle Map is an object containing a collection of SPIFFE Bundles. The bundles it contains are considered authoritative for the corresponding trust domain name, which is also included.
+
+SPIFFE Bundle Maps are designed for use between SPIFFE control plane implementations, between SPIFFE implementations and the workloads they serve, as well as internally (i.e. as an implementation detail of a SPIFFE control plane).
+
+### 5.1. SPIFFE Bundle Map Format
+SPIFFE Bundle Maps are JSON-encoded structures, encapsulating one or more SPIFFE Bundles and some additional metadata. For an example of a complete SPIFFE Bundle Map, please see [Appendix B. SPIFFE Bundle Map Example](#appendix-b-spiffe-bundle-map-example).
+
+#### 5.1.1. Trust Domains
+A static “trust_domains” key MUST be set, and MAY be empty. Its contents are a map of SPIFFE Bundles, keyed by the trust domain name. For more information on what constitutes a valid trust domain name, please see [Section 2][1] of the SPIFFE ID specification.
+
+Producers of SPIFFE Bundle Maps MUST ensure uniqueness amongst trust domain names in a given “trust_domains” element. Consumers MUST reject maps in which duplicate trust domain name keys are detected, provided that the underlying libraries are capable of detecting such duplications. Please see the [Security Considerations section](#63-json-key-duplication) for more information.
+
+Producers of SPIFFE Bundle Maps SHOULD omit the “refresh_hint” key from bundles included in the map, as refresh hint applies to individual bundles and the collection. Consumers of SPIFFE Bundle Maps MUST NOT alter SPIFFE Bundle Map refresh behavior based on the value of “refresh_hint” keys present in any individual bundle in the map.
+
+The decision on which bundle(s) to include in the map is implementation-specific. It may be all bundles the deployment has knowledge of, or the response may be tailored based on the identity of the consumer and the use case. Exactly how this is determined is out-of-scope for this document.
+
+## 6. Security Considerations
 This section outlines security-related considerations that should be made while implementing and deploying a SPIFFE control plane.
 
-### 5.1. SPIFFE Bundle Refresh Hint
+### 6.1. SPIFFE Bundle Refresh Hint
 SPIFFE bundles include an optional `refresh_hint` field meant to indicate the frequency at which consumers should attempt to refresh their copy of the bundle. This value has a clear impact on how quickly keys can be rotated, but it also impacts how quickly keys can be redacted. Refresh hint values should be carefully chosen with this in mind.
 
 Since this field is not mandatory, it is possible to encounter SPIFFE bundles that do not have a `refresh_hint` set. In this case, a client has the option of using a suitable interval by examining SVID validity periods. It should be acknowledged that omitting a `refresh_hint` will likely impact the ability of a trust domain to rapidly revoke compromised keys. Clients should default to a relatively low (e.g. five minutes) refresh interval to be able to retrieve updated trust bundles in a timely manner.
 
-### 5.2. Reusing Cryptographic Keys Across Trust Domains
+### 6.2. Reusing Cryptographic Keys Across Trust Domains
 This specification discourages sharing cryptographic keys across trust domains since the practice degrades trust domain isolation and introduces additional security challenges. When a root key is shared across multiple trust domains, it becomes critically important that authentication and authorization implementations carefully check the trust domain name component of an identity and that the trust domain name component be easily and habitually expressed in authorization policies.
 
 Suppose that a naïve implementation imported (ie. fully trusted) a particular root key and that the authentication system were configured to authenticate the SPIFFE identity of any SVID which chained up to the trusted root key. If the naïve implementation is not configured to only trust a specific trust domain, then any identity issued in any trust domain could be authenticated (so long as the SVID chains up to the trusted root key).
@@ -94,6 +114,9 @@ Suppose that a naïve implementation imported (ie. fully trusted) a particular r
 Continuing the above example where a naïve implementation imports a particular CA certificate, suppose that the authentication did not disambiguate trust domains and that any SVID which chained up to a trusted root key were accepted by the authentication system. Then it would become incumbent on the authorization system to only authorize specific trust domains. In other words, authorization policies need to be explicitly configured to check the trust domain name component of an SVID. The security concern here is that a naïve authorization implementation may blindly trust that the authentication system has filtered out untrusted trust domains.
 
 In summary, a security-in-depth best practice is to maintain a one-to-one mapping between trust domain and root keys so as to reduce subtle (yet catastrophic) authentication and authorization implementation errors. Systems which do reuse root keys across trust domains should ensure that (a) the SVID-issuing system (eg. CA) correctly implements authorization checks prior to issuing SVIDs and (b) that relying parties (ie. systems consuming the SVIDs) correctly implement robust authentication and authorization systems capable of disambiguating multiple trust domains.
+
+### 6.3. JSON Key Duplication
+[RFC 8259][12], which serves as the standard for JSON data format, states that the names within an object SHOULD be unique. Furthermore, it emphasizes that when the names within a JSON object are not unique, the behavior of software that receives such an object is unpredictable. This behavior poses an unacceptable security risk when the JSON format is used to represent SPIFFE Bundle Maps, as the presence of duplicate trust domain names could lead to the incorrect bundle being selected for use in validating SVIDs. As such, it is important that libraries parsing SPIFFE bundle maps employ duplicate key detection.
 
 ## Appendix A. SPIFFE Bundle Example
 In the following example, we configure an initial SPIFFE bundle for the trust domain named `example.com` and then demonstrate how the bundle is updated during root key rotation.
@@ -197,6 +220,38 @@ Trust bundle #2 for example.com:
 
 In trust bundle #2, note that the `spiffe_sequence` parameter has been incremented and the second root certificate for `example.com` has been added. Once this new trust bundle is published and distributed, validators will accept SVIDs signed by either the original or the replacement root certificate. By publishing the replacement certificate well ahead of the expiration of the original certificate, validators have ample opportunity to refresh the trust bundle of example.com and learn of the pending replacement certificate.
 
+## Appendix B. SPIFFE Bundle Map Example
+The following is a sample SPIFFE Bundle Map:
+
+```
+{
+  “trust_domains”: {
+    "example.com": {
+      “spiffe_sequence”: 12035488,
+      "keys": [
+        {
+          "kty": "RSA",
+          "use": "x509-svid",
+          "x5c": ["<base64 DER encoding of Certificate #1>"],
+          "n": "<base64urlUint-encoded value>",
+          "e": "AQAB"
+        },
+        {
+          "kty": "RSA",
+          “kid”: “<JWT key id>”,
+          "use": "jwt-svid",
+          "n": "<base64urlUint-encoded value>",
+          "e": "AQAB"
+        }
+      ]
+    }
+  }
+}
+```
+
+### Appendix B.1. Server/Client Behavior
+SPIFFE Bundle Maps are designed to be loaded and ingested atomically. The entirety of its contents should be loaded by the consumer, and should be considered “state of the world” at this time. If measurement of propagation delay, confirmation of liveness etc, is required, consumers should use the “spiffe_sequence” of the relevant bundles as many failure modes can cause liveness divergence across the bundles represented in the map.
+
 [1]: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#2-spiffe-identity
 [2]: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#3-spiffe-verifiable-identity-document
 [3]: https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE_Workload_API.md
@@ -208,3 +263,4 @@ In trust bundle #2, note that the `spiffe_sequence` parameter has been increment
 [9]: https://tools.ietf.org/html/rfc8555
 [10]: https://tools.ietf.org/html/rfc7517#section-4.7
 [11]: https://tools.ietf.org/html/rfc7518#section-6
+[12]: https://tools.ietf.org/html/rfc8259
