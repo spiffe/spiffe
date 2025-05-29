@@ -133,7 +133,7 @@ message JWTSVID {
 // There are currently no such parameters.
 message JWTBundlesRequest { }
 
-// The JWTBundlesReponse conveys JWT bundles.
+// The JWTBundlesResponse conveys JWT bundles.
 message JWTBundlesResponse {
     // Required. JWK encoded JWT bundles, keyed by the SPIFFE ID of the trust
     // domain.
@@ -153,7 +153,7 @@ message ValidateJWTSVIDRequest {
     string svid = 2;
 }
 
-// The ValidateJWTSVIDReponse message conveys the JWT-SVID validation results.
+// The ValidateJWTSVIDResponse message conveys the JWT-SVID validation results.
 message ValidateJWTSVIDResponse {
     // Required. The SPIFFE ID of the validated JWT-SVID.
     string spiffe_id = 1;
