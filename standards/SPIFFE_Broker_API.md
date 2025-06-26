@@ -72,8 +72,6 @@ The SPIFFE Broker API makes use of the authentication and authorization at the [
 
 Implementations MUST maintain a strict allow-only policy that prevents any caller that is not authorized to leverage the SPIFFE Broker API.
 
-> Note Arndt: Do we want to talk about authorization scope? Should the standard allow Brokers to only be authorized to act on behalf of a subset of workloads or is it always global scoped?
-
 ### 4.2 Remote procedure scope
 
 Every invocation of a remote procedure (RPC) at the SPIFFE Broker API, including its request and responses (potentially multiple), are in context of a concrete workload. Clients are expected to invoke RPCs for each workload they represent individually and isolate them for each other accordingly. An X509 Bundle response, for instance, is only valid for the workload the request has referenced and MUST NOT be applied, visible or in any other way impact other workloads. Same applies to all other RPCs in the scope of the SPIFFE Broker API.
