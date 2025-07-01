@@ -18,6 +18,8 @@ For more general information about SPIFFE, please see the [Secure Production Ide
 2.1.1. [Trust Domain Name Collisions](#211-trust-domain-name-collisions)  
 2.2. [Path](#22-path)  
 2.3. [Maximum SPIFFE ID Length](#23-maximum-spiffe-id-length)  
+2.4. [SPIFFE ID Parsing](#24-spiffe-id-parsing)  
+2.5. [SPIFFE ID Equivalency](#24-spiffe-id-equivalency)  
 3\. [SPIFFE Verifiable Identity Document](#3-spiffe-verifiable-identity-document)  
 3.1. [SVID Trust](#31-svid-trust)  
 3.2. [SVID Components](#32-svid-components)  
@@ -28,6 +30,8 @@ For more general information about SPIFFE, please see the [Secure Production Ide
 4.1.2. [Scope and Influence](#412-scope-and-influence)  
 4.1.3. [Interpretation](#413-interpretation)  
 4.1.4. [Veracity](#414-veracity)  
+4.2. [ID Equivalency](#42-id-equivalency)  
+5\. [Appendix A](#5-appendix-a)  
 
 
 ## 1. Introduction
@@ -115,6 +119,12 @@ All URI components contribute to the URI length, including the "spiffe" scheme, 
 
 SPIFFE IDs follow the URI specification as defined by [RFC 3986](https://tools.ietf.org/html/rfc3986). The scheme and trust domain name of the SPIFFE ID are case-insensitive. The path is case-sensitive.
 
+### 2.5. SPIFFE ID Equivalency
+
+Two SPIFFE IDs are equivalent if and only if they match on a byte-for-byte basis. Note that since SPIFFE IDs allow only ASCII characters without percent-encoding, and SPIFFE also forbids capital letters in the `host` part of the authority (which is traditionally case-insensitive), comparisons of legal SPIFFE IDs are disambiguated.
+
+It is important to try to minimize the amount of processing done on SPIFFE IDs received from untrusted sources prior to comparing them, as it is possible for some URI parsers to normalize an illegal SPIFFE ID into a legal one. Please see Security Considerations [section 4.2](#42-id-equivalency) for more information.
+
 ## 3. SPIFFE Verifiable Identity Document
 A SPIFFE Verifiable Identity Document (SVID) is the mechanism through which a workload communicates its identity to a resource or caller. An SVID is considered valid if it has been signed by an authority within the SPIFFE ID's trust domain.
 
@@ -184,4 +194,30 @@ Operators should carefully consider, on a case by case basis, whether or not a g
 For example, imagine that the operator of trust domain A and trust domain B have a shared customer and a business relationship. During normal operation in trust domain A, a specialized process authenticates the customer and the trust domain’s authority creates an SVID that embeds an assertion indicating the customer’s identity. The purpose of this process is to mitigate unauthorized access to customer data in the event that an intermediary service within the trust domain is compromised by proving that the customer was authenticated and did in fact make this request.
 
 Now imagine that a request for the customer’s data is received by the storage service in trust domain A, except the caller presented an SVID from trust domain B. Even though the presented SVID may have the necessary assertion indicating that the shared customer was authenticated and authorized the request, it is a bad idea to blindly assume that trust domain B has indeed authenticated your customer. If trust domain B is compromised, or if it has a malicious internal actor, it could claim to have authenticated any user it wishes, thus creating the very circumstance that the measure was designed to mitigate in the first place.
+
+### 4.2. ID Equivalency
+The comparison of SPIFFE IDs is a security critical operation. In allowing for internationalization, as well as compatibility with the DNS system, the URI standard which SPIFFE IDs rely upon has made a handful of decisions which complicate the equivalency process. Specifically, case-insensitivity, ambiguous percent-encoding rules and support for UTF-8, and the implementation of many conditionally-special characters can make the topic a confusing one.
+
+This specification has specifically forbidden the use of characters and encoding schemes that complicate comparison (please see sections [2.1](#21-trust-domain) and [2.2](#22-path) for more information). Thus, any legal SPIFFE ID can be considered safe. It will not be misinterpreted or transformed by traditional URI libraries, and it can be safely compared with other legal IDs on a byte-for-byte basis.
+
+It is still possible for a legal URI (but illegal SPIFFE ID) to be legally processed according to URI normalization rules _into_ a legal SPIFFE ID. Thus, under certain circumstances, it is possible for an illegal SPIFFE ID to be passed through a URI parser and produce a legal SPIFFE ID. These two SPIFFE IDs **will not match** on a byte-for-byte basis, however there exists room for confusion.
+
+This is an important detail to keep in mind, particularly when accepting untrusted input that is not signed over by a trust domain authority (e.g. user input from a web app). Untrusted input should always be validated against the SPIFFE ID ruleset prior to accepting and parsing with a traditional URI parser. Please see [Appendix A](#5-appendix-a) for a brief example.
+
+## 5. Appendix A. Lightweight SPIFFE ID validation
+SPIFFE IDs have a strict character set that is designed to be as consistent and as easy to validate as possible. Here is a logic example demonstrating a simple SPIFFE ID validation mechanism:
+1. Total number of characters is less than 2048
+1. Starts with "spiffe://"
+1. Strip prefix "spiffe://"
+1. The (new) first character must not be a `/`
+1. From the beginning, strip one character at a time:
+    1. Ensure it is either a lowercase alpha-numeric, a `.`, a `-`, or a `/`
+    1. When `/` is detected, stop
+    1. The number of stripped characters should not exceed 255, not including `/`
+1. What remains is the path - scan it for the following conditions in sequential order:
+    1. The string does not start or end with `/`
+    1. Includes only uppercase or lowercase alpha-numeric characters, `.`s, `-`s, `_`s, and `/`s
+    1. The character sequences `//`, `/./`, and `/../` do not appear anywhere in the string
+
+If the above checks are successful, the SPIFFE ID is valid.
 
