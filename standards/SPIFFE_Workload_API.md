@@ -218,16 +218,6 @@ If the client is not entitled to receive any X.509 bundles, then the server SHOU
 
 As mentioned in [Stream Responses](#43-stream-responses), each `X509BundleResponse` response contains the complete set of authorized X.509 bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
-### 5.3 Default Identity
-
-It is often the case that a workload doesn’t know what identity it should assume. Determining when to assume what identity is a site-specific concern, and as a result, the SPIFFE specifications don’t reason about how to do this.
-
-In order to support the widest variety of use cases, the X.509-SVID Profile supports the issuance of multiple identities, while also defining a default identity. It is expected that workloads which are aware of multiple identities can handle decision making on their own. Workloads which don’t understand how to leverage multiple identities may use the default identity. The default identity is the first in the `svids` list returned in the `X509SVIDResponse` message. Protocol buffers ensure that the order of the list is preserved.
-
-Workloads that understand how to use multiple identities may leverage the optional `hint` field, which can be used to disambiguate identities and inform the workload of which identity should be used for what purpose. For example, `internal` and `external` to denote an SVID for internal or external use, respectively. SPIFFE Workload API implementations SHOULD NOT support values of more than 1024 bytes in length. The exact value of the `hint` field is an operator choice and is otherwise unconstrained by this specification.
-
-It is the workload's responsibility to handle the absence of an expected hint, or the presence of an unexpected one (e.g. fail, warn, etc).
-
 ## 6. JWT-SVID Profile
 
 The JWT-SVID Profile of the SPIFFE Workload API provides a set of gRPC methods which can be used by workloads to retrieve JWT-SVIDs and their related trust bundles. This profile outlines the signature of these methods, as well as related client and server behavior.
@@ -494,6 +484,16 @@ The client SHOULD NOT process the update until it has received a response with t
 If the client is not entitled to receive any WIT bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchWITBundles` RPC after a backoff.
 
 As mentioned in [Stream Responses](#43-stream-responses), each complete set of response messages within an update contains the complete set of authorized trust bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent update (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
+
+### 8. Default Identity
+
+It is often the case that a workload doesn’t know what identity it should assume. Determining when to assume what identity is a site-specific concern, and as a result, the SPIFFE specifications don’t reason about how to do this.
+
+In order to support the widest variety of use cases, the X.509-SVID and WIT-SVID profiles support the issuance of multiple identities, while also defining a default identity. It is expected that workloads which are aware of multiple identities can handle decision making on their own. Workloads which don’t understand how to leverage multiple identities may use the default identity. The default identity is the first in the `svids` list returned in the `X509SVIDResponse` message. Protocol buffers ensure that the order of the list is preserved.
+
+Workloads that understand how to use multiple identities may leverage the optional `hint` field, which can be used to disambiguate identities and inform the workload of which identity should be used for what purpose. For example, `internal` and `external` to denote an SVID for internal or external use, respectively. SPIFFE Workload API implementations SHOULD NOT support values of more than 1024 bytes in length. The exact value of the `hint` field is an operator choice and is otherwise unconstrained by this specification.
+
+It is the workload's responsibility to handle the absence of an expected hint, or the presence of an unexpected one (e.g. fail, warn, etc).
 
 ## Appendix A. Sample Implementation State Machines
 
