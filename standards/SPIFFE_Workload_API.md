@@ -405,7 +405,7 @@ service SpiffeWorkloadAPI {
 // There are currently no such parameters.
 message WITSVIDRequest {}
 
-// The WITSVIDResponse message carries WIT-SVIDs .
+// The WITSVIDResponse message carries WIT-SVIDs.
 message WITSVIDResponse {
   // Required.
   // A list of WITSVID messages, each of which includes a single WIT-SVID and
@@ -448,6 +448,14 @@ message WITBundlesResponse {
   // trust, keyed by the SPIFFE ID of the trust domain.
   // Bundles are encoded in JWK set (RFC 7517) format.
   map<string, string> bundles = 1;
+  // Indicates that this message is part of an update that has been split across
+  // multiple messages, and that this message is not the last message in the
+  // update.
+  //
+  // If true, the client should expect more messages to follow that complete the
+  // set of bundles sent in this update. The client should not process the
+  // bundle set until it has received a message with `more` set to false.
+  bool more = 2;
 }
 ```
 
@@ -473,11 +481,19 @@ The `FetchWITBundles` RPC streams back bundles for both the trust domain in whic
 
 The `WITBundlesRequest` request message is currently empty and is a placeholder for future expansion.
 
-The `WITBundlesResponse` response message consists of a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides.
+Each `WITBundlesResponse` response message is part of an update of the trust bundle set. The `bundles` field MUST contain at least one or more trust bundles.
+
+The full set of trust bundles within an update may be split across the `bundles` field of multiple `WITBundlesResponse` messages.
+
+When splitting the update across multiple responses, the server MUST set the `more` field to true in all but the last message. The last response in an update will have the `more` field set to false, indicating that the complete set of bundles has been sent.
+
+Within each update, the server MUST send the trust bundle for a given trust domain exactly once. Each update MUST contain at least the trust bundle for the trust domain in which the server resides.
+
+The client SHOULD NOT process the update until it has received a response with the `more` field set to false. Once the client has received a message with the `more` field set to false, it should expect the next message to form part of a new update.
 
 If the client is not entitled to receive any WIT bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchWITBundles` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `WITBundleResponse` response contains the complete set of authorized trust bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
+As mentioned in [Stream Responses](#43-stream-responses), each complete set of response messages within an update contains the complete set of authorized trust bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent update (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
 ## Appendix A. Sample Implementation State Machines
 

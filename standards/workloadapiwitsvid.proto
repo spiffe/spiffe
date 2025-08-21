@@ -32,7 +32,7 @@ message WITSVIDRequest {
   // here. But this is out of scope for the introduction of WIT-SVID.
 }
 
-// The WITSVIDResponse message carries WIT-SVIDs .
+// The WITSVIDResponse message carries WIT-SVIDs.
 message WITSVIDResponse {
   // Required.
   // A list of WITSVID messages, each of which includes a single WIT-SVID and
@@ -75,4 +75,12 @@ message WITBundlesResponse {
   // trust, keyed by the SPIFFE ID of the trust domain.
   // Bundles are encoded in JWK set (RFC 7517) format.
   map<string, string> bundles = 1;
+  // Indicates that this message is part of an update that has been split across
+  // multiple messages, and that this message is not the last message in the
+  // update.
+  //
+  // If true, the client should expect more messages to follow that complete the
+  // set of bundles sent in this update. The client should not process the
+  // bundle set until it has received a message with `more` set to false.
+  bool more = 2;
 }
