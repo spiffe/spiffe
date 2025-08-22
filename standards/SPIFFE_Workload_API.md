@@ -469,7 +469,7 @@ If the client is not entitled to receive any WIT bundles, then the server SHOULD
 
 As mentioned in [Stream Responses](#43-stream-responses), each `WITBundleResponse` response contains the complete set of authorized trust bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
-### 8. Default Identity
+## 8. Default Identity
 
 It is often the case that a workload doesn’t know what identity it should assume. Determining when to assume what identity is a site-specific concern, and as a result, the SPIFFE specifications don’t reason about how to do this.
 
