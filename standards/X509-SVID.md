@@ -141,5 +141,5 @@ Extended Key Usage | id-kp-clientAuth | This field may be set for either leaf or
 [3]: https://tools.ietf.org/html/rfc5280#section-4.2.1.9
 [4]: https://tools.ietf.org/html/rfc5280#section-4.2.1.10
 [5]: https://tools.ietf.org/html/rfc5280#section-4.2.1.3
-[6]: https://tools.ietf.org/html/rfc5280#section-4.2.1.2
+[6]: https://tools.ietf.org/html/rfc5280#section-4.2.1.12
 [7]: https://tools.ietf.org/html/rfc7517
