@@ -366,7 +366,7 @@ In order to provide clarity, the authors thought it would be useful to include s
 
 ### Server State Machine
 
-![Sample server implementation](https://github.com/evan2645/spiffe/blob/aa1ed9f389b31bae5c75919993d1adb4ce924f88/standards/img/workload_api_server_diagram.png)
+![Sample server implementation](./img/workload_api_server_diagram.png)
 1. The SPIFFE Workload Endpoint listener is starting.
 2. The gRPC server is started with the SPIFFE Workload API handler, and is now accepting connections.
 3. An incoming FetchX509SVIDRequest is being validated. This includes checking for the mandatory security header, and ensuring that the caller has an identity available to it.
@@ -378,7 +378,7 @@ In order to provide clarity, the authors thought it would be useful to include s
 
 ### Client State Machine
 
-![Sample client implementation](https://github.com/evan2645/spiffe/blob/aa1ed9f389b31bae5c75919993d1adb4ce924f88/standards/img/workload_api_client_diagram.png)
+![Sample client implementation](./img/workload_api_client_diagram.png)
 1. The Workload API client is dialing the SPIFFE Workload Endpoint.
 2. The client is invoking the FetchX509SVID RPC call, sending a request to the server.
 3. The client is blocked on receiving an X509SVIDResponse message from the server.
