@@ -1,5 +1,10 @@
 # The SPIFFE Workload API
 
+> [!WARNING]  
+> This version of the document belongs to an experimental branch of the SPIFFE standards that explores integration with the WIMSE standards. Contents of this document are subject to breaking change and should not be considered stable.
+> 
+> The current stable version of this document can be found at https://github.com/spiffe/spiffe/blob/main/standards/SPIFFE_Workload_API.md
+
 ## Status of this Memo
 
 This document specifies an identity API standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
