@@ -397,8 +397,11 @@ service SpiffeWorkloadAPI {
 }
 
 // The WITSVIDRequest message conveys parameters for requesting a WIT-SVID.
-// There are currently no such parameters.
-message WITSVIDRequest {}
+message WITSVIDRequest {
+  // Optional. The requested SPIFFE ID for the WIT-SVID. If unset, all WIT-SVIDs
+  // to which the workload is entitled are requested.
+  string spiffe_id = 1;
+}
 
 // The WITSVIDResponse message carries WIT-SVIDs .
 message WITSVIDResponse {
@@ -452,7 +455,7 @@ message WITBundlesResponse {
 
 The `FetchWITSVID` RPC streams back WIT-SVIDs. 
 
-The `WITSVIDRequest` request message is currently empty and is a placeholder for future expansion.
+The `WITSVIDRequest` request message has a single optional `spiffe_id` field, which is used to request a WIT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return WIT-SVIDs for all identities authorized for the client.
 
 The `WITSVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `WITSVID` messages (one for each identity granted to the client).
 

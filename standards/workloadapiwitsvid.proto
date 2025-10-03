@@ -26,10 +26,10 @@ service SpiffeWorkloadAPI {
 }
 
 // The WITSVIDRequest message conveys parameters for requesting a WIT-SVID.
-// There are currently no such parameters.
 message WITSVIDRequest {
-  // TODO(noah): Eventually, we may consider introducing workload key generation
-  // here. But this is out of scope for the introduction of WIT-SVID.
+  // Optional. The requested SPIFFE ID for the WIT-SVID. If unset, all WIT-SVIDs
+  // to which the workload is entitled are requested.
+  string spiffe_id = 1;
 }
 
 // The WITSVIDResponse message carries WIT-SVIDs .
