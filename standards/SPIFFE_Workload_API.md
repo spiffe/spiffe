@@ -28,14 +28,14 @@ Portable and interoperable cryptographic identity for networked workloads is per
 5\. [X.509-SVID Profile](#5-x509-svid-profile)  
 5.1. [Profile Definition](#51-profile-definition)  
 5.2. [Profile RPCs](#52-profile-rpcs)  
-5.3. [Default Identity](#53-default-identity)  
 6\. [JWT-SVID Profile](#6-jwt-svid-profile)  
 6.1. [Profile Definition](#61-profile-definition)  
 6.2. [Profile RPCs](#62-profile-rpcs)  
 6.3. [JWT-SVID Validation](#63-jwt-svid-validation)
 7\. [WIT-SVID Profile](#7-wit-svid-profile)  
-6.1. [Profile Definition](#71-profile-definition)  
-6.2. [Profile RPCs](#72-profile-rpcs)  
+7.1. [Profile Definition](#71-profile-definition)  
+7.2. [Profile RPCs](#72-profile-rpcs)
+8\.[Default Identity](#8-default-identity)
 
 ## 1. Introduction
 
