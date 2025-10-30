@@ -236,6 +236,8 @@ message WITBundlesResponse {
     // Required.
     // WIT trust bundles belonging to trust domains that the workload should
     // trust, keyed by the SPIFFE ID of the trust domain.
-    // Bundles are encoded in JWK set (RFC 7517) format.
+    //
+    // Bundles are encoded in JWK set (RFC 7517) format. Each JWK MUST specify the
+    // `kid` member with a unique identifier for the key.
     map<string, string> bundles = 1;
 }

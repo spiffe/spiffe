@@ -444,7 +444,9 @@ message WITBundlesResponse {
   // Required.
   // WIT trust bundles belonging to trust domains that the workload should
   // trust, keyed by the SPIFFE ID of the trust domain.
-  // Bundles are encoded in JWK set (RFC 7517) format.
+  //
+  // Bundles are encoded in JWK set (RFC 7517) format. Each JWK MUST specify the
+  // `kid` member with a unique identifier for the key.
   map<string, string> bundles = 1;
 }
 ```
@@ -472,6 +474,9 @@ The `FetchWITBundles` RPC streams back bundles for both the trust domain in whic
 The `WITBundlesRequest` request message is currently empty and is a placeholder for future expansion.
 
 The `WITBundlesResponse` response message consists of a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides.
+
+Bundles are encoded as in JWK Set (RFC 7517) format. Each JWK within the JWK Set
+must specify the `kid` member with a unique identifier for the key.
 
 If the client is not entitled to receive any WIT bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchWITBundles` RPC after a backoff.
 
