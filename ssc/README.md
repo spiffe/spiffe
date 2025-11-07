@@ -6,13 +6,13 @@ Please read the [SSC Charter](CHARTER.md) for more information about the SSC's r
 ## SSC Members
 The current members of the SSC, ordered by term,  are as follows:
 
-**Arndt Schwenkschuster** @arndt-s
-[GitHub](https://github.com/arndt-s) | [LinkedIn](https://www.linkedin.com/in/arndtschw/)
-Term End: November 1st, 2027
+**Arndt Schwenkschuster** @arndt-s  
+[GitHub](https://github.com/arndt-s) | [LinkedIn](https://www.linkedin.com/in/arndtschw/)  
+Term End: November 1st, 2027  
 
-**Noah Stride** (@strideynet)
-[GitHub](https://github.com/strideynet) | [LinkedIn](https://www.linkedin.com/in/noah-stride/)
-Term End: November 1st, 2027
+**Noah Stride** (@strideynet)  
+[GitHub](https://github.com/strideynet) | [LinkedIn](https://www.linkedin.com/in/noah-stride/)  
+Term End: November 1st, 2027  
 
 **Volkan Ozcelik** (@v0lkan)  
 [GitHub](https://github.com/v0lkan) | [LinkedIn](https://www.linkedin.com/in/volkanozcelik)  
