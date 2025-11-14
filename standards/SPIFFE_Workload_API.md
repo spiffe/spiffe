@@ -403,7 +403,7 @@ message WITSVIDRequest {
   string spiffe_id = 1;
 }
 
-// The WITSVIDResponse message carries WIT-SVIDs .
+// The WITSVIDResponse message carries WIT-SVIDs.
 message WITSVIDResponse {
   // Required.
   // A list of WITSVID messages, each of which includes a single WIT-SVID and
