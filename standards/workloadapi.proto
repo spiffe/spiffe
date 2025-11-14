@@ -1,3 +1,8 @@
+// WARNING:
+// This version of the specification belongs to an experimental branch of the
+// SPIFFE standards that explores integration with the WIMSE standards. Contents
+// of this specification are subject to breaking change and should not be
+// considered stable.
 syntax = "proto3";
 
 import "google/protobuf/struct.proto";
@@ -36,6 +41,26 @@ service SpiffeWorkloadAPI {
     // Validates a JWT-SVID against the requested audience. Returns the SPIFFE
     // ID of the JWT-SVID and JWT claims.
     rpc ValidateJWTSVID(ValidateJWTSVIDRequest) returns (ValidateJWTSVIDResponse);
+
+    /////////////////////////////////////////////////////////////////////////
+    // WIT-SVID Profile
+    /////////////////////////////////////////////////////////////////////////
+
+    // Fetch WIT-SVIDs for all SPIFFE identities the workload is entitled to. If
+    // the identities which the workload is entitled to change, or, they are
+    // renewed, the server will stream subsequent messages to the client.
+    //
+    // Must return Unimplemented where Workload API endpoint does not support the
+    // WIT-SVID profile.
+    rpc FetchWITSVID(WITSVIDRequest) returns (stream WITSVIDResponse);
+
+    // Fetch trust bundles. Useful for clients that only need to validate SVIDs
+    // without obtaining an SVID for themselves. As this information changes,
+    // subsequent messages will be streamed from the server.
+    //
+    // Must return Unimplemented where Workload API endpoint does not support the
+    // WIT-SVID profile.
+    rpc FetchWITBundles(WITBundlesRequest) returns (stream WITBundlesResponse);
 }
 
 // The X509SVIDRequest message conveys parameters for requesting an X.509-SVID.
@@ -161,4 +186,58 @@ message ValidateJWTSVIDResponse {
     // Required. Claims contained within the payload of the validated JWT-SVID.
     // This includes both SPIFFE-required and non-required claims.
     google.protobuf.Struct claims = 2;
+}
+
+// The WITSVIDRequest message conveys parameters for requesting a WIT-SVID.
+message WITSVIDRequest {
+    // Optional. The requested SPIFFE ID for the WIT-SVID. If unset, all WIT-SVIDs
+    // to which the workload is entitled are requested.
+    string spiffe_id = 1;
+}
+
+// The WITSVIDResponse message carries WIT-SVIDs.
+message WITSVIDResponse {
+    // Required.
+    // A list of WITSVID messages, each of which includes a single WIT-SVID and
+    // its private key.
+    repeated WITSVID svids = 1;
+}
+
+// The WITSVID message carries a single SVID and all associated information,
+// including the WIT bundle for the trust domain.
+message WITSVID {
+    // Required.
+    // The SPIFFE ID of the SVID in this entry
+    string spiffe_id = 1;
+
+    // Required.
+    // Encoded WIT SVID using compact JWS serialization.
+    string wit_svid = 2;
+
+    // Required.
+    // JWK (RFC 7517) encoded private key for the WIT SVID.
+    string wit_svid_key = 3;
+
+    // Optional.
+    // An operator-specified string used to provide guidance on how this identity
+    // should be used by a workload when more than one SVID is returned.
+    // For example, `internal` and `external` to indicate a SVID for internal or
+    // external use, respectively.
+    string hint = 4;
+}
+
+// The WITBundlesRequest message conveys parameters for requesting WIT
+// bundles. There are currently no such parameters.
+message WITBundlesRequest {}
+
+// The WITBundlesResponse message carries a map of trust bundles the workload
+// should trust.
+message WITBundlesResponse {
+    // Required.
+    // WIT trust bundles belonging to trust domains that the workload should
+    // trust, keyed by the SPIFFE ID of the trust domain.
+    //
+    // Bundles are encoded in JWK set (RFC 7517) format. Each JWK MUST specify the
+    // `kid` member with a unique identifier for the key.
+    map<string, string> bundles = 1;
 }
