@@ -61,11 +61,20 @@ It is permitted for an implementation to include additional claims not specified
 
 ## 4. Token Signing and Validation
 
-## 5. Token Transmission
+## 5. Token Presentation
+
+This section describes the manner in which a WIT-SVID may be presented from one workload to another for the purposes of authentication.
+
+The WIT-SVID MUST always be presented by the workload with proof of possession of the key-pair contained within the `cnf`. In other words, the WIT-SVID MUST NOT be presented as a bearer token.
+
+WIMSE defines protocols for presentation of the WIT. It is recommended that that an implementor use one of these defined protocols, however, it is not required. At the time of writing, there are two protocols:
+
+- [WIMSE Workload Proof Token][4]
+- [WIMSE Workload-To-Workload Authentication with HTTP Signatures][5]
 
 ## 6. Representation in the SPIFFE Bundle
 
-This section describes how the WIt-SVId signing keys are published to and consumed from a SPIFFE bundle. Please see the [SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md) specification for more information about SPIFFE bundles.
+This section describes how the WIT-SVID signing keys are published to and consumed from a SPIFFE bundle. Please see the [SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md) specification for more information about SPIFFE bundles.
 
 ### 6.1 Publishing SPIFFE Bundle Elements
 
@@ -101,3 +110,5 @@ TODO: Is this topic appropriate for this document? Does it better belong in SPIF
 [1]: https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-creds/
 [2]: https://www.rfc-editor.org/rfc/rfc7515
 [3]: https://www.rfc-editor.org/rfc/rfc7517
+[4]: https://datatracker.ietf.org/doc/draft-ietf-wimse-wpt/
+[5]: https://datatracker.ietf.org/doc/draft-ietf-wimse-http-signature/
