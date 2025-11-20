@@ -25,6 +25,8 @@ In addition to headers made mandatory by the upstream document, the WIT-SVID pro
 
 - Key ID - `kid`
 
+TODO: Should we summarize `alg`/`typ` even if these will not differ from the WIMSE WIT?
+
 ### 2.1. Key ID - `kid`
 
 The `kid` header is defined by [JSON Web Signature (JWS)][2]. 
@@ -41,17 +43,21 @@ It is permitted for an implementation to include additional headers not specifie
 
 ### 3. Claims
 
+The WIT-SVID specification does not introduce any claims beyond those defined by the upstream document. However, it does set additional restrictions on some claims.
+
 TODO:
 
-- `iss` claim. Do we wish to make this mandatory?
+- `iss` claim. This is RECOMMENDED in the WIT specification. Do we wish to mirror this, or, make it mandatory?
 
 ### 3.1. Subject - `sub`
 
 The `sub` claim MUST be present and set to the SPIFFE ID of the workload to which it is issued. This is the primary claim against which workload identity is asserted.
 
-TODO: Mandatory, and must be the SPIFFE ID of the workload.
+For example: `spiffe://example.org/service`.
 
 ### 3.2. Additional Claims
+
+It is permitted for an implementation to include additional claims not specified in this document or the upstream document.
 
 ## 4. Token Signing and Validation
 
@@ -59,20 +65,39 @@ TODO: Mandatory, and must be the SPIFFE ID of the workload.
 
 ## 6. Representation in the SPIFFE Bundle
 
+This section describes how the WIt-SVId signing keys are published to and consumed from a SPIFFE bundle. Please see the [SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md) specification for more information about SPIFFE bundles.
+
+### 6.1 Publishing SPIFFE Bundle Elements
+
+WIT-SVID signing keys for a given trust domain are represented in the SPIFFE bundle as [RFC 7517][3]-compliant JWK entries, one entry per signing key.
+
+The `use` parameter of the JWK entry MUST be set to `wit-svid`. Additionally, the `kid` parameter of each JWK entry must be set.
+
+### 6.2 Consuming SPIFFE Bundle Elements
+
+SPIFFE bundles may contain JWK entries for many different SVID types. Implementations MUST extract the WIT-SVId specification keys before using them for validation purposes. Entries representing WIT-SVID signing keys can be identified by the value of their `use` parameter, which must be `wit-svid`. If there are no entries with the `wit-svid` use parameter, then the trust domain that the bundle represents does not support WIT-SVID.
+
 ## 7. Security Considerations
 
 ### 7.1 Proof of Possession
 
-The WIT-SVID MUST NOT be used as a bearer token and MUST be presented with a 
-proof of possession of the key-pair within the `cnf` claim. 
+The WIT-SVID MUST NOT be used as a bearer token and MUST be presented with a proof of possession of the key-pair within the `cnf` claim.
 
-## Appendix A. Overview of Differences
+### 7.2 Transport Security
 
-JOSE Headers:
+## Appendix A. Comparing WIMSE WIT with SPIFFE WIT-SVID
 
-| Header  | WIT      | WIT-SVID  |
-|---------|----------|-----------|
-| `kid`   | Optional | Mandatory |
+The following summarises the differences between the IETF WIMSE WIT and the SPIFFE WIT-SVID.
+
+- JOSE Headers
+  - `kid` is not defined by the WIT specification, but is mandatory in WIT-SVID.
+- Claims
+  - `sub` is defined within the WIT specifications, but, is specifically defined to be the SPIFFE ID in a WIT-SIVD.
+
+## Appendix B. Comparing the JWT-SVID and WIT-SVID
+
+TODO: Is this topic appropriate for this document? Does it better belong in SPIFFE-ID.md? or not within the specification at all? I feel this should be covered somewhere since the WIT and JWT are "visually" "similar" and likely to be confused.
 
 [1]: https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-creds/
 [2]: https://www.rfc-editor.org/rfc/rfc7515
+[3]: https://www.rfc-editor.org/rfc/rfc7517
