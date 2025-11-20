@@ -29,9 +29,9 @@ TODO: Should we summarize `alg`/`typ` even if these will not differ from the WIM
 
 ### 2.1. Key ID - `kid`
 
-The `kid` header is defined by [JSON Web Signature (JWS)][2]. 
+The `kid` header is defined by the [JSON Web Signature (JWS)][2] document.
 
-For the WIT-SVID profile, this header is mandatory.
+For a WIT-SVID, this header is mandatory. This differs from the upstream WIT itself where this header is optional.
 
 The precise structure of this header is unspecified, and, it MUST be treated by verifiers as a case-sensitive string.
 
@@ -48,6 +48,7 @@ The WIT-SVID specification does not introduce any claims beyond those defined by
 TODO:
 
 - `iss` claim. This is RECOMMENDED in the WIT specification. Do we wish to mirror this, or, make it mandatory?
+- `jti` claim. This is OPTIONAL in the WIT specification. Do we wish to mirror this, or, make it mandatory?
 
 ### 3.1. Subject - `sub`
 
