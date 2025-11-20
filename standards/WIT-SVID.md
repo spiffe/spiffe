@@ -6,6 +6,7 @@
 > The current stable version of this document can be found at https://github.com/spiffe/spiffe/blob/main/standards/SPIFFE_Workload_Endpoint.md
 
 ## Status of this Memo
+
 This document specifies an identity document standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
 
 ## Table of Contents
@@ -45,6 +46,8 @@ TODO:
 - `iss` claim. Do we wish to make this mandatory?
 
 ### 3.1. Subject - `sub`
+
+The `sub` claim MUST be present and set to the SPIFFE ID of the workload to which it is issued. This is the primary claim against which workload identity is asserted.
 
 TODO: Mandatory, and must be the SPIFFE ID of the workload.
 
