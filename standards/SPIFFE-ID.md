@@ -137,13 +137,13 @@ Individual SVID specifications MAY require or otherwise allow information to be 
 ### 3.3. SVID Format
 An SVID is not itself a document type. Many document formats exist already which fulfil the needs of a SPIFFE SVID, and we do not wish to re-invent those formats. Instead, we define a set of format-specific specifications which standardize the encoding of SVID information.
 
-In order for an SVID to be considered valid, it MUST leverage a document type for which a corresponding specification has been defined. Note that format-specific SVID specifications may upgrade the requirements set forth in this document.
-
-The following document types are defined:
+In order for an SVID to be considered valid, it MUST leverage a document type for which a corresponding specification has been defined. The following document types are defined:
 
 * [X.509 SPIFFE Verifiable Identity Document](X509-SVID.md)
 * [JWT SPIFFE Verifiable Identity Document](JWT-SVID.md)
 * [WIT SPIFFE Verifiable Identity Document](WIT-SVID.md)
+
+Note that format-specific SVID specifications may upgrade the requirements set forth in this document.
 
 ## 4. Security Considerations
 This section includes security considerations that implementers and users should take into account when using SPIFFE IDs and SVIDs.
