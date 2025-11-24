@@ -56,6 +56,16 @@ The `sub` claim MUST be present and set to the SPIFFE ID of the workload to whic
 
 For example: `spiffe://example.org/service`.
 
+### 3.2. JWT ID - `jti`
+
+The `jti` claim provides a unique identifier for the WIT-SVID. It is defined by [RFC 7519][6].
+
+Primarily, this claim enables distinguishing one or more WIT-SVIDs that contain the same SPIFFE ID for the purposes of auditing. For example, if a validator of a WIT-SVID records the JTI within an audit log event, this audit log event can be correlated with the one emitted by the issuer, allowing the lineage of the credential to be ascertained.
+
+TODO: Do we repeat from RFC 7519 that the issuer MUST ensure that this field is unique?
+TODO: In WIT-SVID, is this a MAY/SHOULD/MUST?
+TODO: Do we make any comment here on revocation?
+
 ### 3.2. Additional Claims
 
 It is permitted for an implementation to include additional claims not specified in this document or the upstream document.
@@ -109,7 +119,8 @@ The following summarises the differences between the IETF WIMSE WIT and the SPIF
 TODO: Is this topic appropriate for this document? Does it better belong in SPIFFE-ID.md? or not within the specification at all? I feel this should be covered somewhere since the WIT and JWT are "visually" "similar" and likely to be confused.
 
 [1]: https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-creds/
-[2]: https://www.rfc-editor.org/rfc/rfc7515
-[3]: https://www.rfc-editor.org/rfc/rfc7517
+[2]: https://datatracker.ietf.org/doc/rfc7515
+[3]: https://datatracker.ietf.org/doc/rfc7517
 [4]: https://datatracker.ietf.org/doc/draft-ietf-wimse-wpt/
 [5]: https://datatracker.ietf.org/doc/draft-ietf-wimse-http-signature/
+[6]: https://datatracker.ietf.org/doc/rfc7519
