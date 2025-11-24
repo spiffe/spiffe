@@ -21,9 +21,9 @@ WIT-SVIDs are JSON Web Signature (JWS) data structures.
 
 ### 2. JOSE Header
 
-In addition to headers made mandatory by the upstream document, the WIT-SVID profile makes mandatory the following headers:
+This section describes the JOSE headers that may be included in the WIT-SVID.
 
-- Key ID - `kid`
+The WIT-SVID specification does not introduce any JOSE headers beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some headers.
 
 TODO: Should we summarize `alg`/`typ` even if these will not differ from the WIMSE WIT?
 
@@ -43,7 +43,9 @@ It is permitted for an implementation to include additional headers not specifie
 
 ### 3. Claims
 
-The WIT-SVID specification does not introduce any claims beyond those defined by the upstream document. However, it does set additional restrictions on some claims.
+This section describes the claims that may be included in the WIT-SVID.
+
+The WIT-SVID specification does not introduce any claims beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some claims.
 
 TODO:
 
