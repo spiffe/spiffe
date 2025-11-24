@@ -48,7 +48,6 @@ The WIT-SVID specification does not introduce any claims beyond those defined by
 TODO:
 
 - `iss` claim. This is RECOMMENDED in the WIT specification. Do we wish to mirror this, or, make it mandatory?
-- `jti` claim. This is OPTIONAL in the WIT specification. Do we wish to mirror this, or, make it mandatory?
 
 ### 3.1. Subject - `sub`
 
