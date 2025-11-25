@@ -47,25 +47,39 @@ This section describes the claims that are defined for the WIT-SVID.
 
 The WIT-SVID specification does not introduce any claims beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some claims.
 
+<--
+Within this section, I've tried to abide by the following "structure" for each claim:
+
+- Definition
+- Requirements
+- Advisory information on purpose/usage.
+-->
+
 TODO:
 
 - `iss` claim. This is RECOMMENDED in the WIT specification. Do we wish to mirror this, or, make it mandatory?
 
 ### 3.1. Subject - `sub`
 
-The `sub` claim MUST be present and set to the SPIFFE ID of the workload to which it is issued. This is the primary claim against which workload identity is asserted.
+The identity of the workload holding the WIT-SVID.
+
+The `sub` claim MUST be present and MUST be set to the SPIFFE ID of the workload to which it is issued.
+
+This is the primary claim against which workload identity is asserted.
 
 For example: `spiffe://example.org/service`.
 
 ### 3.2. JWT ID - `jti`
 
-The `jti` claim provides a unique identifier for the WIT-SVID. It is defined by [RFC 7519][6].
+A unique identifier for this WIT-SVID. The meaning of this claim is defined by [RFC 7519][6].
 
-Primarily, this claim enables distinguishing one or more WIT-SVIDs that contain the same SPIFFE ID for the purposes of auditing. For example, if a validator of a WIT-SVID records the JTI within an audit log event, this audit log event can be correlated with the one emitted by the issuer, allowing the lineage of the credential to be ascertained.
+The `jti` claim MAY be present. If present, the issuer MUST abide by the requirements set by [RFC 7519][6] and ensure that there is a negligible probability that the same value will be used by more than one WIT-SVID within the scope of the trust domain.
 
-TODO: Do we repeat from RFC 7519 that the issuer MUST ensure that this field is unique?
-TODO: In WIT-SVID, is this a MAY/SHOULD/MUST?
-TODO: Do we make any comment here on revocation?
+Primarily, this claim enables distinguishing one or more WIT-SVIDs that contain the same SPIFFE ID for the purposes of auditing. For example, if a validator of a WIT-SVID records the JTI within an audit log event, this audit log event can be correlated with the one emitted by the issuer which allows the lineage of the credential to be ascertained.
+
+Typically, the `jti` will be an opaque randomly generated value of sufficient entropy as to make the chance of collision negligible.
+
+TODO: Do we make any comment here on use for revocation?
 
 ### 3.2. Additional Claims
 
