@@ -33,7 +33,7 @@ The `kid` header is defined by the [JSON Web Signature (JWS)][2] document.
 
 For a WIT-SVID, this header is mandatory. This differs from the upstream WIT itself where this header is optional.
 
-The precise structure of this header is unspecified, and, it MUST be treated by verifiers as a case-sensitive string.
+The precise structure of this header is unspecified and it MUST be treated by verifiers as a case-sensitive string.
 
 The issuer MUST ensure that the value set within the `kid` header is unique to each issuing key-pair.
 
@@ -96,7 +96,7 @@ The `use` parameter of the JWK entry MUST be set to `wit-svid`. Additionally, th
 
 ### 6.2 Consuming SPIFFE Bundle Elements
 
-SPIFFE bundles may contain JWK entries for many different SVID types. Implementations MUST extract the WIT-SVId specification keys before using them for validation purposes. Entries representing WIT-SVID signing keys can be identified by the value of their `use` parameter, which must be `wit-svid`. If there are no entries with the `wit-svid` use parameter, then the trust domain that the bundle represents does not support WIT-SVID.
+SPIFFE bundles may contain JWK entries for many different SVID types. Implementations MUST extract the WIT-SVID specification keys before using them for validation purposes. Entries representing WIT-SVID signing keys can be identified by the value of their `use` parameter, which must be `wit-svid`. If there are no entries with the `wit-svid` use parameter, then the trust domain that the bundle represents does not support WIT-SVID.
 
 ## 7. Security Considerations
 
