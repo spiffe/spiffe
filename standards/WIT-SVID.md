@@ -81,11 +81,11 @@ A unique identifier for this WIT-SVID. The meaning of this claim is defined by [
 
 The `jti` claim MAY be present. If present, the issuer MUST abide by the requirements set by [RFC 7519][6] and ensure that there is a negligible probability that the same value will be used by more than one WIT-SVID within the scope of the trust domain.
 
-Primarily, this claim enables distinguishing one or more WIT-SVIDs that contain the same SPIFFE ID for the purposes of auditing. For example, if a validator of a WIT-SVID records the JTI within an audit log event, this audit log event can be correlated with the one emitted by the issuer which allows the lineage of the credential to be ascertained.
-
 Typically, the `jti` will be an opaque randomly generated value of sufficient entropy as to make the chance of collision negligible.
 
-TODO: Do we make any comment here on use for revocation?
+Primarily, this claim enables distinguishing one or more WIT-SVIDs that contain the same SPIFFE ID for the purposes of auditing. For example, if a validator of a WIT-SVID records the JTI within an audit log event, this audit log event can be correlated with the one emitted by the issuer which allows the lineage of the credential to be ascertained.
+
+Due to the nature of how this claim uniquely identifies the WIT-SVID, it could be leveraged for revocation of an individual WIT-SVID. There are no mechanisms defined within SPIFFE for the propagation of WIT-SVID revocations and this is considered out of the scope of the specification.
 
 ### 3.2. Additional Claims
 
