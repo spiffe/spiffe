@@ -25,8 +25,6 @@ This section describes the JOSE headers that are defined for the WIT-SVID.
 
 The WIT-SVID specification does not introduce any JOSE headers beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some headers.
 
-TODO: Should we summarize `alg` even if these will not differ from the WIMSE WIT?
-
 ### 2.1. Key ID - `kid`
 
 Unique identifier of the key-pair used by the issuer to sign the WIT-SVID. The `kid` header is defined by the [JSON Web Signature (JWS)][2] document.
@@ -42,6 +40,24 @@ The issuer MUST ensure that the value set within the `kid` header is unique to e
 The `typ` header is defined by the [JSON Web Signature (JWS)][2] document.
 
 For a WIT-SVID, this header MUST be present and MUST be set to `wit+jwt`.
+
+### 2.3. Algorithm - `alg`
+
+Identifies the cryptographic algorithm used to sign the WIT-SVID. The `alg` header is defined by the [JSON Web Signature (JWS)][2] document.
+
+For a WIT-SVID, this header MUST be present, and, set to one of the following supported values:
+
+`alg` Param Value | Digital Signature Algorithm
+------------------|-----------------------------
+RS256 | RSASSA-PKCS1-v1_5 using SHA-256
+RS384 | RSASSA-PKCS1-v1_5 using SHA-384
+RS512 | RSASSA-PKCS1-v1_5 using SHA-512
+ES256 | ECDSA using P-256 and SHA-256
+ES384 | ECDSA using P-384 and SHA-384
+ES512 | ECDSA using P-521 and SHA-512
+PS256 | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
+PS384 | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
+PS512 | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
 
 ### 2.3. Additional Headers
 
