@@ -21,7 +21,7 @@ WIT-SVIDs are JSON Web Signature (JWS) data structures.
 
 ### 2. JOSE Header
 
-This section describes the JOSE headers that may be included in the WIT-SVID.
+This section describes the JOSE headers that are defined for the WIT-SVID.
 
 The WIT-SVID specification does not introduce any JOSE headers beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some headers.
 
@@ -43,7 +43,7 @@ It is permitted for an implementation to include additional headers not specifie
 
 ### 3. Claims
 
-This section describes the claims that may be included in the WIT-SVID.
+This section describes the claims that are defined for the WIT-SVID.
 
 The WIT-SVID specification does not introduce any claims beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some claims.
 
