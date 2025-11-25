@@ -133,6 +133,10 @@ The following summarises the differences between the IETF WIMSE WIT and the SPIF
 
 TODO: Is this topic appropriate for this document? Does it better belong in SPIFFE-ID.md? or not within the specification at all? I feel this should be covered somewhere since the WIT and JWT are "visually" "similar" and likely to be confused.
 
+<--
+TODO: Update these datatracker links to use rfc-editor.org where possible.
+-->
+
 [1]: https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-creds/
 [2]: https://datatracker.ietf.org/doc/rfc7515
 [3]: https://datatracker.ietf.org/doc/rfc7517
