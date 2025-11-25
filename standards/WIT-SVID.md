@@ -25,19 +25,25 @@ This section describes the JOSE headers that are defined for the WIT-SVID.
 
 The WIT-SVID specification does not introduce any JOSE headers beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some headers.
 
-TODO: Should we summarize `alg`/`typ` even if these will not differ from the WIMSE WIT?
+TODO: Should we summarize `alg` even if these will not differ from the WIMSE WIT?
 
 ### 2.1. Key ID - `kid`
 
-The `kid` header is defined by the [JSON Web Signature (JWS)][2] document.
+Unique identifier of the key-pair used by the issuer to sign the WIT-SVID. The `kid` header is defined by the [JSON Web Signature (JWS)][2] document.
 
-For a WIT-SVID, this header is mandatory. This differs from the upstream WIT itself where this header is optional.
+For a WIT-SVID, this header MUST be present. This differs from the upstream WIT itself where this header is optional.
 
 The precise structure of this header is unspecified and it MUST be treated by verifiers as a case-sensitive string.
 
 The issuer MUST ensure that the value set within the `kid` header is unique to each issuing key-pair.
 
-### 2.2. Additional Headers
+### 2.2. Type - `typ`
+
+The `typ` header is defined by the [JSON Web Signature (JWS)][2] document.
+
+For a WIT-SVID, this header MUST be present and MUST be set to `wit+jwt`.
+
+### 2.3. Additional Headers
 
 It is permitted for an implementation to include additional headers not specified in this document or the upstream document.
 
