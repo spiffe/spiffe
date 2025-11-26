@@ -17,7 +17,7 @@ The Workload Identity Token (WIT) is a token format specified by the IETF WIMSE 
 
 The WIT-SVID is a sub-profiling of this token format for use in SPIFFE contexts. This document will not redefine key elements specified within the upstream [WIMSE Workload Credentials][1] document and as such the reader should be familiar with this document and its contents before implementing WIT-SVID.
 
-WIT-SVIDs are JSON Web Signature (JWS) data structures.
+WIT-SVIDs are [JSON Web Tokens (JWT)][6] encoded using [JSON Web Signature (JWS)][2] compact serialization.
 
 ### 2. JOSE Header
 
@@ -45,7 +45,7 @@ For a WIT-SVID, this parameter MUST be present and MUST be set to `wit+jwt`.
 
 Identifies the cryptographic algorithm used to sign the WIT-SVID. The `alg` header parameter is defined by the [JSON Web Signature (JWS)][2] document.
 
-For a WIT-SVID, this parameter  MUST be present, and, set to one of the following supported values:
+For a WIT-SVID, this parameter MUST be present, and, set to one of the following supported values:
 
 `alg` Param Value | Digital Signature Algorithm
 ------------------|-----------------------------
@@ -58,6 +58,8 @@ ES512 | ECDSA using P-521 and SHA-512
 PS256 | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
 PS384 | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
 PS512 | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
+
+Validators MUST reject WIT-SVIDs with an unsupported `alg` parameter value.
 
 ### 2.3. Additional Header Parameters
 
