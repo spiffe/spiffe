@@ -144,13 +144,7 @@ The WIT-SVID MUST NOT be used as a bearer token and MUST be presented with a pro
 
 ## Appendix A. Example WIT-SVID
 
-<--
-TODO: These are placeholder values. There are currently some issues with this 
-I would like to resolve. Please don't worry about reviewing/leaving comments on
-these for now.
--->
-
-Signed JWT: `eyJhbGciOiJFUzI1NiIsInR5cCI6IndpdCtqd3QifQ.eyJjbmYiOnsiandrIjp7ImFsZyI6IkVkRFNBIiwiY3J2IjoiRWQyNTUxOSIsImt0eSI6Ik9LUCIsIngiOiJPQ0xtN3cxQVlJTkl3RDZOMWhmRWNNS182Q2JWWUdmMmVnQUJiMzM2MXFrIn19LCJleHAiOjE3NjQxNTM0MjYsImlhdCI6MTc2NDE0OTgyNiwianRpIjoiLWJ3azVER1F1WG9tNkdxMGhpOUVvcDE4TkQxTUp2eGpDLV9jYjNhOE5WZyIsInN1YiI6InNwaWZmZTovL2V4YW1wbGUuY29tL215LXdvcmtsb2FkIn0.uo8swJsV1JW_O1X2ycEvjXBKwsXj9qfd1idIFncL1qNGYwODbqk97q2KNFslk-PP6qHTW--uDaiD2nEpe2lhEw`
+Signed JWT: `eyJhbGciOiJFUzI1NiIsInR5cCI6IndpdCtqd3QifQ.eyJjbmYiOnsiandrIjp7ImFsZyI6IkVTMjU2IiwiY3J2IjoiUC0yNTYiLCJrdHkiOiJFQyIsIngiOiJ2amFOU1c4ZmRXLXh1Z0QtUDRpSHVTQVdzbGFRZlF5LTZjaXhHMzlWdl9JIiwieSI6ImFzUWlreFZxZzNoTTFDa0k4LVhwT3pfSkhDU1BNREtnbzVXSW53R2R0bkEifX0sImV4cCI6MTc2NDE1MzY4MCwiaWF0IjoxNzY0MTUwMDgwLCJqdGkiOiJEQkIyXzN4eDg0UjB5N2RmZFBJaDJCNndpWGdaUVhGSW9JYU1jbXk2LXowIiwic3ViIjoic3BpZmZlOi8vZXhhbXBsZS5jb20vbXktd29ya2xvYWQifQ.MQMj9fhGtMRSSZexqJXgYJXIItbtPq884dsEGaUxzzPRYA4DE_2926EtJm3KNDAaDhBnHD996rPqFq3UNAB3hA`
 
 Header:
 
@@ -167,15 +161,16 @@ Payload:
 {
   "cnf": {
     "jwk": {
-      "alg": "EdDSA",
-      "crv": "Ed25519",
-      "kty": "OKP",
-      "x": "OCLm7w1AYINIwD6N1hfEcMK_6CbVYGf2egABb3361qk"
+      "alg": "ES256",
+      "crv": "P-256",
+      "kty": "EC",
+      "x": "vjaNSW8fdW-xugD-P4iHuSAWslaQfQy-6cixG39Vv_I",
+      "y": "asQikxVqg3hM1CkI8-XpOz_JHCSPMDKgo5WInwGdtnA"
     }
   },
-  "exp": 1764153426,
-  "iat": 1764149826,
-  "jti": "-bwk5DGQuXom6Gq0hi9Eop18ND1MJvxjC-_cb3a8NVg",
+  "exp": 1764153680,
+  "iat": 1764150080,
+  "jti": "DBB2_3xx84R0y7dfdPIh2B6wiXgZQXFIoIaMcmy6-z0",
   "sub": "spiffe://example.com/my-workload"
 }
 ```
