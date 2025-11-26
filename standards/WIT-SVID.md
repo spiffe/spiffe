@@ -150,14 +150,14 @@ I would like to resolve. Please don't worry about reviewing/leaving comments on
 these for now.
 -->
 
-Signed JWT: `eyJhbGciOiJFZERTQSIsInR5cCI6IndpbXNlLWlkK2p3dCJ9.eyJjbmYiOnsiandrIjp7ImFsZyI6IkVkRFNBIiwiY3J2IjoiRWQyNTUxOSIsImt0eSI6Ik9LUCIsIngiOiJ6ajhLY1ZPY29EWGVPbzVUMnZBcGczc0NueXZjYmNONHpIZUpKLWxHS2YwIn19LCJleHAiOiIyMDI1LTExLTI2VDEwOjE3OjU1LjczMDM0WiIsImlhdCI6IjIwMjUtMTEtMjZUMDk6MTc6NTUuNzMwNDYxWiIsImp0aSI6IjZ1OWhOZDl6WWprWkFTbVVfNmx1TldSLUhsdmM0UXk4aUc5ak5iUVhHMlEiLCJzdWIiOiJzcGlmZmU6Ly9leGFtcGxlLmNvbS9teS13b3JrbG9hZCJ9.vZ0n5poG9Uf3mwHVkVCAFTQPSBrjlW5usZHxi7L7TvuITJGCII1Oa_9aD-fETnr-IE3wkbhwQHeHlKlT8g8hAQ`
+Signed JWT: `eyJhbGciOiJFUzI1NiIsInR5cCI6IndpdCtqd3QifQ.eyJjbmYiOnsiandrIjp7ImFsZyI6IkVkRFNBIiwiY3J2IjoiRWQyNTUxOSIsImt0eSI6Ik9LUCIsIngiOiJPQ0xtN3cxQVlJTkl3RDZOMWhmRWNNS182Q2JWWUdmMmVnQUJiMzM2MXFrIn19LCJleHAiOjE3NjQxNTM0MjYsImlhdCI6MTc2NDE0OTgyNiwianRpIjoiLWJ3azVER1F1WG9tNkdxMGhpOUVvcDE4TkQxTUp2eGpDLV9jYjNhOE5WZyIsInN1YiI6InNwaWZmZTovL2V4YW1wbGUuY29tL215LXdvcmtsb2FkIn0.uo8swJsV1JW_O1X2ycEvjXBKwsXj9qfd1idIFncL1qNGYwODbqk97q2KNFslk-PP6qHTW--uDaiD2nEpe2lhEw`
 
 Header:
 
 ```json
 {
-  "alg": "EdDSA",
-  "typ": "wimse-id+jwt"
+  "alg": "ES256",
+  "typ": "wit+jwt"
 }
 ```
 
@@ -170,12 +170,12 @@ Payload:
       "alg": "EdDSA",
       "crv": "Ed25519",
       "kty": "OKP",
-      "x": "zj8KcVOcoDXeOo5T2vApg3sCnyvcbcN4zHeJJ-lGKf0"
+      "x": "OCLm7w1AYINIwD6N1hfEcMK_6CbVYGf2egABb3361qk"
     }
   },
-  "exp": "2025-11-26T10:17:55.73034Z",
-  "iat": "2025-11-26T09:17:55.730461Z",
-  "jti": "6u9hNd9zYjkZASmU_6luNWR-Hlvc4Qy8iG9jNbQXG2Q",
+  "exp": 1764153426,
+  "iat": 1764149826,
+  "jti": "-bwk5DGQuXom6Gq0hi9Eop18ND1MJvxjC-_cb3a8NVg",
   "sub": "spiffe://example.com/my-workload"
 }
 ```
