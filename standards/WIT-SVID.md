@@ -142,7 +142,45 @@ The WIT-SVID MUST NOT be used as a bearer token and MUST be presented with a pro
 
 ### 7.2 Transport Security
 
-## Appendix A. Comparing WIMSE WIT with SPIFFE WIT-SVID
+## Appendix A. Example WIT-SVID
+
+<--
+TODO: These are placeholder values. There are currently some issues with this 
+I would like to resolve. Please don't worry about reviewing/leaving comments on
+these for now.
+-->
+
+Signed JWT: `eyJhbGciOiJFZERTQSIsInR5cCI6IndpbXNlLWlkK2p3dCJ9.eyJjbmYiOnsiandrIjp7ImFsZyI6IkVkRFNBIiwiY3J2IjoiRWQyNTUxOSIsImt0eSI6Ik9LUCIsIngiOiJ6ajhLY1ZPY29EWGVPbzVUMnZBcGczc0NueXZjYmNONHpIZUpKLWxHS2YwIn19LCJleHAiOiIyMDI1LTExLTI2VDEwOjE3OjU1LjczMDM0WiIsImlhdCI6IjIwMjUtMTEtMjZUMDk6MTc6NTUuNzMwNDYxWiIsImp0aSI6IjZ1OWhOZDl6WWprWkFTbVVfNmx1TldSLUhsdmM0UXk4aUc5ak5iUVhHMlEiLCJzdWIiOiJzcGlmZmU6Ly9leGFtcGxlLmNvbS9teS13b3JrbG9hZCJ9.vZ0n5poG9Uf3mwHVkVCAFTQPSBrjlW5usZHxi7L7TvuITJGCII1Oa_9aD-fETnr-IE3wkbhwQHeHlKlT8g8hAQ`
+
+Header:
+
+```json
+{
+  "alg": "EdDSA",
+  "typ": "wimse-id+jwt"
+}
+```
+
+Payload:
+
+```json
+{
+  "cnf": {
+    "jwk": {
+      "alg": "EdDSA",
+      "crv": "Ed25519",
+      "kty": "OKP",
+      "x": "zj8KcVOcoDXeOo5T2vApg3sCnyvcbcN4zHeJJ-lGKf0"
+    }
+  },
+  "exp": "2025-11-26T10:17:55.73034Z",
+  "iat": "2025-11-26T09:17:55.730461Z",
+  "jti": "6u9hNd9zYjkZASmU_6luNWR-Hlvc4Qy8iG9jNbQXG2Q",
+  "sub": "spiffe://example.com/my-workload"
+}
+```
+
+## Appendix B. Comparing WIMSE WIT with SPIFFE WIT-SVID
 
 The following summarises the differences between the IETF WIMSE WIT and the SPIFFE WIT-SVID.
 
@@ -151,7 +189,7 @@ The following summarises the differences between the IETF WIMSE WIT and the SPIF
 - Claims
   - `sub` is defined within the WIT specifications, but, in WIT-SVID is constrained to be the SPIFFE ID.
 
-## Appendix B. Comparing the JWT-SVID and WIT-SVID
+## Appendix C. Comparing the JWT-SVID and WIT-SVID
 
 TODO: Is this topic appropriate for this document? Does it better belong in SPIFFE-ID.md? or not within the specification at all? I feel this should be covered somewhere since the WIT and JWT are "visually" "similar" and likely to be confused.
 
