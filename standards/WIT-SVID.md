@@ -21,31 +21,31 @@ WIT-SVIDs are JSON Web Signature (JWS) data structures.
 
 ### 2. JOSE Header
 
-This section describes the JOSE headers that are defined for the WIT-SVID.
+This section describes the JOSE header parameters that are defined for the WIT-SVID.
 
-The WIT-SVID specification does not introduce any JOSE headers beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some headers.
+The WIT-SVID specification does not introduce any JOSE header parameters beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some parameters.
 
 ### 2.1. Key ID - `kid`
 
-Unique identifier of the key-pair used by the issuer to sign the WIT-SVID. The `kid` header is defined by the [JSON Web Signature (JWS)][2] document.
+Unique identifier of the key-pair used by the issuer to sign the WIT-SVID. The `kid` header parameter is defined by the [JSON Web Signature (JWS)][2] document.
 
-For a WIT-SVID, this header MUST be present. This differs from the upstream WIT itself where this header is optional.
+For a WIT-SVID, this cparameter MUST be present. This differs from the upstream WIT itself where this parameter is optional.
 
-The precise structure of this header is unspecified and it MUST be treated by verifiers as a case-sensitive string.
+The precise structure of this parameter is unspecified and it MUST be treated by verifiers as a case-sensitive string.
 
-The issuer MUST ensure that the value set within the `kid` header is unique to each issuing key-pair.
+The issuer MUST ensure that the value set within the `kid` parameter is unique to each issuing key-pair.
 
 ### 2.2. Type - `typ`
 
-The `typ` header is defined by the [JSON Web Signature (JWS)][2] document.
+The `typ` header parameter is defined by the [JSON Web Signature (JWS)][2] document.
 
-For a WIT-SVID, this header MUST be present and MUST be set to `wit+jwt`.
+For a WIT-SVID, this parameter MUST be present and MUST be set to `wit+jwt`.
 
 ### 2.3. Algorithm - `alg`
 
-Identifies the cryptographic algorithm used to sign the WIT-SVID. The `alg` header is defined by the [JSON Web Signature (JWS)][2] document.
+Identifies the cryptographic algorithm used to sign the WIT-SVID. The `alg` header parameter is defined by the [JSON Web Signature (JWS)][2] document.
 
-For a WIT-SVID, this header MUST be present, and, set to one of the following supported values:
+For a WIT-SVID, this parameter  MUST be present, and, set to one of the following supported values:
 
 `alg` Param Value | Digital Signature Algorithm
 ------------------|-----------------------------
@@ -59,9 +59,9 @@ PS256 | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
 PS384 | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
 PS512 | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
 
-### 2.3. Additional Headers
+### 2.3. Additional Header Parameters
 
-It is permitted for an implementation to include additional headers not specified in this document or the upstream document.
+It is permitted for an implementation to include additional header parameters not specified in this document or the upstream document.
 
 ### 3. Claims
 
