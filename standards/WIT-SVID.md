@@ -31,7 +31,7 @@ Unique identifier of the key-pair used by the issuer to sign the WIT-SVID. The `
 
 For a WIT-SVID, this cparameter MUST be present. This differs from the upstream WIT itself where this parameter is optional.
 
-The precise structure of this parameter is unspecified and it MUST be treated by verifiers as a case-sensitive string.
+The format of the value of this parameter is unspecified and it MUST be treated by verifiers as a case-sensitive string.
 
 The issuer MUST ensure that the value set within the `kid` parameter is unique to each issuing key-pair.
 
