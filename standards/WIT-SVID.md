@@ -109,6 +109,8 @@ Due to the nature of how this claim uniquely identifies the WIT-SVID, it could b
 
 It is permitted for an implementation to include additional claims not specified in this document or the upstream document.
 
+When encountering additional claims that it does not recognize, a validator should ignore them.
+
 ## 4. Token Signing and Validation
 
 ## 5. Token Presentation
