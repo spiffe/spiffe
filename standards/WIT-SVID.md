@@ -224,7 +224,11 @@ The following summarises the differences between the IETF WIMSE WIT and the SPIF
 
 ## Appendix C. Comparing the JWT-SVID and WIT-SVID
 
-TODO: Is this topic appropriate for this document? Does it better belong in SPIFFE-ID.md? or not within the specification at all? I feel this should be covered somewhere since the WIT and JWT are "visually" "similar" and likely to be confused.
+TODO: This section, focussing on structural and presentational differences, for the audience of an implementor. A later document in a form similar to a BCP will cover WIT vs JWT vs X509 from a usage point of view.
+
+## Appendix D. Comparing the X509-SVID and WIT-SVID
+
+TODO: This section, focussing on structural and presentational differences, for the audience of an implementor. A later document in a form similar to a BCP will cover WIT vs JWT vs X509 from a usage point of view.
 
 <--
 TODO: Update these datatracker links to use rfc-editor.org where possible.
