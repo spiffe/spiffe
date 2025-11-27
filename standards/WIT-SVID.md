@@ -15,7 +15,7 @@ This document specifies an identity document standard for the internet community
 
 The Workload Identity Token (WIT) is a token format specified by the IETF WIMSE working group in the [WIMSE Workload Credentials][1] document. The WIT binds a public key to the identity of a workload.
 
-The WIT-SVID is a sub-profiling of this token format for use in SPIFFE contexts. This document will not redefine key elements specified within the upstream [WIMSE Workload Credentials][1] document and as such the reader should be familiar with this document and its contents before implementing WIT-SVID.
+The WIT-SVID is a sub-profiling of this token format for use in SPIFFE contexts. This document does not redefine key elements specified within the upstream [WIMSE Workload Credentials][1] document and as such the reader should be familiar with this document and its contents before implementing WIT-SVID.
 
 WIT-SVIDs are [JSON Web Tokens (JWT)][6] encoded using [JSON Web Signature (JWS)][2] compact serialization.
 
@@ -29,7 +29,7 @@ The WIT-SVID specification does not introduce any JOSE header parameters beyond 
 
 Unique identifier of the key-pair used by the issuer to sign the WIT-SVID. The `kid` header parameter is defined by the [JSON Web Signature (JWS)][2] document.
 
-For a WIT-SVID, this cparameter MUST be present. This differs from the upstream WIT itself where this parameter is optional.
+For a WIT-SVID, this parameter MUST be present. This differs from the upstream WIT itself where this parameter is optional.
 
 The format of the value of this parameter is unspecified and it MUST be treated by verifiers as a case-sensitive string.
 
