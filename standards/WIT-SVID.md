@@ -77,11 +77,11 @@ Within this section, I've tried to abide by the following "structure" for each c
 - Definition
 - Requirements
 - Advisory information on purpose/usage.
--->
 
 TODO:
 
 - `iss` claim. This is RECOMMENDED in the WIT specification. Do we wish to mirror this, or, make it mandatory?
+-->
 
 ### 3.1. Subject - `sub`
 
@@ -93,9 +93,15 @@ This is the primary claim against which workload identity is asserted.
 
 For example: `spiffe://example.org/service`.
 
-### 3.2. JWT ID - `jti`
+### 3.2 Confirmation - `cnf`
 
-A unique identifier for this WIT-SVID. The meaning of this claim is defined by [RFC 7519][6].
+<--
+TODO: This section :)
+-->
+
+### 3.3. JWT ID - `jti`
+
+A unique identifier for this WIT-SVID. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
 The `jti` claim MAY be present. If present, the issuer MUST abide by the requirements set by [RFC 7519][6] and ensure that there is a negligible probability that the same value will be used by more than one WIT-SVID within the scope of the trust domain.
 
@@ -104,6 +110,32 @@ Typically, the `jti` will be an opaque randomly generated value of sufficient en
 Primarily, this claim enables distinguishing one or more WIT-SVIDs that contain the same SPIFFE ID for the purposes of auditing. For example, if a validator of a WIT-SVID records the JTI within an audit log event, this audit log event can be correlated with the one emitted by the issuer which allows the lineage of the credential to be ascertained.
 
 Due to the nature of how this claim uniquely identifies the WIT-SVID, it could be leveraged for revocation of an individual WIT-SVID. There are no mechanisms defined within SPIFFE for the propagation of WIT-SVID revocations and this is considered out of the scope of the specification.
+
+### 3.3. Expiry - `exp`
+
+The timestamp at which this WIT-SVID is no longer valid. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
+
+The `exp` claim MUST be present and validators MUST reject WIT-SVIDs that do not include this claim and MUST reject WIT-SVIDs when the time indicated by `exp` is in the past.
+
+This claim is the primary control of the length of time for which a WIT-SVID is valid. This specification does not set any hard upper or lower limits on the length of the validity period.
+
+It is recommended to choose a reasonable value that balances the cost of issuing and distributing WIT-SVIDs to workloads against limiting the period of time in which an exfiltrated WIT-SVID and key-pair remains useful to a bad actor. This is typically a period ranging from minutes to hours.
+
+### 3.4. Not Before - `nbf`
+
+The timestamp at which this WIT-SVID became valid. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
+
+The `nbf` claim SHOULD be present and validators MUST reject WIT-SVIDs when the time indicated by `nbf` is in the future.
+
+Notably, this value may be set to a time shortly in the past relative to the time of issuance, this permits a certain degree of clock skew between validator and issuer.
+
+### 3.4. Issued At - `iat`
+
+The timestamp at which this WIT-SVID was issued. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
+
+The `iat` claim SHOULD be present. This claim MUST NOT be used for limiting the earliest validity of a WIT-SVID, this is the purpose of the `nbf` claim.
+
+This claim exists to assist with auditing and diagnostics.
 
 ### 3.2. Additional Claims
 
