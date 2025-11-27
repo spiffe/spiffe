@@ -178,6 +178,8 @@ SPIFFE bundles may contain JWK entries for many different SVID types. Implementa
 
 The WIT-SVID MUST NOT be used as a bearer token and MUST be presented with a proof of possession of the key-pair within the `cnf` claim.
 
+Similarly, the WIT-SVID MUST NOT be accepted without appropriate proof of possession of the key-pair within the `cnf` claim. See [5. Token Presentation](#5-token-presentation) for information on appropriate protocols for the presentation and acceptance of the WIT-SVID for authentication. 
+
 ### 7.2 Transport Security
 
 ## Appendix A. Example WIT-SVID
