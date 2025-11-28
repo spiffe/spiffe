@@ -29,11 +29,13 @@ The WIT-SVID specification does not introduce any JOSE header parameters beyond 
 
 Unique identifier of the key-pair used by the issuer to sign the WIT-SVID. The `kid` header parameter is defined by the [JSON Web Signature (JWS)][2] document.
 
-For a WIT-SVID, this parameter MUST be present. This differs from the upstream WIT itself where this parameter is optional.
+For a WIT-SVID, this parameter MUST be present. This differs from the upstream WIT itself and the JWT-SVID where this parameter is optional.
 
 The format of the value of this parameter is unspecified and it MUST be treated by verifiers as a case-sensitive string.
 
 The issuer MUST ensure that the value set within the `kid` parameter is unique to each issuing key-pair.
+
+This parameter allows a validator to select the correct public key from a trust bundle for validating the signature of a WIT-SVID without enumerating all keys.
 
 ### 2.2. Type - `typ`
 
@@ -257,6 +259,8 @@ The following summarises the differences between the IETF WIMSE WIT and the SPIF
 ## Appendix C. Comparing the JWT-SVID and WIT-SVID
 
 TODO: This section, focussing on structural and presentational differences, for the audience of an implementor. A later document in a form similar to a BCP will cover WIT vs JWT vs X509 from a usage point of view.
+
+Notably, the WIT-SVID makes the `kid` header parameter mandatory whereas the JWT-SVID does not. This change was intended to reflect reality: a significant number of JWT-SVID validation implementations (e.g `go-spiffe`, SPIRE) within the SPIFFE ecosystem will reject a perfectly spec-compliant JWT-SVID without the `kid` parameter, making this a de-facto requirement. A similar situation would be likely to occur if the `kid` header parameter was optional for the WIT-SVID. Therefore, making this mandatory from the outset increases the chances of the implementations and the specification being in coherence in regards to the `kid` header parameter.
 
 ## Appendix D. Comparing the X509-SVID and WIT-SVID
 
