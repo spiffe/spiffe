@@ -258,13 +258,20 @@ The following summarises the differences between the IETF WIMSE WIT and the SPIF
 
 ## Appendix C. Comparing the JWT-SVID and WIT-SVID
 
-TODO: This section, focussing on structural and presentational differences, for the audience of an implementor. A later document in a form similar to a BCP will cover WIT vs JWT vs X509 from a usage point of view.
+This appendix explores the differences between the JWT-SVID and WIT-SVID from a structural and presentational point of view. For a more in-depth exploration of the types of SVIDs and guidance on selecting between them, see the [Best Practices: SVID Type Comparison document][TODO].
+
+...
 
 Notably, the WIT-SVID makes the `kid` header parameter mandatory whereas the JWT-SVID does not. This change was intended to reflect reality: a significant number of JWT-SVID validation implementations (e.g `go-spiffe`, SPIRE) within the SPIFFE ecosystem will reject a perfectly spec-compliant JWT-SVID without the `kid` parameter, making this a de-facto requirement. A similar situation would be likely to occur if the `kid` header parameter was optional for the WIT-SVID. Therefore, making this mandatory from the outset increases the chances of the implementations and the specification being in coherence in regards to the `kid` header parameter.
 
+...
+
 ## Appendix D. Comparing the X509-SVID and WIT-SVID
 
-TODO: This section, focussing on structural and presentational differences, for the audience of an implementor. A later document in a form similar to a BCP will cover WIT vs JWT vs X509 from a usage point of view.
+This appendix explores the differences between the X509-SVID and WIT-SVID from a structural and presentational point of view. For a more in-depth exploration of the types of SVIDs and guidance on selecting between them, see the [Best Practices: SVID Type Comparison document][TODO].
+
+Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct at first glance, ...
+
 
 <--
 TODO: Update these datatracker links to use rfc-editor.org where possible.
