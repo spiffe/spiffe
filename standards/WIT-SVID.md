@@ -77,10 +77,6 @@ Within this section, I've tried to abide by the following "structure" for each c
 - Definition
 - Requirements
 - Advisory information on purpose/usage.
-
-TODO:
-
-- `iss` claim. This is RECOMMENDED in the WIT specification. Do we wish to mirror this, or, make it mandatory?
 -->
 
 ### 3.1. Subject - `sub`
@@ -121,7 +117,7 @@ This claim is the primary control of the length of time for which a WIT-SVID is 
 
 It is recommended to choose a reasonable value that balances the cost of issuing and distributing WIT-SVIDs to workloads against limiting the period of time in which an exfiltrated WIT-SVID and key-pair remains useful to a bad actor. This is typically a period ranging from minutes to hours.
 
-### 3.4. Not Before - `nbf`
+### 3.5. Not Before - `nbf`
 
 The timestamp at which this WIT-SVID became valid. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
@@ -129,7 +125,7 @@ The `nbf` claim SHOULD be present and validators MUST reject WIT-SVIDs when the 
 
 Notably, this value may be set to a time shortly in the past relative to the time of issuance, this permits a certain degree of clock skew between validator and issuer.
 
-### 3.4. Issued At - `iat`
+### 3.6. Issued At - `iat`
 
 The timestamp at which this WIT-SVID was issued. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
@@ -137,7 +133,15 @@ The `iat` claim SHOULD be present. This claim MUST NOT be used for limiting the 
 
 This claim exists to assist with auditing and diagnostics.
 
-### 3.2. Additional Claims
+### 3.7. Issuer - `iss`
+
+The issuer of this WIT-SVID. The meaning of this claim is defined by [RFC7519][6].
+
+The `iss` claim MAY be present. When present, it SHOULD NOT be a value compatible with OpenID Connect Discovery - this is to prevent the validation and acceptance of the WIT-SVID as an OIDC ID Token without validation of a proof of possession.
+
+Within SPIFFE, there already exists mechanisms for the distribution of trust bundles, and, the trust domain part of the `sub` broadly identifies the issuer. In many cases, this makes the `iss` claim redundant. The specification has intentionally been left relaxed for the `iss` claim to support the usage of alternative trust distribution models and developments to the specification in future.
+
+### 3.8. Additional Claims
 
 It is permitted for an implementation to include additional claims not specified in this document or the upstream document.
 
