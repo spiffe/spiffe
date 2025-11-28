@@ -38,10 +38,10 @@ WIT-SVIDs are signed JWTs containing a SPIFFE ID in the `sub` claim, but further
 | **Primary use**       | Transport-level identity (mTLS)                | Request/API-level identity (bearer)                   | Request/API-level identity with proof-of-possession        |
 | **Layer**             | Transport                                      | Application                                           | Application                                                |
 | **Format**            | X.509 certificate                              | Signed JWT                                            | Signed JWT with public key binding                         |
-| **Token semantics**   | Holder-of-key (private key bound to cert)      | Bearer token                                          | Holder-of-key via explicit proof-of-possesion key binding  |
+| **Token semantics**   | Holder-of-key (private key bound to cert)      | Bearer token                                          | Holder-of-key via explicit proof-of-possession key binding |
 | **Rotation**          | Frequent, automatic                            | Short-lived tokens                                    | Short-lived tokens + workload-bound key material           |
-| **Verification**      | Cert chain + SAN/SPIFFE ID                     | JWS signature + claims validation                     | JWS signature + claims + **PoP verification**              |
-| **Replay resistance** | Strong (TLS handshake + key possession)        | Weak unless TTL is very short                         | Strong (proof-of-possesion)                                |
+| **Verification**      | Cert chain + SAN/SPIFFE ID                     | JWS signature + claims validation                     | JWS signature + claims + proof-of-possession               |
+| **Replay resistance** | Strong (TLS handshake + key possession)        | Weak unless TTL is very short                         | Strong (proof-of-possession)                               |
 | **Maturity**          | Very high (meshes, RPC stacks, proxies)        | High (gateways, APIs, cloud services)                 | Emerging                                                   |
 | **Best for**          | In-mesh mTLS, long-lived connections           | API gateways, cloud federation, stateless requests    | Application layer calls requiring integrity guarantees     |
 
