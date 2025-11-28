@@ -91,9 +91,21 @@ For example: `spiffe://example.org/service`.
 
 ### 3.2 Confirmation - `cnf`
 
-<--
-TODO: This section :)
--->
+The public key of the workload. The meaning of this claim and the structure of its value is defined by [RFC7800][7] and [WIMSE Workload Credentials][1].
+
+In addition to the requirements set out in RFC7800 and WIMSE Workload Credentials, the `cnf.jwk.alg` claim MUST have one of the following supported values:
+
+`alg` Param Value | Digital Signature Algorithm
+------------------|-----------------------------
+RS256 | RSASSA-PKCS1-v1_5 using SHA-256
+RS384 | RSASSA-PKCS1-v1_5 using SHA-384
+RS512 | RSASSA-PKCS1-v1_5 using SHA-512
+ES256 | ECDSA using P-256 and SHA-256
+ES384 | ECDSA using P-384 and SHA-384
+ES512 | ECDSA using P-521 and SHA-512
+PS256 | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
+PS384 | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
+PS512 | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
 
 ### 3.3. JWT ID - `jti`
 
@@ -246,3 +258,4 @@ TODO: Update these datatracker links to use rfc-editor.org where possible.
 [4]: https://datatracker.ietf.org/doc/draft-ietf-wimse-wpt/
 [5]: https://datatracker.ietf.org/doc/draft-ietf-wimse-http-signature/
 [6]: https://datatracker.ietf.org/doc/rfc7519
+[7]: https://datatracker.ietf.org/doc/rfc7800/
