@@ -159,7 +159,21 @@ It is permitted for an implementation to include additional claims not specified
 
 When encountering additional claims that it does not recognize, a validator should ignore them.
 
-## 4. Token Signing and Validation
+## 4. Token Issuance and Validation
+
+This section describes the manner in which a WIT-SVID may be issued and validated.
+
+The process of signing a WIT-SVID does not differ significantly from the well-established for signing a JWT-SVID or a JWT more generally. Implementors should follow the canonical process set out by [RFC7519][6]. However, they should bear in mind the following specific requirements for WIT-SVIDs:
+
+- The issuer MUST use one of the permitted algorithms for signing the WIT-SVID JWT as per [2.3. Algorithm - `alg`](#23-algorithm---alg).
+- The issuer MUST set the `alg`, `typ` and `kid` header parameters.
+- The issuer MUST set the `sub`, `exp` and `cnf` claims.
+- The issuer MUST set the `cnf.jwk.alg` claim to one of the permitted algorithms as per [3.2 Confirmation - `cnf`](#32-confirmation---cnf)
+- The issuer SHOULD set the `jti`, `nbf` and `iat` claims.
+
+The process of validating a WIT-SVID is similar to the well-established process for validating a JWT-SVID or a JWT more generally. Implementors should follow the canonical process set out by [RFC7519][6]. However, they should bear in mind the following specific requirements for WIT-SVIDs:
+
+- The validator MUST NOT accept the WIT-SVID without an appropriate proof of posession of the key-pair contained within the `cnf`.
 
 ## 5. Token Presentation
 
@@ -194,7 +208,7 @@ SPIFFE bundles may contain JWK entries for many different SVID types. Implementa
 
 The WIT-SVID MUST NOT be used as a bearer token and MUST be presented with a proof of possession of the key-pair within the `cnf` claim.
 
-Similarly, the WIT-SVID MUST NOT be accepted without appropriate proof of possession of the key-pair within the `cnf` claim. See [5. Token Presentation](#5-token-presentation) for information on appropriate protocols for the presentation and acceptance of the WIT-SVID for authentication. 
+Similarly, the WIT-SVID MUST NOT be accepted without appropriate proof of possession of the key-pair within the `cnf` claim. See [5. Token Presentation](#5-token-presentation) for information on appropriate protocols for the presentation and acceptance of the WIT-SVID for authentication.
 
 ### 7.2 Transport Security
 
