@@ -4,7 +4,7 @@
 This document provides information and guidance on the selection of [SPIFFE Verifiable Identity Document](/standards/SPIFFE.md#3-the-spiffe-verifiable-identity-document) (SVID) formats for use across common workload identity scenarios. Distribution of this document is unlimited.
 
 ## Abstract
-The SPIFFE standard specifies multiple compliant SVID formats. Selection of the most appropriate for use is dependent on numerous factors, including but not limited to: client library availability, desired security properties, interoperability, certificate vs. token semantics, and the nature of expected workload-to-workload networking.
+The SPIFFE standard specifies multiple compliant SVID formats. Selection of the most appropriate for use is dependent on numerous factors, including but not limited to: client library availability \& maturity, desired security properties, interoperability, certificate vs. token semantics, and the nature of expected workload-to-workload networking.
 
 This document outlines the best current practices to consider when selecting an SVID format for use in a SPIFFE-based identity system.
 
@@ -54,16 +54,16 @@ WIT-SVIDs differ from JWT-SVIDs in that they are proof-of-possession tokens (i.e
 
 ## 3. Comparison Matrix
 
-|                       | X.509-SVID                                     | JWT-SVID                                              | WIT-SVID                                                   |
-|-----------------------|------------------------------------------------|-------------------------------------------------------|------------------------------------------------------------|
-| **Primary use**       | Transport-level identity (mTLS)                | Request/API-level identity (bearer)                   | Request/API-level identity with proof-of-possession        |
-| **Layer**             | Transport                                      | Application                                           | Application                                                |
-| **Format**            | X.509 certificate                              | Signed JWT                                            | Signed JWT with public key binding                         |
-| **Token semantics**   | Holder-of-key (private key bound to cert)      | Bearer token                                          | Holder-of-key (private key bound to token)                 |
-| **Rotation**          | Frequent, automatic                            | Short-lived tokens                                    | Short-lived tokens, key material                           |
-| **Verification**      | Certificate chain                              | JWS signature, claims                                 | JWS signature, claims, proof-of-possession                 |
-| **Replay resistance** | Strong: TLS handshake, key possession          | Weak: stateless token expiry                          | Strong: key possession                                     |
-| **Maturity**          | High                                           | High                                                  | Emerging                                                   |
+|                       | X.509-SVID                                     | JWT-SVID                                       | WIT-SVID                                                   |
+|-----------------------|------------------------------------------------|------------------------------------------------|------------------------------------------------------------|
+| **Primary use**       | Transport-level identity with mutual TLS       | Request/API-level identity with bearer tokens  | Request/API-level identity with proof-of-possession        |
+| **Layer**             | Transport                                      | Application                                    | Application                                                |
+| **Format**            | X.509 certificate                              | Signed JWT                                     | Signed JWT with public key binding                         |
+| **Proof semantics**   | Holder-of-key (private key bound to cert)      | Bearer token                                   | Holder-of-key (private key bound to workload)              |
+| **Rotation**          | Frequent, automatic                            | Short-lived tokens                             | Short-lived tokens, key material                           |
+| **Verification**      | Certificate chain                              | JWS signature, claims                          | JWS signature, claims, proof-of-possession                 |
+| **Replay resistance** | Strong (TLS handshake, key possession)         | Weak (stateless token expiry)                  | Strong (key possession)                                    |
+| **Maturity**          | High                                           | High                                           | Emerging                                                   |
 
 ## 4. Selection Criteria
 This section provides guidance on scenarios where a single SVID format can be considered favorable when compared with the alternatives. This should not be considered exhaustive, and there are likely to be cases where multiple or any of the formats could be argued to be suitable.
@@ -97,14 +97,12 @@ It should be noted that while WIT-SVID is an additive improvement to the token-b
 #### Transport security
 * Where TLS is available across all workloads, favor X.509-SVIDs.
 * Where TLS is not available across all workloads, favor token-based SVID formats.
-  * Where client library support is available, favor WIT-SVID.
-  * Else, use JWT-SVID.
+  * Where client library support is available, favor WIT-SVIDs.
+  * Else, favor JWT-SVIDs.
 
-#### Complex call chain topologies 
-* Where workloads may need to request chain with multiple workload-to-workload steps, favor JWT-SVIDs.
-
-#### Latency
-* Where workloads might need very low latency in the authentication layer, favor JWT-SVIDs.
+#### Latency & resources
+* Where application layer identity workloads need low latency in the authentication layer, favor JWT-SVIDs.
+* Where application layer identity workloads are resource restricted, favor JWT-SVIDs.
 
 ## 5. Appendix
 
