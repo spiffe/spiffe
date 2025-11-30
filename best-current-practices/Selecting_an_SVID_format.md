@@ -43,7 +43,7 @@ This section provides a brief description of the available SVID formats for cont
 ### 2.1 X.509-SVID
 [X.509-SVIDs](/standards/X509-SVID.md) are short-lived X.509 certificates containing a SPIFFE ID in the Subject Alternative Name. They are issued by the certificate authority (CA) of their SPIFFE trust domain, and used to authenticate during mutual TLS (mTLS) between workloads.
 
-Casting SVID information to an X.509 certifcate format also allows for transport-level encryption to be used between peers with mutual TLS support, meaning X.509-SVIDs enable secure communication in transit between workloads that have such capabilities.
+Casting SVID information to an X.509 certificate format also allows for transport-level encryption to be used between peers with mutual TLS support, meaning X.509-SVIDs enable secure communication in transit between workloads that have such capabilities.
 
 ### 2.2 JWT-SVID
 [JWT-SVIDs](/standards/JWT-SVID.md) are signed JSON Web Tokens (JWT) containing a SPIFFE ID in the `sub` claim. It is issued and signed by the JWT issuer of the SPIFFE trust domain, and is used to authenticate in the application layer between workloads.
@@ -93,13 +93,13 @@ WIT-SVIDs are the preferred choice for systems where application layer authentic
 * Workloads need to safeguard against impersonation more strongly than with simple token expiry,
 * Callers must provide per-request proof of identity
 
-It should be noted that while WIT-SVID is an additive improvement to the token-based authentication semantics of JWT-SVID, support for proof-of-possession verificaton and handling of WIT-specific claims and concepts (such as the Workload Proof Token) needs to be implemented in both server and client applications.
+It should be noted that while WIT-SVID is an additive improvement to the token-based authentication semantics of JWT-SVID, support for proof-of-possession verification and handling of WIT-specific claims and concepts (such as the Workload Proof Token) needs to be implemented in both server and client applications.
 
 ### 4.4 Heuristics
 
-* When TLS is available across all workloads, favour X.509-SVIDs.
-* When TLS is not available across all workloads, favour token-based SVID formats.
-  * When client library support is available, favour WIT-SVID
+* Where TLS is available across all workloads, favor X.509-SVIDs.
+* Where TLS is not available across all workloads, favor token-based SVID formats.
+  * Where client library support is available, favor WIT-SVID.
   * Else, use JWT-SVID.
 
 ## 5. Security Considerations
