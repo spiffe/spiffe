@@ -104,6 +104,8 @@ It should be noted that while WIT-SVID is an additive improvement to the token-b
 * Where application layer identity workloads need low latency in the authentication layer, favor JWT-SVIDs.
 * Where application layer identity workloads are resource restricted, favor JWT-SVIDs.
 
+[TODO; Adjust/Add to this decision tree]
+
 ## 5. Appendix
 
 * [WIMSE Workload Credential](https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-creds/) (draft IETF Internet Document)
