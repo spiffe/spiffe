@@ -97,10 +97,20 @@ It should be noted that while WIT-SVID is an additive improvement to the token-b
 
 ### 4.4 Heuristics
 
+#### Transport security
+
 * Where TLS is available across all workloads, favor X.509-SVIDs.
 * Where TLS is not available across all workloads, favor token-based SVID formats.
   * Where client library support is available, favor WIT-SVID.
   * Else, use JWT-SVID.
+
+#### Complex call chain topologies 
+
+* Where workloads may need to request chain, favor JWT-SVIDs.
+
+#### Latency
+
+* Where workloads might need very low latency in the authentication layer, favor JWT-SVIDs.
 
 ## 5. Security Considerations
 This section outlines security considerations that should be taken into account when selecting one of the SVID formats. 
