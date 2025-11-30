@@ -76,21 +76,21 @@ X.509-SVIDs are the preferred choice for systems requiring transport layer authe
 * All workloads have TLS capabilities (either natively or via enabling process such as proxies)
 
 ### 4.2 When to use JWT-SVID
-JWT-SVIDs are the preferred choice for systems where application layer authentication is required (in contrast to authentication in the transport layer). This might apply when:
+JWT-SVIDs are the preferred choice for systems where application layer authentication is required (in contrast to authentication in the transport layer) without the need for strong proof-of-possession verification. This might apply in scenarios where:
 
 * Systems do not have native or platform-enabled TLS support across all workloads,
 * Identity metadata needs to be inspected in-flight to perform actions such as routing and proxying,
-* Used in highly heterogeneous environments where third party identity integration (e.g. OIDC) is common
+* Environments are highly heterogeneous, and third party identity integration (e.g. OIDC) or legacy systems are common
 
 Layer 7 networking is the typical context requiring token-based authentication throughout each of the participating applications.
 
 ### 4.3 When to use WIT-SVID
-WIT-SVIDs are the preferred choice for systems where application layer authentication is required (as with JWT-SVID), but there is an additional need for stronger security assurances regarding message integrity or provenance. Specifically, this will be in cases where:
+WIT-SVIDs are the preferred choice for systems where application layer authentication is required (as with JWT-SVID), but there is an additional need for stronger security assurances regarding message integrity or provenance via proof-of-possession. Specifically, this will be in cases where:
 
 * Workloads need to safeguard against impersonation more strongly than with simple token expiry,
-* Callers must provide per-request proof of identity
+* Callers must provide per-request proof of identity.
 
-It should be noted that while WIT-SVID is an additive improvement to the token-based authentication semantics of JWT-SVID, support for proof-of-possession verification and handling of WIT-specific claims and concepts (such as the Workload Proof Token) needs to be implemented in both server and client applications.
+It should be noted that while WIT-SVID is an additive improvement to the token-based authentication semantics of JWT-SVID, support for proof-of-possession verification and handling of WIT-specific claims and concepts (such as the Workload Proof Token) need to be implemented in both server and client applications for use of the format.
 
 ### 4.4 Heuristics
 
@@ -101,9 +101,12 @@ It should be noted that while WIT-SVID is an additive improvement to the token-b
   * Else, use JWT-SVID.
 
 #### Complex call chain topologies 
-* Where workloads may need to request chain with multiple workload-to-workload hops, favor JWT-SVIDs.
+* Where workloads may need to request chain with multiple workload-to-workload steps, favor JWT-SVIDs.
 
 #### Latency
 * Where workloads might need very low latency in the authentication layer, favor JWT-SVIDs.
 
 ## 5. Appendix
+
+* [WIMSE Workload Credential](https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-creds/) (draft IETF Internet Document)
+
