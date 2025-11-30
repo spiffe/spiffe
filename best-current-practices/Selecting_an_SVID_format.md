@@ -34,7 +34,7 @@ The [SPIFFE standard](/standards/SPIFFE.md) defines support for multiple SVID fo
 
 This has been an additive process over the history of SPIFFE. The standard was originally written with X.509-SVID as the only supported SVID format, and JWT-SVID was subsequently added as the first token-based SVID to aid in interoperability with Layer 7 networking.
 
-More recently, WIT-SVID has been proposed as another token-based SVID format to make use of authentication concepts developed as part of the IETF [Workloads In Multi-System Environments (WIMSE)](https://datatracker.ietf.org/group/wimse/documents/) working group.
+More recently, WIT-SVID has been proposed as another token-based SVID format to make use of authentication concepts developed as part of the IETF [Workloads In Multi-System Environments (WIMSE)](https://datatracker.ietf.org/group/wimse/documents/) working group. This represents an enhancement over the existing JWT-SVID semantics by codifying proof-of-possession information as part of the mandatory claims of the token.
 
 ## 2. Overview of Formats
 This section provides a brief description of the available SVID formats for contextual and comparative clarity. Full specification details for each can be found in their corresponding standardization (linked) documents.
@@ -52,7 +52,7 @@ JWT-SVIDs are bearer tokens, and do not enable any kind of encryption or cryptog
 ### 2.3 WIT-SVID
 WIT-SVIDs are signed JWTs containing a SPIFFE ID in the `sub` claim and a public key binding, with proof-of-possession metadata regarding the signing key available in a `cnf` claim.
 
-WIT-SVIDs differ from JWT-SVIDs in that they are proof-of-possession tokens (i.e. **not** bearer tokens). This provides enhanced security guarantees about caller provenance, integrity, and non-repudiation.
+WIT-SVIDs differ from JWT-SVIDs in that they are proof-of-possession tokens (i.e. **not** bearer tokens). This provides enhanced security guarantees about caller provenance, integrity, and non-repudiation while still maintaining the interoperability of using token-based authentication in the application layer.
 
 ## 3. Comparison Matrix
 
