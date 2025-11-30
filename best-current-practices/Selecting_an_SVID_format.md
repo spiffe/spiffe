@@ -81,16 +81,18 @@ X.509-SVIDs are the preferred choice for systems requiring transport layer authe
 JWT-SVIDs are the preferred choice for systems where application layer authentication is required (in contrast to authentication in the transport layer). This might apply when:
 
 * Systems do not have native or platform-enabled TLS support across all workloads,
-* Identity needs to be inspected in-flight to perform actions like routing and proxying,
-* Highly heterogeneous environments where third party identity integration (e.g. OIDC) is common
+* Identity metadata needs to be inspected in-flight to perform actions such as routing and proxying,
+* Used in highly heterogeneous environments where third party identity integration (e.g. OIDC) is common
 
-Layer 7 networking is the typical context which requires token-based authentication in the application.
+Layer 7 networking is the typical context requiring token-based authentication throughout each of the participating applications.
 
 ### 4.3 When to use WIT-SVID
 WIT-SVIDs are the preferred choice for systems where application layer authentication is required (as with JWT-SVID), but there is an additional need for stronger security assurances regarding message integrity or provenance. Specifically, this will be in cases where:
 
 * Workloads need to safeguard against impersonation more strongly than with simple token expiry,
 * Callers must provide per-request proof of identity
+
+It should be noted that while WIT-SVID is an additive improvement to the token-based authentication semantics of JWT-SVID, support for proof-of-possession verificaton and handling of WIT-specific claims and concepts (such as the Workload Proof Token) needs to be implemented in both server and client applications.
 
 ## 5. Security Considerations
 This section outlines security considerations that should be taken into account when selecting one of the SVID formats. 
