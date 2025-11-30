@@ -20,6 +20,7 @@ This document outlines the best current practices to consider when selecting an 
 4.1 [When to use X.509-SVID](#41-when-to-use-x509-svid)  
 4.2 [When to use JWT-SVID](#42-when-to-use-jwt-svid)  
 4.3 [When to use WIT-SVID](#43-when-to-use-wit-svid)  
+4.4 [Heuristics](#44-heuristics)  
 5\. [Security Considerations](#5-security-considerations)  
 5.1 [Threat Models](#51-threat-models)  
 5.2 [Mitigations](#52-mitigations)  
@@ -93,6 +94,13 @@ WIT-SVIDs are the preferred choice for systems where application layer authentic
 * Callers must provide per-request proof of identity
 
 It should be noted that while WIT-SVID is an additive improvement to the token-based authentication semantics of JWT-SVID, support for proof-of-possession verificaton and handling of WIT-specific claims and concepts (such as the Workload Proof Token) needs to be implemented in both server and client applications.
+
+### 4.4 Heuristics
+
+* When TLS is available across all workloads, favour X.509-SVIDs.
+* When TLS is not available across all workloads, favour token-based SVID formats.
+  * When client library support is available, favour WIT-SVID
+  * Else, use JWT-SVID.
 
 ## 5. Security Considerations
 This section outlines security considerations that should be taken into account when selecting one of the SVID formats. 
