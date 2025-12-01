@@ -38,7 +38,7 @@ More recently, WIT-SVID has been proposed as an additional token-based SVID form
 This section provides a brief description of the available SVID formats for contextual and comparative clarity. Full specification details for each can be found in their corresponding standardization (linked) documents.
 
 ### 2.1 X.509-SVID
-[X.509-SVIDs](/standards/X509-SVID.md) are short-lived X.509 certificates containing a SPIFFE ID in the Subject Alternative Name. They are issued by the certificate authority (CA) of their SPIFFE trust domain, and used to authenticate during mutual TLS (mTLS) between workloads.
+[X.509-SVIDs](/standards/X509-SVID.md) are short-lived X.509 certificates containing a SPIFFE ID in the Subject Alternative Name. They are issued by the certificate authority (CA) of their SPIFFE trust domain, and often used to authenticate client and/or server workloads with mutual TLS.
 
 Casting SVID information to an X.509 certificate format also allows for transport-level encryption to be used between peers with mutual TLS support, meaning X.509-SVIDs enable secure communication in transit between workloads that have such capabilities.
 
