@@ -43,7 +43,7 @@ This section provides a brief description of the available SVID formats for cont
 Casting SVID information to an X.509 certificate format also allows for transport-level encryption to be used between peers with mutual TLS support, meaning X.509-SVIDs enable secure communication in transit between workloads that have such capabilities.
 
 ### 2.2 JWT-SVID
-[JWT-SVIDs](/standards/JWT-SVID.md) are signed JSON Web Tokens (JWT) containing a SPIFFE ID in the `sub` claim. It is issued and signed by the JWT issuer of the SPIFFE trust domain, and is used to authenticate in the application layer between workloads.
+[JWT-SVIDs](/standards/JWT-SVID.md) are signed JSON Web Tokens (JWT) containing a SPIFFE ID in the `sub` claim. It is issued and signed by the JWT issuer of the SPIFFE trust domain, and is used to authenticate workloads in the application layer.
 
 JWT-SVIDs are bearer tokens, and do not enable any kind of encryption or cryptographic protection against impersonation. Various recommendations exist to mitigate against known vulnerabilities of the JWT as an identity token, and should be followed when JWT-SVIDs are used in SPIFFE.
 
