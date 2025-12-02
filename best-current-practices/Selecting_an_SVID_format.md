@@ -60,7 +60,6 @@ WIT-SVIDs differ from JWT-SVIDs in that their key binding allows them to be used
 | **Layer**                 | Transport                                      | Application                                    | Application                                                |
 | **Format**                | X.509 certificate                              | Signed JWT                                     | Signed JWT with public key binding                         |
 | **Proof semantics**       | Holder-of-key                                  | N/A                                            | Holder-of-key                                              |
-| **Rotation**              | Frequent, automatic                            | Short-lived tokens                             | Short-lived tokens, key material                           |
 | **Verification**          | Certificate chain                              | JWS signature, claims                          | JWS signature, claims, proof-of-possession                 |
 | **Replay resistance**     | Strong (TLS handshake, key possession)         | Weak (stateless token expiry)                  | Strong (key possession)                                    |
 | **Integrity protection**  | Yes                                            | No                                             | Yes (via presentation methods)                             |
