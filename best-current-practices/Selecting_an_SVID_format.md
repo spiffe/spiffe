@@ -54,7 +54,7 @@ WIT-SVIDs differ from JWT-SVIDs in that their key binding allows them to be used
 
 ## 3. Comparison Matrix
 
-|                           | X.509-SVID                                     | JWT-SVID                                       | WIT-SVID                                                   |
+|                           | X.509-SVID with mutual TLS                      | JWT-SVID in request header                    | WIT-SVID with proof-of-possession                          |
 |---------------------------|------------------------------------------------|------------------------------------------------|------------------------------------------------------------|
 | **Primary use**           | Transport-level identity with mutual TLS       | Request/API-level identity with bearer tokens  | Request/API-level identity with proof-of-possession        |
 | **Layer**                 | Transport                                      | Application                                    | Application                                                |
