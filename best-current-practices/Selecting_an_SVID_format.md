@@ -54,16 +54,20 @@ WIT-SVIDs differ from JWT-SVIDs in that their key binding allows them to be used
 
 ## 3. Comparison Matrix
 
-|                       | X.509-SVID                                     | JWT-SVID                                       | WIT-SVID                                                   |
-|-----------------------|------------------------------------------------|------------------------------------------------|------------------------------------------------------------|
-| **Primary use**       | Transport-level identity with mutual TLS       | Request/API-level identity with bearer tokens  | Request/API-level identity with proof-of-possession        |
-| **Layer**             | Transport                                      | Application                                    | Application                                                |
-| **Format**            | X.509 certificate                              | Signed JWT                                     | Signed JWT with public key binding                         |
-| **Proof semantics**   | Holder-of-key (private key bound to cert)      | Bearer token                                   | Holder-of-key (private key bound to workload)              |
-| **Rotation**          | Frequent, automatic                            | Short-lived tokens                             | Short-lived tokens, key material                           |
-| **Verification**      | Certificate chain                              | JWS signature, claims                          | JWS signature, claims, proof-of-possession                 |
-| **Replay resistance** | Strong (TLS handshake, key possession)         | Weak (stateless token expiry)                  | Strong (key possession)                                    |
-| **Maturity**          | High                                           | High                                           | Emerging                                                   |
+|                           | X.509-SVID                                     | JWT-SVID                                       | WIT-SVID                                                   |
+|---------------------------|------------------------------------------------|------------------------------------------------|------------------------------------------------------------|
+| **Primary use**           | Transport-level identity with mutual TLS       | Request/API-level identity with bearer tokens  | Request/API-level identity with proof-of-possession        |
+| **Layer**                 | Transport                                      | Application                                    | Application                                                |
+| **Format**                | X.509 certificate                              | Signed JWT                                     | Signed JWT with public key binding                         |
+| **Proof semantics**       | Holder-of-key                                  | N/A                                            | Holder-of-key                                              |
+| **Rotation**              | Frequent, automatic                            | Short-lived tokens                             | Short-lived tokens, key material                           |
+| **Verification**          | Certificate chain                              | JWS signature, claims                          | JWS signature, claims, proof-of-possession                 |
+| **Replay resistance**     | Strong (TLS handshake, key possession)         | Weak (stateless token expiry)                  | Strong (key possession)                                    |
+| **Integrity protection**  | Yes                                            | No                                             | Yes (via presentation methods)                             |
+| **Encryption**            | Yes                                            | No                                             | No                                                         |
+| **Server authentication** | Yes                                            | No                                             | No                                                         |
+| **TLS termination**       | No                                             | Yes                                            | Yes                                                        |
+| **Maturity**              | High                                           | High                                           | Emerging                                                   |
 
 ## 4. Selection Criteria
 This section provides guidance on scenarios where a single SVID format can be considered favorable when compared with the alternatives. This should not be considered exhaustive, and there are likely to be cases where multiple or any of the formats could be argued to be suitable.
