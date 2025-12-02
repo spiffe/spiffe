@@ -50,7 +50,7 @@ JWT-SVIDs are bearer tokens, and do not enable any kind of encryption or cryptog
 ### 2.3 WIT-SVID
 WIT-SVIDs are signed JWTs containing a SPIFFE ID in the `sub` claim and a public key binding, with proof-of-possession metadata regarding the signing key available in a `cnf` claim.
 
-WIT-SVIDs differ from JWT-SVIDs in that they are proof-of-possession tokens (i.e. **not** bearer tokens). This provides enhanced security guarantees about caller provenance, integrity, and non-repudiation while still maintaining the interoperability of using token-based authentication in the application layer.
+WIT-SVIDs differ from JWT-SVIDs in that their key binding allows them to be used as proof-of-possession tokens (i.e. **not** bearer tokens). Use of this property enables enhanced security guarantees about caller provenance, integrity, and non-repudiation - while still maintaining the interoperability of using token-based authentication in the application layer.
 
 ## 3. Comparison Matrix
 
