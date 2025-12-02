@@ -40,7 +40,7 @@ This section provides a brief description of the available SVID formats for cont
 ### 2.1 X.509-SVID
 [X.509-SVIDs](/standards/X509-SVID.md) are short-lived X.509 certificates containing a SPIFFE ID in the Subject Alternative Name. They are issued by the certificate authority (CA) of their SPIFFE trust domain, and often used to authenticate client and/or server workloads with mutual TLS.
 
-Casting SVID information to an X.509 certificate format also allows for transport-level encryption to be used between peers with mutual TLS support, meaning X.509-SVIDs enable secure communication in transit between workloads that have such capabilities.
+Casting SVID information to an X.509 certificate format also allows for both transport-level encryption to be used between peers with mutual TLS support, meaning X.509-SVIDs enable secure communication in transit between workloads that have such capabilities. X.509s also provide integrity guarantees tied to their digital signatures, ensuring certificates are not altered or tampered with.
 
 ### 2.2 JWT-SVID
 [JWT-SVIDs](/standards/JWT-SVID.md) are signed JSON Web Tokens (JWT) containing a SPIFFE ID in the `sub` claim. It is issued and signed by the JWT issuer of the SPIFFE trust domain, and is used to authenticate workloads in the application layer.
