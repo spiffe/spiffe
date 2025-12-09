@@ -65,7 +65,7 @@ Validators MUST reject WIT-SVIDs with an unsupported `alg` parameter value.
 
 ### 2.3. Additional Header Parameters
 
-It is permitted for an implementation to include additional header parameters not specified in this document or the upstream document.
+Implementations SHOULD NOT provide additional header parameters not specified by this document.
 
 ### 3. Claims
 
