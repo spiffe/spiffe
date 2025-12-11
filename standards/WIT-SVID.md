@@ -216,13 +216,16 @@ Similarly, the WIT-SVID MUST NOT be accepted without appropriate proof of posses
 
 ## Appendix A. Example WIT-SVID
 
-Signed JWT: `eyJhbGciOiJFUzI1NiIsInR5cCI6IndpdCtqd3QifQ.eyJjbmYiOnsiandrIjp7ImFsZyI6IkVTMjU2IiwiY3J2IjoiUC0yNTYiLCJrdHkiOiJFQyIsIngiOiJ2amFOU1c4ZmRXLXh1Z0QtUDRpSHVTQVdzbGFRZlF5LTZjaXhHMzlWdl9JIiwieSI6ImFzUWlreFZxZzNoTTFDa0k4LVhwT3pfSkhDU1BNREtnbzVXSW53R2R0bkEifX0sImV4cCI6MTc2NDE1MzY4MCwiaWF0IjoxNzY0MTUwMDgwLCJqdGkiOiJEQkIyXzN4eDg0UjB5N2RmZFBJaDJCNndpWGdaUVhGSW9JYU1jbXk2LXowIiwic3ViIjoic3BpZmZlOi8vZXhhbXBsZS5jb20vbXktd29ya2xvYWQifQ.MQMj9fhGtMRSSZexqJXgYJXIItbtPq884dsEGaUxzzPRYA4DE_2926EtJm3KNDAaDhBnHD996rPqFq3UNAB3hA`
+This appendix provides an example WIT-SVID.
+
+Signed JWT: `eyJhbGciOiJFUzI1NiIsImtpZCI6ImxRU2kzaFpGbmRhMkQtWEprajF6bDdmb0pvdWl3STRuckF5aHk0alppSmciLCJ0eXAiOiJ3aXQrand0In0.eyJjbmYiOnsiandrIjp7ImFsZyI6IkVTMjU2IiwiY3J2IjoiUC0yNTYiLCJrdHkiOiJFQyIsIngiOiJyelA3bUxDS0FIV21zTTZYMEV3VklTQ19oSTN1amN1OTVmZlVreWVER0dvIiwieSI6InVPcmZEbGp0WDltM2pZLWhzeWhMSllheHRHa3pEdjVlNWttQ2U1OFo5N2cifX0sImV4cCI6MTc2NTQ1NjUwMywiaWF0IjoxNzY1NDUyOTAzLCJqdGkiOiIxeWoxOVY0TWNPQXpNY0ZpN3F2c2dfQWdDeGxyWTVFX3g1MDl3bEtLUXRjIiwic3ViIjoic3BpZmZlOi8vZXhhbXBsZS5jb20vbXktd29ya2xvYWQifQ.sfhEvZNdY_kWrICF08lX0u__rn39YnTavnW-VPBS20zgowDh6-X43v5eOUKZbjZf06yLBQM-Mry5w1g1QFsCkg`
 
 Header:
 
 ```json
 {
   "alg": "ES256",
+  "kid": "lQSi3hZFnda2D-XJkj1zl7foJouiwI4nrAyhy4jZiJg",
   "typ": "wit+jwt"
 }
 ```
@@ -236,13 +239,13 @@ Payload:
       "alg": "ES256",
       "crv": "P-256",
       "kty": "EC",
-      "x": "vjaNSW8fdW-xugD-P4iHuSAWslaQfQy-6cixG39Vv_I",
-      "y": "asQikxVqg3hM1CkI8-XpOz_JHCSPMDKgo5WInwGdtnA"
+      "x": "rzP7mLCKAHWmsM6X0EwVISC_hI3ujcu95ffUkyeDGGo",
+      "y": "uOrfDljtX9m3jY-hsyhLJYaxtGkzDv5e5kmCe58Z97g"
     }
   },
-  "exp": 1764153680,
-  "iat": 1764150080,
-  "jti": "DBB2_3xx84R0y7dfdPIh2B6wiXgZQXFIoIaMcmy6-z0",
+  "exp": 1765456503,
+  "iat": 1765452903,
+  "jti": "1yj19V4McOAzMcFi7qvsg_AgCxlrY5E_x509wlKKQtc",
   "sub": "spiffe://example.com/my-workload"
 }
 ```
