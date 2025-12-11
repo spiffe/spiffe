@@ -261,7 +261,7 @@ The following summarises the differences between the IETF WIMSE WIT and the SPIF
 
 ## Appendix C. Comparing the JWT-SVID and WIT-SVID
 
-This appendix explores the differences between the JWT-SVID and WIT-SVID from a structural and presentational point of view. For a more in-depth exploration of the types of SVIDs and guidance on selecting between them, see the [Best Practices: SVID Type Comparison document][TODO].
+This appendix explores the differences between the JWT-SVID and WIT-SVID from a structural and presentational point of view. For a more in-depth exploration of the types of SVIDs and guidance on selecting between them, see the [Best Practices: SVID Type Comparison document][8].
 
 ...
 
@@ -271,7 +271,7 @@ Notably, the WIT-SVID makes the `kid` header parameter mandatory whereas the JWT
 
 ## Appendix D. Comparing the X509-SVID and WIT-SVID
 
-This appendix explores the differences between the X509-SVID and WIT-SVID from a structural and presentational point of view. For a more in-depth exploration of the types of SVIDs and guidance on selecting between them, see the [Best Practices: SVID Type Comparison document][TODO].
+This appendix explores the differences between the X509-SVID and WIT-SVID from a structural and presentational point of view. For a more in-depth exploration of the types of SVIDs and guidance on selecting between them, see the [Best Practices: SVID Type Comparison document][8].
 
 Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct at first glance, ...
 
@@ -281,9 +281,10 @@ TODO: Update these datatracker links to use rfc-editor.org where possible.
 -->
 
 [1]: https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-creds/
-[2]: https://datatracker.ietf.org/doc/rfc7515
-[3]: https://datatracker.ietf.org/doc/rfc7517
+[2]: https://www.rfc-editor.org/rfc/rfc7515.html
+[3]: https://www.rfc-editor.org/rfc/rfc7517.html
 [4]: https://datatracker.ietf.org/doc/draft-ietf-wimse-wpt/
 [5]: https://datatracker.ietf.org/doc/draft-ietf-wimse-http-signature/
-[6]: https://datatracker.ietf.org/doc/rfc7519
-[7]: https://datatracker.ietf.org/doc/rfc7800/
+[6]: https://www.rfc-editor.org/rfc/rfc7519.html
+[7]: https://www.rfc-editor.org/rfc/rfc7800.html
+[8]: https://example.com/todo-svid-type-compare
