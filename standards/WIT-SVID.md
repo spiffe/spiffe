@@ -275,10 +275,7 @@ Payload:
 
 This appendix summarises the differences between the IETF WIMSE WIT and the SPIFFE WIT-SVID.
 
-- JOSE Headers
-  - `kid` is not defined by the WIT specification, but is mandatory in WIT-SVID.
-- Claims
-  - `sub` is defined within the WIT specifications, but, in WIT-SVID is constrained to be the SPIFFE ID.
+.. TODO ..
 
 ## Appendix C. Comparing the JWT-SVID and WIT-SVID
 
