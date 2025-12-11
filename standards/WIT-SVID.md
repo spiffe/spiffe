@@ -296,7 +296,7 @@ Notably, the WIT-SVID makes the `kid` header parameter mandatory whereas the JWT
 
 This appendix explores the differences between the X509-SVID and WIT-SVID from a structural and presentational point of view. For a more in-depth exploration of the types of SVIDs and guidance on selecting between them, see the [Best Practices: SVID Type Comparison document][8].
 
-Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct at first glance, they share a number of common traits:
+Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct, they share a number of common traits:
 
 - Both contain a public key belonging to the workload and when authenticating using the SVID, the workload must demonstrate possession using the corresponding private key. The possession of the X509-SVID or the WIT-SVID alone is not enough to authenticate using it and because of this, they do not need to be treated as "sensitive" values.
 - Both are likely to have lifespans of comparable lengths (e.g minutes to hours).
