@@ -47,7 +47,7 @@ For a WIT-SVID, this parameter MUST be present and MUST be set to `wit+jwt`.
 
 Identifies the cryptographic algorithm used to sign the WIT-SVID. The `alg` header parameter is defined by the [JSON Web Signature (JWS)][2] document.
 
-For a WIT-SVID, this parameter MUST be present, and, set to one of the following supported values:
+For a WIT-SVID, this parameter MUST be present and set to one of the following supported values:
 
 `alg` Param Value | Digital Signature Algorithm
 ------------------|-----------------------------
@@ -153,7 +153,7 @@ The issuer of this WIT-SVID. The meaning of this claim is defined by [RFC7519][6
 
 The `iss` claim MAY be present. When present, it SHOULD NOT be a value compatible with OpenID Connect Discovery - this is to prevent the validation and acceptance of the WIT-SVID as an OIDC ID Token without validation of a proof of possession.
 
-Within SPIFFE, there already exists mechanisms for the distribution of trust bundles, and, the trust domain part of the `sub` broadly identifies the issuer. In many cases, this makes the `iss` claim redundant. The specification has intentionally been left relaxed for the `iss` claim to support the usage of alternative trust distribution models and developments to the specification in future.
+Within SPIFFE, there already exists mechanisms for the distribution of trust bundles and the trust domain part of the `sub` broadly identifies the issuer. In many cases, this makes the `iss` claim redundant. The specification has intentionally been left relaxed for the `iss` claim to support the usage of alternative trust distribution models and developments to the specification in future.
 
 ### 3.8. Additional Claims
 
