@@ -165,7 +165,7 @@ When encountering additional claims that it does not recognize, a validator shou
 
 This section describes the manner in which a WIT-SVID may be issued and validated.
 
-The process of signing a WIT-SVID does not differ significantly from the well-established for signing a JWT-SVID or a JWT more generally. Implementors should follow the canonical process set out by [RFC7519][6]. However, they should bear in mind the following specific requirements for WIT-SVIDs:
+The process of signing a WIT-SVID does not differ significantly from the well-established method for signing a JWT-SVID or a JWT. Implementors should follow the canonical process set out by [RFC7519][6]. However, they should bear in mind the following specific requirements for WIT-SVIDs:
 
 - The issuer MUST use one of the permitted algorithms for signing the WIT-SVID JWT as per [2.3. Algorithm - `alg`](#23-algorithm---alg).
 - The issuer MUST set the `alg`, `typ` and `kid` header parameters.
