@@ -206,13 +206,34 @@ SPIFFE bundles may contain JWK entries for many different SVID types. Implementa
 
 ## 7. Security Considerations
 
-### 7.1 Proof of Possession
+### 7.1 Mandatory Proof of Possession
 
 The WIT-SVID MUST NOT be used as a bearer token and MUST be presented with a proof of possession of the key-pair within the `cnf` claim.
 
 Similarly, the WIT-SVID MUST NOT be accepted without appropriate proof of possession of the key-pair within the `cnf` claim. See [5. Token Presentation](#5-token-presentation) for information on appropriate protocols for the presentation and acceptance of the WIT-SVID for authentication.
 
-### 7.2 Transport Security
+Implementors should take care to ensure that the WIT-SVID will not be accepted by validators that may be expecting a JWT-SVID or JWT (e.g. OIDC Workload Identity Federation).
+
+### 7.2 Proof of Possession and Mitigation of Tampering and Replay
+
+When choosing a proof of possession mechanism, consider how the characteristics of the mechanism will mitigate the impact of an attacker intercepting the WIT-SVID, proof of possession and potentially the request itself. There are broadly two scenarios to consider:
+
+- Tampering: When the attacker intercepts and modifies a legitimate request to be malicious.
+- Replay: When the attacker intercepts the request and uses the WIT-SVID and PoP and uses these to make their own request.
+
+A key characteristic to consider is how tightly scoped the proof of possession is, that is, how specific it is to the request being made by the sender.
+
+A tightly scoped proof of possession limits the extent to which an attacker can tamper with the intentions of the request and limits the actions an attacker can take when replaying. A loosely scoped proof of possession (e.g. one that is only scoped to the intended recipient) would allow an attacker to perform a wide range of actions. A good proof of possession would be scoped to a specific action with a specific set of parameters.
+
+The scope of a proof of possession must be understood and enforced by the recipient to be of any value. If the sender includes a trait of the request within a proof of possesion but the recipient does not validate this against the received request, then it has served no purpose.
+
+Additionally, the lifespan of a Proof of Possession MUST be limited and SHOULD be limited to a shortest period necessary to serve its intended purpose. This reduces the window in which they can be replayed by an attacker. In ideal circumstances, the lifespan could feasibly be set to a small number of seconds, however the lower bound of this value may be constrained by factors such as clock skew and network latency.
+
+Recipients MAY choose to prevent replay by only permitting a distinct proof of possession to be used at most once. This may be implemented by recording some unique identifier of the proof of possesion (e.g. in the case of the WIMSE WPT, the `jti` claim). This requires a degree of coordination between the sender and the recipient as the sender must be aware that it can only use a proof of possession once.
+
+### 7.3 Transport Security
+
+The WIT-SVID and corresponding proof of possession MUST be transmitted over a secure channel (e.g. server authenticated TLS).
 
 ## Appendix A. Example WIT-SVID
 
