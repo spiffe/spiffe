@@ -302,7 +302,7 @@ Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct
 They do however differ in a number of key ways:
 
 - X509-SVIDs are X.509 certificates - it is an extremely mature standard and good support for authentication based on them (e.g TLS) is available in most languages. WITs are much less mature and language support is likely to be initially limited.
-- Typically, X509-SVIDs are associated with mTLS - which provides not only authentication but also protection from eavesdropping. Whilst WIT-SVIDs cannot be used for TLS, they can both be used with other mechanisms (e.g. HTTP Message Signatures).
+- X509-SVIDs are typically presented and mutually authenticated at the network layer using TLS. They authenticate a channel. A WIT-SVID would typically be sent along with a single request on the application layer. They authenticate a single invocation.
 - X509-SVIDs are serialized in ASN.1, whereas WIT-SVIDs are JWTs and are serialized using JSON. JSON is often considered easier to work with and understand.
 
 It's entirely feasible that in some environments, both may even be used within the same connection (e.g the client presents a WIT-SVID and the server presents an X509-SVID.)
