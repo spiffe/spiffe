@@ -294,12 +294,18 @@ Notably, the WIT-SVID makes the `kid` header parameter mandatory whereas the JWT
 
 This appendix explores the differences between the X509-SVID and WIT-SVID from a structural and presentational point of view. For a more in-depth exploration of the types of SVIDs and guidance on selecting between them, see the [Best Practices: SVID Type Comparison document][8].
 
-Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct at first glance, ...
+Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct at first glance, they share a number of common traits:
 
+- Both contain a public key belonging to the workload and when authenticating using the SVID, the workload must demonstrate possession using the corresponding private key. The possession of the X509-SVID or the WIT-SVID alone is not enough to authenticate using it and because of this, they do not need to be treated as "sensitive" values.
+- Both are cryptographically signed by an issuer, and, a validator uses this signature to ensure that it is a legitimate credential and has not been tampered with.
 
-<--
-TODO: Update these datatracker links to use rfc-editor.org where possible.
--->
+They do however differ in a number of key ways:
+
+- X509-SVIDs are X.509 certificates - it is an extremely mature standard and good support for authentication based on them (e.g TLS) is available in most languages. WITs are much less mature and language support is likely to be initially limited.
+- Typically, X509-SVIDs are associated with mTLS. Whilst WIT-SVIDs cannot be used for TLS, they can both be used with other mechanisms (e.g. HTTP Message Signatures).
+- X509-SVIDs are serialized in ASN.1, whereas WIT-SVIDs are JWTs and are serialized using JSON. JSON is often considered easier to work with and understand.
+
+It's entirely feasible that in some environments, both may even be used within the same connection (e.g the client presents a WIT-SVID and the server presents an X509-SVID.)
 
 [1]: https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-creds/
 [2]: https://www.rfc-editor.org/rfc/rfc7515.html
