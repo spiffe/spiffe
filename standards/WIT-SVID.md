@@ -273,7 +273,7 @@ Payload:
 
 ## Appendix B. Comparing WIMSE WIT with SPIFFE WIT-SVID
 
-The following summarises the differences between the IETF WIMSE WIT and the SPIFFE WIT-SVID.
+This appendix summarises the differences between the IETF WIMSE WIT and the SPIFFE WIT-SVID.
 
 - JOSE Headers
   - `kid` is not defined by the WIT specification, but is mandatory in WIT-SVID.
@@ -284,11 +284,13 @@ The following summarises the differences between the IETF WIMSE WIT and the SPIF
 
 This appendix explores the differences between the JWT-SVID and WIT-SVID from a structural and presentational point of view. For a more in-depth exploration of the types of SVIDs and guidance on selecting between them, see the [Best Practices: SVID Type Comparison document][8].
 
-...
+Whilst at first glance the JWT-SVID and WIT-SVID may look quite similar, there are a number of differences to keep in mind.
+
+First and foremost, the WIT-SVID includes a public key belonging to the workload when authenticating with the WIT-SVID it is required for the workload to also perform a proof of possession of the private key. This differs significantly from JWT-SVIDs which are bearer tokens - presentation of the JWT-SVID alone is enough to authenticate using it. This creates a difference in how they must be handled, with a JWT-SVID being significantly more susceptible to replay by a bad actor who has intercepted it.
+
+Because of their sensitive nature, it is highly recommended that JWT-SVIDs have the shortest lifespan possible (e.g. seconds, minutes) whereas the proof of possession mechanism for WIT-SVIDs means it is perfectly acceptable for a WIT-SVID to have a lifespan in the order of hours.
 
 Notably, the WIT-SVID makes the `kid` header parameter mandatory whereas the JWT-SVID does not. This change was intended to reflect reality: a significant number of JWT-SVID validation implementations (e.g `go-spiffe`, SPIRE) within the SPIFFE ecosystem will reject a perfectly spec-compliant JWT-SVID without the `kid` parameter, making this a de-facto requirement. A similar situation would be likely to occur if the `kid` header parameter was optional for the WIT-SVID. Therefore, making this mandatory from the outset increases the chances of the implementations and the specification being in coherence in regards to the `kid` header parameter.
-
-...
 
 ## Appendix D. Comparing the X509-SVID and WIT-SVID
 
@@ -297,12 +299,13 @@ This appendix explores the differences between the X509-SVID and WIT-SVID from a
 Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct at first glance, they share a number of common traits:
 
 - Both contain a public key belonging to the workload and when authenticating using the SVID, the workload must demonstrate possession using the corresponding private key. The possession of the X509-SVID or the WIT-SVID alone is not enough to authenticate using it and because of this, they do not need to be treated as "sensitive" values.
+- Both are likely to have lifespans of comparable lengths (e.g minutes to hours).
 - Both are cryptographically signed by an issuer, and, a validator uses this signature to ensure that it is a legitimate credential and has not been tampered with.
 
 They do however differ in a number of key ways:
 
 - X509-SVIDs are X.509 certificates - it is an extremely mature standard and good support for authentication based on them (e.g TLS) is available in most languages. WITs are much less mature and language support is likely to be initially limited.
-- Typically, X509-SVIDs are associated with mTLS. Whilst WIT-SVIDs cannot be used for TLS, they can both be used with other mechanisms (e.g. HTTP Message Signatures).
+- Typically, X509-SVIDs are associated with mTLS - which provides not only authentication but also protection from eavesdropping. Whilst WIT-SVIDs cannot be used for TLS, they can both be used with other mechanisms (e.g. HTTP Message Signatures).
 - X509-SVIDs are serialized in ASN.1, whereas WIT-SVIDs are JWTs and are serialized using JSON. JSON is often considered easier to work with and understand.
 
 It's entirely feasible that in some environments, both may even be used within the same connection (e.g the client presents a WIT-SVID and the server presents an X509-SVID.)
