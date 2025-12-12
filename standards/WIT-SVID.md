@@ -67,6 +67,8 @@ Validators MUST reject WIT-SVIDs with an unsupported `alg` parameter value.
 
 Implementations SHOULD NOT provide additional header parameters not specified by this document.
 
+Validators should ignore unknown header parameters except where those header parameters are specified by the `crit` header parameter as per [RFC7515][2].
+
 ### 3. Claims
 
 This section describes the claims that are defined for the WIT-SVID.
