@@ -295,7 +295,7 @@ This appendix explores the differences between the JWT-SVID and WIT-SVID from a 
 
 Whilst at first glance the JWT-SVID and WIT-SVID may look quite similar, there are a number of differences to keep in mind.
 
-First and foremost, the WIT-SVID includes a public key belonging to the workload when authenticating with the WIT-SVID it is required for the workload to also perform a proof of possession of the private key. This differs significantly from JWT-SVIDs which are bearer tokens - presentation of the JWT-SVID alone is enough to authenticate using it. This creates a difference in how they must be handled, with a JWT-SVID being significantly more susceptible to replay by a bad actor who has intercepted it.
+First and foremost, the WIT-SVID includes a public key belonging to the workload. When authenticating with the WIT-SVID it is required for the workload to also perform a proof of possession of the private key. This differs significantly from JWT-SVIDs which are bearer tokens - presentation of the JWT-SVID alone is enough to authenticate using it. This creates a difference in how they must be handled, with a JWT-SVID being significantly more susceptible to replay by a bad actor who has intercepted it.
 
 Because of their sensitive nature, it is highly recommended that JWT-SVIDs have the shortest lifespan possible (e.g. seconds, minutes) whereas the proof of possession mechanism for WIT-SVIDs means it is perfectly acceptable for a WIT-SVID to have a lifespan in the order of hours.
 
