@@ -243,7 +243,7 @@ Recipients MAY choose to prevent replay by only permitting a distinct proof of p
 
 The WIT-SVID and corresponding proof of possession MUST be transmitted over a secure channel (e.g. server authenticated TLS).
 
-## Appendix A. Example WIT-SVID
+## Appendix A. Example WIT-SVID
 
 This appendix provides an example WIT-SVID.
 
