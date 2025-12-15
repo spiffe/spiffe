@@ -131,7 +131,7 @@ Implementations MAY issue a WIT-SVID with the same `jti` to two different instan
 
 The timestamp at which this WIT-SVID is no longer valid. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
-The `exp` claim MUST be present and validators MUST reject WIT-SVIDs that do not include this claim and MUST reject WIT-SVIDs when the time indicated by `exp` is in the past.
+The `exp` claim MUST be present and validators MUST reject WIT-SVIDs that do not include this claim and MUST reject WIT-SVIDs when the time indicated by `exp` is in the past. Validators MAY allow a small amount of leeway (e.g seconds to at most a couple of minutes) when comparing the expiry time to the current time to account for clock skew.
 
 This claim is the primary control of the length of time for which a WIT-SVID is valid. This specification does not set any hard upper or lower limits on the length of the validity period.
 
