@@ -125,6 +125,8 @@ Primarily, this claim enables distinguishing one or more WIT-SVIDs that contain 
 
 Due to the nature of how this claim uniquely identifies the WIT-SVID, it could be leveraged for revocation of an individual WIT-SVID. There are no mechanisms defined within SPIFFE for the propagation of WIT-SVID revocations and this is considered out of the scope of the specification.
 
+Implementations MAY issue a WIT-SVID with the same `jti` to two different instances of the workload on the same node. As such, the `jti` SHOULD NOT be used for replay protection.
+
 ### 3.3. Expiry - `exp`
 
 The timestamp at which this WIT-SVID is no longer valid. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
