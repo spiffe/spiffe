@@ -145,6 +145,8 @@ The `nbf` claim SHOULD be present and validators MUST reject WIT-SVIDs when the 
 
 Notably, this value may be set to a time shortly in the past relative to the time of issuance, this permits a certain degree of clock skew between validator and issuer.
 
+Validators MAY use the difference between the `nbf` and `exp` to determine the lifespan of the WIT-SVIDs and MAY reject WIT-SVIDs where the lifespan exceeds an administratively configured lifespan policy.
+
 ### 3.6. Issued At - `iat`
 
 The timestamp at which this WIT-SVID was issued. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
