@@ -17,6 +17,8 @@ The Workload Identity Token (WIT) is a token format specified by the IETF WIMSE 
 
 The WIT-SVID is a sub-profiling of this token format for use in SPIFFE contexts. This document does not redefine key elements specified within the upstream [WIMSE Workload Credentials][1] document and as such the reader should be familiar with this document and its contents before implementing WIT-SVID.
 
+As the WIT-SVID is a sub-profiling of the WIMSE WIT, all WIT-SVIDs are WIMSE WITs and implementations designed to consume WIMSE WITs will be compatible with WIT-SVIDs. Conversely, not all WITs are WIT-SVIDs and implementations designed specifically for WIT-SVIDs may not function with WITs or other profiles of WITs.
+
 WIT-SVIDs are [JSON Web Tokens (JWT)][6] encoded using [JSON Web Signature (JWS)][2] compact serialization.
 
 ### 2. JOSE Header
