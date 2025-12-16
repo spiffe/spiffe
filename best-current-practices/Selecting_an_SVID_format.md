@@ -4,7 +4,7 @@
 This document provides information and guidance on the selection of [SPIFFE Verifiable Identity Document](/standards/SPIFFE.md#3-the-spiffe-verifiable-identity-document) (SVID) formats for use across common workload identity scenarios. Distribution of this document is unlimited.
 
 ## Abstract
-The SPIFFE standard specifies multiple compliant SVID formats. Selection of the most appropriate for use is dependent on numerous factors, including but not limited to: client library availability \& maturity, desired security properties, interoperability, certificate vs. token semantics, and the nature of expected workload-to-workload networking.
+The SPIFFE standard specifies multiple compliant SVID formats. Selection of the most appropriate for use is dependent on numerous factors, including but not limited to: desired security properties, workload-to-workload networking infrastructure, interoperability, SDK availability \& maturity, and certificate vs. token semantics.
 
 This document outlines the best current practices to consider when selecting an SVID format for use in a SPIFFE-based identity system.
 
