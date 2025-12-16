@@ -34,6 +34,8 @@ This has been an additive process over the history of SPIFFE. The standard was o
 
 More recently, WIT-SVID has been proposed as an additional token-based SVID format to make use of authentication concepts developed as part of the IETF [Workloads In Multi-System Environments (WIMSE)](https://datatracker.ietf.org/group/wimse/documents/) working group. This represents an enhancement over the existing JWT-SVID semantics by codifying proof-of-possession information as part of the mandatory claims of the token.
 
+It should be noted that SPIFFE only defines the nature of the credentials serialised in each SVID document format, and does not define the nature of their expected usage in practice. This document seeks to provide guidance on this in practice. 
+
 ## 2. Overview of Formats
 This section provides a brief description of the available SVID formats for contextual and comparative clarity. Full specification details for each can be found in their corresponding standardization (linked) documents.
 
