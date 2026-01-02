@@ -137,7 +137,7 @@ This claim is the primary control of the length of time for which a WIT-SVID is 
 
 It is recommended to choose a reasonable value that balances the cost of issuing and distributing WIT-SVIDs to workloads against limiting the period of time in which an exfiltrated WIT-SVID and key-pair remains useful to a bad actor. This is typically a period ranging from minutes to hours.
 
-### 3.5. Not Before - `nbf`
+### 3.4. Not Before - `nbf`
 
 The timestamp at which this WIT-SVID became valid. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
@@ -147,7 +147,7 @@ Notably, this value may be set to a time shortly in the past relative to the tim
 
 Validators MAY use the difference between the `nbf` and `exp` to determine the lifespan of the WIT-SVIDs and MAY reject WIT-SVIDs where the lifespan exceeds an administratively configured lifespan policy.
 
-### 3.6. Issued At - `iat`
+### 3.5. Issued At - `iat`
 
 The timestamp at which this WIT-SVID was issued. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
@@ -155,7 +155,7 @@ The `iat` claim SHOULD be present. This claim MUST NOT be used for limiting the 
 
 This claim exists to assist with auditing and diagnostics.
 
-### 3.7. Issuer - `iss`
+### 3.6. Issuer - `iss`
 
 The issuer of this WIT-SVID. The meaning of this claim is defined by [RFC7519][6].
 
@@ -163,7 +163,7 @@ The `iss` claim MAY be present. When present, it SHOULD NOT be a value compatibl
 
 Within SPIFFE, there already exists mechanisms for the distribution of trust bundles and the trust domain part of the `sub` broadly identifies the issuer. In many cases, this makes the `iss` claim redundant. The specification has intentionally been left relaxed for the `iss` claim to support the usage of alternative trust distribution models and developments to the specification in future.
 
-### 3.8. Additional Claims
+### 3.7. Additional Claims
 
 It is permitted for an implementation to include additional claims not specified in this document or the upstream document.
 
