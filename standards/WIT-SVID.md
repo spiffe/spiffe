@@ -99,6 +99,8 @@ For example: `spiffe://example.org/service`.
 
 The public key of the workload. The meaning of this claim and the structure of its value is defined by [RFC7800][7] and [WIMSE Workload Credentials][1].
 
+The `cnf` claim MUST be present and validators MUST reject WIT-SVIDs without this claim. The structure of this claim MUST be as described by [RFC7800][7] and [WIMSE Workload Credentials][1].
+
 In addition to the requirements set out in RFC7800 and WIMSE Workload Credentials, the `cnf.jwk.alg` claim MUST have one of the following supported values:
 
 `alg` Param Value | Digital Signature Algorithm
