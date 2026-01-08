@@ -24,7 +24,7 @@ The SPIFFE Project has a reference implementation, the SPIRE (the SPIFFE Runtime
 
 * Provides and manages the rotation of keys and certs for mutual authentication and encryption between workloads.
 
-* Simplifies access from identified services to secret stores, databases, services meshes and cloud provider services.
+* Simplifies access from identified services to secret stores, databases, service meshes, and cloud provider services.
 
 * Interoperability and federation to SPIFFE compatible systems across heterogeneous environments and administrative trust boundaries.
 
@@ -46,7 +46,7 @@ SPIFFE is a [graduated](https://www.cncf.io/projects/spiffe/) project of the [Cl
 
 * [spiffe](https://github.com/spiffe/spiffe): This repository includes the SPIFFE ID, SVID and Workload API specifications, example code, and tests, as well as project governance, policies, and processes.    
 * [spire](https://github.com/spiffe/spire): This is a reference implementation of SPIFFE and the SPIFFE Workload API that can be run on and across varying hosting environments.
-* [go-spiffe](https://github.com/spiffe/go-spiffe/tree/main/v2): Golang client libraries.
+* [go-spiffe](https://github.com/spiffe/go-spiffe): Golang client libraries.
 * [java-spiffe](https://github.com/spiffe/java-spiffe): Java client libraries
 
 ### Communications
