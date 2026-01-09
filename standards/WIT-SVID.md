@@ -285,13 +285,42 @@ Payload:
 
 ## Appendix B. Comparing WIMSE WIT with SPIFFE WIT-SVID
 
-This appendix summarises the differences between the IETF WIMSE WIT and the SPIFFE WIT-SVID:
+This appendix summarises the differences between the IETF WIMSE WIT and the SPIFFE WIT-SVID.
 
-- `kid` header parameter: this is not required in a WIT, but is required in a WIT-SVID.
-- `alg` header parameter: in a WIT, this may be any algorithm registered in the IANA JOSE Algorithms registry with the exception of `none`. For a WIT-SVID, the possible set of values is constrained to a subset of the registry values.
-- additional header parameters: it is not forbidden to include additional header parameters in the WIT. In a WIT-SVID, the inclusion of additional header parameters is forbidden.
-- `sub` claim: in a WIT-SVID, this must be a SPIFFE ID.
-- `cnf.jwk.alg` claim: in a WIT, this may be any algorithm registered in the IANA JOSE Algorithms registry with the exception of `none`. For a WIT-SVID, the possible set of values is constrained to a subset of the registry values.
+Key:
+
+- ✓: Mandatory (MUST)
+- ~: Optional (SHOULD, MAY)
+- ✗: Prohibited (SHOULD NOT, MUST NOT)
+- *: Note below
+
+Header Parameter             | WIT-SVID | WIMSE WIT
+-----------------------------|----------|----------
+`kid`                        | ✓        | ~
+`typ`                        | ✓        | ✓
+`alg`                        | ✓*       | ✓
+Additional header parameters | ✗        | ~
+
+Notes:
+
+- `alg`: The WIT-SVID requires the `alg` header parameter to be a value specified within this document. The WIMSE WIT accepts any algorithm registered in the IANA JOSE registry with the exception of `none`.
+
+Claim             | WIT-SVID | WIMSE WIT
+------------------|----------|----------
+`sub`             | ✓*       | ✓
+`cnf`             | ✓*       | ✓
+`jti`             | ~        | ~
+`exp`             | ✓        | ✓
+`iat`             | ~        | ~
+`nbf`             | ~        | ~
+`iss`             | ~*       | ~
+Additional claims | ~        | ~
+
+Notes:
+
+- `sub` claim: The WIT-SVID requires that this must be a SPIFFE ID. The WIMSE WIT requirs that this be a WIMSE Workload Identifier. A SPIFFE ID is a WIMSE Workload Identifier.
+- `cnf.jwk.alg`: The WIT-SVID requires the `cnf.jwk.alg` claim to be a value specified within this document. The WIMSE WIT accepts any algorithm registered in the IANA JOSE registry with the exception of `none`.
+- `iss`: Both the WIT-SVID and WIMSE WIT allow the optional inclusion of the `iss` claim. The WIT-SVID requires that if this is included, that this is not a value compatible with OpenID Connect Discovery.
 
 ## Appendix C. Comparing the JWT-SVID and WIT-SVID
 
