@@ -77,14 +77,6 @@ This section describes the claims that are defined for the WIT-SVID.
 
 The WIT-SVID specification does not introduce any claims beyond those defined by the upstream document for the WIT. However, it does set additional restrictions and provide SPIFFE-specific guidance on some claims.
 
-<--
-Within this section, I've tried to abide by the following "structure" for each claim:
-
-- Definition
-- Requirements
-- Advisory information on purpose/usage.
--->
-
 ### 3.1. Subject - `sub`
 
 The identity of the workload holding the WIT-SVID.
