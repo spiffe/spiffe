@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/struct.proto";
-
 service SpiffeBrokerAPI {
     /////////////////////////////////////////////////////////////////////////
     // X509-SVID Profile

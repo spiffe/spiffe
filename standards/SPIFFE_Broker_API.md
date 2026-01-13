@@ -287,7 +287,7 @@ service SpiffeBrokerAPI {
 // running in the same environment.
 message WorkloadPIDReference {
     // Required. The process id of the workload.
-    string pid = 1;
+    int32 pid = 1;
 }
 
 // The JWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
@@ -334,7 +334,7 @@ message JWTBundlesRequest {
     }
 }
 
-// The JWTBundlesReponse conveys JWT bundles.
+// The JWTBundlesResponse conveys JWT bundles.
 message JWTBundlesResponse {
     // Required. JWK encoded JWT bundles, keyed by the SPIFFE ID of the trust
     // domain.
