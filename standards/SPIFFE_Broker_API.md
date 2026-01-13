@@ -94,8 +94,6 @@ The exact timing of server response messages is implementation-specific, and SHO
 
 Finally, implementers of SPIFFE Broker API servers should be careful about pushing updated response messages *too* rapidly. Some software may reload automatically upon receiving new information, potentially causing a period of unavailability should all instances reload at once. As a result, implementers may introduce some splay/jitter in the transmission of widespread updates.
 
-> Note Arndt: do we want to jitter responses for Brokers too, or should this behaviour not be implemented there instead? Or both?
-
 ### 4.5 Default Values and Redacted Information
 
 Client and servers MUST implement the same default values behavior as described in section 4.4 of the [SPIFFE Workload API](./SPIFFE_Workload_API.md).
@@ -112,9 +110,20 @@ It is important to highlight that bundles MUST only be used in the context of th
 
 ### 4.8 Workload References and SVID entitlements
 
-Implementations MUST validate that workload references point to existing, accessible workloads before processing any identity requests. Invalid or stale references or situations where the workload itself exists but is not entitled to receive an SVID or bundle SHOULD result in the gRPC error code "PreconditionFailed".
+Implementations MUST validate that workload references point to existing, accessible workloads before processing any identity requests. The server MUST return appropriate gRPC status codes to indicate different failure conditions:
 
-To differentiate between these situations the server MUST use `WorkloadReferenceError` with gRPC Rich Error Details when returning "PreconditionFailed". See [Section 7](#7-workload-reference-error) for details.
+| Situation | gRPC Status Code | google.rpc.ErrorInfo.reason |
+|-----------|------------------|------------------------------|
+| The workload reference is malformed or invalid (e.g., negative PID) | InvalidArgument | WORKLOAD_REFERENCE_INVALID |
+| The referenced workload does not exist or cannot be found | NotFound | WORKLOAD_NOT_FOUND |
+| The referenced workload exists but is not entitled to receive an SVID or bundle | PermissionDenied | WORKLOAD_NOT_ENTITLED |
+
+Servers SHOULD include `google.rpc.ErrorInfo` details with the error response containing:
+- `reason`: One of the error reasons specified in the table above
+- `domain`: "spiffe.io"
+- `metadata`: Optional contextual information such as the PID value or other debugging details
+
+Clients MAY inspect ErrorInfo details for structured error information but MUST handle cases where only the status code is available.
 
 ### 4.9 Workload Lifecycle
 
@@ -234,7 +243,7 @@ The `X509SVIDResponse` response consists of a mandatory `svids` field, which MUS
 
 All fields in the `X509SVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Broker API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `X509SVIDResponse` message. In the event that a client receives more than one `X509SVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
 
-If the referenced workload does not exist or is not entitled to receive any X509-SVIDs, then the server SHOULD respond with the "FailedPrecondition" gRPC status code. See [Section 7](#7-workload-reference-error) for details. Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
+If the referenced workload does not exist or is not entitled to receive any X509-SVIDs, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
 
 As mentioned in [Stream Responses](#43-stream-responses), each `X509SVIDResponse` message returned on the `FetchX509SVID` stream contains the complete set of authorized SVIDs and bundles of the workload at that point in time. As such, if the server redacts SVIDs from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted SVIDS. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received SVIDs and bundles.
 
@@ -246,7 +255,7 @@ The `X509BundlesRequest` request message contains a reference to the workload.
 
 The `X509BundlesResponse` response message has a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides.
 
-If the referenced workload does not exist or is not entitled to receive any X.509 bundles, then the server SHOULD respond with the "FailedPrecondition" gRPC status code. See [Section 7](#7-workload-reference-error) for details. Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
+If the referenced workload does not exist or is not entitled to receive any X.509 bundles, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
 
 As mentioned in [Stream Responses](#43-stream-responses), each `X509BundleResponse` response contains the complete set of authorized X.509 bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the bundles. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received bundles.
 
@@ -355,7 +364,7 @@ The `JWTSVIDResponse` response message consists of a mandatory `svids` field, wh
 
 All fields in the `JWTSVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Broker API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `JWTSVIDResponse` message. In the event that a SPIFFE Broker API client encounters more than one `JWTSVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
 
-If the referenced workload does not exist or is not entitled to receive any JWT-SVIDs, then the server SHOULD respond with the "FailedPrecondition" gRPC status code. See [Section 7](#7-workload-reference-error) for details. Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchJWTSVID` RPC after a backoff.
+If the referenced workload does not exist or is not entitled to receive any JWT-SVIDs, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchJWTSVID` RPC after a backoff.
 
 #### 6.2.2 FetchJWTBundles
 
@@ -367,45 +376,9 @@ The `JWTBundlesResponse` response message consists of a mandatory `bundles` fiel
 
 The returned bundles are encoded as a standard JWK Set as defined by [RFC 7517](https://tools.ietf.org/html/rfc7517) containing the JWT-SVID signing keys for the trust domain. These keys may only represent a subset of the keys present in the SPIFFE trust bundle for the trust domain. The server MUST NOT include keys with other uses in the returned JWT bundles.
 
-If the referenced workload does not exist or is not entitled to receive any JWT bundles, then the server SHOULD respond with the "FailedPrecondition" gRPC status code. See [Section 7](#7-workload-reference-error) for details. Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchJWTBundles` RPC after a backoff.
+If the referenced workload does not exist or is not entitled to receive any JWT bundles, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchJWTBundles` RPC after a backoff.
 
 As mentioned in [Stream Responses](#43-stream-responses), each `JWTBundlesResponse` response contains the complete set of authorized JWT bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted bundles. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received bundles.
-
-# 7. Workload Reference Error
-
-The `WorkloadReferenceError` is used in situations where the client itself is authenticated and authorized, but the server is not able to respond due to the workload referenced in the request. It is only sent in combination with the gRPC error code "FailedPrecondition" and contains a mandatory `error` field.
-
-```protobuf
-// The WorkloadReferenceError message is used to convey errors related to workload references.
-message WorkloadReferenceError {
-    // Required. The error code.
-    WorkloadReferenceErrorCode code = 1;
-}
-
-// The WorkloadReferenceErrorCode enum defines the possible error codes for workload reference errors.
-enum WorkloadReferenceErrorCode {
-    UNSPECIFIED = 0;
-
-    // The workload reference is invalid, e.g., it does not match the expected format.
-    WORKLOAD_REFERENCE_INVALID = 1;
-
-    // The referenced workload could not be found.
-    WORKLOAD_REFERENCE_NOT_FOUND = 2;
-
-    // The workload is not entitled to the receive the requested SVID or bundle.
-    WORKLOAD_NOT_ENTITLED = 3;
-}
-```
-
-The error field is used to differentiate between the following situations:
-
-| Situation | Workload Reference Error Code |
-|-----------|-------------------------------|
-| The reference submitted by the client is not well-formatted. | WORKLOAD_REFERENCE_INVALID |
-| The referenced workload does not exist. | WORKLOAD_REFERENCE_NOT_FOUND | 
-| The referenced workload exists but is not entitled to receive an SVID or bundle. | WORKLOAD_NOT_ENTITLED |
-
-Clients receiving a "WorkloadReferenceError" error may retry the request after a backoff, but need to be aware that unless the state of the system has changed the same error will be returned again. The client MAY also choose to stop retrying the request and report an error to the user.
 
 ## Appendix A. Sample Implementation State Machines
 
