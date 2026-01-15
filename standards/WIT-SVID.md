@@ -11,6 +11,35 @@ This document specifies an identity document standard for the internet community
 
 ## Table of Contents
 
+- [1. Introduction](#1-introduction)
+- [2. JOSE Header](#2-jose-header)
+  - [2.1. Key ID - `kid`](#21-key-id---kid)
+  - [2.2. Type - `typ`](#22-type---typ)
+  - [2.3. Algorithm - `alg`](#23-algorithm---alg)
+  - [2.4. Additional Header Parameters](#24-additional-header-parameters)
+- [3. Claims](#3-claims)
+  - [3.1. Subject - `sub`](#31-subject---sub)
+  - [3.2. Confirmation - `cnf`](#32-confirmation---cnf)
+  - [3.3. JWT ID - `jti`](#33-jwt-id---jti)
+  - [3.4. Expiry - `exp`](#34-expiry---exp)
+  - [3.5. Not Before - `nbf`](#35-not-before---nbf)
+  - [3.6. Issued At - `iat`](#36-issued-at---iat)
+  - [3.7. Issuer - `iss`](#37-issuer---iss)
+  - [3.8. Additional Claims](#38-additional-claims)
+- [4. Token Issuance and Validation](#4-token-issuance-and-validation)
+- [5. Token Presentation](#5-token-presentation)
+- [6. Representation in the SPIFFE Bundle](#6-representation-in-the-spiffe-bundle)
+  - [6.1 Publishing SPIFFE Bundle Elements](#61-publishing-spiffe-bundle-elements)
+  - [6.2 Consuming SPIFFE Bundle Elements](#62-consuming-spiffe-bundle-elements)
+- [7. Security Considerations](#7-security-considerations)
+  - [7.1 Mandatory Proof of Possession](#71-mandatory-proof-of-possession)
+  - [7.2 Proof of Possession and Mitigation of Tampering and Replay](#72-proof-of-possession-and-mitigation-of-tampering-and-replay)
+  - [7.3 Transport Security](#73-transport-security)
+- [Appendix A. Example WIT-SVID](#appendix-a-example-wit-svid)
+- [Appendix B. Comparing WIMSE WIT with SPIFFE WIT-SVID](#appendix-b-comparing-wimse-wit-with-spiffe-wit-svid)
+- [Appendix C. Comparing the JWT-SVID and WIT-SVID](#appendix-c-comparing-the-jwt-svid-and-wit-svid)
+- [Appendix D. Comparing the X509-SVID and WIT-SVID](#appendix-d-comparing-the-x509-svid-and-wit-svid)
+
 ## 1. Introduction
 
 The Workload Identity Token (WIT) is a token format specified by the IETF WIMSE working group in the [WIMSE Workload Credentials][1] document. The WIT binds a public key to the identity of a workload.
@@ -65,7 +94,7 @@ PS512 | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
 
 Validators MUST reject WIT-SVIDs with an unsupported `alg` parameter value.
 
-### 2.3. Additional Header Parameters
+### 2.4. Additional Header Parameters
 
 Implementations SHOULD NOT provide additional header parameters not specified by this document.
 
@@ -87,7 +116,7 @@ This is the primary claim against which workload identity is asserted.
 
 For example: `spiffe://example.org/service`.
 
-### 3.2 Confirmation - `cnf`
+### 3.2. Confirmation - `cnf`
 
 The public key of the workload. The meaning of this claim and the structure of its value is defined by [RFC7800][7] and [WIMSE Workload Credentials][1].
 
@@ -121,7 +150,7 @@ Due to the nature of how this claim uniquely identifies the WIT-SVID, it could b
 
 Implementations MAY issue a WIT-SVID with the same `jti` to two different instances of the workload on the same node. As such, the `jti` SHOULD NOT be used for replay protection.
 
-### 3.3. Expiry - `exp`
+### 3.4. Expiry - `exp`
 
 The timestamp at which this WIT-SVID is no longer valid. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
@@ -131,7 +160,7 @@ This claim is the primary control of the length of time for which a WIT-SVID is 
 
 It is recommended to choose a reasonable value that balances the cost of issuing and distributing WIT-SVIDs to workloads against limiting the period of time in which an exfiltrated WIT-SVID and key-pair remains useful to a bad actor. This is typically a period ranging from minutes to hours.
 
-### 3.4. Not Before - `nbf`
+### 3.5. Not Before - `nbf`
 
 The timestamp at which this WIT-SVID became valid. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
@@ -141,7 +170,7 @@ Notably, this value may be set to a time shortly in the past relative to the tim
 
 Validators MAY use the difference between the `nbf` and `exp` to determine the lifespan of the WIT-SVIDs and MAY reject WIT-SVIDs where the lifespan exceeds an administratively configured lifespan policy.
 
-### 3.5. Issued At - `iat`
+### 3.6. Issued At - `iat`
 
 The timestamp at which this WIT-SVID was issued. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
@@ -149,7 +178,7 @@ The `iat` claim SHOULD be present. This claim MUST NOT be used for limiting the 
 
 This claim exists to assist with auditing and diagnostics.
 
-### 3.6. Issuer - `iss`
+### 3.7. Issuer - `iss`
 
 The issuer of this WIT-SVID. The meaning of this claim is defined by [RFC7519][6].
 
@@ -157,7 +186,7 @@ The `iss` claim MAY be present. When present, it SHOULD NOT be a value compatibl
 
 Within SPIFFE, there already exists mechanisms for the distribution of trust bundles and the trust domain part of the `sub` broadly identifies the issuer. In many cases, this makes the `iss` claim redundant. The specification has intentionally been left relaxed for the `iss` claim to support the usage of alternative trust distribution models and developments to the specification in future.
 
-### 3.7. Additional Claims
+### 3.8. Additional Claims
 
 It is permitted for an implementation to include additional claims not specified in this document or the upstream document.
 
@@ -179,7 +208,7 @@ The issuer MAY issue the same WIT-SVID, or WIT-SVIDs with the same key within th
 
 The process of validating a WIT-SVID is similar to the well-established process for validating a JWT-SVID or a JWT more generally. Implementors should follow the canonical process set out by [RFC7519][6]. However, they should bear in mind the following specific requirements for WIT-SVIDs:
 
-- The validator MUST NOT accept the WIT-SVID without an appropriate proof of posession of the key-pair contained within the `cnf`.
+- The validator MUST NOT accept the WIT-SVID without an appropriate proof of possession of the key-pair contained within the `cnf`.
 
 ## 5. Token Presentation
 
@@ -187,7 +216,7 @@ This section describes the manner in which a WIT-SVID may be presented from one 
 
 The WIT-SVID MUST always be presented by the workload with proof of possession of the key-pair contained within the `cnf`. In other words, the WIT-SVID MUST NOT be presented as a bearer token and therefore MUST NOT be presented using the HTTP `Authorization` header.
 
-WIMSE defines protocols for presentation of the WIT and accompanying proof of possession. It is recommended that that an implementor use one of these defined protocols. The use of other protocols is permitted if they meet the requirements set out above. At the time of writing, there are two protocols specified by WIMSE for WIT:
+WIMSE defines protocols for presentation of the WIT and accompanying proof of possession. It is recommended that an implementor use one of these defined protocols. The use of other protocols is permitted if they meet the requirements set out above. At the time of writing, there are two protocols specified by WIMSE for WIT:
 
 - [WIMSE Workload Proof Token][4]
 - [WIMSE Workload-To-Workload Authentication with HTTP Signatures][5]
@@ -310,7 +339,7 @@ Additional claims | ~        | ~
 
 Notes:
 
-- `sub` claim: The WIT-SVID requires that this must be a SPIFFE ID. The WIMSE WIT requirs that this be a WIMSE Workload Identifier. A SPIFFE ID is a WIMSE Workload Identifier.
+- `sub` claim: The WIT-SVID requires that this must be a SPIFFE ID. The WIMSE WIT requires that this be a WIMSE Workload Identifier. A SPIFFE ID is a WIMSE Workload Identifier.
 - `cnf.jwk.alg`: The WIT-SVID requires the `cnf.jwk.alg` claim to be a value specified within this document. The WIMSE WIT accepts any algorithm registered in the IANA JOSE registry with the exception of `none`.
 - `iss`: Both the WIT-SVID and WIMSE WIT allow the optional inclusion of the `iss` claim. The WIT-SVID requires that if this is included, that this is not a value compatible with OpenID Connect Discovery.
 
