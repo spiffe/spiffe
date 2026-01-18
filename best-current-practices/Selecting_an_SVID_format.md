@@ -67,8 +67,10 @@ WIT-SVIDs differ from JWT-SVIDs in that their key binding allows them to be used
 | **Integrity protection**  | Yes                                            | No                                             | Yes (via presentation methods)                             |
 | **Encryption**            | Yes                                            | No                                             | No                                                         |
 | **Server authentication** | Yes                                            | No                                             | No                                                         |
-| **TLS termination**       | No                                             | Yes                                            | Yes                                                        |
+| **TLS termination***      | No                                             | Yes                                            | Yes                                                        |
 | **Maturity**              | High                                           | High                                           | Emerging                                                   |
+
+* _TLS termination_ refers to support for decryption of network traffic at an intermediate point or network boundary (e.g. a proxy or load balancer) without compromise of the provided identity. 
 
 ## 4. Selection Criteria
 This section provides guidance on scenarios where a single SVID format can be considered favorable when compared with the alternatives. This should not be considered exhaustive, and there are likely to be cases where multiple or any of the formats could be argued to be suitable.
