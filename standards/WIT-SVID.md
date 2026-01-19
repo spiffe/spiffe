@@ -162,7 +162,7 @@ It is recommended to choose a reasonable value that balances the cost of issuing
 
 The timestamp at which this WIT-SVID became valid. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
-The `nbf` claim SHOULD be present and validators MUST reject WIT-SVIDs when the time indicated by `nbf` is in the future.
+The `nbf` claim MAY be present and validators MUST reject WIT-SVIDs when the time indicated by `nbf` is in the future.
 
 Notably, this value may be set to a time shortly in the past relative to the time of issuance, this permits a certain degree of clock skew between validator and issuer.
 
@@ -172,7 +172,7 @@ Validators MAY use the difference between the `nbf` and `exp` to determine the l
 
 The timestamp at which this WIT-SVID was issued. The meaning of this claim and the structure of its value is defined by [RFC7519][6].
 
-The `iat` claim SHOULD be present. This claim MUST NOT be used for limiting the earliest validity of a WIT-SVID, this is the purpose of the `nbf` claim.
+The `iat` claim MAY be present. This claim MUST NOT be used for limiting the earliest validity of a WIT-SVID, this is the purpose of the `nbf` claim.
 
 This claim exists to assist with auditing and diagnostics.
 
