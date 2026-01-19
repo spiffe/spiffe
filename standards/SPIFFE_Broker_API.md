@@ -85,7 +85,11 @@ independently verify the process exists and collect workload identity attributes
 through secure channels (e.g., /proc filesystem, container runtime APIs) rather than
 accepting client-provided attributes at face value.
 
-### 3.1.2 Reference Types
+### 3.1.2 Local vs remote references
+
+Some reference such as the process ID are only available locally while other references such as a Kubernetes Pod Reference can be resolved across the network. Clients MUST ensure that local references are not sent to remote Broker APIs and servers MUST deny requests coming from outside the node that contain local references.
+
+### 3.1.3 Builtin Reference Types
 
 The specification defines the following standard workload reference types:
 
@@ -132,7 +136,7 @@ WorkloadReference {
 }
 ```
 
-### 3.1.3 Extensibility
+### 3.1.4 Extensibility
 
 The SPIFFE Broker API is designed to support additional reference types without modification to the protocol definition. The `WorkloadReference.reference` field uses `google.protobuf.Any`, allowing any message type to be packed and used as a reference.
 

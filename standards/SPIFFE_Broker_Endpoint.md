@@ -50,11 +50,11 @@ flowchart TD
 
 ## 2. Accessibility
 
-The SPIFFE Broker Endpoint SHOULD be exposed through a local endpoint, and implementers SHOULD NOT expose the same endpoint instance to more than one host. Additionally, its accessibility SHOULD be restricted to designated clients and SHOULD NOT be available to workloads.
+The SPIFFE Broker Endpoint can be exposed through a local or a remote endpoint. Depending on the use-case a local endpoint may be sufficient while some deployments require a remote endpoint. Where possible, accessibility SHOULD be restricted to designed clients only and not be available to workloads.
 
 ## 3. Transport
 
-The SPIFFE Broker Endpoint MUST be served over gRPC, and compliant clients MUST support gRPC. It may be exposed as either a Unix Domain Socket (UDS) or a TCP listen socket. Implementations SHOULD prefer Unix Domain Socket transport, however TCP is supported for implementations in which Unix Domain Sockets are impractical or impossible. TCP transport MUST NOT be used unless the underlying network allows the Workload Endpoint server to strongly authenticate the workload based on source IP address (e.g., over a localhost or link-local network), or other strong network-level assertions (e.g., via an SDN policy).
+The SPIFFE Broker Endpoint MUST be served over gRPC, and compliant clients MUST support gRPC. It may be exposed as either a Unix Domain Socket (UDS) or a TCP listen socket. For local endpoints the Unix Domain Socket transport is preferred.
 
 As a hardening measure against [Server Side Request Forgery](https://www.owasp.org/index.php/Server_Side_Request_Forgery) (SSRF) attacks, every client request to the SPIFFE Broker Endpoint MUST include the static gRPC metadata key `broker.spiffe.io` with a value of `true` (case sensitive). Requests not including this metadata key/value MUST be rejected by the SPIFFE Broker Endpoint (see the [Error Codes](#6-error-codes) section for more information). This prevents an attacker from exploiting an SSRF vulnerability to access the SPIFFE Broker Endpoint unless the vulnerability also gives the attacker control over outgoing gRPC metadata.
 
