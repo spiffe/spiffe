@@ -6,7 +6,7 @@ This document specifies an identity API standard for the internet community, and
 
 ## Abstract
 
-Brokers are trusted infrastructure components that can act on-behalf-of workloads. This API enables them to retrieve SVIDs and bundles of workloads it represents by referencing the workloads by its process ID.
+Brokers are trusted infrastructure components that can act on-behalf-of workloads. This API enables them to retrieve the SVIDs and trust bundles of workloads it represents by referencing the workloads by its process ID.
 
 ## Table of Contents
 
@@ -172,7 +172,7 @@ Finally, implementers of SPIFFE Broker API servers should be careful about pushi
 
 ### 4.5 Default Values and Redacted Information
 
-Client and servers MUST implement the same default values behavior as described in section 4.4 of the [SPIFFE Workload API](./SPIFFE_Workload_API.md).
+Clients and servers MUST implement the same default values behavior as described in section 4.4 of the [SPIFFE Workload API](./SPIFFE_Workload_API.md).
 
 ### 4.6 Mandatory Fields
 
@@ -204,7 +204,7 @@ Clients MAY inspect ErrorInfo details for structured error information but MUST 
 
 ### 4.9 Workload Lifecycle
 
-Both, server and client MUST monitor the state of the workload and ensure that no operations are performed beyond the lifetime of the workload. For instance, the server MUST not send responses to the client once the workload has stopped. Clients on the other hand MUST drop all the data received for the workload, removing it from file systems or other locations it potentially have stored it in addition.
+Both server and client MUST monitor the state of the workload and ensure that no operations are performed beyond the lifetime of the workload. For instance, the server MUST not send responses to the client once the workload has stopped. Clients on the other hand MUST drop all the data received for the workload, removing it from file systems or other locations it potentially have stored it in addition.
 
 ## 5. X.509-SVID Profile
 
@@ -343,7 +343,7 @@ All fields in the `X509SVID` message are mandatory, with the exception of the `h
 
 If the referenced workload does not exist or is not entitled to receive any X509-SVIDs, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `X509SVIDResponse` message returned on the `FetchX509SVID` stream contains the complete set of authorized SVIDs and bundles of the workload at that point in time. As such, if the server redacts SVIDs from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted SVIDS. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received SVIDs and bundles.
+As mentioned in [Stream Responses](#43-stream-responses), each `X509SVIDResponse` message returned on the `FetchX509SVID` stream contains the complete set of authorized SVIDs and bundles of the workload at that point in time. As such, if the server redacts SVIDs from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted SVIDs. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received SVIDs and bundles.
 
 #### 5.2.2 FetchX509Bundles
 
@@ -361,7 +361,7 @@ As mentioned in [Stream Responses](#43-stream-responses), each `X509BundleRespon
 
 Servers and clients of Broker API are expected to follow the behavior as defined in section 5.3 of the [SPIFFE Workload API](./SPIFFE_Workload_API.md#53-default-identity) when multiple identities are returned.
 
-The Broker is expected to use the default identity in situations where it cannot determine the expected usage and is not able to deliver multiple identities to the workload. When it is able to deliver multiple identities to workloads it MUST identify these identities with their corresponding `hint` as delivered by the SPIFFE Broker API and clients MUST be able to use these identifier to identify identities.
+The Broker is expected to use the default identity in situations where it cannot determine the expected usage and is not able to deliver multiple identities to the workload. When it is able to deliver multiple identities to workloads it MUST identify these identities with their corresponding `hint` as delivered by the SPIFFE Broker API and clients MUST be able to use these identifiers to identify identities.
 
 ## 6. JWT-SVID Profile
 
