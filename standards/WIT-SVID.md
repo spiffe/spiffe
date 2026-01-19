@@ -1,9 +1,7 @@
 # The WIT SPIFFE Verifiable Identity Document
 
 > [!WARNING]  
-> This version of the document belongs to an experimental branch of the SPIFFE standards that explores integration with the WIMSE standards. Contents of this document are subject to breaking change and should not be considered stable.
->
-> The current stable version of this document can be found at https://github.com/spiffe/spiffe/blob/main/standards/SPIFFE_Workload_Endpoint.md
+> This document belongs to an experimental branch of the SPIFFE standards that explores integration with the WIMSE standards. Contents of this document are subject to breaking change and should not be considered stable.
 
 ## Status of this Memo
 
