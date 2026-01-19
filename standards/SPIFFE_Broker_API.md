@@ -62,7 +62,83 @@ Workload references MUST satisfy the following requirements:
 * Local Scope: References are valid only within the local execution environment and MUST NOT be used across network boundaries or different nodes
 * Dereferenceability: The server must be able to verify that the referenced workload exists and is accessible for identity operations
 
-Currently, the specification defines process identifiers (Process ID, or PID) as the primary workload reference mechanism. Future versions of this specification may introduce additional reference types to support different operating system primitives, such as Windows process handles or container runtime identifiers. Future extension to the SPIFFE Broker API specification will be made through the extensible oneof reference field structure that is present in all request messages.
+### 3.1.1 Multiple Reference Support
+
+All request messages in the SPIFFE Broker API accept one or more references to identify a workload. When multiple references are provided, they MUST all resolve to the same workload. This provides stronger security guarantees by requiring multiple proofs of workload identity.
+
+Clients MUST provide at least one reference in each request. Clients MAY provide multiple references of different types to strengthen workload identification.
+
+Servers MUST:
+* Validate that at least one reference is provided
+* Validate each reference individually according to its type
+* Reject the message if any reference is not understood
+* Resolve each reference to a workload identity
+* Verify that all provided references resolve to the same workload
+* Return an error if references do not all identify the same workload
+
+References MUST be resolved on the server and the server MUST verify the existence
+of the referenced workload.
+
+Servers MUST NOT trust reference data provided by the client without independent
+verification. For example, when a client provides a PID reference, the server SHOULD
+independently verify the process exists and collect workload identity attributes
+through secure channels (e.g., /proc filesystem, container runtime APIs) rather than
+accepting client-provided attributes at face value.
+
+### 3.1.2 Reference Types
+
+The specification defines the following standard workload reference types:
+
+**Process ID (PID) Reference**: Identifies a workload by its process identifier. The PID MUST be a positive integer. This reference type is universally supported across POSIX-compliant systems.
+
+Example:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/WorkloadPIDReference"
+    value: <packed WorkloadPIDReference { pid: 1234 }>
+  }
+}
+```
+
+**Container Reference**: Identifies a workload by its container runtime identifier (e.g., Docker container ID, containerd container ID). The container_id field is required. The optional runtime field (e.g., "docker", "containerd", "cri-o") MAY be used by implementations to optimize container resolution.
+
+Example:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/WorkloadContainerReference"
+    value: <packed WorkloadContainerReference {
+      container_id: "abc123def456..."
+      runtime: "docker"
+    }>
+  }
+}
+```
+
+**Kubernetes Pod Reference**: Identifies a workload by its Kubernetes pod coordinates. Both namespace and pod_name fields are required. The optional container_name field MAY be provided to identify a specific container within a pod; if unset, implementations SHOULD infer the container based on available information.
+
+Example:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/WorkloadK8sPodReference"
+    value: <packed WorkloadK8sPodReference {
+      namespace: "web"
+      pod_name: "web-server-abc123"
+      container_name: "nginx"
+    }>
+  }
+}
+```
+
+### 3.1.3 Extensibility
+
+The SPIFFE Broker API is designed to support additional reference types without modification to the protocol definition. The `WorkloadReference.reference` field uses `google.protobuf.Any`, allowing any message type to be packed and used as a reference.
+
+Standard reference types defined by this specification (WorkloadPIDReference, WorkloadContainerReference, WorkloadK8sPodReference) can be packed into the Any field. Implementations MAY define and use vendor-specific or implementation-specific reference types by packing their custom message types into the Any field.
+
+Implementations extending the reference types SHOULD document their extensions, including the fully-qualified type name used in the Any field, to avoid conflicts with other implementations. Servers that receive a reference type they do not recognize MUST reject the request with an InvalidArgument status.
 
 ## 4. Client and Server Behavior
 
@@ -110,11 +186,12 @@ It is important to highlight that bundles MUST only be used in the context of th
 
 ### 4.8 Workload References and SVID entitlements
 
-Implementations MUST validate that workload references point to existing, accessible workloads before processing any identity requests. The server MUST return appropriate gRPC status codes to indicate different failure conditions:
+Implementations MUST validate that workload references point to existing, accessible workloads before processing any identity requests. When multiple references are provided, implementations MUST validate each reference individually and verify that all references resolve to the same workload. The server MUST return appropriate gRPC status codes to indicate different failure conditions:
 
 | Situation | gRPC Status Code | google.rpc.ErrorInfo.reason |
 |-----------|------------------|------------------------------|
-| The workload reference is malformed or invalid (e.g., negative PID) | InvalidArgument | WORKLOAD_REFERENCE_INVALID |
+| The request contains zero references, or a reference is malformed or invalid (e.g., negative PID, empty container ID) | InvalidArgument | WORKLOAD_REFERENCE_INVALID |
+| Multiple references are provided but they do not all resolve to the same workload | InvalidArgument | WORKLOAD_REFERENCES_MISMATCH |
 | The referenced workload does not exist or cannot be found | NotFound | WORKLOAD_NOT_FOUND |
 | The referenced workload exists but is not entitled to receive an SVID or bundle | PermissionDenied | WORKLOAD_NOT_ENTITLED |
 
@@ -144,7 +221,7 @@ service SpiffeBrokerAPI {
     // X509-SVID Profile
     /////////////////////////////////////////////////////////////////////////
 
-    // Fetch X.509-SVIDs for all SPIFFE identities the referenced workload is 
+    // Fetch X.509-SVIDs for all SPIFFE identities the referenced workload is
     // entitled to, as well as related information like trust bundles. As this
     // information changes, subsequent messages will be streamed from the server.
     rpc FetchX509SVID(X509SVIDRequest) returns (stream X509SVIDResponse);
@@ -157,19 +234,41 @@ service SpiffeBrokerAPI {
     // ... RPCS for other profiles ...
 }
 
-// The WorkloadPIDReference message conveys a process id reference of a workload 
-// running in the same environment.
+// The WorkloadReference message represents a single reference to a workload.
+message WorkloadReference {
+    // Required. The reference to the workload.
+    google.protobuf.Any reference = 1;
+}
+
+// The WorkloadPIDReference message conveys a process id reference of a workload.
 message WorkloadPIDReference {
     // Required. The process id of the workload.
     int32 pid = 1;
 }
 
+// The WorkloadContainerReference message conveys a container runtime identifier.
+message WorkloadContainerReference {
+    // Required. The container runtime identifier.
+    string container_id = 1;
+    // Optional. The container runtime type.
+    string runtime = 2;
+}
+
+// The WorkloadK8sPodReference message conveys a Kubernetes pod reference.
+message WorkloadK8sPodReference {
+    // Required. The Kubernetes namespace.
+    string namespace = 1;
+    // Required. The Kubernetes pod name.
+    string pod_name = 2;
+    // Optional. The container name within the pod.
+    string container_name = 3;
+}
+
 // The X509SVIDRequest message conveys parameters for requesting an X.509-SVID.
 message X509SVIDRequest {
-    // Required. The reference identifying the workload.
-    oneof reference {
-        WorkloadPIDReference pid = 1;
-    }
+    // Required. One or more references identifying the workload. All references
+    // MUST resolve to the same workload.
+    repeated WorkloadReference references = 1;
 }
 
 // The X509SVIDResponse message carries X.509-SVIDs and related information,
@@ -212,10 +311,9 @@ message X509SVID {
 // The X509BundlesRequest message conveys parameters for requesting X.509
 // bundles.
 message X509BundlesRequest {
-    // Required. The reference identifying the workload.
-    oneof reference {
-        WorkloadPIDReference pid = 1;
-    }
+    // Required. One or more references identifying the workload. All references
+    // MUST resolve to the same workload.
+    repeated WorkloadReference references = 1;
 }
 
 // The X509BundlesResponse message carries a map of trust bundles the workload 
@@ -237,7 +335,7 @@ message X509BundlesResponse {
 
 The `FetchX509SVID` RPC enables Brokers to retrieve X509-SVIDs and X.509 bundles on behalf of a referenced workload via a streaming response. The returned materials are workload-specific and MUST only be used for operations involving that particular workload. Brokers MUST NOT use these SVIDs or bundles for any other workload or purpose.
 
-The `X509SVIDRequest` request message contains a mandatory workload reference. According to the `oneof` section only one reference is permitted.
+The `X509SVIDRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
 
 The `X509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client, on-behalf of the workload). The `federated_bundles` field is optional.
 
@@ -292,19 +390,41 @@ service SpiffeBrokerAPI {
     // ... RPCs for other profiles ...
 }
 
-// The WorkloadPIDReference message conveys a process id reference of a workload 
-// running in the same environment.
+// The WorkloadReference message represents a single reference to a workload.
+message WorkloadReference {
+    // Required. The reference to the workload.
+    google.protobuf.Any reference = 1;
+}
+
+// The WorkloadPIDReference message conveys a process id reference of a workload.
 message WorkloadPIDReference {
     // Required. The process id of the workload.
     int32 pid = 1;
 }
 
+// The WorkloadContainerReference message conveys a container runtime identifier.
+message WorkloadContainerReference {
+    // Required. The container runtime identifier.
+    string container_id = 1;
+    // Optional. The container runtime type.
+    string runtime = 2;
+}
+
+// The WorkloadK8sPodReference message conveys a Kubernetes pod reference.
+message WorkloadK8sPodReference {
+    // Required. The Kubernetes namespace.
+    string namespace = 1;
+    // Required. The Kubernetes pod name.
+    string pod_name = 2;
+    // Optional. The container name within the pod.
+    string container_name = 3;
+}
+
 // The JWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
 message JWTSVIDRequest {
-    // Required. The reference identifying the workload.
-    oneof reference {
-        WorkloadPIDReference pid = 1;
-    }
+    // Required. One or more references identifying the workload. All references
+    // MUST resolve to the same workload.
+    repeated WorkloadReference references = 1;
 
     // Required. The audience(s) the workload intends to authenticate against.
     repeated string audience = 2;
@@ -336,11 +456,10 @@ message JWTSVID {
 }
 
 // The JWTBundlesRequest message conveys parameters for requesting JWT bundles.
-message JWTBundlesRequest { 
-    // Required. The reference identifying the workload.
-    oneof reference {
-        WorkloadPIDReference pid = 1;
-    }
+message JWTBundlesRequest {
+    // Required. One or more references identifying the workload. All references
+    // MUST resolve to the same workload.
+    repeated WorkloadReference references = 1;
 }
 
 // The JWTBundlesResponse conveys JWT bundles.
@@ -355,10 +474,9 @@ message JWTBundlesResponse {
 
 #### 6.2.1 FetchJWTSVID
 
-
 The `FetchJWTSVID` RPC allows a Broker to request one or more short-lived JWT-SVIDs with a specific audience for a workload.
 
-The `JWTSVIDRequest` request contains a reference to the workload for which the Broker wants to request the JWT-SVID. It also contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
+The `JWTSVIDRequest` request contains one or more references to the workload for which the Broker wants to request the JWT-SVID. When multiple references are provided, all MUST resolve to the same workload. It also contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
 
 The `JWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
 

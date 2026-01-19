@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/any.proto";
+
 service SpiffeBrokerAPI {
     /////////////////////////////////////////////////////////////////////////
     // X509-SVID Profile
@@ -30,19 +32,52 @@ service SpiffeBrokerAPI {
     rpc FetchJWTBundles(JWTBundlesRequest) returns (stream JWTBundlesResponse);
 }
 
-// The WorkloadPIDReference message conveys a process id reference of a workload 
+// The WorkloadReference message represents a single reference to a workload.
+// The reference field contains one of the standard reference types or 
+// a vendor-specific extension type.
+message WorkloadReference {
+    // Required. The reference to the workload.
+    google.protobuf.Any reference = 1;
+}
+
+// The WorkloadPIDReference message conveys a process id reference of a workload
 // running in the same environment.
 message WorkloadPIDReference {
-    // Required. The process id of the workload.
+    // Required. The process id of the workload. MUST be a positive integer.
     int32 pid = 1;
+}
+
+// The WorkloadContainerReference message conveys a container runtime identifier
+// reference of a workload.
+message WorkloadContainerReference {
+    // Required. The container runtime identifier (e.g., container ID from
+    // Docker, containerd, or cri-o).
+    string container_id = 1;
+
+    // Optional. The container runtime type (e.g., "docker", "containerd",
+    // "cri-o"). Implementations MAY use this to optimize container resolution.
+    string runtime = 2;
+}
+
+// The WorkloadK8sPodReference message conveys a Kubernetes pod reference of a
+// workload.
+message WorkloadK8sPodReference {
+    // Required. The Kubernetes namespace of the pod.
+    string namespace = 1;
+
+    // Required. The Kubernetes pod name.
+    string pod_name = 2;
+
+    // Optional. The container name within the pod. If unset, implementations
+    // SHOULD infer the container based on available information.
+    string container_name = 3;
 }
 
 // The X509SVIDRequest message conveys parameters for requesting an X.509-SVID.
 message X509SVIDRequest {
-    // Required. The reference identifying the workload.
-    oneof reference {
-        WorkloadPIDReference pid = 1;
-    }
+    // Required. One or more references identifying the workload. All references
+    // MUST resolve to the same workload. At least one reference is required.
+    repeated WorkloadReference references = 1;
 }
 
 // The X509SVIDResponse message carries X.509-SVIDs and related information,
@@ -88,10 +123,9 @@ message X509SVID {
 // The X509BundlesRequest message conveys parameters for requesting X.509
 // bundles.
 message X509BundlesRequest {
-    // Required. The reference identifying the workload.
-    oneof reference {
-        WorkloadPIDReference pid = 1;
-    }
+    // Required. One or more references identifying the workload. All references
+    // MUST resolve to the same workload. At least one reference is required.
+    repeated WorkloadReference references = 1;
 }
 
 // The X509BundlesResponse message carries a map of trust bundles the workload 
@@ -108,10 +142,9 @@ message X509BundlesResponse {
 
 // The JWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
 message JWTSVIDRequest {
-    // Required. The reference identifying the workload.
-    oneof reference {
-        WorkloadPIDReference pid = 1;
-    }
+    // Required. One or more references identifying the workload. All references
+    // MUST resolve to the same workload. At least one reference is required.
+    repeated WorkloadReference references = 1;
 
     // Required. The audience(s) the workload intends to authenticate against.
     repeated string audience = 2;
@@ -143,11 +176,10 @@ message JWTSVID {
 }
 
 // The JWTBundlesRequest message conveys parameters for requesting JWT bundles.
-message JWTBundlesRequest { 
-    // Required. The reference identifying the workload.
-    oneof reference {
-        WorkloadPIDReference pid = 1;
-    }
+message JWTBundlesRequest {
+    // Required. One or more references identifying the workload. All references
+    // MUST resolve to the same workload. At least one reference is required.
+    repeated WorkloadReference references = 1;
 }
 
 // The JWTBundlesReponse conveys JWT bundles.
