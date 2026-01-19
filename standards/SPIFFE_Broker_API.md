@@ -500,4 +500,27 @@ As mentioned in [Stream Responses](#43-stream-responses), each `JWTBundlesRespon
 
 ## Appendix A. Sample Implementation State Machines
 
-> TODO Arndt: SPIFFE Workload API contains an example state machine - should we do something similar for the Broker API?
+### Workload State Machine
+
+1. The workload is starting
+2. The workload is making a request to a peer workload.
+3. The request is re-routed to a egress gateway on the same node. Broker steps 1-6 are followed.
+4. The egress gateway returns the response of the peer workload.
+
+### Broker State Machine
+
+1. The broker is observing a request from a new workload
+2. The broker identifies the workload by the process ID that has made the request
+3. The broker requests an X.509-SVID from the Broker API using the process ID (PID) as a reference. SPIFFE Server State steps 1-6 are followed.
+4. The Broker API responds with an X.509-SVID and corresponding bundle for the workload
+5. The broker makes the request to the peer workload using the X.509-SVID and bundle as authentication artifacts.
+6. The broker returns the response from the peer workload to the workload that has made the request.
+
+### SPIFFE Server State Machine
+
+1. The SPIFFE server is receiving the request from the Broker with the workloads PID reference
+2. The SPIFFE server identifies the broker, authenticating and authorising it as a trusted infrastructure component that is allowed to use the Broker API
+3. The SPIFFE server uses the PID reference to locate the process. 
+4. The SPIFFE server uses the located process to collect attributes of the workload. This may include container and container platform attributes.
+5. The SPIFFE server uses collected attributes to authenticate the workload and issues an X.509-SVID
+6. The SPIFFE server returns the X.509-SVID and corresponding bundle belonging to the workload
