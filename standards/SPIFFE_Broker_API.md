@@ -85,13 +85,13 @@ independently verify the process exists and collect workload identity attributes
 through secure channels (e.g., /proc filesystem, container runtime APIs) rather than
 accepting client-provided attributes at face value.
 
-### 3.1.2 Local vs remote references
+### 3.1.2 Local-only references
 
-Some reference such as the process ID are only available locally while other references such as a Kubernetes Pod Reference can be resolved across the network. Clients MUST ensure that local references are not sent to remote Broker APIs and servers MUST deny requests coming from outside the node that contain local references.
+Some references such as the process ID are only available and discoverable locally and need to be treated in this way. Clients MUST ensure that local references are not sent to remote Broker APIs and servers MUST deny reqeusts coming from outside the node that contain local-only references. This is to mitigate situations where a broker requests credentials for a workload with a process ID from a different node where that process ID is used by a different workload.
 
 ### 3.1.3 Builtin Reference Types
 
-The specification defines the following standard workload reference types:
+The specification currently defines a single build-in workload reference type.
 
 **Process ID (PID) Reference**: Identifies a workload by its process identifier. The PID MUST be a positive integer. This reference type is universally supported across POSIX-compliant systems.
 
@@ -105,42 +105,11 @@ WorkloadReference {
 }
 ```
 
-**Container Reference**: Identifies a workload by its container runtime identifier (e.g., Docker container ID, containerd container ID). The container_id field is required. The optional runtime field (e.g., "docker", "containerd", "cri-o") MAY be used by implementations to optimize container resolution.
-
-Example:
-```protobuf
-WorkloadReference {
-  reference: Any {
-    type_url: "type.googleapis.com/WorkloadContainerReference"
-    value: <packed WorkloadContainerReference {
-      container_id: "abc123def456..."
-      runtime: "docker"
-    }>
-  }
-}
-```
-
-**Kubernetes Pod Reference**: Identifies a workload by its Kubernetes pod coordinates. Both namespace and pod_name fields are required. The optional container_name field MAY be provided to identify a specific container within a pod; if unset, implementations SHOULD infer the container based on available information.
-
-Example:
-```protobuf
-WorkloadReference {
-  reference: Any {
-    type_url: "type.googleapis.com/WorkloadK8sPodReference"
-    value: <packed WorkloadK8sPodReference {
-      namespace: "web"
-      pod_name: "web-server-abc123"
-      container_name: "nginx"
-    }>
-  }
-}
-```
-
 ### 3.1.4 Extensibility
 
 The SPIFFE Broker API is designed to support additional reference types without modification to the protocol definition. The `WorkloadReference.reference` field uses `google.protobuf.Any`, allowing any message type to be packed and used as a reference.
 
-Standard reference types defined by this specification (WorkloadPIDReference, WorkloadContainerReference, WorkloadK8sPodReference) can be packed into the Any field. Implementations MAY define and use vendor-specific or implementation-specific reference types by packing their custom message types into the Any field.
+Standard reference types defined by this specification can be packed into the Any field. Implementations MAY define and use vendor-specific or implementation-specific reference types by packing their custom message types into the Any field.
 
 Implementations extending the reference types SHOULD document their extensions, including the fully-qualified type name used in the Any field, to avoid conflicts with other implementations. Servers that receive a reference type they do not recognize MUST reject the request with an InvalidArgument status.
 
@@ -194,7 +163,7 @@ Implementations MUST validate that workload references point to existing, access
 
 | Situation | gRPC Status Code | google.rpc.ErrorInfo.reason |
 |-----------|------------------|------------------------------|
-| The request contains zero references, or a reference is malformed or invalid (e.g., negative PID, empty container ID) | InvalidArgument | WORKLOAD_REFERENCE_INVALID |
+| The request contains zero references, or a reference is malformed or invalid (e.g., negative PID) | InvalidArgument | WORKLOAD_REFERENCE_INVALID |
 | Multiple references are provided but they do not all resolve to the same workload | InvalidArgument | WORKLOAD_REFERENCES_MISMATCH |
 | The referenced workload does not exist or cannot be found | NotFound | WORKLOAD_NOT_FOUND |
 | The referenced workload exists but is not entitled to receive an SVID or bundle | PermissionDenied | WORKLOAD_NOT_ENTITLED |
@@ -248,24 +217,6 @@ message WorkloadReference {
 message WorkloadPIDReference {
     // Required. The process id of the workload.
     int32 pid = 1;
-}
-
-// The WorkloadContainerReference message conveys a container runtime identifier.
-message WorkloadContainerReference {
-    // Required. The container runtime identifier.
-    string container_id = 1;
-    // Optional. The container runtime type.
-    string runtime = 2;
-}
-
-// The WorkloadK8sPodReference message conveys a Kubernetes pod reference.
-message WorkloadK8sPodReference {
-    // Required. The Kubernetes namespace.
-    string namespace = 1;
-    // Required. The Kubernetes pod name.
-    string pod_name = 2;
-    // Optional. The container name within the pod.
-    string container_name = 3;
 }
 
 // The X509SVIDRequest message conveys parameters for requesting an X.509-SVID.
@@ -406,24 +357,6 @@ message WorkloadPIDReference {
     int32 pid = 1;
 }
 
-// The WorkloadContainerReference message conveys a container runtime identifier.
-message WorkloadContainerReference {
-    // Required. The container runtime identifier.
-    string container_id = 1;
-    // Optional. The container runtime type.
-    string runtime = 2;
-}
-
-// The WorkloadK8sPodReference message conveys a Kubernetes pod reference.
-message WorkloadK8sPodReference {
-    // Required. The Kubernetes namespace.
-    string namespace = 1;
-    // Required. The Kubernetes pod name.
-    string pod_name = 2;
-    // Optional. The container name within the pod.
-    string container_name = 3;
-}
-
 // The JWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
 message JWTSVIDRequest {
     // Required. One or more references identifying the workload. All references
@@ -524,7 +457,7 @@ As mentioned in [Stream Responses](#43-stream-responses), each `JWTBundlesRespon
 
 1. The SPIFFE server is receiving the request from the Broker with the workloads PID reference
 2. The SPIFFE server identifies the broker, authenticating and authorising it as a trusted infrastructure component that is allowed to use the Broker API
-3. The SPIFFE server uses the PID reference to locate the process. 
+3. The SPIFFE server uses the PID reference to locate the process.
 4. The SPIFFE server uses the located process to collect attributes of the workload. This may include container and container platform attributes.
 5. The SPIFFE server uses collected attributes to authenticate the workload and issues an X.509-SVID
 6. The SPIFFE server returns the X.509-SVID and corresponding bundle belonging to the workload

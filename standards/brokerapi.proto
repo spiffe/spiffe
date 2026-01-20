@@ -47,32 +47,6 @@ message WorkloadPIDReference {
     int32 pid = 1;
 }
 
-// The WorkloadContainerReference message conveys a container runtime identifier
-// reference of a workload.
-message WorkloadContainerReference {
-    // Required. The container runtime identifier (e.g., container ID from
-    // Docker, containerd, or cri-o).
-    string container_id = 1;
-
-    // Optional. The container runtime type (e.g., "docker", "containerd",
-    // "cri-o"). Implementations MAY use this to optimize container resolution.
-    string runtime = 2;
-}
-
-// The WorkloadK8sPodReference message conveys a Kubernetes pod reference of a
-// workload.
-message WorkloadK8sPodReference {
-    // Required. The Kubernetes namespace of the pod.
-    string namespace = 1;
-
-    // Required. The Kubernetes pod name.
-    string pod_name = 2;
-
-    // Optional. The container name within the pod. If unset, implementations
-    // SHOULD infer the container based on available information.
-    string container_name = 3;
-}
-
 // The X509SVIDRequest message conveys parameters for requesting an X.509-SVID.
 message X509SVIDRequest {
     // Required. One or more references identifying the workload. All references
