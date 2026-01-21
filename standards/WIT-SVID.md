@@ -233,7 +233,7 @@ The `kid` parameter of each JWK entry must be set. The value of the `kid` parame
 
 ### 6.2 Consuming SPIFFE Bundle Elements
 
-SPIFFE bundles may contain JWK entries for many different SVID types. Implementations MUST extract the WIT-SVID specification keys before using them for validation purposes. Entries representing WIT-SVID signing keys can be identified by the value of their `use` parameter, which must be `wit-svid`. If there are no entries with the `wit-svid` use parameter, then the trust domain that the bundle represents does not support WIT-SVID.
+SPIFFE bundles may contain JWK entries for many different SVID types. Implementations MUST extract the WIT-SVID specification keys before using them for validation purposes. Entries representing WIT-SVID signing keys can be identified by the value of their `use` parameter, which MUST be `wit-svid`. If there are no entries with the `wit-svid` use parameter, then the trust domain that the bundle represents does not support WIT-SVID.
 
 ## 7. Security Considerations
 
