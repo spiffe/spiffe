@@ -200,9 +200,9 @@ The process of signing a WIT-SVID does not differ significantly from the well-es
 - The issuer MUST set the `alg`, `typ` and `kid` header parameters.
 - The issuer MUST set the `sub`, `exp` and `cnf` claims.
 - The issuer MUST set the `cnf.jwk.alg` claim to one of the permitted algorithms as per [3.2 Confirmation - `cnf`](#32-confirmation---cnf)
-- The issuer SHOULD set the `jti`, `nbf` and `iat` claims.
+- The issuer MAY set the `jti`, `nbf` and `iat` claims.
 
-The issuer MAY issue the same WIT-SVID, or WIT-SVIDs with the same key within the `cnf`, to instances of the same workload running on the same host. This may be useful in cases where an implementor wishes to have a local agent of the issuer cache WIT-SVIDs for workloads for performance or reliability reasons. Implementors should consider how this impacts the relationship between a WIT-SVID and a specific instance of a workload for the purposes of auditing or revocation.
+The issuer MAY return the same WIT-SVID, or WIT-SVIDs with the same key within the `cnf`, to instances of the same workload running on the same host. This may be useful in cases where an implementor wishes to have a local agent of the issuer cache WIT-SVIDs for workloads for performance or reliability reasons. Implementors should consider how this impacts the relationship between a WIT-SVID and a specific instance of a workload for the purposes of auditing or revocation.
 
 The process of validating a WIT-SVID is similar to the well-established process for validating a JWT-SVID or a JWT more generally. Implementors should follow the canonical process set out by [RFC7519][6]. However, they should bear in mind the following specific requirements for WIT-SVIDs:
 
