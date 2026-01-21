@@ -243,7 +243,7 @@ The WIT-SVID MUST NOT be used as a bearer token and MUST be presented with a pro
 
 Similarly, the WIT-SVID MUST NOT be accepted without appropriate proof of possession of the key-pair within the `cnf` claim. See [5. Token Presentation](#5-token-presentation) for information on appropriate protocols for the presentation and acceptance of the WIT-SVID for authentication.
 
-Implementors should take care to ensure that the WIT-SVID will not be accepted by validators that may be expecting a JWT-SVID or JWT (e.g. OIDC Workload Identity Federation).
+Implementors should take care to ensure that the WIT-SVID will not be accepted by validators that may be expecting a JWT-SVID or JWT (e.g. OIDC Workload Identity Federation). For this reason, the WIT-SVID MUST NOT be presented within the HTTP `Authorization` header.
 
 ### 7.2 Proof of Possession and Mitigation of Tampering and Replay
 
