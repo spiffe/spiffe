@@ -260,7 +260,7 @@ The scope of a proof of possession must be understood and enforced by the recipi
 
 Additionally, the lifespan of a Proof of Possession MUST be limited and SHOULD be limited to the shortest period necessary to serve its intended purpose. This reduces the window in which the PoP can be replayed by an attacker. In ideal circumstances, the lifespan could feasibly be set to a small number of seconds, however the lower bound of this value may be constrained by factors such as clock skew and network latency.
 
-Recipients MAY choose to prevent replay by only permitting a distinct proof of possession to be used at most once. This may be implemented by recording some unique identifier of the proof of possesion (e.g. in the case of the WIMSE WPT, the `jti` claim). This requires a degree of coordination between the sender and the recipient as the sender must be aware that it can only use a proof of possession once.
+Recipients MAY choose to prevent replay by only permitting a distinct proof of possession to be used at most once. This may be implemented by recording some unique identifier of the proof of possesion (e.g. in the case of the WIMSE WPT, its `jti` claim). This requires a degree of coordination between the sender and the recipient as the sender must be aware that it can only use a proof of possession once. This also introduces complexity for the recipient as they must maintain a cache of previously seen PoPs until they have expired.
 
 ### 7.3 Transport Security
 
