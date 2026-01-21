@@ -258,7 +258,7 @@ A tightly scoped proof of possession limits the extent to which an attacker can 
 
 The scope of a proof of possession must be understood and enforced by the recipient to be of any value. If the sender includes a trait of the request within a proof of possesion but the recipient does not validate this against the received request, then it has served no purpose.
 
-Additionally, the lifespan of a Proof of Possession MUST be limited and SHOULD be limited to a shortest period necessary to serve its intended purpose. This reduces the window in which they can be replayed by an attacker. In ideal circumstances, the lifespan could feasibly be set to a small number of seconds, however the lower bound of this value may be constrained by factors such as clock skew and network latency.
+Additionally, the lifespan of a Proof of Possession MUST be limited and SHOULD be limited to the shortest period necessary to serve its intended purpose. This reduces the window in which the PoP can be replayed by an attacker. In ideal circumstances, the lifespan could feasibly be set to a small number of seconds, however the lower bound of this value may be constrained by factors such as clock skew and network latency.
 
 Recipients MAY choose to prevent replay by only permitting a distinct proof of possession to be used at most once. This may be implemented by recording some unique identifier of the proof of possesion (e.g. in the case of the WIMSE WPT, the `jti` claim). This requires a degree of coordination between the sender and the recipient as the sender must be aware that it can only use a proof of possession once.
 
