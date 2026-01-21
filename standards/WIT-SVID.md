@@ -359,9 +359,9 @@ This appendix explores the differences between the X509-SVID and WIT-SVID from a
 
 Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct, they share a number of common traits:
 
-- Both contain a public key belonging to the workload and when authenticating using the SVID, the workload must demonstrate possession using the corresponding private key. The possession of the X509-SVID or the WIT-SVID alone is not enough to authenticate using it and because of this, they do not need to be treated as "sensitive" values.
+- Both contain a public key belonging to the workload and when authenticating using the SVID, the workload must demonstrate possession using the corresponding private key. The possession of the X509-SVID or the WIT-SVID alone is not enough to authenticate using it and because of this, they do not need to be treated as "sensitive" values.  The proof of possession of the private key is used with both, albeit implemented at different layers (TLS vs application).
 - Both are likely to have lifespans of comparable lengths (e.g minutes to hours).
-- Both are cryptographically signed by an issuer, and, a validator uses this signature to ensure that it is a legitimate credential and has not been tampered with.
+- Both are cryptographically signed by an issuer and a validator uses this signature to ensure that it is a legitimate credential and has not been tampered with.
 
 They do however differ in a number of key ways:
 
@@ -369,7 +369,7 @@ They do however differ in a number of key ways:
 - X509-SVIDs are typically presented and mutually authenticated at the network layer using TLS. They authenticate a channel. A WIT-SVID would typically be sent along with a single request on the application layer. They authenticate a single invocation.
 - X509-SVIDs are serialized in ASN.1, whereas WIT-SVIDs are JWTs and are serialized using JSON. JSON is often considered easier to work with and understand.
 
-It's entirely feasible that in some environments, both may even be used within the same connection (e.g the client presents a WIT-SVID and the server presents an X509-SVID.)
+It's entirely feasible for both may be used within the same connection (e.g the client presents a WIT-SVID and the server presents an X509-SVID.)
 
 [1]: https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-creds/
 [2]: https://www.rfc-editor.org/rfc/rfc7515.html
