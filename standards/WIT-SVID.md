@@ -250,7 +250,7 @@ Implementors should take care to ensure that the WIT-SVID will not be accepted b
 When choosing a proof of possession mechanism, consider how the characteristics of the mechanism will mitigate the impact of an attacker intercepting the WIT-SVID, proof of possession and potentially the request itself. There are broadly two scenarios to consider:
 
 - Tampering: When the attacker intercepts and modifies a legitimate request to be malicious.
-- Replay: When the attacker intercepts the request and uses the WIT-SVID and PoP and uses these to make their own request.
+- Replay: When the attacker intercepts the request and uses the WIT-SVID and PoP to make their own request.
 
 A key characteristic to consider is how tightly scoped the proof of possession is, that is, how specific it is to the request being made by the sender.
 
