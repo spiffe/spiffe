@@ -50,7 +50,7 @@ Extending the SPIFFE Broker API outside of the standard is prohibited and instea
 
 The SPIFFE Broker API is defined by a Protocol Buffer (version 3) service definition. The complete definition is found in [brokerapi.proto](brokerapi.proto).
 
-Profiles are implemented as a group of related RPCs within a single `BrokerAPI` service.
+Profiles are implemented as a group of related RPCs within a single `API` service in the `spiffe.broker` package.
 
 ## 3.1 Workload Reference
 
@@ -188,8 +188,7 @@ The X.509-SVID Profile of the SPIFFE Broker API provides a set of gRPC methods w
 The X.509-SVID Profile RPCs and associated messages are defined below. For the complete Broker API service definition, see [brokerapi.proto](brokerapi.proto).
 
 ```protobuf
-
-service SpiffeBrokerAPI {
+service API {
     /////////////////////////////////////////////////////////////////////////
     // X509-SVID Profile
     /////////////////////////////////////////////////////////////////////////
@@ -197,12 +196,12 @@ service SpiffeBrokerAPI {
     // Fetch X.509-SVIDs for all SPIFFE identities the referenced workload is
     // entitled to, as well as related information like trust bundles. As this
     // information changes, subsequent messages will be streamed from the server.
-    rpc FetchX509SVID(X509SVIDRequest) returns (stream X509SVIDResponse);
+    rpc SubscribeToX509SVID(SubscribeToX509SVIDRequest) returns (stream SubscribeToX509SVIDResponse);
 
     // Fetch trust bundles of the referenced workload. Useful in situations that
     // only need to validate SVIDs without obtaining an SVID for themself. As this
     // information changes, subsequent messages will be streamed from the server.
-    rpc FetchX509Bundles(X509BundlesRequest) returns (stream X509BundlesResponse);
+    rpc SubscribeToX509Bundles(SubscribeToX509BundlesRequest) returns (stream SubscribeToX509BundlesResponse);
 
     // ... RPCS for other profiles ...
 }
@@ -219,25 +218,28 @@ message WorkloadPIDReference {
     int32 pid = 1;
 }
 
-// The X509SVIDRequest message conveys parameters for requesting an X.509-SVID.
-message X509SVIDRequest {
+// The SubscribeToX509SVIDRequest message conveys parameters for requesting an X.509-SVID.
+message SubscribeToX509SVIDRequest {
     // Required. One or more references identifying the workload. All references
     // MUST resolve to the same workload.
     repeated WorkloadReference references = 1;
 }
 
-// The X509SVIDResponse message carries X.509-SVIDs and related information,
+// The SubscribeToX509SVIDResponse message carries X.509-SVIDs and related information,
 // including a list of bundles the workload may use for federating with foreign
 // trust domains.
-message X509SVIDResponse {
+message SubscribeToX509SVIDResponse {
     // Required. A list of X509SVID messages, each of which includes a single
     // X.509-SVID, its private key, and the bundle for the trust domain.
     repeated X509SVID svids = 1;
 
+    // Optional. ASN.1 DER encoded certificate revocation lists.
+    repeated bytes crl = 2;
+
     // Optional. CA certificate bundles belonging to foreign trust domains that
     // the workload should trust, keyed by the SPIFFE ID of the foreign trust
     // domain. Bundles are ASN.1 DER encoded.
-    map<string, bytes> federated_bundles = 2;
+    map<string, bytes> federated_bundles = 3;
 }
 
 // The X509SVID message carries a single SVID and all associated information,
@@ -263,17 +265,17 @@ message X509SVID {
     string hint = 5;
 }
 
-// The X509BundlesRequest message conveys parameters for requesting X.509
+// The SubscribeToX509BundlesRequest message conveys parameters for requesting X.509
 // bundles.
-message X509BundlesRequest {
+message SubscribeToX509BundlesRequest {
     // Required. One or more references identifying the workload. All references
     // MUST resolve to the same workload.
     repeated WorkloadReference references = 1;
 }
 
-// The X509BundlesResponse message carries a map of trust bundles the workload 
+// The SubscribeToX509BundlesResponse message carries a map of trust bundles the workload
 // should trust.
-message X509BundlesResponse {
+message SubscribeToX509BundlesResponse {
     // Optional. ASN.1 DER encoded certificate revocation lists.
     repeated bytes crl = 1;
 
@@ -286,31 +288,31 @@ message X509BundlesResponse {
 
 ### 5.2 Profile RPCs
 
-#### 5.2.1 FetchX509SVID
+#### 5.2.1 SubscribeToX509SVID
 
-The `FetchX509SVID` RPC enables Brokers to retrieve X509-SVIDs and X.509 bundles on behalf of a referenced workload via a streaming response. The returned materials are workload-specific and MUST only be used for operations involving that particular workload. Brokers MUST NOT use these SVIDs or bundles for any other workload or purpose.
+The `SubscribeToX509SVID` RPC enables Brokers to retrieve X509-SVIDs and X.509 bundles on behalf of a referenced workload via a streaming response. The returned materials are workload-specific and MUST only be used for operations involving that particular workload. Brokers MUST NOT use these SVIDs or bundles for any other workload or purpose.
 
-The `X509SVIDRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
+The `SubscribeToX509SVIDRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
 
-The `X509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client, on-behalf of the workload). The `federated_bundles` field is optional.
+The `SubscribeToX509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client, on-behalf of the workload). The `federated_bundles` field is optional.
 
-All fields in the `X509SVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Broker API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `X509SVIDResponse` message. In the event that a client receives more than one `X509SVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
+All fields in the `X509SVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Broker API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `SubscribeToX509SVIDResponse` message. In the event that a client receives more than one `X509SVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
 
-If the referenced workload does not exist or is not entitled to receive any X509-SVIDs, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchX509SVID` RPC after a backoff.
+If the referenced workload does not exist or is not entitled to receive any X509-SVIDs, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `SubscribeToX509SVID` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `X509SVIDResponse` message returned on the `FetchX509SVID` stream contains the complete set of authorized SVIDs and bundles of the workload at that point in time. As such, if the server redacts SVIDs from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted SVIDs. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received SVIDs and bundles.
+As mentioned in [Stream Responses](#43-stream-responses), each `SubscribeToX509SVIDResponse` message returned on the `SubscribeToX509SVID` stream contains the complete set of authorized SVIDs and bundles of the workload at that point in time. As such, if the server redacts SVIDs from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted SVIDs. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received SVIDs and bundles.
 
-#### 5.2.2 FetchX509Bundles
+#### 5.2.2 SubscribeToX509Bundles
 
-The `FetchX509Bundles` RPC streams back X.509 bundles for the workload to the Broker. These bundles MUST only be used to authenticate X509-SVIDs and MUST only be used for operations involving the referenced workload. They MUST not be used for any other workload.
+The `SubscribeToX509Bundles` RPC streams back X.509 bundles for the workload to the Broker. These bundles MUST only be used to authenticate X509-SVIDs and MUST only be used for operations involving the referenced workload. They MUST not be used for any other workload.
 
-The `X509BundlesRequest` request message contains a reference to the workload.
+The `SubscribeToX509BundlesRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
 
-The `X509BundlesResponse` response message has a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides.
+The `SubscribeToX509BundlesResponse` response message has a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides.
 
-If the referenced workload does not exist or is not entitled to receive any X.509 bundles, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
+If the referenced workload does not exist or is not entitled to receive any X.509 bundles, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `SubscribeToX509Bundles` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `X509BundleResponse` response contains the complete set of authorized X.509 bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the bundles. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received bundles.
+As mentioned in [Stream Responses](#43-stream-responses), each `SubscribeToX509BundlesResponse` response contains the complete set of authorized X.509 bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the bundles. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received bundles.
 
 ### 5.3 Default Identity
 
@@ -327,20 +329,20 @@ The JWT-SVID Profile of the SPIFFE Broker API provides a set of gRPC methods whi
 The JWT-SVID Profile RPCs and associated messages are defined below. For the complete Broker API service definition, see [brokerapi.proto](brokerapi.proto).
 
 ```protobuf
-service SpiffeBrokerAPI {
+service API {
     /////////////////////////////////////////////////////////////////////////
     // JWT-SVID Profile
     /////////////////////////////////////////////////////////////////////////
 
-    // Fetch JWT-SVIDs for all SPIFFE identities the referenced workload is 
-    // entitled to, for the requested audience. If an optional SPIFFE ID is 
+    // Fetch JWT-SVIDs for all SPIFFE identities the referenced workload is
+    // entitled to, for the requested audience. If an optional SPIFFE ID is
     // requested, only the JWT-SVID for that SPIFFE ID is returned.
-    rpc FetchJWTSVID(JWTSVIDRequest) returns (JWTSVIDResponse);
+    rpc FetchJWTSVID(FetchJWTSVIDRequest) returns (FetchJWTSVIDResponse);
 
     // Fetches the JWT bundles, formatted as JWKS documents, keyed by the
     // SPIFFE ID of the trust domain. As this information changes, subsequent
     // messages will be streamed from the server.
-    rpc FetchJWTBundles(JWTBundlesRequest) returns (stream JWTBundlesResponse);
+    rpc SubscribeToJWTBundles(SubscribeToJWTBundlesRequest) returns (stream SubscribeToJWTBundlesResponse);
 
     // ... RPCs for other profiles ...
 }
@@ -357,8 +359,8 @@ message WorkloadPIDReference {
     int32 pid = 1;
 }
 
-// The JWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
-message JWTSVIDRequest {
+// The FetchJWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
+message FetchJWTSVIDRequest {
     // Required. One or more references identifying the workload. All references
     // MUST resolve to the same workload.
     repeated WorkloadReference references = 1;
@@ -371,8 +373,8 @@ message JWTSVIDRequest {
     string spiffe_id = 3;
 }
 
-// The JWTSVIDResponse message conveys JWT-SVIDs.
-message JWTSVIDResponse {
+// The FetchJWTSVIDResponse message conveys JWT-SVIDs.
+message FetchJWTSVIDResponse {
     // Required. The list of returned JWT-SVIDs.
     repeated JWTSVID svids = 1;
 }
@@ -392,15 +394,15 @@ message JWTSVID {
     string hint = 3;
 }
 
-// The JWTBundlesRequest message conveys parameters for requesting JWT bundles.
-message JWTBundlesRequest {
+// The SubscribeToJWTBundlesRequest message conveys parameters for requesting JWT bundles.
+message SubscribeToJWTBundlesRequest {
     // Required. One or more references identifying the workload. All references
     // MUST resolve to the same workload.
     repeated WorkloadReference references = 1;
 }
 
-// The JWTBundlesResponse conveys JWT bundles.
-message JWTBundlesResponse {
+// The SubscribeToJWTBundlesResponse message conveys JWT bundles.
+message SubscribeToJWTBundlesResponse {
     // Required. JWK encoded JWT bundles, keyed by the SPIFFE ID of the trust
     // domain.
     map<string, bytes> bundles = 1;
@@ -413,27 +415,27 @@ message JWTBundlesResponse {
 
 The `FetchJWTSVID` RPC allows a Broker to request one or more short-lived JWT-SVIDs with a specific audience for a workload.
 
-The `JWTSVIDRequest` request contains one or more references to the workload for which the Broker wants to request the JWT-SVID. When multiple references are provided, all MUST resolve to the same workload. It also contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
+The `FetchJWTSVIDRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload. It also contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
 
-The `JWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
+The `FetchJWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
 
-All fields in the `JWTSVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Broker API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `JWTSVIDResponse` message. In the event that a SPIFFE Broker API client encounters more than one `JWTSVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
+All fields in the `JWTSVID` message are mandatory, with the exception of the `hint` field. When the `hint` field is set (i.e. non-empty), SPIFFE Broker API servers MUST ensure its value is unique amongst the set of returned SVIDs in any given `FetchJWTSVIDResponse` message. In the event that a SPIFFE Broker API client encounters more than one `JWTSVID` message with the same `hint` value set, then the first message in the list SHOULD be selected.
 
 If the referenced workload does not exist or is not entitled to receive any JWT-SVIDs, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchJWTSVID` RPC after a backoff.
 
-#### 6.2.2 FetchJWTBundles
+#### 6.2.2 SubscribeToJWTBundles
 
-The `FetchJWTBundles` RPC streams back JWT bundles for the workload to the Broker. These bundles MUST only be used to authenticate JWT-SVIDs and MUST only be used for operations involving the referenced workload. They MUST NOT be used for any other workload.
+The `SubscribeToJWTBundles` RPC streams back JWT bundles for the workload to the Broker. These bundles MUST only be used to authenticate JWT-SVIDs and MUST only be used for operations involving the referenced workload. They MUST NOT be used for any other workload.
 
-The `JWTBundlesRequest` request message contains a reference to the workload.
+The `SubscribeToJWTBundlesRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
 
-The `JWTBundlesResponse` response message consists of a mandatory `bundles` field, which MUST contain at least the JWT bundle for the trust domain in which the server resides.
+The `SubscribeToJWTBundlesResponse` response message consists of a mandatory `bundles` field, which MUST contain at least the JWT bundle for the trust domain in which the server resides.
 
 The returned bundles are encoded as a standard JWK Set as defined by [RFC 7517](https://tools.ietf.org/html/rfc7517) containing the JWT-SVID signing keys for the trust domain. These keys may only represent a subset of the keys present in the SPIFFE trust bundle for the trust domain. The server MUST NOT include keys with other uses in the returned JWT bundles.
 
-If the referenced workload does not exist or is not entitled to receive any JWT bundles, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `FetchJWTBundles` RPC after a backoff.
+If the referenced workload does not exist or is not entitled to receive any JWT bundles, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `SubscribeToJWTBundles` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `JWTBundlesResponse` response contains the complete set of authorized JWT bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted bundles. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received bundles.
+As mentioned in [Stream Responses](#43-stream-responses), each `SubscribeToJWTBundlesResponse` response contains the complete set of authorized JWT bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted bundles. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received bundles.
 
 ## Appendix A. Sample Implementation State Machines
 
