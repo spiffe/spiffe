@@ -360,7 +360,7 @@ This appendix explores the differences between the X509-SVID and WIT-SVID from a
 Whilst at first glance the X509-SVID and WIT-SVID may be quite visually distinct, they share a number of common traits:
 
 - Both contain a public key belonging to the workload and when authenticating using the SVID, the workload must demonstrate possession using the corresponding private key. The possession of the X509-SVID or the WIT-SVID alone is not enough to authenticate using it and because of this, they do not need to be treated as "sensitive" values.  The proof of possession of the private key is used with both, albeit implemented at different layers (TLS vs application).
-- Both are likely to have lifespans of comparable lengths (e.g minutes to hours).
+- Both are likely to have lifespans of comparable lengths (e.g. minutes to hours).
 - Both are cryptographically signed by an issuer and a validator uses this signature to ensure that it is a legitimate credential and has not been tampered with.
 
 They do however differ in a number of key ways:
