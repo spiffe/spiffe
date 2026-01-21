@@ -96,7 +96,7 @@ Validators MUST reject WIT-SVIDs with an unsupported `alg` parameter value.
 
 Implementations SHOULD NOT provide additional header parameters not specified by this document.
 
-Validators should ignore unknown header parameters except where those header parameters are specified by the `crit` header parameter as per [RFC7515][2].
+Validators SHOULD ignore unknown header parameters except where those header parameters are specified by the `crit` header parameter as per the [JSON Web Signature][2] document.
 
 ### 3. Claims
 
@@ -188,7 +188,7 @@ Within SPIFFE, there already exists mechanisms for the distribution of trust bun
 
 It is permitted for an implementation to include additional claims not specified in this document or the upstream document.
 
-When encountering additional claims that it does not recognize, a validator should ignore them.
+When encountering additional claims that it does not recognize, a validator SHOULD ignore them.
 
 ## 4. Token Issuance and Validation
 
