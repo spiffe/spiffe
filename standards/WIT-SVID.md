@@ -58,7 +58,7 @@ The WIT-SVID specification does not introduce any JOSE header parameters beyond 
 
 Unique identifier of the key-pair used by the issuer to sign the WIT-SVID. The `kid` header parameter is defined by the [JSON Web Signature (JWS)][2] document.
 
-For a WIT-SVID, this parameter MUST be present. This differs from the upstream WIT itself and the JWT-SVID where this parameter is optional.
+For a WIT-SVID, this parameter MUST be present. This differs from the upstream WIT itself and the JWT-SVID where this parameter is optional. [Appendix B](#appendix-b-comparing-wimse-wit-with-spiffe-wit-svid) explores the reasoning for this difference.
 
 The format of the value of this parameter is unspecified and it MUST be treated by verifiers as a case-sensitive string.
 
