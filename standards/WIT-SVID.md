@@ -229,7 +229,7 @@ WIT-SVID signing keys for a given trust domain are represented in the SPIFFE bun
 
 The `use` parameter of the JWK entry MUST be set to `wit-svid`.
 
-The `kid` parameter of each JWK entry must be set. The value of the `kid` parameter MUST be unique within the scope of the SPIFFE bundle. No other JWK, whether for JWT-SVID or WIT-SVID, may have use the same value.
+The `kid` parameter of each JWK entry must be set. The value of the `kid` parameter MUST be unique within the scope of the SPIFFE bundle. No other JWK, whether for JWT-SVID or WIT-SVID, may have the same value.
 
 ### 6.2 Consuming SPIFFE Bundle Elements
 
