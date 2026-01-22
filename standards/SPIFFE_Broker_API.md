@@ -91,7 +91,7 @@ Some references such as the process ID are only available and discoverable local
 
 ### 3.1.3 Builtin Reference Types
 
-The specification currently defines a single build-in workload reference type.
+The specification currently defines two builtin workload reference types.
 
 **Process ID (PID) Reference**: Identifies a workload by its process identifier. The PID MUST be a positive integer. This reference type is universally supported across POSIX-compliant systems.
 
@@ -101,6 +101,18 @@ WorkloadReference {
   reference: Any {
     type_url: "type.googleapis.com/WorkloadPIDReference"
     value: <packed WorkloadPIDReference { pid: 1234 }>
+  }
+}
+```
+
+**Kubernetes Pod UID Reference**: Identifies a workload by its Kubernetes pod UID. The UID MUST be a valid UUID string as assigned by Kubernetes. This reference type is supported in Kubernetes environments.
+
+Example:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/WorkloadKubernetesPodUIDReference"
+    value: <packed WorkloadKubernetesPodUIDReference { uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890" }>
   }
 }
 ```
@@ -216,6 +228,13 @@ message WorkloadReference {
 message WorkloadPIDReference {
     // Required. The process id of the workload.
     int32 pid = 1;
+}
+
+// The WorkloadKubernetesPodUIDReference message conveys a Kubernetes pod UID reference of a
+// workload running in a Kubernetes cluster.
+message WorkloadKubernetesPodUIDReference {
+    // Required. The UID of the Kubernetes pod.
+    string uid = 1;
 }
 
 // The SubscribeToX509SVIDRequest message conveys parameters for requesting an X.509-SVID.
@@ -357,6 +376,13 @@ message WorkloadReference {
 message WorkloadPIDReference {
     // Required. The process id of the workload.
     int32 pid = 1;
+}
+
+// The WorkloadKubernetesPodUIDReference message conveys a Kubernetes pod UID reference of a
+// workload running in a Kubernetes cluster.
+message WorkloadKubernetesPodUIDReference {
+    // Required. The UID of the Kubernetes pod.
+    string uid = 1;
 }
 
 // The FetchJWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
