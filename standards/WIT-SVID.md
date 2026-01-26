@@ -186,6 +186,8 @@ Within SPIFFE, there already exists mechanisms for the distribution of trust bun
 
 ### 3.8. Additional Claims
 
+The audience (`aud`) claim MUST NOT be included within a WIT-SVID. The inclusion of this claim within the WIT-SVID is not appropriate as scoping authentication to a specific recipient should be implemented within the Proof of Possession and not the WIT itself.
+
 It is permitted for an implementation to include additional claims not specified in this document or the upstream document.
 
 When encountering additional claims that it does not recognize, a validator SHOULD ignore them.
@@ -333,6 +335,7 @@ Claim             | WIT-SVID | WIMSE WIT
 `iat`             | ~        | ~
 `nbf`             | ~        | ~
 `iss`             | ~*       | ~
+`aud`             | ✗        | ~
 Additional claims | ~        | ~
 
 Notes:
