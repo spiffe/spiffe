@@ -37,9 +37,9 @@ An SVID itself is not a document type. Instead, we define:
   1) the properties required of an SVID
   2) the method by which SVID information can be encoded and validated in various existing document types
 
-The supported document types are an X.509 certificate or a JWT token.
+The supported document types are an X.509 certificate, JWT token and WIT token.
 
-The SPIFFE SVID is defined in the [SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md) specification. The X.509 SVID specification is defined in [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md). The JWT token SVID specification is defined in [The JWT SPIFFE Verifiable Identity Document](JWT-SVID.md).
+The SPIFFE SVID is defined in the [SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md) specification. The X.509 SVID specification is defined in [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md). The JWT token SVID specification is defined in [The JWT SPIFFE Verifiable Identity Document](JWT-SVID.md). The WIT token SVID specification is defined in [The WIT SPIFFE Verifiable Identity Document](WIT-SVID.md).
 
 ## 4. The Workload API
 The SPIFFE Workload API is the method through which workloads, or compute processes, obtain their SVID(s). It is typically exposed locally (eg. via a Unix domain socket), and explicitly does not include an authentication handshake or authenticating token from the workload. Implementors can verify the authenticity of the caller to the Workload API via an out-of-band method, such as inspecting the properties of the process calling the Unix domain socket that are provided by the operating system.
@@ -55,6 +55,7 @@ This document covered, at a high level, the various components that make up the 
 * [The SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md)
 * [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md)
 * [The JWT SPIFFE Verifiable Identity Document](JWT-SVID.md)
+* [The WIT SPIFFE Verifiable Identity Document](WIT-SVID.md)
 * [The SPIFFE Workload Endpoint](SPIFFE_Workload_Endpoint.md)
 * [The SPIFFE Workload API](SPIFFE_Workload_API.md)
 * [The SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md)
