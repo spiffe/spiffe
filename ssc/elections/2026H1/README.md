@@ -6,7 +6,7 @@ This subdirectory captures the nominees and results of the 2026 H1 SSC election.
 * JUNE 15th, 2026: Polls close
 * JUNE 22nd, 2026: Results announced
 
-For more information on how to participate, please see the relevant GitHub [tracking issue](LINK_TO_ISSUE).
+For more information on how to participate, please see the relevant GitHub [tracking issue](https://github.com/spiffe/spiffe/issues/384).
 
 ## Nominees
 To be announced.
