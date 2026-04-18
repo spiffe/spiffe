@@ -4,12 +4,13 @@
 
 *  @arndt-s @spikecurtis @strideynet @azdagron
 
-/CODE-OF-CONDUCT.md @spiffe/ssc
-/GOVERNANCE.md      @spiffe/ssc
-/MATURITY.md        @spiffe/ssc
-/NEW_PROJECTS.md    @spiffe/ssc
-/README.md          @spiffe/ssc
-/community/         @spiffe/ssc
-/proposals/         @spiffe/ssc
-/ssc/               @spiffe/ssc
+/CODE-OF-CONDUCT.md      @spiffe/ssc
+/GOVERNANCE.md           @spiffe/ssc
+/MATURITY.md             @spiffe/ssc
+/NEW_PROJECTS.md         @spiffe/ssc
+/README.md               @spiffe/ssc
+/community/              @spiffe/ssc
+/proposals/              @spiffe/ssc
+/ssc/                    @spiffe/ssc
+/best-current-practices/ @spiffe/ssc
 
