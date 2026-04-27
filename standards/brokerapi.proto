@@ -49,13 +49,6 @@ message WorkloadPIDReference {
     int32 pid = 1;
 }
 
-// The WorkloadKubernetesPodUIDReference message conveys a Kubernetes pod UID reference of a
-// workload running in a Kubernetes cluster.
-message WorkloadKubernetesPodUIDReference {
-    // Required. The UID of the Kubernetes pod. MUST be a valid UUID string.
-    string uid = 1;
-}
-
 // The KubernetesObjectReference message conveys a reference to an arbitrary
 // Kubernetes object (built-in or custom) by which a workload is identified for
 // the purpose of SVID issuance. The referenced object MUST exist and be accessible

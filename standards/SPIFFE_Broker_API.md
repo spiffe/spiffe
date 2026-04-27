@@ -61,9 +61,9 @@ isolation and security boundaries.
 
 References fall into two broad categories:
 
-* **Local references** identify a running process or container co-located with
-  the Broker (e.g., process ID, Kubernetes pod UID). They are only meaningful in
-  the local execution environment and have a process-like lifecycle.
+* **Local references** identify a running process co-located with the Broker
+  (e.g., process ID). They are only meaningful in the local execution
+  environment and have a process-like lifecycle.
 * **Object references** identify an addressable object in a control plane that
   represents an identity (e.g., a Kubernetes object). They are valid across the
   scope of that control plane (e.g., the cluster) and have a lifecycle tied to
@@ -128,7 +128,7 @@ any individual reference applies to the request as a whole.
 
 ### 3.1.3 Builtin Reference Types
 
-The specification currently defines three builtin workload reference types.
+The specification currently defines two builtin workload reference types.
 
 **Process ID (PID) Reference**: Identifies a workload by its process identifier. The PID MUST be a positive integer. This reference type is universally supported across POSIX-compliant systems.
 
@@ -138,18 +138,6 @@ WorkloadReference {
   reference: Any {
     type_url: "type.googleapis.com/WorkloadPIDReference"
     value: <packed WorkloadPIDReference { pid: 1234 }>
-  }
-}
-```
-
-**Kubernetes Pod UID Reference**: Identifies a workload by its Kubernetes pod UID. The UID MUST be a valid UUID string as assigned by Kubernetes. This reference type is supported in Kubernetes environments.
-
-Example:
-```protobuf
-WorkloadReference {
-  reference: Any {
-    type_url: "type.googleapis.com/WorkloadKubernetesPodUIDReference"
-    value: <packed WorkloadKubernetesPodUIDReference { uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890" }>
   }
 }
 ```
@@ -167,6 +155,14 @@ namespaced resource. `namespace` MUST NOT be set when `name` is not set
 (a namespace alone does not identify any object; the server resolves the
 namespace from the UID when the object is identified by `uid` alone).
 `namespace` MUST be empty when the resource is cluster-scoped.
+
+This single reference type covers a range of Kubernetes identification patterns
+that earlier drafts of this specification expressed with multiple dedicated
+reference messages. In particular, identifying a Pod by its UID alone — a
+common pattern for Brokers running alongside the Kubernetes runtime that
+already know the pod UID but not its namespaced name — is expressed by setting
+`resource = "pods"` and `uid = <pod uid>` (with `name` and `namespace` left
+empty); see the corresponding example below.
 
 The advantages of using `<plural>.<group>` for the `resource` field are:
 
@@ -232,6 +228,24 @@ WorkloadReference {
 }
 ```
 SPIFFE ID: `spiffe://prod-us-east.k8s.example.com/pods/shop/checkout-7c9f`
+
+Pod by UID only — the common case for Brokers that observe pod UIDs from the
+Kubernetes runtime but do not have the pod's namespaced name handy. The server
+resolves the pod by UID and derives the namespace and name when emitting the
+SPIFFE ID:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      resource: "pods"
+      uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    }>
+  }
+}
+```
+SPIFFE ID: resolved by the server from the UID, e.g.
+`spiffe://prod-us-east.k8s.example.com/pods/shop/checkout-7c9f`
 
 Namespaced non-core resource (Deployment) by namespaced name only:
 ```protobuf
@@ -368,8 +382,8 @@ Clients MAY inspect ErrorInfo details for structured error information but MUST 
 Both server and client MUST monitor the state of the workload and ensure that no operations are performed beyond the lifetime of the workload. For instance, the server MUST not send responses to the client once the workload has stopped. Clients on the other hand MUST drop all the data received for the workload, removing it from file systems or other locations it potentially have stored it in addition.
 
 What constitutes "stopped" depends on the reference type. For local references
-(such as a process ID or Kubernetes pod UID), the workload is considered stopped
-when the underlying process or pod terminates. For object references (such as a
+(such as a process ID), the workload is considered stopped when the underlying
+process terminates. For object references (such as a
 `KubernetesObjectReference`), the workload is considered stopped when the
 referenced object no longer exists in the control plane, or — when the
 reference pinned a UID alongside a name — when the object resolved by name no
@@ -412,13 +426,6 @@ message WorkloadReference {
 message WorkloadPIDReference {
     // Required. The process id of the workload.
     int32 pid = 1;
-}
-
-// The WorkloadKubernetesPodUIDReference message conveys a Kubernetes pod UID reference of a
-// workload running in a Kubernetes cluster.
-message WorkloadKubernetesPodUIDReference {
-    // Required. The UID of the Kubernetes pod.
-    string uid = 1;
 }
 
 // The SubscribeToX509SVIDRequest message conveys parameters for requesting an X.509-SVID.
@@ -560,13 +567,6 @@ message WorkloadReference {
 message WorkloadPIDReference {
     // Required. The process id of the workload.
     int32 pid = 1;
-}
-
-// The WorkloadKubernetesPodUIDReference message conveys a Kubernetes pod UID reference of a
-// workload running in a Kubernetes cluster.
-message WorkloadKubernetesPodUIDReference {
-    // Required. The UID of the Kubernetes pod.
-    string uid = 1;
 }
 
 // The FetchJWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
