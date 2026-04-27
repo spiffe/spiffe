@@ -54,13 +54,35 @@ Profiles are implemented as a group of related RPCs within a single `API` servic
 
 ## 3.1 Workload Reference
 
-The SPIFFE Broker API requires a mechanism to uniquely identify and reference workloads running within the same environment as the Broker. This reference system enables Brokers to request identity materials on behalf of specific workloads while maintaining proper isolation and security boundaries.
+The SPIFFE Broker API requires a mechanism to identify the entity for which the
+server should issue an SVID. This reference system enables Brokers to request
+identity materials on behalf of specific entities while maintaining proper
+isolation and security boundaries.
 
-Workload references MUST satisfy the following requirements:
+References fall into two broad categories:
 
-* Uniqueness: Each reference must uniquely identify a single workload within the local environment at any given time
-* Local Scope: References are valid only within the local execution environment and MUST NOT be used across network boundaries or different nodes
-* Dereferenceability: The server must be able to verify that the referenced workload exists and is accessible for identity operations
+* **Local references** identify a running process or container co-located with
+  the Broker (e.g., process ID, Kubernetes pod UID). They are only meaningful in
+  the local execution environment and have a process-like lifecycle.
+* **Object references** identify an addressable object in a control plane that
+  represents an identity (e.g., a Kubernetes object). They are valid across the
+  scope of that control plane (e.g., the cluster) and have a lifecycle tied to
+  the object's existence in that control plane.
+
+Throughout this specification, "workload" is used as a shorthand for the entity
+that the reference resolves to, regardless of whether that entity is a running
+process or a control-plane object.
+
+References MUST satisfy the following requirements:
+
+* Uniqueness: Each reference MUST uniquely identify a single entity within its
+  applicable scope (the local node for local references; the relevant control
+  plane for object references) at any given time
+* Scope: Local references MUST NOT be used across network boundaries or
+  different nodes; object references MUST NOT be used across control planes
+  (e.g., across Kubernetes clusters)
+* Dereferenceability: The server MUST be able to verify that the referenced
+  entity exists and is accessible for identity operations
 
 ### 3.1.1 Multiple Reference Support
 
@@ -85,13 +107,28 @@ independently verify the process exists and collect workload identity attributes
 through secure channels (e.g., /proc filesystem, container runtime APIs) rather than
 accepting client-provided attributes at face value.
 
-### 3.1.2 Local-only references
+### 3.1.2 Reference scope
 
-Some references such as the process ID are only available and discoverable locally and need to be treated in this way. Clients MUST ensure that local references are not sent to remote Broker APIs and servers MUST deny reqeusts coming from outside the node that contain local-only references. This is to mitigate situations where a broker requests credentials for a workload with a process ID from a different node where that process ID is used by a different workload.
+Some references — such as the process ID — are only meaningful and discoverable
+on the local node. Clients MUST ensure that local references are not sent to
+remote Broker APIs and servers MUST deny requests originating from outside the
+node that contain local references. This mitigates situations where a Broker
+requests credentials with a process ID from a different node, where that
+process ID is used by a different workload.
+
+Object references (such as `KubernetesObjectReference`) are valid across the
+control plane that owns the referenced object — for example, anywhere within
+the same Kubernetes cluster — and MAY be sent across the network within that
+scope. Object references MUST NOT be honored by a server bound to a different
+control plane (e.g., a different cluster); servers MUST reject object
+references that name a control plane they do not serve.
+
+When mixing reference types in a single request, the most restrictive scope of
+any individual reference applies to the request as a whole.
 
 ### 3.1.3 Builtin Reference Types
 
-The specification currently defines two builtin workload reference types.
+The specification currently defines three builtin workload reference types.
 
 **Process ID (PID) Reference**: Identifies a workload by its process identifier. The PID MUST be a positive integer. This reference type is universally supported across POSIX-compliant systems.
 
@@ -116,6 +153,145 @@ WorkloadReference {
   }
 }
 ```
+
+**Kubernetes Object Reference**: Identifies a workload by an arbitrary Kubernetes
+object — built-in or custom — for which the server is expected to issue an SVID.
+The `resource` field MUST be set to `<plural>.<group>` for non-core API groups, or
+`<plural>` for the core API group. This is the same format accepted by `kubectl`
+and used as the name of `CustomResourceDefinition` objects in the Kubernetes API.
+At least one of `name` or `uid` MUST be specified; when both are specified together
+with `namespace` (for namespaced resources), the server MUST verify that the
+object resolved by name has the specified UID at the time of issuing the SVIDs and
+MUST return an error otherwise. `namespace` MUST be set when `name` is set on a
+namespaced resource. `namespace` MUST NOT be set when `name` is not set
+(a namespace alone does not identify any object; the server resolves the
+namespace from the UID when the object is identified by `uid` alone).
+`namespace` MUST be empty when the resource is cluster-scoped.
+
+The advantages of using `<plural>.<group>` for the `resource` field are:
+
+- It is a well-known format that Kubernetes users are familiar with from `kubectl` commands.
+- It is the exact name of `CustomResourceDefinition` objects in the Kubernetes API.
+- It does not contain uppercase letters, fitting naturally into URIs (such as a SPIFFE ID, when a runtime chooses to embed the resource in the path).
+- It can be split into the `<plural>` and `<group>` components and relayed to a
+  `SubjectAccessReview` request without additional lookups (e.g. mapping `Kind` to
+  `<plural>`).
+
+Note that SPIFFE does not specify how runtimes should attest workloads referenced
+by a `KubernetesObjectReference`, but this design facilitates implementations that
+choose to attest via the recommended `SubjectAccessReview` API in Kubernetes.
+
+The mapping from a Kubernetes object to a SPIFFE ID is implementation-defined;
+this specification does not mandate a particular SPIFFE ID format. A RECOMMENDED
+default — used in the examples below — is
+`spiffe://<trust domain>/<resource>/<namespace>/<name>` for namespaced resources
+and `spiffe://<trust domain>/<resource>/<name>` for cluster-scoped resources.
+Runtimes MAY use other formats to satisfy ecosystem conventions or stronger
+identity guarantees:
+
+- **Istio-style**: `spiffe://<trust domain>/ns/<namespace>/sa/<serviceaccount>`.
+  An Istio-aligned implementation that attests workloads referenced by a
+  `KubernetesObjectReference` (resource = `serviceaccounts`) would naturally
+  emit this format.
+- **UID-suffixed**: `spiffe://<trust domain>/<resource>/<namespace>/<name>/<uid>`
+  (or a similar variant). Appending the object's UID disambiguates successive
+  incarnations of the same `<namespace>/<name>` (e.g., a Pod that was deleted
+  and recreated, or a CRD instance recreated with the same name): each
+  incarnation gets a distinct SPIFFE ID, and a relying party policy granting
+  trust to the older incarnation does not automatically transfer to the new
+  one. This is a stronger guarantee than name-only formats but produces
+  longer-lived audit trails of past UIDs in policy.
+
+Regardless of the exact format chosen, operators are strongly encouraged to
+choose trust domains that identify a specific Kubernetes cluster (for example,
+by encoding the cluster name in the trust domain). The path portion of the
+SPIFFE ID — whether `<resource>/<namespace>/<name>`, `ns/<namespace>/sa/<sa>`,
+or anything else — is not globally unique; it is normal for the same path to
+exist in multiple clusters. The trust domain is the only component that
+distinguishes otherwise identical SPIFFE IDs across clusters. Encoding the
+cluster in the trust domain allows relying parties to decide, on a per-cluster
+basis, which SVIDs to accept (for example, by federating with only a subset of
+cluster trust domains).
+
+Examples — references and the corresponding SPIFFE ID under the recommended
+default format, assuming a trust domain of `prod-us-east.k8s.example.com`
+(a trust domain dedicated to a specific Kubernetes cluster):
+
+Namespaced core resource (Pod) by name and UID:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      resource: "pods"
+      namespace: "shop"
+      name: "checkout-7c9f"
+      uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    }>
+  }
+}
+```
+SPIFFE ID: `spiffe://prod-us-east.k8s.example.com/pods/shop/checkout-7c9f`
+
+Namespaced non-core resource (Deployment) by namespaced name only:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      resource: "deployments.apps"
+      namespace: "shop"
+      name: "checkout"
+    }>
+  }
+}
+```
+SPIFFE ID: `spiffe://prod-us-east.k8s.example.com/deployments.apps/shop/checkout`
+
+Namespaced ServiceAccount by namespaced name (a common identity anchor for
+workloads in Kubernetes):
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      resource: "serviceaccounts"
+      namespace: "shop"
+      name: "checkout"
+    }>
+  }
+}
+```
+SPIFFE ID: `spiffe://prod-us-east.k8s.example.com/serviceaccounts/shop/checkout`
+
+Namespaced custom resource (Flux Kustomization) by UID only:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      resource: "kustomizations.kustomize.toolkit.fluxcd.io"
+      uid: "0fa1b2c3-4d5e-6f70-8192-a3b4c5d6e7f8"
+    }>
+  }
+}
+```
+SPIFFE ID: resolved by the server from the UID, e.g.
+`spiffe://prod-us-east.k8s.example.com/kustomizations.kustomize.toolkit.fluxcd.io/flux-system/apps`
+
+Cluster-scoped core resource (Node) by name:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      resource: "nodes"
+      name: "ip-10-0-1-42.ec2.internal"
+    }>
+  }
+}
+```
+SPIFFE ID: `spiffe://prod-us-east.k8s.example.com/nodes/ip-10-0-1-42.ec2.internal`
 
 ### 3.1.4 Extensibility
 
@@ -190,6 +366,14 @@ Clients MAY inspect ErrorInfo details for structured error information but MUST 
 ### 4.9 Workload Lifecycle
 
 Both server and client MUST monitor the state of the workload and ensure that no operations are performed beyond the lifetime of the workload. For instance, the server MUST not send responses to the client once the workload has stopped. Clients on the other hand MUST drop all the data received for the workload, removing it from file systems or other locations it potentially have stored it in addition.
+
+What constitutes "stopped" depends on the reference type. For local references
+(such as a process ID or Kubernetes pod UID), the workload is considered stopped
+when the underlying process or pod terminates. For object references (such as a
+`KubernetesObjectReference`), the workload is considered stopped when the
+referenced object no longer exists in the control plane, or — when the
+reference pinned a UID alongside a name — when the object resolved by name no
+longer matches the pinned UID.
 
 ## 5. X.509-SVID Profile
 
