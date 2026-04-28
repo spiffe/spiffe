@@ -214,12 +214,20 @@ The process of validating a WIT-SVID is similar to the well-established process 
 
 This section describes the manner in which a WIT-SVID may be presented from one workload to another for the purposes of authentication.
 
-The WIT-SVID MUST always be presented by the workload with proof of possession of the key-pair contained within the `cnf`. In other words, the WIT-SVID MUST NOT be presented as a bearer token. Additionally, a WIT-SVID MUST NOT be presented using the HTTP `Authorization` header to avoid confusion with a bearer token.
+Unlike a conventional bearer token, a WIT-SVID is bound to a workload's key-pair via the `cnf` claim, and is only meaningful when presented with a proof of possession of that key-pair. As such, protocols for presentation of the WIT-SVID also include a mechanism for producing and presenting the proof of possession.
 
-WIMSE defines protocols for presentation of the WIT and accompanying proof of possession. It is recommended that an implementor use one of these defined protocols. The use of other protocols is permitted if they meet the requirements set out above. At the time of writing, there are two protocols specified by WIMSE for WIT:
+Any protocol used to present a WIT-SVID MUST satisfy all of the following requirements:
+
+- The presentation MUST be bound to a proof of possession of the key-pair identified by the `cnf` claim.
+- The WIT-SVID MUST NOT be presented as a bearer token.
+- The WIT-SVID MUST NOT be presented using the HTTP `Authorization` header.
+
+WIMSE defines protocols that meet these requirements, and implementors SHOULD use one of these defined protocols. At the time of writing, there are two protocols specified by WIMSE for WIT:
 
 - [WIMSE Workload Proof Token][4]
 - [WIMSE Workload-To-Workload Authentication with HTTP Signatures][5]
+
+Implementors MAY choose to use an alternative protocol for the presentation of the WIT-SVID provided that the requirements set out above are met.
 
 ## 6. Representation in the SPIFFE Bundle
 
