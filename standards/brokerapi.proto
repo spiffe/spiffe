@@ -92,9 +92,8 @@ message KubernetesObjectReference {
 
 // The SubscribeToX509SVIDRequest message conveys parameters for requesting an X.509-SVID.
 message SubscribeToX509SVIDRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload. At least one reference is required.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToX509SVIDResponse message carries X.509-SVIDs and related information,
@@ -140,9 +139,8 @@ message X509SVID {
 // The SubscribeToX509BundlesRequest message conveys parameters for requesting X.509
 // bundles.
 message SubscribeToX509BundlesRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload. At least one reference is required.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToX509BundlesResponse message carries a map of trust bundles the workload
@@ -159,9 +157,8 @@ message SubscribeToX509BundlesResponse {
 
 // The FetchJWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
 message FetchJWTSVIDRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload. At least one reference is required.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 
     // Required. The audience(s) the workload intends to authenticate against.
     repeated string audience = 2;
@@ -194,9 +191,8 @@ message JWTSVID {
 
 // The SubscribeToJWTBundlesRequest message conveys parameters for requesting JWT bundles.
 message SubscribeToJWTBundlesRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload. At least one reference is required.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToJWTBundlesResponse message conveys JWT bundles.

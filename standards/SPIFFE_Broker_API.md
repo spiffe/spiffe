@@ -84,19 +84,9 @@ References MUST satisfy the following requirements:
 * Dereferenceability: The server MUST be able to verify that the referenced
   entity exists and is accessible for identity operations
 
-### 3.1.1 Multiple Reference Support
+### 3.1.1 Reference Resolution
 
-All request messages in the SPIFFE Broker API accept one or more references to identify a workload. When multiple references are provided, they MUST all resolve to the same workload. This provides stronger security guarantees by requiring multiple proofs of workload identity.
-
-Clients MUST provide at least one reference in each request. Clients MAY provide multiple references of different types to strengthen workload identification.
-
-Servers MUST:
-* Validate that at least one reference is provided
-* Validate each reference individually according to its type
-* Reject the message if any reference is not understood
-* Resolve each reference to a workload identity
-* Verify that all provided references resolve to the same workload
-* Return an error if references do not all identify the same workload
+Each request message in the SPIFFE Broker API carries exactly one workload reference. Clients MUST provide a reference; servers MUST reject requests that lack one or whose reference type is not understood by the server.
 
 References MUST be resolved on the server and the server MUST verify the existence
 of the referenced workload.
@@ -122,9 +112,6 @@ the same Kubernetes cluster — and MAY be sent across the network within that
 scope. Object references MUST NOT be honored by a server bound to a different
 control plane (e.g., a different cluster); servers MUST reject object
 references that name a control plane they do not serve.
-
-When mixing reference types in a single request, the most restrictive scope of
-any individual reference applies to the request as a whole.
 
 ### 3.1.3 Builtin Reference Types
 
@@ -361,12 +348,11 @@ It is important to highlight that bundles MUST only be used in the context of th
 
 ### 4.8 Workload References and SVID entitlements
 
-Implementations MUST validate that workload references point to existing, accessible workloads before processing any identity requests. When multiple references are provided, implementations MUST validate each reference individually and verify that all references resolve to the same workload. The server MUST return appropriate gRPC status codes to indicate different failure conditions:
+Implementations MUST validate that the workload reference points to an existing, accessible workload before processing any identity requests. The server MUST return appropriate gRPC status codes to indicate different failure conditions:
 
 | Situation | gRPC Status Code | google.rpc.ErrorInfo.reason |
 |-----------|------------------|------------------------------|
-| The request contains zero references, or a reference is malformed or invalid (e.g., negative PID) | InvalidArgument | WORKLOAD_REFERENCE_INVALID |
-| Multiple references are provided but they do not all resolve to the same workload | InvalidArgument | WORKLOAD_REFERENCES_MISMATCH |
+| The request omits the reference, or the reference is malformed or invalid (e.g., negative PID) | InvalidArgument | WORKLOAD_REFERENCE_INVALID |
 | The referenced workload does not exist or cannot be found | NotFound | WORKLOAD_NOT_FOUND |
 | The referenced workload exists but is not entitled to receive an SVID or bundle | PermissionDenied | WORKLOAD_NOT_ENTITLED |
 
@@ -430,9 +416,8 @@ message WorkloadPIDReference {
 
 // The SubscribeToX509SVIDRequest message conveys parameters for requesting an X.509-SVID.
 message SubscribeToX509SVIDRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToX509SVIDResponse message carries X.509-SVIDs and related information,
@@ -478,9 +463,8 @@ message X509SVID {
 // The SubscribeToX509BundlesRequest message conveys parameters for requesting X.509
 // bundles.
 message SubscribeToX509BundlesRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToX509BundlesResponse message carries a map of trust bundles the workload
@@ -502,7 +486,7 @@ message SubscribeToX509BundlesResponse {
 
 The `SubscribeToX509SVID` RPC enables Brokers to retrieve X509-SVIDs and X.509 bundles on behalf of a referenced workload via a streaming response. The returned materials are workload-specific and MUST only be used for operations involving that particular workload. Brokers MUST NOT use these SVIDs or bundles for any other workload or purpose.
 
-The `SubscribeToX509SVIDRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
+The `SubscribeToX509SVIDRequest` request message contains a mandatory workload reference.
 
 The `SubscribeToX509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client, on-behalf of the workload). The `federated_bundles` field is optional.
 
@@ -516,7 +500,7 @@ As mentioned in [Stream Responses](#43-stream-responses), each `SubscribeToX509S
 
 The `SubscribeToX509Bundles` RPC streams back X.509 bundles for the workload to the Broker. These bundles MUST only be used to authenticate X509-SVIDs and MUST only be used for operations involving the referenced workload. They MUST not be used for any other workload.
 
-The `SubscribeToX509BundlesRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
+The `SubscribeToX509BundlesRequest` request message contains a mandatory workload reference.
 
 The `SubscribeToX509BundlesResponse` response message has a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides.
 
@@ -571,9 +555,8 @@ message WorkloadPIDReference {
 
 // The FetchJWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
 message FetchJWTSVIDRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 
     // Required. The audience(s) the workload intends to authenticate against.
     repeated string audience = 2;
@@ -606,9 +589,8 @@ message JWTSVID {
 
 // The SubscribeToJWTBundlesRequest message conveys parameters for requesting JWT bundles.
 message SubscribeToJWTBundlesRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToJWTBundlesResponse message conveys JWT bundles.
@@ -625,7 +607,7 @@ message SubscribeToJWTBundlesResponse {
 
 The `FetchJWTSVID` RPC allows a Broker to request one or more short-lived JWT-SVIDs with a specific audience for a workload.
 
-The `FetchJWTSVIDRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload. It also contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
+The `FetchJWTSVIDRequest` request message contains a mandatory workload reference. It also contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
 
 The `FetchJWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
 
@@ -637,7 +619,7 @@ If the referenced workload does not exist or is not entitled to receive any JWT-
 
 The `SubscribeToJWTBundles` RPC streams back JWT bundles for the workload to the Broker. These bundles MUST only be used to authenticate JWT-SVIDs and MUST only be used for operations involving the referenced workload. They MUST NOT be used for any other workload.
 
-The `SubscribeToJWTBundlesRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
+The `SubscribeToJWTBundlesRequest` request message contains a mandatory workload reference.
 
 The `SubscribeToJWTBundlesResponse` response message consists of a mandatory `bundles` field, which MUST contain at least the JWT bundle for the trust domain in which the server resides.
 
