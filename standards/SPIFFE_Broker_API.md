@@ -131,9 +131,10 @@ WorkloadReference {
 
 **Kubernetes Object Reference**: Identifies a workload by an arbitrary Kubernetes
 object — built-in or custom — for which the server is expected to issue an SVID.
-The `resource` field MUST be set to `<plural>.<group>` for non-core API groups, or
-`<plural>` for the core API group. This is the same format accepted by `kubectl`
-and used as the name of `CustomResourceDefinition` objects in the Kubernetes API.
+The `resource` field is a structured `KubernetesResource` message carrying the
+resource's `plural` and `group`, both required. For non-core resources the
+`group` MUST be set to the API group name (e.g., `apps`, `example.com`). For
+core resources the `group` MUST be set to the literal string `core`.
 At least one of `name` or `uid` MUST be specified; when both are specified together
 with `namespace` (for namespaced resources), the server MUST verify that the
 object resolved by name has the specified UID at the time of issuing the SVIDs and
@@ -148,17 +149,19 @@ that earlier drafts of this specification expressed with multiple dedicated
 reference messages. In particular, identifying a Pod by its UID alone — a
 common pattern for Brokers running alongside the Kubernetes runtime that
 already know the pod UID but not its namespaced name — is expressed by setting
-`resource = "pods"` and `uid = <pod uid>` (with `name` and `namespace` left
-empty); see the corresponding example below.
+`resource = { plural: "pods" }` and `uid = <pod uid>` (with `name` and
+`namespace` left empty); see the corresponding example below.
 
-The advantages of using `<plural>.<group>` for the `resource` field are:
+The advantages of separating `plural` and `group` into distinct fields are:
 
-- It is a well-known format that Kubernetes users are familiar with from `kubectl` commands.
-- It is the exact name of `CustomResourceDefinition` objects in the Kubernetes API.
-- It does not contain uppercase letters, fitting naturally into URIs (such as a SPIFFE ID, when a runtime chooses to embed the resource in the path).
-- It can be split into the `<plural>` and `<group>` components and relayed to a
-  `SubjectAccessReview` request without additional lookups (e.g. mapping `Kind` to
-  `<plural>`).
+- The `plural` and `group` components map directly onto the `Resource` and
+  `Group` fields of a `SubjectAccessReview` request without any string parsing.
+- It avoids ambiguity when a custom resource's plural name happens to contain
+  a dot (e.g., `myresource.example` in the `com` group vs. `myresource` in the
+  `example.com` group), which the `<plural>.<group>` shorthand cannot
+  disambiguate.
+- It does not contain uppercase letters, fitting naturally into URIs (such as
+  a SPIFFE ID, when a runtime chooses to embed the resource in the path).
 
 Note that SPIFFE does not specify how runtimes should attest workloads referenced
 by a `KubernetesObjectReference`, but this design facilitates implementations that
@@ -168,7 +171,9 @@ The mapping from a Kubernetes object to a SPIFFE ID is implementation-defined;
 this specification does not mandate a particular SPIFFE ID format. A RECOMMENDED
 default — used in the examples below — is
 `spiffe://<trust domain>/<resource>/<namespace>/<name>` for namespaced resources
-and `spiffe://<trust domain>/<resource>/<name>` for cluster-scoped resources.
+and `spiffe://<trust domain>/<resource>/<name>` for cluster-scoped resources,
+where `<resource>` is `<plural>.<group>` for non-core resources or `<plural>`
+alone for core resources (the conventional Kubernetes shorthand).
 Runtimes MAY use other formats to satisfy ecosystem conventions or stronger
 identity guarantees:
 
@@ -206,7 +211,7 @@ WorkloadReference {
   reference: Any {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
-      resource: "pods"
+      resource: { plural: "pods", group: "core" }
       namespace: "shop"
       name: "checkout-7c9f"
       uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
@@ -225,7 +230,7 @@ WorkloadReference {
   reference: Any {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
-      resource: "pods"
+      resource: { plural: "pods", group: "core" }
       uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
     }>
   }
@@ -240,7 +245,7 @@ WorkloadReference {
   reference: Any {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
-      resource: "deployments.apps"
+      resource: { plural: "deployments", group: "apps" }
       namespace: "shop"
       name: "checkout"
     }>
@@ -256,7 +261,7 @@ WorkloadReference {
   reference: Any {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
-      resource: "serviceaccounts"
+      resource: { plural: "serviceaccounts", group: "core" }
       namespace: "shop"
       name: "checkout"
     }>
@@ -271,7 +276,7 @@ WorkloadReference {
   reference: Any {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
-      resource: "kustomizations.kustomize.toolkit.fluxcd.io"
+      resource: { plural: "kustomizations", group: "kustomize.toolkit.fluxcd.io" }
       uid: "0fa1b2c3-4d5e-6f70-8192-a3b4c5d6e7f8"
     }>
   }
@@ -286,7 +291,7 @@ WorkloadReference {
   reference: Any {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
-      resource: "nodes"
+      resource: { plural: "nodes", group: "core" }
       name: "ip-10-0-1-42.ec2.internal"
     }>
   }
