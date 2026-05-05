@@ -101,10 +101,10 @@ accepting client-provided attributes at face value.
 
 Some references — such as the process ID — are only meaningful and discoverable
 on the local node. Clients MUST ensure that local references are not sent to
-remote Broker APIs and servers MUST deny requests originating from outside the
-node that contain local references. This mitigates situations where a Broker
-requests credentials with a process ID from a different node, where that
-process ID is used by a different workload.
+remote Broker API servers, and deployments MUST ensure servers do not receive
+requests originating from outside the node they run on. This mitigates situations
+where a Broker requests credentials with a process ID from a different node, where
+that process ID is used by a different workload.
 
 Object references (such as `KubernetesObjectReference`) are valid across the
 control plane that owns the referenced object — for example, anywhere within
