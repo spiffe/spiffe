@@ -145,7 +145,7 @@ message JWTBundlesResponse {
 message ValidateJWTSVIDRequest {
     // Required. The audience of the validating party. The JWT-SVID must
     // contain an audience claim which contains this value in order to
-    // succesfully validate.
+    // successfully validate.
     string audience = 1;
 
     // Required. The JWT-SVID to validate, encoded using JWS Compact
