@@ -75,28 +75,34 @@ echo "Total: $NUM_ELIGIBLE_VOTERS"
 #
 # Look up user data
 #
-echo
-echo
+VOTERS_WITH_EMAIL=""
+VOTERS_WITHOUT_EMAIL=""
+VOTERS_AND_EMAILS=""
+
 for VOTER in $ELIGIBLE_VOTERS; do
-	if [ "$VOTER" == "dependabot[bot]" ] || [ "$VOTER" == "github-actions[bot]" ] || [ "$VOTER" == "chainguard-alerter" ] || ["$VOTER" == "spire-helm-version-checker[bot]"] ; then
+	if [ "$VOTER" == "dependabot[bot]" ] || [ "$VOTER" == "github-actions[bot]" ] || [ "$VOTER" == "chainguard-alerter" ] || [ "$VOTER" == "spire-helm-version-checker[bot]" ] ; then
 		continue
 	fi
 
 	USER_RESP=`$CURL/users/$VOTER`
-	NAME=`echo "$USER_RESP" | jq '.name' | sed 's/^"//' | sed 's/"$//'`
-	EMAIL=`echo "$USER_RESP" | jq '.email' | sed 's/^"//' | sed 's/"$//'`
+	EMAIL=`echo "$USER_RESP" | jq -r '.email // empty'`
 
-	if [ "$EMAIL" == "null" ]; then
-		EMAIL=" ** unknown email"
-                continue
+	if [ -n "$EMAIL" ]; then
+		VOTERS_WITH_EMAIL+="@$VOTER"$'\n'
+		VOTERS_AND_EMAILS+="@$VOTER,$EMAIL"$'\n'
+	else
+		VOTERS_WITHOUT_EMAIL+="@$VOTER"$'\n'
 	fi
-
-	if [ "$NAME" == "null" ]; then
-		NAME=
-	fi
-
-	echo "- $NAME (@$VOTER) <$EMAIL>"
 done
 
 echo
+echo "Voters with email:"
+echo "$VOTERS_WITH_EMAIL"
+
+echo "Voters without email:"
+echo "$VOTERS_WITHOUT_EMAIL"
+
+echo "Voters and emails:"
+echo "$VOTERS_AND_EMAILS"
+
 echo "COMPLETE"
