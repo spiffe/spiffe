@@ -160,50 +160,16 @@ The advantages of separating `plural` and `group` into distinct fields are:
   a dot (e.g., `myresource.example` in the `com` group vs. `myresource` in the
   `example.com` group), which the `<plural>.<group>` shorthand cannot
   disambiguate.
-- It does not contain uppercase letters, fitting naturally into URIs (such as
-  a SPIFFE ID, when a runtime chooses to embed the resource in the path).
+- It does not contain uppercase letters, fitting naturally into URIs.
 
 Note that SPIFFE does not specify how runtimes should attest workloads referenced
 by a `KubernetesObjectReference`, but this design facilitates implementations that
 choose to attest via the recommended `SubjectAccessReview` API in Kubernetes.
 
 The mapping from a Kubernetes object to a SPIFFE ID is implementation-defined;
-this specification does not mandate a particular SPIFFE ID format. A RECOMMENDED
-default — used in the examples below — is
-`spiffe://<trust domain>/<resource>/<namespace>/<name>` for namespaced resources
-and `spiffe://<trust domain>/<resource>/<name>` for cluster-scoped resources,
-where `<resource>` is `<plural>.<group>` for non-core resources or `<plural>`
-alone for core resources (the conventional Kubernetes shorthand).
-Runtimes MAY use other formats to satisfy ecosystem conventions or stronger
-identity guarantees:
+this specification does not mandate a particular SPIFFE ID format.
 
-- **Istio-style**: `spiffe://<trust domain>/ns/<namespace>/sa/<serviceaccount>`.
-  An Istio-aligned implementation that attests workloads referenced by a
-  `KubernetesObjectReference` (resource = `serviceaccounts`) would naturally
-  emit this format.
-- **UID-suffixed**: `spiffe://<trust domain>/<resource>/<namespace>/<name>/<uid>`
-  (or a similar variant). Appending the object's UID disambiguates successive
-  incarnations of the same `<namespace>/<name>` (e.g., a Pod that was deleted
-  and recreated, or a CRD instance recreated with the same name): each
-  incarnation gets a distinct SPIFFE ID, and a relying party policy granting
-  trust to the older incarnation does not automatically transfer to the new
-  one. This is a stronger guarantee than name-only formats but produces
-  longer-lived audit trails of past UIDs in policy.
-
-Regardless of the exact format chosen, operators are strongly encouraged to
-choose trust domains that identify a specific Kubernetes cluster (for example,
-by encoding the cluster name in the trust domain). The path portion of the
-SPIFFE ID — whether `<resource>/<namespace>/<name>`, `ns/<namespace>/sa/<sa>`,
-or anything else — is not globally unique; it is normal for the same path to
-exist in multiple clusters. The trust domain is the only component that
-distinguishes otherwise identical SPIFFE IDs across clusters. Encoding the
-cluster in the trust domain allows relying parties to decide, on a per-cluster
-basis, which SVIDs to accept (for example, by federating with only a subset of
-cluster trust domains).
-
-Examples — references and the corresponding SPIFFE ID under the recommended
-default format, assuming a trust domain of `prod-us-east.k8s.example.com`
-(a trust domain dedicated to a specific Kubernetes cluster):
+Examples:
 
 Namespaced core resource (Pod) by name and UID:
 ```protobuf
@@ -219,12 +185,9 @@ WorkloadReference {
   }
 }
 ```
-SPIFFE ID: `spiffe://prod-us-east.k8s.example.com/pods/shop/checkout-7c9f`
 
 Pod by UID only — the common case for Brokers that observe pod UIDs from the
-Kubernetes runtime but do not have the pod's namespaced name handy. The server
-resolves the pod by UID and derives the namespace and name when emitting the
-SPIFFE ID:
+Kubernetes runtime but do not have the pod's namespaced name handy:
 ```protobuf
 WorkloadReference {
   reference: Any {
@@ -236,8 +199,6 @@ WorkloadReference {
   }
 }
 ```
-SPIFFE ID: resolved by the server from the UID, e.g.
-`spiffe://prod-us-east.k8s.example.com/pods/shop/checkout-7c9f`
 
 Namespaced non-core resource (Deployment) by namespaced name only:
 ```protobuf
@@ -252,7 +213,6 @@ WorkloadReference {
   }
 }
 ```
-SPIFFE ID: `spiffe://prod-us-east.k8s.example.com/deployments.apps/shop/checkout`
 
 Namespaced ServiceAccount by namespaced name (a common identity anchor for
 workloads in Kubernetes):
@@ -268,7 +228,6 @@ WorkloadReference {
   }
 }
 ```
-SPIFFE ID: `spiffe://prod-us-east.k8s.example.com/serviceaccounts/shop/checkout`
 
 Namespaced custom resource (Flux Kustomization) by UID only:
 ```protobuf
@@ -282,8 +241,6 @@ WorkloadReference {
   }
 }
 ```
-SPIFFE ID: resolved by the server from the UID, e.g.
-`spiffe://prod-us-east.k8s.example.com/kustomizations.kustomize.toolkit.fluxcd.io/flux-system/apps`
 
 Cluster-scoped core resource (Node) by name:
 ```protobuf
@@ -297,7 +254,6 @@ WorkloadReference {
   }
 }
 ```
-SPIFFE ID: `spiffe://prod-us-east.k8s.example.com/nodes/ip-10-0-1-42.ec2.internal`
 
 ### 3.1.4 Extensibility
 
