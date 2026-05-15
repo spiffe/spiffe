@@ -131,26 +131,32 @@ WorkloadReference {
 
 **Kubernetes Object Reference**: Identifies a workload by an arbitrary Kubernetes
 object — built-in or custom — for which the server is expected to issue an SVID.
-The `resource` field is a structured `KubernetesResource` message carrying the
-resource's `plural` and `group`, both required. For non-core resources the
-`group` MUST be set to the API group name (e.g., `apps`, `example.com`). For
-core resources the `group` MUST be set to the literal string `core`.
-At least one of `name` or `uid` MUST be specified; when both are specified together
-with `namespace` (for namespaced resources), the server MUST verify that the
-object resolved by name has the specified UID at the time of issuing the SVIDs and
-MUST return an error otherwise. `namespace` MUST be set when `name` is set on a
-namespaced resource. `namespace` MUST NOT be set when `name` is not set
+The reference is composed of two sibling fields:
+
+- `resource` is a structured `KubernetesResource` message carrying the
+  resource's `plural` and `group`, both required. For non-core resources the
+  `group` MUST be set to the API group name (e.g., `apps`, `example.com`). For
+  core resources the `group` MUST be set to the literal string `core`.
+- `object` is a structured `KubernetesObject` message identifying the specific
+  instance within that resource by `namespace`, `name`, and/or `uid`.
+
+At least one of `object.name` or `object.uid` MUST be specified; when both are
+specified together with `object.namespace` (for namespaced resources), the
+server MUST verify that the object resolved by name has the specified UID at
+the time of issuing the SVIDs and MUST return an error otherwise.
+`object.namespace` MUST be set when `object.name` is set on a namespaced
+resource. `object.namespace` MUST NOT be set when `object.name` is not set
 (a namespace alone does not identify any object; the server resolves the
-namespace from the UID when the object is identified by `uid` alone).
-`namespace` MUST be empty when the resource is cluster-scoped.
+namespace from the UID when the object is identified by `object.uid` alone).
+`object.namespace` MUST be empty when the resource is cluster-scoped.
 
 This single reference type covers a range of Kubernetes identification patterns
 that earlier drafts of this specification expressed with multiple dedicated
 reference messages. In particular, identifying a Pod by its UID alone — a
 common pattern for Brokers running alongside the Kubernetes runtime that
 already know the pod UID but not its namespaced name — is expressed by setting
-`resource = { plural: "pods" }` and `uid = <pod uid>` (with `name` and
-`namespace` left empty); see the corresponding example below.
+`resource = { plural: "pods", group: "core" }` and `object = { uid: <pod uid> }`;
+see the corresponding example below.
 
 The advantages of separating `plural` and `group` into distinct fields are:
 
@@ -160,7 +166,6 @@ The advantages of separating `plural` and `group` into distinct fields are:
   a dot (e.g., `myresource.example` in the `com` group vs. `myresource` in the
   `example.com` group), which the `<plural>.<group>` shorthand cannot
   disambiguate.
-- It does not contain uppercase letters, fitting naturally into URIs.
 
 Note that SPIFFE does not specify how runtimes should attest workloads referenced
 by a `KubernetesObjectReference`, but this design facilitates implementations that
@@ -178,9 +183,11 @@ WorkloadReference {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       resource: { plural: "pods", group: "core" }
-      namespace: "shop"
-      name: "checkout-7c9f"
-      uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      object: {
+        namespace: "shop"
+        name: "checkout-7c9f"
+        uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      }
     }>
   }
 }
@@ -194,7 +201,7 @@ WorkloadReference {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       resource: { plural: "pods", group: "core" }
-      uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      object: { uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890" }
     }>
   }
 }
@@ -207,8 +214,7 @@ WorkloadReference {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       resource: { plural: "deployments", group: "apps" }
-      namespace: "shop"
-      name: "checkout"
+      object: { namespace: "shop", name: "checkout" }
     }>
   }
 }
@@ -222,8 +228,7 @@ WorkloadReference {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       resource: { plural: "serviceaccounts", group: "core" }
-      namespace: "shop"
-      name: "checkout"
+      object: { namespace: "shop", name: "checkout" }
     }>
   }
 }
@@ -236,7 +241,7 @@ WorkloadReference {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       resource: { plural: "kustomizations", group: "kustomize.toolkit.fluxcd.io" }
-      uid: "0fa1b2c3-4d5e-6f70-8192-a3b4c5d6e7f8"
+      object: { uid: "0fa1b2c3-4d5e-6f70-8192-a3b4c5d6e7f8" }
     }>
   }
 }
@@ -249,7 +254,7 @@ WorkloadReference {
     type_url: "type.googleapis.com/KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       resource: { plural: "nodes", group: "core" }
-      name: "ip-10-0-1-42.ec2.internal"
+      object: { name: "ip-10-0-1-42.ec2.internal" }
     }>
   }
 }
