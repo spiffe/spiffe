@@ -49,12 +49,12 @@ message WorkloadPIDReference {
     int32 pid = 1;
 }
 
-// The KubernetesResource message identifies a Kubernetes resource by its
-// plural name and API group. This avoids ambiguity between plurals that
+// The KubernetesObjectType message identifies the type of a Kubernetes object
+// by its plural name and API group. This avoids ambiguity between plurals that
 // happen to contain dots (e.g., the plural `myresource.example` in the `com`
 // group vs. `myresource` in the `example.com` group) that arises when the
 // `<plural>.<group>` shorthand is parsed as a single string.
-message KubernetesResource {
+message KubernetesObjectType {
     // Required. The plural name of the Kubernetes resource, as registered with
     // the Kubernetes API server. For example, `pods`, `deployments`, or the
     // plural form declared by a `CustomResourceDefinition`.
@@ -66,27 +66,16 @@ message KubernetesResource {
     string group = 2;
 }
 
-// The KubernetesObject message identifies a specific Kubernetes object within
-// its resource by `namespace`, `name`, and/or `uid`.
-message KubernetesObject {
+// The KubernetesObjectKey message identifies a specific Kubernetes object
+// within its type by `namespace` and `name`.
+message KubernetesObjectKey {
     // Optional. The namespace of the referenced Kubernetes object. MUST be set
-    // when `name` is set on a namespaced resource. MUST NOT be set when `name`
-    // is not set (a namespace alone does not identify any object; the server
-    // resolves the namespace from the UID when the object is identified by
-    // `uid` alone). MUST be empty when the resource is cluster-scoped.
+    // for namespaced resources. MUST be empty when the resource is
+    // cluster-scoped.
     string namespace = 1;
 
-    // Optional. The name of the referenced Kubernetes object. At least one of `name`
-    // or `uid` MUST be specified.
+    // Required. The name of the referenced Kubernetes object.
     string name = 2;
-
-    // Optional. The UID of the referenced Kubernetes object. MUST be a valid UUID
-    // string as assigned by Kubernetes. At least one of `name` or `uid` MUST be
-    // specified. When both `name` (together with `namespace` for namespaced
-    // resources) and `uid` are specified, the server MUST verify that the object
-    // resolved by name has the specified UID at the time of issuing the SVIDs and
-    // MUST return an error otherwise.
-    string uid = 3;
 }
 
 // The KubernetesObjectReference message conveys a reference to an arbitrary
@@ -97,11 +86,19 @@ message KubernetesObject {
 // The mapping from a Kubernetes object to a SPIFFE ID is implementation-defined;
 // this specification does not mandate a particular SPIFFE ID format.
 message KubernetesObjectReference {
-    // Required. The Kubernetes resource of the referenced object.
-    KubernetesResource resource = 1;
+    // Required. The type of the referenced Kubernetes object.
+    KubernetesObjectType type = 1;
 
-    // Required. The specific Kubernetes object within `resource`.
-    KubernetesObject object = 2;
+    // Optional. The namespaced name of the referenced Kubernetes object.
+    // At least one of `key` or `uid` MUST be specified.
+    KubernetesObjectKey key = 2;
+
+    // Optional. The UID of the referenced Kubernetes object. MUST be a valid
+    // UUID string as assigned by Kubernetes. At least one of `key` or `uid`
+    // MUST be specified. When both `key` and `uid` are specified, the server
+    // MUST verify that the object resolved by `key` has the specified UID at
+    // the time of issuing the SVIDs and MUST return an error otherwise.
+    string uid = 3;
 }
 
 // The SubscribeToX509SVIDRequest message conveys parameters for requesting an X.509-SVID.
