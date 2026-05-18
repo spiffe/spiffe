@@ -54,27 +54,39 @@ Profiles are implemented as a group of related RPCs within a single `API` servic
 
 ## 3.1 Workload Reference
 
-The SPIFFE Broker API requires a mechanism to uniquely identify and reference workloads running within the same environment as the Broker. This reference system enables Brokers to request identity materials on behalf of specific workloads while maintaining proper isolation and security boundaries.
+The SPIFFE Broker API requires a mechanism to identify the entity for which the
+server should issue an SVID. This reference system enables Brokers to request
+identity materials on behalf of specific entities while maintaining proper
+isolation and security boundaries.
 
-Workload references MUST satisfy the following requirements:
+References fall into two broad categories:
 
-* Uniqueness: Each reference must uniquely identify a single workload within the local environment at any given time
-* Local Scope: References are valid only within the local execution environment and MUST NOT be used across network boundaries or different nodes
-* Dereferenceability: The server must be able to verify that the referenced workload exists and is accessible for identity operations
+* **Local references** identify a running process co-located with the Broker
+  (e.g., process ID). They are only meaningful in the local execution
+  environment and have a process-like lifecycle.
+* **Object references** identify an addressable object in a control plane that
+  represents an identity (e.g., a Kubernetes object). They are valid across the
+  scope of that control plane (e.g., the cluster) and have a lifecycle tied to
+  the object's existence in that control plane.
 
-### 3.1.1 Multiple Reference Support
+Throughout this specification, "workload" is used as a shorthand for the entity
+that the reference resolves to, regardless of whether that entity is a running
+process or a control-plane object.
 
-All request messages in the SPIFFE Broker API accept one or more references to identify a workload. When multiple references are provided, they MUST all resolve to the same workload. This provides stronger security guarantees by requiring multiple proofs of workload identity.
+References MUST satisfy the following requirements:
 
-Clients MUST provide at least one reference in each request. Clients MAY provide multiple references of different types to strengthen workload identification.
+* Uniqueness: Each reference MUST uniquely identify a single entity within its
+  applicable scope (the local node for local references; the relevant control
+  plane for object references) at any given time
+* Scope: Local references MUST NOT be used across network boundaries or
+  different nodes; object references MUST NOT be used across control planes
+  (e.g., across Kubernetes clusters)
+* Dereferenceability: The server MUST be able to verify that the referenced
+  entity exists and is accessible for identity operations
 
-Servers MUST:
-* Validate that at least one reference is provided
-* Validate each reference individually according to its type
-* Reject the message if any reference is not understood
-* Resolve each reference to a workload identity
-* Verify that all provided references resolve to the same workload
-* Return an error if references do not all identify the same workload
+### 3.1.1 Reference Resolution
+
+Each request message in the SPIFFE Broker API carries exactly one workload reference. Clients MUST provide a reference; servers MUST reject requests that lack one or whose reference type is not understood by the server.
 
 References MUST be resolved on the server and the server MUST verify the existence
 of the referenced workload.
@@ -85,9 +97,21 @@ independently verify the process exists and collect workload identity attributes
 through secure channels (e.g., /proc filesystem, container runtime APIs) rather than
 accepting client-provided attributes at face value.
 
-### 3.1.2 Local-only references
+### 3.1.2 Reference scope
 
-Some references such as the process ID are only available and discoverable locally and need to be treated in this way. Clients MUST ensure that local references are not sent to remote Broker APIs and servers MUST deny reqeusts coming from outside the node that contain local-only references. This is to mitigate situations where a broker requests credentials for a workload with a process ID from a different node where that process ID is used by a different workload.
+Some references — such as the process ID — are only meaningful and discoverable
+on the local node. Clients MUST ensure that local references are not sent to
+remote Broker API servers, and deployments MUST ensure servers do not receive
+requests originating from outside the node they run on. This mitigates situations
+where a Broker requests credentials with a process ID from a different node, where
+that process ID is used by a different workload.
+
+Object references (such as `KubernetesObjectReference`) are valid across the
+control plane that owns the referenced object — for example, anywhere within
+the same Kubernetes cluster — and MAY be sent across the network within that
+scope. Object references MUST NOT be honored by a server bound to a different
+control plane (e.g., a different cluster); servers MUST reject object
+references that name a control plane they do not serve.
 
 ### 3.1.3 Builtin Reference Types
 
@@ -105,14 +129,130 @@ WorkloadReference {
 }
 ```
 
-**Kubernetes Pod UID Reference**: Identifies a workload by its Kubernetes pod UID. The UID MUST be a valid UUID string as assigned by Kubernetes. This reference type is supported in Kubernetes environments.
+**Kubernetes Object Reference**: Identifies a workload by an arbitrary Kubernetes
+object — built-in or custom — for which the server is expected to issue an SVID.
+The reference is composed of three fields:
 
-Example:
+- `type` is a structured `KubernetesObjectType` message carrying the
+  resource's `plural` and `group`, both required. For non-core resources the
+  `group` MUST be set to the API group name (e.g., `apps`, `example.com`). For
+  core resources the `group` MUST be set to the literal string `core`.
+- `key` is a structured `KubernetesObjectKey` message identifying the
+  specific instance within that type by `namespace` and `name`.
+  `key.namespace` MUST be set for namespaced resources and MUST be empty for
+  cluster-scoped ones; `key.name` is required when `key` is set.
+- `uid` is the UID of the referenced Kubernetes object as assigned by
+  Kubernetes.
+
+At least one of `key` or `uid` MUST be specified. When both are specified, the
+server MUST verify that the object resolved by `key` has the specified UID at
+the time of issuing the SVIDs and MUST return an error otherwise. When only
+`uid` is specified, the server resolves the object — and its namespace, if
+any — from the UID.
+
+This single reference type covers a range of Kubernetes identification patterns
+that earlier drafts of this specification expressed with multiple dedicated
+reference messages. In particular, identifying a Pod by its UID alone — a
+common pattern for Brokers running alongside the Kubernetes runtime that
+already know the pod UID but not its namespaced name — is expressed by setting
+`type = { plural: "pods", group: "core" }` and `uid = <pod uid>` (with `key`
+left unset); see the corresponding example below.
+
+The advantages of separating `plural` and `group` into distinct fields are:
+
+- The `plural` and `group` components map directly onto the `Resource` and
+  `Group` fields of a `SubjectAccessReview` request without any string parsing.
+- It avoids ambiguity when a custom resource's plural name happens to contain
+  a dot (e.g., `myresource.example` in the `com` group vs. `myresource` in the
+  `example.com` group), which the `<plural>.<group>` shorthand cannot
+  disambiguate.
+
+Note that SPIFFE does not specify how runtimes should attest workloads referenced
+by a `KubernetesObjectReference`, but this design facilitates implementations that
+choose to attest via the recommended `SubjectAccessReview` API in Kubernetes.
+
+The mapping from a Kubernetes object to a SPIFFE ID is implementation-defined;
+this specification does not mandate a particular SPIFFE ID format.
+
+Examples:
+
+Namespaced core resource (Pod) by name and UID:
 ```protobuf
 WorkloadReference {
   reference: Any {
-    type_url: "type.googleapis.com/WorkloadKubernetesPodUIDReference"
-    value: <packed WorkloadKubernetesPodUIDReference { uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890" }>
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      type: { plural: "pods", group: "core" }
+      key: { namespace: "shop", name: "checkout-7c9f" }
+      uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    }>
+  }
+}
+```
+
+Pod by UID only — the common case for Brokers that observe pod UIDs from the
+Kubernetes runtime but do not have the pod's namespaced name handy:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      type: { plural: "pods", group: "core" }
+      uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    }>
+  }
+}
+```
+
+Namespaced non-core resource (Deployment) by namespaced name only:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      type: { plural: "deployments", group: "apps" }
+      key: { namespace: "shop", name: "checkout" }
+    }>
+  }
+}
+```
+
+Namespaced ServiceAccount by namespaced name (a common identity anchor for
+workloads in Kubernetes):
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      type: { plural: "serviceaccounts", group: "core" }
+      key: { namespace: "shop", name: "checkout" }
+    }>
+  }
+}
+```
+
+Namespaced custom resource (Flux Kustomization) by UID only:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      type: { plural: "kustomizations", group: "kustomize.toolkit.fluxcd.io" }
+      uid: "0fa1b2c3-4d5e-6f70-8192-a3b4c5d6e7f8"
+    }>
+  }
+}
+```
+
+Cluster-scoped core resource (Node) by name:
+```protobuf
+WorkloadReference {
+  reference: Any {
+    type_url: "type.googleapis.com/KubernetesObjectReference"
+    value: <packed KubernetesObjectReference {
+      type: { plural: "nodes", group: "core" }
+      key: { name: "ip-10-0-1-42.ec2.internal" }
+    }>
   }
 }
 ```
@@ -171,12 +311,11 @@ It is important to highlight that bundles MUST only be used in the context of th
 
 ### 4.8 Workload References and SVID entitlements
 
-Implementations MUST validate that workload references point to existing, accessible workloads before processing any identity requests. When multiple references are provided, implementations MUST validate each reference individually and verify that all references resolve to the same workload. The server MUST return appropriate gRPC status codes to indicate different failure conditions:
+Implementations MUST validate that the workload reference points to an existing, accessible workload before processing any identity requests. The server MUST return appropriate gRPC status codes to indicate different failure conditions:
 
 | Situation | gRPC Status Code | google.rpc.ErrorInfo.reason |
 |-----------|------------------|------------------------------|
-| The request contains zero references, or a reference is malformed or invalid (e.g., negative PID) | InvalidArgument | WORKLOAD_REFERENCE_INVALID |
-| Multiple references are provided but they do not all resolve to the same workload | InvalidArgument | WORKLOAD_REFERENCES_MISMATCH |
+| The request omits the reference, or the reference is malformed or invalid (e.g., negative PID) | InvalidArgument | WORKLOAD_REFERENCE_INVALID |
 | The referenced workload does not exist or cannot be found | NotFound | WORKLOAD_NOT_FOUND |
 | The referenced workload exists but is not entitled to receive an SVID or bundle | PermissionDenied | WORKLOAD_NOT_ENTITLED |
 
@@ -190,6 +329,14 @@ Clients MAY inspect ErrorInfo details for structured error information but MUST 
 ### 4.9 Workload Lifecycle
 
 Both server and client MUST monitor the state of the workload and ensure that no operations are performed beyond the lifetime of the workload. For instance, the server MUST not send responses to the client once the workload has stopped. Clients on the other hand MUST drop all the data received for the workload, removing it from file systems or other locations it potentially have stored it in addition.
+
+What constitutes "stopped" depends on the reference type. For local references
+(such as a process ID), the workload is considered stopped when the underlying
+process terminates. For object references (such as a
+`KubernetesObjectReference`), the workload is considered stopped when the
+referenced object no longer exists in the control plane, or — when the
+reference pinned a UID alongside a name — when the object resolved by name no
+longer matches the pinned UID.
 
 ## 5. X.509-SVID Profile
 
@@ -230,18 +377,10 @@ message WorkloadPIDReference {
     int32 pid = 1;
 }
 
-// The WorkloadKubernetesPodUIDReference message conveys a Kubernetes pod UID reference of a
-// workload running in a Kubernetes cluster.
-message WorkloadKubernetesPodUIDReference {
-    // Required. The UID of the Kubernetes pod.
-    string uid = 1;
-}
-
 // The SubscribeToX509SVIDRequest message conveys parameters for requesting an X.509-SVID.
 message SubscribeToX509SVIDRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToX509SVIDResponse message carries X.509-SVIDs and related information,
@@ -287,9 +426,8 @@ message X509SVID {
 // The SubscribeToX509BundlesRequest message conveys parameters for requesting X.509
 // bundles.
 message SubscribeToX509BundlesRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToX509BundlesResponse message carries a map of trust bundles the workload
@@ -311,7 +449,7 @@ message SubscribeToX509BundlesResponse {
 
 The `SubscribeToX509SVID` RPC enables Brokers to retrieve X509-SVIDs and X.509 bundles on behalf of a referenced workload via a streaming response. The returned materials are workload-specific and MUST only be used for operations involving that particular workload. Brokers MUST NOT use these SVIDs or bundles for any other workload or purpose.
 
-The `SubscribeToX509SVIDRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
+The `SubscribeToX509SVIDRequest` request message contains a mandatory workload reference.
 
 The `SubscribeToX509SVIDResponse` response consists of a mandatory `svids` field, which MUST contain one or more `X509SVID` messages (one for each identity granted to the client, on-behalf of the workload). The `federated_bundles` field is optional.
 
@@ -325,7 +463,7 @@ As mentioned in [Stream Responses](#43-stream-responses), each `SubscribeToX509S
 
 The `SubscribeToX509Bundles` RPC streams back X.509 bundles for the workload to the Broker. These bundles MUST only be used to authenticate X509-SVIDs and MUST only be used for operations involving the referenced workload. They MUST not be used for any other workload.
 
-The `SubscribeToX509BundlesRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
+The `SubscribeToX509BundlesRequest` request message contains a mandatory workload reference.
 
 The `SubscribeToX509BundlesResponse` response message has a mandatory `bundles` field, which MUST contain at least the trust bundle for the trust domain in which the server resides.
 
@@ -378,18 +516,10 @@ message WorkloadPIDReference {
     int32 pid = 1;
 }
 
-// The WorkloadKubernetesPodUIDReference message conveys a Kubernetes pod UID reference of a
-// workload running in a Kubernetes cluster.
-message WorkloadKubernetesPodUIDReference {
-    // Required. The UID of the Kubernetes pod.
-    string uid = 1;
-}
-
 // The FetchJWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
 message FetchJWTSVIDRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 
     // Required. The audience(s) the workload intends to authenticate against.
     repeated string audience = 2;
@@ -422,9 +552,8 @@ message JWTSVID {
 
 // The SubscribeToJWTBundlesRequest message conveys parameters for requesting JWT bundles.
 message SubscribeToJWTBundlesRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToJWTBundlesResponse message conveys JWT bundles.
@@ -441,7 +570,7 @@ message SubscribeToJWTBundlesResponse {
 
 The `FetchJWTSVID` RPC allows a Broker to request one or more short-lived JWT-SVIDs with a specific audience for a workload.
 
-The `FetchJWTSVIDRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload. It also contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
+The `FetchJWTSVIDRequest` request message contains a mandatory workload reference. It also contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
 
 The `FetchJWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
 
@@ -453,7 +582,7 @@ If the referenced workload does not exist or is not entitled to receive any JWT-
 
 The `SubscribeToJWTBundles` RPC streams back JWT bundles for the workload to the Broker. These bundles MUST only be used to authenticate JWT-SVIDs and MUST only be used for operations involving the referenced workload. They MUST NOT be used for any other workload.
 
-The `SubscribeToJWTBundlesRequest` request message contains one or more mandatory workload references. When multiple references are provided, all MUST resolve to the same workload.
+The `SubscribeToJWTBundlesRequest` request message contains a mandatory workload reference.
 
 The `SubscribeToJWTBundlesResponse` response message consists of a mandatory `bundles` field, which MUST contain at least the JWT bundle for the trust domain in which the server resides.
 

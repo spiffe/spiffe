@@ -49,18 +49,62 @@ message WorkloadPIDReference {
     int32 pid = 1;
 }
 
-// The WorkloadKubernetesPodUIDReference message conveys a Kubernetes pod UID reference of a
-// workload running in a Kubernetes cluster.
-message WorkloadKubernetesPodUIDReference {
-    // Required. The UID of the Kubernetes pod. MUST be a valid UUID string.
-    string uid = 1;
+// The KubernetesObjectType message identifies the type of a Kubernetes object
+// by its plural name and API group. This avoids ambiguity between plurals that
+// happen to contain dots (e.g., the plural `myresource.example` in the `com`
+// group vs. `myresource` in the `example.com` group) that arises when the
+// `<plural>.<group>` shorthand is parsed as a single string.
+message KubernetesObjectType {
+    // Required. The plural name of the Kubernetes resource, as registered with
+    // the Kubernetes API server. For example, `pods`, `deployments`, or the
+    // plural form declared by a `CustomResourceDefinition`.
+    string plural = 1;
+
+    // Required. The API group of the Kubernetes resource. For non-core
+    // resources this is the API group name (e.g., `apps`, `example.com`).
+    // For core resources this field MUST be set to the literal string `core`.
+    string group = 2;
+}
+
+// The KubernetesObjectKey message identifies a specific Kubernetes object
+// within its type by `namespace` and `name`.
+message KubernetesObjectKey {
+    // Optional. The namespace of the referenced Kubernetes object. MUST be set
+    // for namespaced resources. MUST be empty when the resource is
+    // cluster-scoped.
+    string namespace = 1;
+
+    // Required. The name of the referenced Kubernetes object.
+    string name = 2;
+}
+
+// The KubernetesObjectReference message conveys a reference to an arbitrary
+// Kubernetes object (built-in or custom) by which a workload is identified for
+// the purpose of SVID issuance. The referenced object MUST exist and be accessible
+// at the time of the request.
+//
+// The mapping from a Kubernetes object to a SPIFFE ID is implementation-defined;
+// this specification does not mandate a particular SPIFFE ID format.
+message KubernetesObjectReference {
+    // Required. The type of the referenced Kubernetes object.
+    KubernetesObjectType type = 1;
+
+    // Optional. The namespaced name of the referenced Kubernetes object.
+    // At least one of `key` or `uid` MUST be specified.
+    KubernetesObjectKey key = 2;
+
+    // Optional. The UID of the referenced Kubernetes object. MUST be a valid
+    // UUID string as assigned by Kubernetes. At least one of `key` or `uid`
+    // MUST be specified. When both `key` and `uid` are specified, the server
+    // MUST verify that the object resolved by `key` has the specified UID at
+    // the time of issuing the SVIDs and MUST return an error otherwise.
+    string uid = 3;
 }
 
 // The SubscribeToX509SVIDRequest message conveys parameters for requesting an X.509-SVID.
 message SubscribeToX509SVIDRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload. At least one reference is required.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToX509SVIDResponse message carries X.509-SVIDs and related information,
@@ -106,9 +150,8 @@ message X509SVID {
 // The SubscribeToX509BundlesRequest message conveys parameters for requesting X.509
 // bundles.
 message SubscribeToX509BundlesRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload. At least one reference is required.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToX509BundlesResponse message carries a map of trust bundles the workload
@@ -125,9 +168,8 @@ message SubscribeToX509BundlesResponse {
 
 // The FetchJWTSVIDRequest message conveys parameters for requesting JWT-SVIDs.
 message FetchJWTSVIDRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload. At least one reference is required.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 
     // Required. The audience(s) the workload intends to authenticate against.
     repeated string audience = 2;
@@ -160,9 +202,8 @@ message JWTSVID {
 
 // The SubscribeToJWTBundlesRequest message conveys parameters for requesting JWT bundles.
 message SubscribeToJWTBundlesRequest {
-    // Required. One or more references identifying the workload. All references
-    // MUST resolve to the same workload. At least one reference is required.
-    repeated WorkloadReference references = 1;
+    // Required. The reference identifying the workload.
+    WorkloadReference reference = 1;
 }
 
 // The SubscribeToJWTBundlesResponse message conveys JWT bundles.
