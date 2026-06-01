@@ -6,7 +6,7 @@ This document specifies an identity endpoint standard for the internet community
 
 ## Abstract
 
-The SPIFFE Broker Endpoint is a dedicted endpoint for trusted infrastructure components in SPIFFE. It offers specific APIs that are not targeted to workloads but components in the infrastructure that can act on behalf of workloads and request corresponding SVIDs.
+The SPIFFE Broker Endpoint is a dedicated endpoint for trusted infrastructure components in SPIFFE. It offers specific APIs that are not targeted to workloads but components in the infrastructure that can act on behalf of workloads and request corresponding SVIDs.
 
 ## Table of Contents
 
@@ -15,20 +15,19 @@ The SPIFFE Broker Endpoint is a dedicted endpoint for trusted infrastructure com
 3\. [Transport](#3-transport)  
 3.1. [Transport Security](#31-transport-security)  
 4\. [Locating the Endpoint](#4-locating-the-endpoint)  
-5\. [Authentication](#5-authentication)  
+5\. [Authentication and Authorization](#5-authentication-and-authorization)  
 6\. [Error Codes](#6-error-codes)  
 7\. [Extensibility and Services Rendered](#7-extensibility-and-services-rendered)  
-Appendix A. [List of Error Codes](#appendix-a-list-of-error-codes)  
 
 ## 1. Introduction
 
 Workloads today run on a variety of different platforms that each offer unique set of capabilities and limitations. The [SPIFFE Workload API](./SPIFFE_Workload_API.md) offers workloads a standardized way to retrieve SVIDs.
 
-Since the introduction of SPIFFE and its Workload API new patterns arised where the workload itself is not requesting the SVID but a component doing it on-behalf-of the workload. This component either provisions the SVID to the workload in a way the workload understands, or, hooks into the network to perform transport layer security such as TLS outside of the workload. Service meshes are well-known for this pattern.
+Since the introduction of SPIFFE and its Workload API new patterns have arisen where the workload itself is not requesting the SVID but a component doing it on-behalf-of the workload. This component either provisions the SVID to the workload in a way the workload understands, or, hooks into the network to perform transport layer security such as TLS outside of the workload. Service meshes are well-known for this pattern.
 
-In the beginnings, the on-behalf-of component was a proxy running next to the workload. Each workload would have it's own peer-proxy and together they would form a combined security boundary. In this situation, the proxy was able to leverage the SPIFFE Workload Endpoint and API to retrieve SVIDs on behalf of the workload it shares the security boundary with. This pattern is commonly known as "sidecar pattern", the proxy as a "sidecar" or "sidecar proxy" 
+In the beginnings, the on-behalf-of component was a proxy running next to the workload. Each workload would have its own peer-proxy and together they would form a combined security boundary. In this situation, the proxy was able to leverage the SPIFFE Workload Endpoint and API to retrieve SVIDs on behalf of the workload it shares the security boundary with. This pattern is commonly known as the "sidecar pattern", and the proxy as a "sidecar" or "sidecar proxy".
 
-Since this has been introduced, the pattern has evolved to locate the proxy from one per workload to one per node for security, separation of concern, maintenance and other reasons. The proxy that acts on-behalf of multiple workloads as “broker”. This pattern poses a conflict with the SPIFFE Workload API & Endpoint. The security boundary of the Broker and the workload is different, and thus the component that requests an SVID is not the workload, or a “workload specific” (sidecar) instance anymore but a broker that acts on-behalf of all the workloads running on the node. The SPIFFE of today would see the broker as the workload and not the workload the broker represents.
+Since this has been introduced, the pattern has evolved to locate the proxy from one per workload to one per node for security, separation of concern, maintenance and other reasons. A proxy that acts on-behalf of multiple workloads is referred to as a "broker". This pattern poses a conflict with the SPIFFE Workload API & Endpoint. The security boundary of the Broker and the workload is different, and thus the component that requests an SVID is not the workload, or a "workload specific" (sidecar) instance anymore but a broker that acts on-behalf of all the workloads running on the node. The SPIFFE of today would see the broker as the workload and not the workload the broker represents.
 
 Another use case for the broker is a node agent placed in front of other, potentially multiple, node agents and routing requests. This can be for functional and non-functional reasons.
 
@@ -50,7 +49,7 @@ flowchart TD
 
 ## 2. Accessibility
 
-The SPIFFE Broker Endpoint can be exposed through a local or a remote endpoint. Depending on the use-case a local endpoint may be sufficient while some deployments require a remote endpoint. Where possible, accessibility SHOULD be restricted to designed clients only and not be available to workloads.
+The SPIFFE Broker Endpoint can be exposed through a local or a remote endpoint. Depending on the use-case a local endpoint may be sufficient while some deployments require a remote endpoint. Where possible, accessibility SHOULD be restricted to designated clients only and not be available to workloads.
 
 ## 3. Transport
 
@@ -70,37 +69,40 @@ The value of the `SPIFFE_BROKER_SOCKET` environment variable is structured as an
 
 If the scheme is set to `unix`, then the authority component MUST NOT be set, and the path component MUST be set to the absolute path of the SPIFFE Broker Endpoint Unix Domain Socket (e.g. `unix:///path/to/endpoint.sock`). The scheme and path components are mandatory, and no other component may be set.
 
-If the scheme is set to `tcp`, then the host component of the authority MUST be set to an IP address, and the port component of the authority MUST be set to the TCP port number of the SPIFFE Workload Endpoint TCP listen socket. The scheme, host, and port components are mandatory, and no other component may be set. As an example, `tcp://127.0.0.1:8000` is valid, and `tcp://127.0.0.1:8000/foo` is not.
+If the scheme is set to `tcp`, then the host component of the authority MUST be set to an IP address or a DNS name, and the port component of the authority MUST be set to the TCP port number of the SPIFFE Broker Endpoint TCP listen socket. The scheme, host, and port components are mandatory, and no other component may be set. As examples, `tcp://127.0.0.1:8000` and `tcp://broker.example.com:8443` are valid, and `tcp://127.0.0.1:8000/foo` is not.
+
+DNS names are permitted because the Broker Endpoint is allowed to be served over the network and is authenticated (in contrast to the SPIFFE Workload Endpoint, which is local-only and not authenticated).
 
 ## 5. Authentication and Authorization
 
 The SPIFFE Broker Endpoint requires mutual authentication in the form of Mutual Transport Layer Security as defined in [RFC 5246](https://www.rfc-editor.org/rfc/rfc5246.txt) (TLS 1.2) and [RFC 8446](https://www.rfc-editor.org/rfc/rfc8446.txt) (TLS 1.3) in the form of X509-SVIDs. Prior to the mutual authentication both parties need to retrieve the SVID and bundle, for instance by using the SPIFFE Workload API.
 
-The nature of the SPIFFE Broker Endpoint requires strong access control and only authorized callers must be allowed to connect. Controlling access only by accessibility is highly discouraged and implementers should restrict both, only making the endpoint accessible to allowed components and implementing strict access control on the endpoint. It is reccomended to base access control on the SPIFFE-ID of the client. Given the broad capabilities the SPIFFE Broker Endpoint offers to authorized clients the policy is reccommended to be static and based of configuration.
+The nature of the SPIFFE Broker Endpoint requires strong access control and only authorized callers must be allowed to connect. Controlling access only by accessibility is highly discouraged and implementers should restrict both, only making the endpoint accessible to allowed components and implementing strict access control on the endpoint. It is recommended to base access control on the SPIFFE-ID of the client. Given the broad capabilities the SPIFFE Broker Endpoint offers to authorized clients the policy is recommended to be static and based on configuration.
 
-In addition, it is required to also perform server authentication on the broker in the form of validating the expected SPIFFE-ID of the SPIFFE provider. This is to prevent man-in-the-middle attacks where an attacker poses as a SPIFFE provider and returns poisened SVIDs or bundles to a legitimate broker.
+In addition, it is required to also perform server authentication on the broker in the form of validating the expected SPIFFE-ID of the SPIFFE provider. This is to prevent man-in-the-middle attacks where an attacker poses as a SPIFFE provider and returns poisoned SVIDs or bundles to a legitimate broker.
 
 ## 6. Error Codes
 
 A number of error conditions may be encountered by the client when interacting with the SPIFFE Broker Endpoint. For instance, the client request may have omitted the mandatory security header (see the Transport section for more information), or the SPIFFE Broker Endpoint implementation may still be initializing or otherwise unavailable.
 
-Implementations receiving a client request that does not contain the mandatory security header MUST respond with gRPC status code "INVALID_ARGUMENT". Clients encountering the "INVALID_ARGUMENT" status code SHOULD NOT retry, as this indicates that an error has been made in the client implementation, and is not recoverable. 
+Implementations receiving a client request that does not contain the mandatory security header MUST respond with gRPC status code "InvalidArgument". Clients encountering the "InvalidArgument" status code SHOULD NOT retry, as this indicates that an error has been made in the client implementation, and is not recoverable.
 
-In the event that the SPIFFE Broker Endpoint implementation is running but unavailable, for instance if it is still initializing or it is performing load shedding, clients will receive the gRPC status code "UNAVAILABLE". Clients receiving this code OR clients which are unable to reach the SPIFFE Workload Endpoint MAY retry with a backoff.
+In the event that the SPIFFE Broker Endpoint implementation is running but unavailable, for instance if it is still initializing or it is performing load shedding, clients will receive the gRPC status code "Unavailable". Clients receiving this code OR clients which are unable to reach the SPIFFE Broker Endpoint MAY retry with a backoff.
 
-In situations where the client cannot be idenfied "UNAUTHENTICATED" is returned to clients. Clients should keep in mind that this is unlikely to be observed because authentication errors result in a rejected connection before the gRPC layer is initialized. Retries using the same certificate SHOULD NOT be made, instead clients should turn to the SPIFFE Workload API and refresh their credentials before retrying.
+In situations where the client cannot be identified "Unauthenticated" is returned to clients. Clients should keep in mind that this is unlikely to be observed because authentication errors result in a rejected connection before the gRPC layer is initialized. Retries using the same certificate SHOULD NOT be made, instead clients should turn to the SPIFFE Workload API and refresh their credentials before retrying.
 
-Clients that are not valid brokers and are not authorized are expected to observe "PERMISSION_DENIED". Clients receiving this code MAY retry with a backoff to allow for non-static policy at the server.
+Clients that are not valid brokers and are not authorized are expected to observe "PermissionDenied". Clients receiving this code MAY retry with a backoff to allow for non-static policy at the server.
 
 As a summary, the expected error codes are:
 
 | Code | Condition | Client Behavior |
 | ---- | --------- | -------- |
-| INVALID_ARGUMENT | The gRPC security header is not present in the client request. Please see the [Transport](#3-transport) section for more information. | Report an error, don't retry. |
-| UNAVAILABLE | The SPIFFE Broker Endpoint implementation is unable to handle the request. | Retry with a backoff. |
-| UNAUTHENTICATED | Client cannot be identified. | Refresh credentials and retry  with a backoff. |
-| PERMISSION_DENIED | Client is not authorized. | Report an error, don't retry. |
-| NOT_FOUND | The workload the broker represents could not have been identified. | Verify existance, if positive retry with a backoff. |
+| InvalidArgument | The gRPC security header is not present in the client request. Please see the [Transport](#3-transport) section for more information. | Report an error, don't retry. |
+| Unavailable | The SPIFFE Broker Endpoint implementation is unable to handle the request. | Retry with a backoff. |
+| Unauthenticated | Client cannot be identified. | Refresh credentials and retry with a backoff. |
+| PermissionDenied | Client is not authorized. | Report an error, don't retry. |
+
+API-layer errors related to the workload reference carried in a request (e.g., the referenced workload does not exist or is not entitled to an SVID) are specified in [Section 4.8 of the SPIFFE Broker API](./SPIFFE_Broker_API.md#48-workload-references-and-svid-entitlements).
 
 ## 7. Extensibility and Services Rendered
 

@@ -13,13 +13,21 @@ Brokers are trusted infrastructure components that can act on-behalf-of workload
 1\. [Introduction](#1-introduction)  
 2\. [Extensibility](#2-extensibility)  
 3\. [Service Definition](#3-service-definition)  
+3.1. [Workload Reference](#31-workload-reference)  
+3.1.1. [Reference Resolution](#311-reference-resolution)  
+3.1.2. [Reference scope](#312-reference-scope)  
+3.1.3. [Builtin Reference Types](#313-builtin-reference-types)  
+3.1.4. [Extensibility](#314-extensibility)  
 4\. [Client and Server Behavior](#4-client-and-server-behavior)  
-4.1. [Identifying the Caller](#41-identifying-the-caller)  
-4.2. [Connection Lifetime](#42-connection-lifetime)  
-4.3. [Stream Responses](#43-stream-responses)  
-4.4. [Default Values and Redacted Information](#44-default-values-and-redacted-information)  
-4.5. [Mandatory Fields](#45-mandatory-fields)  
-4.6. [Federated Bundles](#46-federated-bundles)  
+4.1. [Authenticating and authorizing the Caller](#41-authenticating-and-authorizing-the-caller)  
+4.2. [Remote procedure scope](#42-remote-procedure-scope)  
+4.3. [Connection Lifetime](#43-connection-lifetime)  
+4.4. [Stream Responses](#44-stream-responses)  
+4.5. [Default Values and Redacted Information](#45-default-values-and-redacted-information)  
+4.6. [Mandatory Fields](#46-mandatory-fields)  
+4.7. [Federated Bundles](#47-federated-bundles)  
+4.8. [Workload References and SVID entitlements](#48-workload-references-and-svid-entitlements)  
+4.9. [Workload Lifecycle](#49-workload-lifecycle)  
 5\. [X.509-SVID Profile](#5-x509-svid-profile)  
 5.1. [Profile Definition](#51-profile-definition)  
 5.2. [Profile RPCs](#52-profile-rpcs)  
@@ -27,6 +35,7 @@ Brokers are trusted infrastructure components that can act on-behalf-of workload
 6\. [JWT-SVID Profile](#6-jwt-svid-profile)  
 6.1. [Profile Definition](#61-profile-definition)  
 6.2. [Profile RPCs](#62-profile-rpcs)  
+Appendix A. [Sample Implementation State Machines](#appendix-a-sample-implementation-state-machines)  
 
 ## 1. Introduction
 
@@ -329,7 +338,11 @@ Clients MAY inspect ErrorInfo details for structured error information but MUST 
 
 ### 4.9 Workload Lifecycle
 
-Both server and client MUST monitor the state of the workload and ensure that no operations are performed beyond the lifetime of the workload. For instance, the server MUST not send responses to the client once the workload has stopped. Clients on the other hand MUST drop all the data received for the workload, removing it from file systems or other locations it potentially have stored it in addition.
+Server and client MUST ensure that no operations are performed beyond the
+lifetime of the workload. Once the workload has stopped, the server MUST stop
+sending responses for that workload, and the client MUST drop all data it
+received for the workload, removing it from file systems or other locations
+where it may have been stored.
 
 What constitutes "stopped" depends on the reference type. For local references
 (such as a process ID), the workload is considered stopped when the underlying
@@ -462,7 +475,7 @@ All fields in the `X509SVID` message are mandatory, with the exception of the `h
 
 If the referenced workload does not exist or is not entitled to receive any X509-SVIDs, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `SubscribeToX509SVID` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `SubscribeToX509SVIDResponse` message returned on the `SubscribeToX509SVID` stream contains the complete set of authorized SVIDs and bundles of the workload at that point in time. As such, if the server redacts SVIDs from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted SVIDs. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received SVIDs and bundles.
+As mentioned in [Stream Responses](#44-stream-responses), each `SubscribeToX509SVIDResponse` message returned on the `SubscribeToX509SVID` stream contains the complete set of authorized SVIDs and bundles of the workload at that point in time. As such, if the server redacts SVIDs from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted SVIDs. This includes situations where the server returns a `PermissionDenied`, in which case the Broker is expected to drop all previously received SVIDs and bundles **for the referenced workload only**. SVIDs and bundles held on behalf of other workloads are not affected, see [Section 4.2 Remote procedure scope](#42-remote-procedure-scope).
 
 #### 5.2.2 SubscribeToX509Bundles
 
@@ -474,7 +487,7 @@ The `SubscribeToX509BundlesResponse` response message has a mandatory `bundles` 
 
 If the referenced workload does not exist or is not entitled to receive any X.509 bundles, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `SubscribeToX509Bundles` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `SubscribeToX509BundlesResponse` response contains the complete set of authorized X.509 bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the bundles. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received bundles.
+As mentioned in [Stream Responses](#44-stream-responses), each `SubscribeToX509BundlesResponse` response contains the complete set of authorized X.509 bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the bundles. This includes situations where the server returns a `PermissionDenied`, in which case the Broker is expected to drop all previously received bundles **for the referenced workload only**; bundles held on behalf of other workloads MUST NOT be affected (see [Section 4.2 Remote procedure scope](#42-remote-procedure-scope)).
 
 ### 5.3 Default Identity
 
@@ -599,7 +612,7 @@ The returned bundles are encoded as a standard JWK Set as defined by [RFC 7517](
 
 If the referenced workload does not exist or is not entitled to receive any JWT bundles, then the server MUST respond with an appropriate gRPC status code as specified in [Section 4.8](#48-workload-references-and-svid-entitlements). Under such a case, the Broker MAY attempt to reconnect with another call to the `SubscribeToJWTBundles` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `SubscribeToJWTBundlesResponse` response contains the complete set of authorized JWT bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted bundles. This includes situations where the server returns a Permission denied, where the Broker is expected to drop all previous received bundles.
+As mentioned in [Stream Responses](#44-stream-responses), each `SubscribeToJWTBundlesResponse` response contains the complete set of authorized JWT bundles of the workload at that point in time. As such, if the server redacts bundles from a subsequent response that was in context of the referenced workload the Broker SHOULD cease using the redacted bundles. This includes situations where the server returns a `PermissionDenied`, in which case the Broker is expected to drop all previously received bundles **for the referenced workload only**; bundles held on behalf of other workloads MUST NOT be affected (see [Section 4.2 Remote procedure scope](#42-remote-procedure-scope)).
 
 ## Appendix A. Sample Implementation State Machines
 
