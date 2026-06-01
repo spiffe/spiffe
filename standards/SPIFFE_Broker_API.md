@@ -6,7 +6,7 @@ This document specifies an identity API standard for the internet community, and
 
 ## Abstract
 
-Brokers are trusted infrastructure components that can act on-behalf-of workloads. This API enables them to retrieve the SVIDs and trust bundles of workloads it represents by referencing the workloads by its process ID.
+Brokers are trusted infrastructure components that can act on-behalf-of workloads. This API enables them to retrieve the SVIDs and trust bundles of workloads they represent by referencing each workload with a workload reference (for example, a process ID or a Kubernetes object).
 
 ## Table of Contents
 
@@ -27,7 +27,6 @@ Brokers are trusted infrastructure components that can act on-behalf-of workload
 6\. [JWT-SVID Profile](#6-jwt-svid-profile)  
 6.1. [Profile Definition](#61-profile-definition)  
 6.2. [Profile RPCs](#62-profile-rpcs)  
-6.3. [JWT-SVID Validation](#63-jwt-svid-validation)  
 
 ## 1. Introduction
 
@@ -273,6 +272,8 @@ The SPIFFE Broker API makes use of the authentication and authorization at the [
 
 Implementations MUST maintain a strict allow-only policy that prevents any caller that is not authorized to leverage the SPIFFE Broker API.
 
+Implementations MAY enforce more fine-grained access control by inspecting data carried in the request. For example, an implementation MAY restrict a given caller to a subset of reference types (such as only `WorkloadPIDReference`, or only `KubernetesObjectReference` against a specific namespace), to a subset of audiences in `FetchJWTSVID`, or to a subset of requested SPIFFE IDs. The exact policy model is implementation-defined.
+
 ### 4.2 Remote procedure scope
 
 Every invocation of a remote procedure (RPC) at the SPIFFE Broker API, including its request and responses (potentially multiple), are in context of a concrete workload. Clients are expected to invoke RPCs for each workload they represent individually and isolate them for each other accordingly. An X509 Bundle response, for instance, is only valid for the workload the request has referenced and MUST NOT be applied, visible or in any other way impact other workloads. Same applies to all other RPCs in the scope of the SPIFFE Broker API.
@@ -371,9 +372,13 @@ message WorkloadReference {
     google.protobuf.Any reference = 1;
 }
 
-// The WorkloadPIDReference message conveys a process id reference of a workload.
+// The WorkloadPIDReference message conveys a process id reference of a workload
+// running in the same environment.
 message WorkloadPIDReference {
-    // Required. The process id of the workload.
+    // Required. The process id of the workload. MUST be a positive integer.
+    // For workloads running inside container runtimes that maintain a separate
+    // sandbox (e.g. the `pause` container in containerd or CRI-O), this MUST
+    // be the PID of the workload's own process, not the sandbox PID.
     int32 pid = 1;
 }
 
@@ -510,9 +515,13 @@ message WorkloadReference {
     google.protobuf.Any reference = 1;
 }
 
-// The WorkloadPIDReference message conveys a process id reference of a workload.
+// The WorkloadPIDReference message conveys a process id reference of a workload
+// running in the same environment.
 message WorkloadPIDReference {
-    // Required. The process id of the workload.
+    // Required. The process id of the workload. MUST be a positive integer.
+    // For workloads running inside container runtimes that maintain a separate
+    // sandbox (e.g. the `pause` container in containerd or CRI-O), this MUST
+    // be the PID of the workload's own process, not the sandbox PID.
     int32 pid = 1;
 }
 

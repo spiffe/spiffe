@@ -46,6 +46,9 @@ message WorkloadReference {
 // running in the same environment.
 message WorkloadPIDReference {
     // Required. The process id of the workload. MUST be a positive integer.
+    // For workloads running inside container runtimes that maintain a separate
+    // sandbox (e.g. the `pause` container in containerd or CRI-O), this MUST
+    // be the PID of the workload's own process, not the sandbox PID.
     int32 pid = 1;
 }
 
