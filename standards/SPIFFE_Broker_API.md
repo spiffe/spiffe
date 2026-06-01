@@ -303,7 +303,7 @@ Every stream response message sent by the server MUST include the full set of in
 
 The exact timing of server response messages is implementation-specific, and SHOULD be dictated by events which change the response, such as an SVID rotation. Receiving a request message from the client MUST be considered a response-generating event. In other words, the first response message of the server response stream (on a connection-by-connection basis) MUST be sent as soon as possible, without delay.
 
-Finally, implementers of SPIFFE Broker API servers should be careful about pushing updated response messages *too* rapidly. Some software may reload automatically upon receiving new information, potentially causing a period of unavailability should all instances reload at once. As a result, implementers may introduce some splay/jitter in the transmission of widespread updates.
+Finally, implementers of SPIFFE Broker API servers should be careful about pushing updated response messages *too* rapidly. Some software may reload automatically upon receiving new information, potentially causing a period of unavailability should all instances reload at once. As a result, implementers may introduce some splay/jitter in the transmission of widespread updates. Likewise, Brokers SHOULD apply their own jitter when distributing updates out to multiple workloads.
 
 ### 4.5 Default Values and Redacted Information
 
