@@ -54,6 +54,7 @@ The Workload API is defined in the [SPIFFE Workload API](SPIFFE_Workload_API.md)
 This document covered, at a high level, the various components that make up the SPIFFE specification as a whole. Together, these components solve many of the authentication and traffic security challenges presented in modern, heterogeneous environments, particularly those which are highly dynamic. For more detailed information, please see the specification(s) related to the component of interest.
 
 ## Appendix A. List of SPIFFE Specifications
+
 * [The SPIFFE Identity and Verifiable Identity Document](SPIFFE-ID.md)
 * [The X.509 SPIFFE Verifiable Identity Document](X509-SVID.md)
 * [The JWT SPIFFE Verifiable Identity Document](JWT-SVID.md)
@@ -61,3 +62,4 @@ This document covered, at a high level, the various components that make up the 
 * [The SPIFFE Workload API](SPIFFE_Workload_API.md)
 * [The SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md)
 * [SPIFFE Federation](SPIFFE_Federation.md)
+* [Stability](STABILITY.md)
