@@ -102,8 +102,9 @@ A section inherits the stability of the document it sits in unless it carries
 its own marker. This lets a mature specification grow a less-baked addition
 without dragging the whole document down a level. For example, an otherwise
 Stable specification may define a specific profile, or a set of RPCs, at a lower
-stability whilst that part is still being proven. An override is declared inline
-at the head of the section:
+stability whilst that part is still being proven.
+
+An override is declared inline at the head of the section:
 
 > **Stability: Beta** (this section only - the remainder of this document is
 > Stable.)
