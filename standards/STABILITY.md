@@ -52,22 +52,27 @@ merges it into the `main` branch with a Beta banner, approved by two
 maintainers. The criterion for promotion is SIG-Spec consensus that its design
 is sound and ready for trial implementation.
 
-We avoid breaking changes to Beta specifications. However, the purpose of the
-Beta phase is to gather experience from real implementations, and that
-experience may occasionally force a breaking change. Where it does, the change
-should be clearly communicated along with advice on adjusting implementations.
-Adopters should expect to track such changes and pin to a specific revision.
+When implementing a Beta specification, it is recommended that adopters record
+the revision of the specification that they have implemented. A permalink to
+the document on GitHub or the commit hash is sufficient for this purpose.
 
-This feedback loop is the point of the Beta phase: we encourage those
-implementing a Beta specification to discuss their experience and raise feedback
-with SIG-Spec, so that any rough edges can be ironed out before it is promoted
-to Stable.
+Adopters implementing a Beta specification are encouraged to discuss their
+experience and raise feedback with SIG-Spec, so that any rough edges can be
+ironed out before it is promoted to Stable.
 
-For this reason, we typically expect implementations of a Beta specification to
-gate it behind a feature flag (or equivalent opt-in), rather than enabling it by
-default. This makes it clear to operators that they are relying on functionality
-that may still change, and keeps a Beta feature from becoming a de-facto stable
-one purely by virtue of being widely deployed.
+We avoid making breaking changes to Beta specifications. However, the purpose of
+the Beta phase is to gather experience from real implementations, and that
+experience may occasionally force a breaking change.
+
+Where breaking changes must be made, the change should be clearly communicated
+along with advice on adjusting implementations. This should be included within
+the document itself within an appendix.
+
+Due to the potential for breaking changes, we typically expect implementations
+of a Beta specification to gate it behind a feature flag (or equivalent opt-in),
+rather than enabling it by default. This makes it clear to operators that they
+are relying on functionality that may still change, and keeps a Beta feature
+from becoming a de-facto stable one purely by virtue of being widely deployed.
 
 ### 2.3. Stable
 
