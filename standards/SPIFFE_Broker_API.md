@@ -131,7 +131,7 @@ Example:
 ```protobuf
 WorkloadReference {
   reference: Any {
-    type_url: "type.googleapis.com/WorkloadPIDReference"
+    type_url: "type.googleapis.com/spiffe.broker.WorkloadPIDReference"
     value: <packed WorkloadPIDReference { pid: 1234 }>
   }
 }
@@ -188,7 +188,7 @@ Namespaced core resource (Pod) by name and UID:
 ```protobuf
 WorkloadReference {
   reference: Any {
-    type_url: "type.googleapis.com/KubernetesObjectReference"
+    type_url: "type.googleapis.com/spiffe.broker.KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       type: { plural: "pods", group: "core" }
       key: { namespace: "shop", name: "checkout-7c9f" }
@@ -203,7 +203,7 @@ Kubernetes runtime but do not have the pod's namespaced name handy:
 ```protobuf
 WorkloadReference {
   reference: Any {
-    type_url: "type.googleapis.com/KubernetesObjectReference"
+    type_url: "type.googleapis.com/spiffe.broker.KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       type: { plural: "pods", group: "core" }
       uid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
@@ -216,7 +216,7 @@ Namespaced non-core resource (Deployment) by namespaced name only:
 ```protobuf
 WorkloadReference {
   reference: Any {
-    type_url: "type.googleapis.com/KubernetesObjectReference"
+    type_url: "type.googleapis.com/spiffe.broker.KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       type: { plural: "deployments", group: "apps" }
       key: { namespace: "shop", name: "checkout" }
@@ -230,7 +230,7 @@ workloads in Kubernetes):
 ```protobuf
 WorkloadReference {
   reference: Any {
-    type_url: "type.googleapis.com/KubernetesObjectReference"
+    type_url: "type.googleapis.com/spiffe.broker.KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       type: { plural: "serviceaccounts", group: "core" }
       key: { namespace: "shop", name: "checkout" }
@@ -243,7 +243,7 @@ Namespaced custom resource (Flux Kustomization) by UID only:
 ```protobuf
 WorkloadReference {
   reference: Any {
-    type_url: "type.googleapis.com/KubernetesObjectReference"
+    type_url: "type.googleapis.com/spiffe.broker.KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       type: { plural: "kustomizations", group: "kustomize.toolkit.fluxcd.io" }
       uid: "0fa1b2c3-4d5e-6f70-8192-a3b4c5d6e7f8"
@@ -256,7 +256,7 @@ Cluster-scoped core resource (Node) by name:
 ```protobuf
 WorkloadReference {
   reference: Any {
-    type_url: "type.googleapis.com/KubernetesObjectReference"
+    type_url: "type.googleapis.com/spiffe.broker.KubernetesObjectReference"
     value: <packed KubernetesObjectReference {
       type: { plural: "nodes", group: "core" }
       key: { name: "ip-10-0-1-42.ec2.internal" }
