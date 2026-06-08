@@ -62,64 +62,34 @@ Profiles are implemented as a group of related RPCs within a single `API` servic
 
 ## 3.1 Workload Reference
 
-The SPIFFE Broker API requires a mechanism to identify the entity for which the
-server should issue an SVID. This reference system enables Brokers to request
-identity materials on behalf of specific entities while maintaining proper
-isolation and security boundaries.
+The SPIFFE Broker API requires a mechanism to identify the entity for which the server should issue an SVID. This reference system enables Brokers to request identity materials on behalf of specific entities while maintaining proper isolation and security boundaries.
 
 References fall into two broad categories:
 
-* **Local references** identify a running process co-located with the Broker
-  (e.g., process ID). They are only meaningful in the local execution
-  environment and have a process-like lifecycle.
-* **Object references** identify an addressable object in a control plane that
-  represents an identity (e.g., a Kubernetes object). They are valid across the
-  scope of that control plane (e.g., the cluster) and have a lifecycle tied to
-  the object's existence in that control plane.
+* **Local references** identify a running process co-located with the Broker (e.g., process ID). They are only meaningful in the local execution environment and have a process-like lifecycle.
+* **Object references** identify an addressable object in a control plane that represents an identity (e.g., a Kubernetes object). They are valid across the scope of that control plane (e.g., the cluster) and have a lifecycle tied to the object's existence in that control plane.
 
-Throughout this specification, "workload" is used as a shorthand for the entity
-that the reference resolves to, regardless of whether that entity is a running
-process or a control-plane object.
+Throughout this specification, "workload" is used as a shorthand for the entity that the reference resolves to, regardless of whether that entity is a running process or a control-plane object.
 
 References MUST satisfy the following requirements:
 
-* Uniqueness: Each reference MUST uniquely identify a single entity within its
-  applicable scope (the local node for local references; the relevant control
-  plane for object references) at any given time
-* Scope: Local references MUST NOT be used across network boundaries or
-  different nodes; object references MUST NOT be used across control planes
-  (e.g., across Kubernetes clusters)
-* Dereferenceability: The server MUST be able to verify that the referenced
-  entity exists and is accessible for identity operations
+* Uniqueness: Each reference MUST uniquely identify a single entity within its applicable scope (the local node for local references; the relevant control plane for object references) at any given time
+* Scope: Local references MUST NOT be used across network boundaries or different nodes; object references MUST NOT be used across control planes (e.g., across Kubernetes clusters)
+* Dereferenceability: The server MUST be able to verify that the referenced entity exists and is accessible for identity operations
 
 ### 3.1.1 Reference Resolution
 
 Each request message in the SPIFFE Broker API carries exactly one workload reference. Clients MUST provide a reference; servers MUST reject requests that lack one or whose reference type is not understood by the server.
 
-References MUST be resolved on the server and the server MUST verify the existence
-of the referenced workload.
+References MUST be resolved on the server and the server MUST verify the existence of the referenced workload.
 
-Servers MUST NOT trust reference data provided by the client without independent
-verification. For example, when a client provides a PID reference, the server SHOULD
-independently verify the process exists and collect workload identity attributes
-through secure channels (e.g., /proc filesystem, container runtime APIs) rather than
-accepting client-provided attributes at face value.
+Servers MUST NOT trust reference data provided by the client without independent verification. For example, when a client provides a PID reference, the server SHOULD independently verify the process exists and collect workload identity attributes through secure channels (e.g., /proc filesystem, container runtime APIs) rather than accepting client-provided attributes at face value.
 
 ### 3.1.2 Reference scope
 
-Some references — such as the process ID — are only meaningful and discoverable
-on the local node. Clients MUST ensure that local references are not sent to
-remote Broker API servers, and deployments MUST ensure servers do not receive
-requests originating from outside the node they run on. This mitigates situations
-where a Broker requests credentials with a process ID from a different node, where
-that process ID is used by a different workload.
+Some references — such as the process ID — are only meaningful and discoverable on the local node. Clients MUST ensure that local references are not sent to remote Broker API servers, and deployments MUST ensure servers do not receive requests originating from outside the node they run on. This mitigates situations where a Broker requests credentials with a process ID from a different node, where that process ID is used by a different workload.
 
-Object references (such as `KubernetesObjectReference`) are valid across the
-control plane that owns the referenced object — for example, anywhere within
-the same Kubernetes cluster — and MAY be sent across the network within that
-scope. Object references MUST NOT be honored by a server bound to a different
-control plane (e.g., a different cluster); servers MUST reject object
-references that name a control plane they do not serve.
+Object references (such as `KubernetesObjectReference`) are valid across the control plane that owns the referenced object — for example, anywhere within the same Kubernetes cluster — and MAY be sent across the network within that scope. Object references MUST NOT be honored by a server bound to a different control plane (e.g., a different cluster); servers MUST reject object references that name a control plane they do not serve.
 
 ### 3.1.3 Builtin Reference Types
 
@@ -137,50 +107,24 @@ WorkloadReference {
 }
 ```
 
-**Kubernetes Object Reference**: Identifies a workload by an arbitrary Kubernetes
-object — built-in or custom — for which the server is expected to issue an SVID.
-The reference is composed of three fields:
+**Kubernetes Object Reference**: Identifies a workload by an arbitrary Kubernetes object — built-in or custom — for which the server is expected to issue an SVID. The reference is composed of three fields:
 
-- `type` is a structured `KubernetesObjectType` message carrying the
-  resource's `plural` and `group`, both required. For non-core resources the
-  `group` MUST be set to the API group name (e.g., `apps`, `example.com`). For
-  core resources the `group` MUST be set to the literal string `core`.
-- `key` is a structured `KubernetesObjectKey` message identifying the
-  specific instance within that type by `namespace` and `name`.
-  `key.namespace` MUST be set for namespaced resources and MUST be empty for
-  cluster-scoped ones; `key.name` is required when `key` is set.
-- `uid` is the UID of the referenced Kubernetes object as assigned by
-  Kubernetes.
+- `type` is a structured `KubernetesObjectType` message carrying the resource's `plural` and `group`, both required. For non-core resources the `group` MUST be set to the API group name (e.g., `apps`, `example.com`). For core resources the `group` MUST be set to the literal string `core`.
+- `key` is a structured `KubernetesObjectKey` message identifying the specific instance within that type by `namespace` and `name`. `key.namespace` MUST be set for namespaced resources and MUST be empty for cluster-scoped ones; `key.name` is required when `key` is set.
+- `uid` is the UID of the referenced Kubernetes object as assigned by Kubernetes.
 
-At least one of `key` or `uid` MUST be specified. When both are specified, the
-server MUST verify that the object resolved by `key` has the specified UID at
-the time of issuing the SVIDs and MUST return an error otherwise. When only
-`uid` is specified, the server resolves the object — and its namespace, if
-any — from the UID.
+At least one of `key` or `uid` MUST be specified. When both are specified, the server MUST verify that the object resolved by `key` has the specified UID at the time of issuing the SVIDs and MUST return an error otherwise. When only `uid` is specified, the server resolves the object — and its namespace, if any — from the UID.
 
-This single reference type covers a range of Kubernetes identification patterns
-that earlier drafts of this specification expressed with multiple dedicated
-reference messages. In particular, identifying a Pod by its UID alone — a
-common pattern for Brokers running alongside the Kubernetes runtime that
-already know the pod UID but not its namespaced name — is expressed by setting
-`type = { plural: "pods", group: "core" }` and `uid = <pod uid>` (with `key`
-left unset); see the corresponding example below.
+This single reference type covers a range of Kubernetes identification patterns that earlier drafts of this specification expressed with multiple dedicated reference messages. In particular, identifying a Pod by its UID alone — a common pattern for Brokers running alongside the Kubernetes runtime that already know the pod UID but not its namespaced name — is expressed by setting `type = { plural: "pods", group: "core" }` and `uid = <pod uid>` (with `key` left unset); see the corresponding example below.
 
 The advantages of separating `plural` and `group` into distinct fields are:
 
-- The `plural` and `group` components map directly onto the `Resource` and
-  `Group` fields of a `SubjectAccessReview` request without any string parsing.
-- It avoids ambiguity when a custom resource's plural name happens to contain
-  a dot (e.g., `myresource.example` in the `com` group vs. `myresource` in the
-  `example.com` group), which the `<plural>.<group>` shorthand cannot
-  disambiguate.
+- The `plural` and `group` components map directly onto the `Resource` and `Group` fields of a `SubjectAccessReview` request without any string parsing.
+- It avoids ambiguity when a custom resource's plural name happens to contain a dot (e.g., `myresource.example` in the `com` group vs. `myresource` in the `example.com` group), which the `<plural>.<group>` shorthand cannot disambiguate.
 
-Note that SPIFFE does not specify how runtimes should attest workloads referenced
-by a `KubernetesObjectReference`, but this design facilitates implementations that
-choose to attest via the recommended `SubjectAccessReview` API in Kubernetes.
+Note that SPIFFE does not specify how runtimes should attest workloads referenced by a `KubernetesObjectReference`, but this design facilitates implementations that choose to attest via the recommended `SubjectAccessReview` API in Kubernetes.
 
-The mapping from a Kubernetes object to a SPIFFE ID is implementation-defined;
-this specification does not mandate a particular SPIFFE ID format.
+The mapping from a Kubernetes object to a SPIFFE ID is implementation-defined; this specification does not mandate a particular SPIFFE ID format.
 
 Examples:
 
@@ -338,19 +282,9 @@ Clients MAY inspect ErrorInfo details for structured error information but MUST 
 
 ### 4.9 Workload Lifecycle
 
-Server and client MUST ensure that no operations are performed beyond the
-lifetime of the workload. Once the workload has stopped, the server MUST stop
-sending responses for that workload, and the client MUST drop all data it
-received for the workload, removing it from file systems or other locations
-where it may have been stored.
+Server and client MUST ensure that no operations are performed beyond the lifetime of the workload. Once the workload has stopped, the server MUST stop sending responses for that workload, and the client MUST drop all data it received for the workload, removing it from file systems or other locations where it may have been stored.
 
-What constitutes "stopped" depends on the reference type. For local references
-(such as a process ID), the workload is considered stopped when the underlying
-process terminates. For object references (such as a
-`KubernetesObjectReference`), the workload is considered stopped when the
-referenced object no longer exists in the control plane, or — when the
-reference pinned a UID alongside a name — when the object resolved by name no
-longer matches the pinned UID.
+What constitutes "stopped" depends on the reference type. For local references (such as a process ID), the workload is considered stopped when the underlying process terminates. For object references (such as a `KubernetesObjectReference`), the workload is considered stopped when the referenced object no longer exists in the control plane, or — when the reference pinned a UID alongside a name — when the object resolved by name no longer matches the pinned UID.
 
 ## 5. X.509-SVID Profile
 
