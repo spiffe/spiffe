@@ -52,7 +52,7 @@ Future versions of this specification may introduce additional profiles or make 
 
 ## 2. Extensibility
 
-Extending the SPIFFE Broker API outside of the standard is prohibited and instead, implementers should introduce new gRPC services, according to the [extensibility method](./SPIFFE_Broker_Endpoint.md#7-extensibility-and-services-rendered) outlined in the SPIFFE Broker Endpoint specification.
+Implementations MUST NOT add or modify RPCs outside of this standard. Custom workload reference types MAY be defined using the extension point described in [Section 3.1.4](#314-extensibility). Any other extensions MUST be introduced as new gRPC services, as described in the [extensibility method](./SPIFFE_Broker_Endpoint.md#7-extensibility-and-services-rendered) of the SPIFFE Broker Endpoint specification.
 
 ## 3. Service Definition
 
