@@ -117,13 +117,6 @@ At least one of `key` or `uid` MUST be specified. When both are specified, the s
 
 This single reference type covers a range of Kubernetes identification patterns that earlier drafts of this specification expressed with multiple dedicated reference messages. In particular, identifying a Pod by its UID alone — a common pattern for Brokers running alongside the Kubernetes runtime that already know the pod UID but not its namespaced name — is expressed by setting `type = { plural: "pods", group: "core" }` and `uid = <pod uid>` (with `key` left unset); see the corresponding example below.
 
-The advantages of separating `plural` and `group` into distinct fields are:
-
-- The `plural` and `group` components map directly onto the `Resource` and `Group` fields of a `SubjectAccessReview` request without any string parsing.
-- It avoids ambiguity when a custom resource's plural name happens to contain a dot (e.g., `myresource.example` in the `com` group vs. `myresource` in the `example.com` group), which the `<plural>.<group>` shorthand cannot disambiguate.
-
-Note that SPIFFE does not specify how runtimes should attest workloads referenced by a `KubernetesObjectReference`, but this design facilitates implementations that choose to attest via the recommended `SubjectAccessReview` API in Kubernetes.
-
 The mapping from a Kubernetes object to a SPIFFE ID is implementation-defined; this specification does not mandate a particular SPIFFE ID format.
 
 Examples:
