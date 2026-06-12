@@ -210,7 +210,7 @@ The `X509BundlesResponse` response message has a mandatory `bundles` field, whic
 
 If the client is not entitled to receive any X.509 bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchX509Bundles` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `X509BundleResponse` response contains the complete set of authorized X.509 bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
+As mentioned in [Stream Responses](#43-stream-responses), each `X509BundlesResponse` response contains the complete set of authorized X.509 bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
 ### 5.3 Default Identity
 
@@ -344,7 +344,7 @@ The returned bundles are encoded as a standard JWK Set as defined by [RFC 7517](
 
 If the client is not entitled to receive any JWT bundles, then the server SHOULD respond with the "PermissionDenied" gRPC status code (see the [Error Codes](SPIFFE_Workload_Endpoint.md#6-error-codes) section in the SPIFFE Workload Endpoint specification for more information). The client MAY attempt to reconnect with another call to the `FetchJWTBundles` RPC after a backoff.
 
-As mentioned in [Stream Responses](#43-stream-responses), each `JWTBundleResponse` response contains the complete set of authorized JWT bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
+As mentioned in [Stream Responses](#43-stream-responses), each `JWTBundlesResponse` response contains the complete set of authorized JWT bundles for the client at that point in time. As such, if the server redacts bundles from a subsequent response (or all bundles, i.e., returns a "PermissionDenied" gRPC status code) the client SHOULD cease using the redacted bundles.
 
 #### 6.2.3 ValidateJWTSVID
 

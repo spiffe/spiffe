@@ -6,7 +6,7 @@ Please read the [SSC Charter](CHARTER.md) for more information about the SSC's r
 ## SSC Members
 The current members of the SSC, ordered by term,  are as follows:
 
-**Arndt Schwenkschuster** @arndt-s  
+**Arndt Schwenkschuster** (@arndt-s)  
 [GitHub](https://github.com/arndt-s) | [LinkedIn](https://www.linkedin.com/in/arndtschw/)  
 Term End: November 1st, 2027  
 
@@ -24,4 +24,4 @@ Term end: May 10th, 2027
 
 **Kevin Fox** (@kfox1111)  
 [GitHub](https://github.com/kfox1111) | [LinkedIn](https://www.pnnl.gov/people/kevin-fox)  
-Term end: May 4th, 2026 
+Term end: May 4th, 2026  

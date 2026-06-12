@@ -36,7 +36,7 @@ Perhaps the most important function of SPIFFE is to secure process to process co
 This specification addresses the encoding of SVID information into an X.509 certificate, the constraints which must be set, as well as how to validate X.509 SVIDs.
 
 ## 2. SPIFFE ID
-In an X.509 SVID, the corresponding SPIFFE ID is set as a URI type in the Subject Alternative Name extension (SAN extension, see [RFC 5280 section 4.2.16][2]). An X.509 SVID MUST contain exactly one URI SAN, and by extension, exactly one SPIFFE ID. SVIDs containing more than one SPIFFE ID introduce challenges related to auditing and authorization logic, and SVIDs containing more than one URI SAN introduce challenges related to SPIFFE ID validation. Validators encountering an SVID containing more than one URI SAN MUST reject the SVID. Please see the [Validation](#5-validation) section for more information.
+In an X.509 SVID, the corresponding SPIFFE ID is set as a URI type in the Subject Alternative Name extension (SAN extension, see [RFC 5280 section 4.2.1.6][2]). An X.509 SVID MUST contain exactly one URI SAN, and by extension, exactly one SPIFFE ID. SVIDs containing more than one SPIFFE ID introduce challenges related to auditing and authorization logic, and SVIDs containing more than one URI SAN introduce challenges related to SPIFFE ID validation. Validators encountering an SVID containing more than one URI SAN MUST reject the SVID. Please see the [Validation](#5-validation) section for more information.
 
 An X.509 SVID MAY contain any number of other SAN field types, including DNS SANs.
 
@@ -97,7 +97,7 @@ Certificate path validation requires the leaf SVID certificate and one or more S
 ### 5.2. Leaf Validation
 When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
 
-When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `CA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator must also ensure that the scheme of the SPIFFE ID is set to `spiffe`. SVIDs containing more than one URI SAN MUST be rejected.
+When validating an X.509 SVID for authentication purposes, the validator MUST ensure that the `cA` field in the basic constraints extension is set to `false`, and that `keyCertSign` and `cRLSign` are not set in the key usage extension. The validator MUST also ensure that the scheme of the SPIFFE ID is set to `spiffe`, and MUST ensure that the SPIFFE ID has a non-root path component. SVIDs containing more than one URI SAN MUST be rejected.
 
 As support for URI name constraints becomes more widespread, future versions of this document may update the requirements set forth in this section in order to better leverage name constraint validation.
 
@@ -124,9 +124,9 @@ This document set forth conventions and standards for the issuance and validatio
 ## Appendix A. X.509 Field Reference
 Extension | Field | Description
 ----------|-------|------------
-Subject Alternate Name | uniformResourceIdentifier | This field is set equal to the SPIFFE ID. Only one instance of this field is permitted.
+Subject Alternative Name | uniformResourceIdentifier | This field is set equal to the SPIFFE ID. Only one instance of this field is permitted.
 Basic Constraints | CA | This field must be set to `true` if and only if the SVID is a signing certificate.
-Basic Constraints | pathLenConstraint | This field may be be set if the implementor wishes to enforce a finite CA hierarchy depth, for example, if inherited from an existing private key infrastructure (PKI).
+Basic Constraints | pathLenConstraint | This field may be set if the implementor wishes to enforce a finite CA hierarchy depth, for example, if inherited from an existing private key infrastructure (PKI).
 Name Constraints | permittedSubtrees | This field may be set if the implementor wishes to use URI name constraints. It will be required in a future version of this document.
 Key Usage | keyCertSign | This field must be set if and only if the SVID is a signing certificate.
 Key Usage | cRLSign | This field may be set if and only if the SVID is a signing certificate.
