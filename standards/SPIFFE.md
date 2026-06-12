@@ -4,7 +4,7 @@
 This document specifies an identity and identity issuance standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
 
 ## Abstract
-Distributed design patterns and practices such as microservices, container orchestrators, and cloud computing have led to production environments that are increasingly dynamic and heterogenous. Conventional security practices (such as network policies that only allow traffic between particular IP addresses) struggle to scale under this complexity. A first-class identity framework for workloads in an organization becomes necessary.
+Distributed design patterns and practices such as microservices, container orchestrators, and cloud computing have led to production environments that are increasingly dynamic and heterogeneous. Conventional security practices (such as network policies that only allow traffic between particular IP addresses) struggle to scale under this complexity. A first-class identity framework for workloads in an organization becomes necessary.
 
 Further, modern developers are expected to understand and play a role in how applications are deployed and managed in production environments. Operations teams require deeper visibility into the applications they are managing. As we move to a more evolved security stance, we must offer better tools to both teams so they can play an active role in building secure, distributed applications.
 
@@ -58,3 +58,4 @@ This document covered, at a high level, the various components that make up the 
 * [The SPIFFE Workload Endpoint](SPIFFE_Workload_Endpoint.md)
 * [The SPIFFE Workload API](SPIFFE_Workload_API.md)
 * [The SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md)
+* [SPIFFE Federation](SPIFFE_Federation.md)
