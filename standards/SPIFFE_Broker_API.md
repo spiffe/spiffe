@@ -60,7 +60,7 @@ The SPIFFE Broker API is defined by a Protocol Buffer (version 3) service defini
 
 Profiles are implemented as a group of related RPCs within a single `API` service in the `spiffe.broker` package.
 
-## 3.1 Workload Reference
+### 3.1 Workload Reference
 
 The SPIFFE Broker API requires a mechanism to identify the entity for which the server should issue an SVID. This reference system enables Brokers to request identity materials on behalf of specific entities while maintaining proper isolation and security boundaries.
 
@@ -222,7 +222,7 @@ Implementations MAY enforce more fine-grained access control by inspecting data 
 
 ### 4.2 Remote procedure scope
 
-Every invocation of a remote procedure (RPC) at the SPIFFE Broker API, including its request and responses (potentially multiple), are in context of a concrete workload. Clients are expected to invoke RPCs for each workload they represent individually and isolate them for each other accordingly. An X509 Bundle response, for instance, is only valid for the workload the request has referenced and MUST NOT be applied, visible or in any other way impact other workloads. Same applies to all other RPCs in the scope of the SPIFFE Broker API.
+Every invocation of a remote procedure (RPC) at the SPIFFE Broker API, including its request and responses (potentially multiple), are in context of a concrete workload. Clients are expected to invoke RPCs for each workload they represent individually and isolate them from each other accordingly. An X509 Bundle response, for instance, is only valid for the workload the request has referenced and MUST NOT be applied, visible or in any other way impact other workloads. Same applies to all other RPCs in the scope of the SPIFFE Broker API.
 
 If multiple workloads communicate with each other, and the client of the SPIFFE Broker API is involved, it MUST ensure that the corresponding certificates are accordingly separated. For instance, the SVID and bundle of the client is only used for client-side operations, and the SVID and bundle of the server is only used for server-side operations.
 
@@ -519,7 +519,7 @@ message SubscribeToJWTBundlesResponse {
 
 The `FetchJWTSVID` RPC allows a Broker to request one or more short-lived JWT-SVIDs with a specific audience for a workload.
 
-The `FetchJWTSVIDRequest` request message contains a mandatory workload reference. It also contains a mandatory `audience` field, which MUST contain the value to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
+The `FetchJWTSVIDRequest` request message contains a mandatory workload reference. It also contains a mandatory `audience` field, which MUST contain the values to embed in the audience claim of the returned JWT-SVIDs. The `spiffe_id` field is optional, and is used to request a JWT-SVID for a specific SPIFFE ID. If unspecified, the server MUST return JWT-SVIDs for all identities authorized for the workload.
 
 The `FetchJWTSVIDResponse` response message consists of a mandatory `svids` field, which MUST contain one or more `JWTSVID` messages.
 

@@ -59,7 +59,7 @@ As a hardening measure against [Server Side Request Forgery](https://www.owasp.o
 
 ### 3.1 Transport Security
 
-The SPIFFE Broker Endpoint requires transport security in the form of mutual TLS. Compared to the SPIFFE Workload Endpoint the broker and the implementation are expected to have a previously established root of trust in the form of SPIFFE bundles and X509-SVIDs. Effectively, this means that both parties need to make use of the SPIFFE Workload API as workloads first, before serving or connecting to the SPIFFE Broker Endpoint. Please see the [Authentication](#5-authentication) section for more information.
+The SPIFFE Broker Endpoint requires transport security in the form of mutual TLS. Compared to the SPIFFE Workload Endpoint the broker and the implementation are expected to have a previously established root of trust in the form of SPIFFE bundles and X509-SVIDs. Effectively, this means that both parties need to make use of the SPIFFE Workload API as workloads first, before serving or connecting to the SPIFFE Broker Endpoint. Please see the [Authentication and Authorization](#5-authentication-and-authorization) section for more information.
 
 ## 4. Locating the Endpoint
 
