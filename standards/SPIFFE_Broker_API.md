@@ -280,7 +280,7 @@ Clients MAY inspect ErrorInfo details for structured error information but MUST 
 
 ### 4.9 Workload Lifecycle
 
-Server and client MUST ensure that no operations are performed beyond the lifetime of the workload. Once the workload has stopped, the server MUST stop sending responses for that workload, and the client MUST drop all data it received for the workload, removing it from file systems or other locations where it may have been stored.
+Server and client MUST ensure that no operations are performed beyond the lifetime of the workload in a timely manner. Once the workload has stopped, the server MUST stop sending responses for that workload, and the client MUST drop all data it received for the workload, removing it from file systems or other locations where it may have been stored.
 
 What constitutes "stopped" depends on the reference type. For local references (such as a process ID), the workload is considered stopped when the underlying process terminates. For object references (such as a `KubernetesObjectReference`), the workload is considered stopped when the referenced object no longer exists in the control plane, or — when the reference pinned a UID alongside a name — when the object resolved by name no longer matches the pinned UID.
 
