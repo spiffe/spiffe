@@ -94,7 +94,7 @@ Servers MUST NOT trust reference data provided by the client without independent
 
 Some references — such as the process ID — are only meaningful and discoverable on the local node. Clients MUST ensure that local references are not sent to remote Broker API servers, and deployments MUST ensure servers do not receive requests originating from outside the node they run on. This mitigates situations where a Broker requests credentials with a process ID from a different node, where that process ID is used by a different workload.
 
-Object references (such as `KubernetesObjectReference`) are valid across the control plane that owns the referenced object — for example, anywhere within the same Kubernetes cluster — and MAY be sent across the network within that scope. Object references MUST NOT be honored by a server bound to a different control plane (e.g., a different cluster); servers MUST reject object references that name a control plane they do not serve.
+Similar applies to the `KubernetesObjectReference`. It is only valid within the Kubernetes Control Plane that owns the referenced object and the Broker API can only be used for references within a single Control Plane.
 
 ### 3.1.3 Builtin Reference Types
 
@@ -224,6 +224,8 @@ The SPIFFE Broker API makes use of the authentication and authorization at the [
 Implementations MUST maintain a strict allow-only policy that prevents any caller that is not authorized to leverage the SPIFFE Broker API.
 
 Implementations MAY enforce more fine-grained access control by inspecting data carried in the request. For example, an implementation MAY restrict a given caller to a subset of reference types (such as only `WorkloadPIDReference`, or only `KubernetesObjectReference` against a specific namespace), to a subset of audiences in `FetchJWTSVID`, or to a subset of requested SPIFFE IDs. The exact policy model is implementation-defined.
+
+Because the [SPIFFE Broker Endpoint](./SPIFFE_Broker_Endpoint.md#3-transport) MAY be served over a TCP listen socket, the caller is not necessarily co-located with the implementation. Authorized brokers MAY therefore request SVIDs from outside the cluster or host on which the implementation runs, provided they satisfy the authentication and authorization requirements of the SPIFFE Broker Endpoint. Where this is not desired, an implementation can restrict such access either by differentiating on the SPIFFE ID of the broker as part of its authorization policy, or by limiting the endpoint to local accessibility, for instance by serving it over a Unix Domain Socket.
 
 ### 4.2 Remote procedure scope
 
