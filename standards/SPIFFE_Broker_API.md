@@ -1,5 +1,10 @@
 # The SPIFFE Broker API
 
+> [!IMPORTANT]
+> **New in June 2026** — The Broker API is a new addition to the SPIFFE
+> specification. Users and implementers should confirm implementation
+> compatibility within their environment before adoption.
+
 ## Status of this Memo
 
 This document specifies an identity API standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.
