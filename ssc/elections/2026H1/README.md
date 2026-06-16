@@ -9,7 +9,14 @@ This subdirectory captures the nominees and results of the 2026 H1 SSC election.
 For more information on how to participate, please see the relevant GitHub [tracking issue](https://github.com/spiffe/spiffe/issues/384).
 
 ## Nominees
-To be announced.
+
+- Ali Mohamed
+- Aviral Garg
+- Kevin Fox
+- Sorin Dumitru
 
 ## Results
-To be announced.
+
+Sorin Dumitru has been elected.
+
+Results: https://civs1.civs.us/cgi-bin/results.pl?id=E_0c5ca126cc12f065
