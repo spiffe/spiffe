@@ -6,6 +6,10 @@ Please read the [SSC Charter](CHARTER.md) for more information about the SSC's r
 ## SSC Members
 The current members of the SSC, ordered by term,  are as follows:
 
+**Sorin Dumitru** (@sorindumitru)  
+[GitHub](https://github.com/sorindumitru) | [LinkedIn](https://www.linkedin.com/in/sorin-dumitru-69841243)  
+Term end: June 16th, 2028
+
 **Arndt Schwenkschuster** (@arndt-s)  
 [GitHub](https://github.com/arndt-s) | [LinkedIn](https://www.linkedin.com/in/arndtschw/)  
 Term End: November 1st, 2027  
@@ -20,8 +24,4 @@ Term end: May 10th, 2027
 
 **Mariusz Sabath** (@mrsabath)  
 [GitHub](https://github.com/mrsabath) | [LinkedIn](https://www.linkedin.com/in/mariusz-sabath-b36b0b20/)  
-Term end: May 10th, 2027  
-
-**Kevin Fox** (@kfox1111)  
-[GitHub](https://github.com/kfox1111) | [LinkedIn](https://www.pnnl.gov/people/kevin-fox)  
-Term end: May 4th, 2026  
+Term end: May 10th, 2027
