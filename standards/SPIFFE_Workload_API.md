@@ -136,12 +136,12 @@ message X509SVIDResponse {
     // X.509-SVID, its private key, and the bundle for the trust domain.
     repeated X509SVID svids = 1;
 
-    // Optional. ASN.1 DER encoded certificate revocation lists.
+    // Optional. ASN.1 DER encoded (not PEM) certificate revocation lists.
     repeated bytes crl = 2;
 
     // Optional. CA certificate bundles belonging to foreign trust domains that
     // the workload should trust, keyed by the SPIFFE ID of the foreign trust
-    // domain. Bundles are ASN.1 DER encoded.
+    // domain. Bundles are ASN.1 DER encoded (not PEM).
     map<string, bytes> federated_bundles = 3;
 }
 
@@ -151,14 +151,14 @@ message X509SVID {
     // Required. The SPIFFE ID of the SVID in this entry
     string spiffe_id = 1;
 
-    // Required. ASN.1 DER encoded certificate chain. MAY include
+    // Required. ASN.1 DER encoded (not PEM) certificate chain. MAY include
     // intermediates, the leaf certificate (or SVID itself) MUST come first.
     bytes x509_svid = 2;
 
-    // Required. ASN.1 DER encoded PKCS#8 private key. MUST be unencrypted.
+    // Required. ASN.1 DER encoded (not PEM) PKCS#8 private key. MUST be unencrypted.
     bytes x509_svid_key = 3;
 
-    // Required. ASN.1 DER encoded X.509 bundle for the trust domain.
+    // Required. ASN.1 DER encoded (not PEM) X.509 bundle for the trust domain.
     bytes bundle = 4;
 
     // Optional. An operator-specified string used to provide guidance on how this
@@ -176,12 +176,12 @@ message X509BundlesRequest {
 // The X509BundlesResponse message carries a set of global CRLs and a map of
 // trust bundles the workload should trust.
 message X509BundlesResponse {
-    // Optional. ASN.1 DER encoded certificate revocation lists.
+    // Optional. ASN.1 DER encoded (not PEM) certificate revocation lists.
     repeated bytes crl = 1;
 
     // Required. CA certificate bundles belonging to trust domains that the
     // workload should trust, keyed by the SPIFFE ID of the trust domain.
-    // Bundles are ASN.1 DER encoded.
+    // Bundles are ASN.1 DER encoded (not PEM).
     map<string, bytes> bundles = 2;
 }
 ```
