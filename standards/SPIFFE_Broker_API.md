@@ -1,6 +1,6 @@
 # The SPIFFE Broker API
 
-> **Stability: Beta** - see [STABILITY.md](STABILITY.md).
+> **Stability: Incubating** - see [STABILITY.md](STABILITY.md).
 
 ## Status of this Memo
 
