@@ -78,9 +78,17 @@ widely deployed.
 ### 2.3. Stable
 
 A specification is promoted from Incubating to **Stable** by a pull request that
-updates its banner, approved by two code owners. The criterion for promotion is
-that at least two independent, interoperable implementations exist and no
-further breaking changes are anticipated.
+updates its banner, approved by two code owners.
+
+Promotion is ultimately at the behest of the code owners. It is not gated on
+any fixed criteria, however, the code owners should be satisfied that it is 
+unlikely that any significant or breaking changes will be required in the
+future.
+
+Typically, a specification is ready for promotion when there are multiple
+independent implementations and there are real-world deployments that have
+proven that the specification is fit for purpose. In practice, different
+criteria may be more appropriate depending on what the specification defines.
 
 Breaking changes to a Stable specification are severely avoided and reserved for
 resolving critical security issues. A Stable specification cannot be demoted
