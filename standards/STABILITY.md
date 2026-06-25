@@ -49,7 +49,7 @@ indicates that it is Proposed.
 
 A specification is promoted from Proposed to **Incubating** by a pull request
 that merges it into the `main` branch with an Incubating banner, approved by two
-maintainers. The criterion for promotion is SIG-Spec consensus that its design
+code owners. The criterion for promotion is SIG-Spec consensus that its design
 is sound and ready for trial implementation.
 
 When implementing an Incubating specification, it is recommended that adopters
@@ -78,7 +78,7 @@ widely deployed.
 ### 2.3. Stable
 
 A specification is promoted from Incubating to **Stable** by a pull request that
-updates its banner, approved by two maintainers. The criterion for promotion is
+updates its banner, approved by two code owners. The criterion for promotion is
 that at least two independent, interoperable implementations exist and no
 further breaking changes are anticipated.
 
