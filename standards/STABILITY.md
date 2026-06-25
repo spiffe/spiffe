@@ -86,9 +86,10 @@ unlikely that any significant or breaking changes will be required in the
 future.
 
 Typically, a specification is ready for promotion when there are multiple
-independent implementations and there are real-world deployments that have
-proven that the specification is fit for purpose. In practice, different
-criteria may be more appropriate depending on what the specification defines.
+distinct and interoperable implementations and there are real-world deployments
+that have proven that the specification is fit for purpose. In practice,
+different criteria may be more appropriate depending on what the specification
+defines.
 
 Breaking changes to a Stable specification are severely avoided and reserved for
 resolving critical security issues. A Stable specification cannot be demoted
