@@ -64,4 +64,4 @@ This document covered, at a high level, the various components that make up the 
 * [SPIFFE Federation](SPIFFE_Federation.md)
 * [The SPIFFE Broker API](SPIFFE_Broker_API.md)
 * [The SPIFFE Broker Endpoint](SPIFFE_Broker_Endpoint.md)
-* [Stability](STABILITY.md)
+* [SPIFFE Specification Stability](STABILITY.md)

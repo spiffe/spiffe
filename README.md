@@ -43,6 +43,7 @@ SPIFFE is a [graduated](https://www.cncf.io/projects/spiffe/) project of the [Cl
 * [SPIFFE Federation](standards/SPIFFE_Federation.md)
 * [The SPIFFE Broker API](standards/SPIFFE_Broker_API.md)
 * [The SPIFFE Broker Endpoint](standards/SPIFFE_Broker_Endpoint.md)
+* [SPIFFE Specification Stability](standards/STABILITY.md)
 
 ## Getting Started
 

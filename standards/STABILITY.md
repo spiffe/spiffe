@@ -3,8 +3,8 @@
 ## Table of Contents
 1\. [What this is](#1-what-this-is)  
 2\. [Stability levels](#2-stability-levels)  
-2.1. [Proposed](#21-proposed)
-2.2. [Experimental](#22-experimental)
+2.1. [Proposed](#21-proposed)  
+2.2. [Experimental](#22-experimental)  
 2.3. [Incubating](#23-incubating)  
 2.4. [Stable](#24-stable)  
 3\. [Marking stability](#3-marking-stability)  
