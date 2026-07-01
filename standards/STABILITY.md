@@ -74,7 +74,7 @@ A specification may move to **Incubating** via two routes:
   This PR must be approved by two maintainers.
 
 The criterion for promotion to Incubating is SIG-Spec consensus that the design
-is sound and ready for trial implementations.
+is sound and ready for real world scenarios.
 
 When implementing an Incubating specification, it is recommended that adopters
 record the revision of the specification that they have implemented. A permalink
