@@ -10,7 +10,7 @@ Remember, with great power comes great responsibility.
 
 [ ] Ensure [documented membership of SSC](README.md) is updated, as is the associated GitHub issue for the election.
 
-[ ] Ensure [membership of SSC in Github](https://github.com/orgs/spiffe/teams/ssc) is updated.
+[ ] Ensure [membership of SSC in Github](https://github.com/orgs/spiffe/teams/ssc) is updated. Use the appropriate GitHub Org Management tooling at ssc/github-org-management.
 
 [ ] Ensure [owner on the SPIFFE org](https://github.com/orgs/spiffe/people?query=role%3Aowner) role is added.
 
@@ -32,7 +32,7 @@ Offboarding is largely the opposite of Onboarding:
 
 [ ] Ensure [documented membership of SSC](README.md) is updated, as is the associated GitHub issue for the election.
 
-[ ] Ensure [membership of SSC in Github](https://github.com/orgs/spiffe/teams/ssc) role is removed (changed to regular member).
+[ ] Ensure [membership of SSC in Github](https://github.com/orgs/spiffe/teams/ssc) role is removed (changed to regular member). Use the appropriate GitHub Org Management tooling at ssc/github-org-management.
 
 [ ] Ensure [owner on the SPIFFE org](https://github.com/orgs/spiffe/people?query=role%3Aowner) is removed.
 

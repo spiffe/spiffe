@@ -1,0 +1,89 @@
+name: Peribolos (apply)
+
+# Reconcile the spiffe org's teams to ssc/github-org-management/org.yaml after a
+# change lands on main. The apply job runs WITH --confirm, so it mutates GitHub.
+#
+# SECURITY MODEL (see ssc/github-org-management/README.md):
+#   * Two jobs. `build` compiles peribolos with NO credentials and NO repo code,
+#     then hands the binary to `apply` as an artifact. This keeps the heavy,
+#     dependency-laden build away from the write-capable token.
+#   * `apply` is the ONLY place the write App (APPLY_APP_*, Org Members:
+#     Read & write) is used. Its secrets live in the `org-management` protected
+#     environment (deployment branch restricted to main + required reviewers), so
+#     the write key is unreachable from any PR-triggered workflow and each apply
+#     pauses for a human to approve after reviewing the plan.
+on:
+  push:
+    branches: [main]
+    paths:
+      - ssc/github-org-management/org.yaml
+      - .github/workflows/peribolos-apply.yml
+
+permissions:
+  contents: read
+
+# Never let two applies race against the org.
+concurrency:
+  group: peribolos-apply
+  cancel-in-progress: false
+
+jobs:
+  # Credential-free build. No checkout, no secrets — go install fetches the
+  # module from the proxy (integrity-verified against sum.golang.org).
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version: stable
+
+      - name: Build peribolos
+        run: |
+          go install sigs.k8s.io/prow/cmd/peribolos@v0.0.0-20260624122823-2b5fea27a177
+          mkdir -p dist
+          cp "$(go env GOPATH)/bin/peribolos" dist/peribolos
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: peribolos-bin
+          path: dist/peribolos
+          retention-days: 1
+          if-no-files-found: error
+
+  # The only job that touches the write key. Gated by the org-management
+  # environment (required reviewers + main-only).
+  apply:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: org-management
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: peribolos-bin
+          path: dist
+
+      - name: Mint write GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.APPLY_APP_ID }}
+          private-key: ${{ secrets.APPLY_APP_PRIVATE_KEY }}
+          owner: spiffe
+
+      - name: Peribolos apply
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          umask 077
+          chmod +x dist/peribolos
+          printf '%s' "$GH_TOKEN" > "${RUNNER_TEMP}/token"
+          dist/peribolos \
+            --config-path ssc/github-org-management/org.yaml \
+            --github-token-path "${RUNNER_TEMP}/token" \
+            --fix-teams \
+            --fix-team-members \
+            --confirm

@@ -1,0 +1,96 @@
+# SPIFFE GitHub organization configuration, applied by Peribolos.
+#
+# Peribolos is AUTHORITATIVE over the org's team list: any team that exists in
+# the `spiffe` org but is NOT listed below becomes a deletion candidate when
+# `--fix-teams` runs. For that reason every existing team is enumerated here,
+# even ones we are not actively curating yet. See ./README.md before editing.
+#
+# This file is reconciled with `--fix-teams --fix-team-members` only. Org
+# membership, org settings, and repo permissions are NOT managed here.
+orgs:
+  spiffe:
+    teams:
+
+      ssc:
+        description: Members of the SPIFFE Steering Committee
+        privacy: closed
+        maintainers: []
+        members:
+          - arndt-s
+          - sorindumitru
+          - strideynet
+          - v0lkan
+          - mrsabath
+
+      spiffe-maintainers:
+        description: SPIFFE project maintainers
+        privacy: closed
+        maintainers: []
+        members:
+          - arndt-s
+          - strideynet
+          - azdagron
+          - sorindumitru
+
+      spire-maintainers:
+        description: SPIRE project maintainers
+        privacy: closed
+        members:
+          - amartinezfayo
+          - azdagron
+          - evan2645
+          - MarcosDY
+          - rturner3
+          - sorindumitru
+
+      # TODO(strideynet): It feels like `docs` and `spiffe-io-ux-core` could
+      # be merged into a new `spiffe-io-maintainers` team.
+      docs:
+        privacy: closed
+        members:
+          - ajessup
+          - Andres-GC
+          - mchurichi
+          - sanderson042
+
+      spiffe-io-ux-core:
+        description: spiffe.io UI/UX Core Tem
+        privacy: closed
+        members:
+          - hamzaerbay
+          - usirin
+          - v0lkan
+
+      spike-maintainers:
+        description: SPIKE maintainers
+        privacy: closed
+        members:
+          - parlakisik
+          - kfox1111
+          - v0lkan
+
+      tiny-projects-maintainers:
+        description: This is a volunteer team to supplement maintenance efforts for tiny SPIFFE projects, where the project lacks a full set of maintainers.
+        privacy: closed
+        members:
+          - kfox1111
+          - strideynet
+          - v0lkan
+          - amoore877
+          - fkautz
+          - moe-omar
+
+      vsecm-sdk-go-maintainers:
+        description: Maintainers for VMware Secrets Manager Go SDK
+        privacy: closed
+        members:
+          - parlakisik
+          - st96d045
+          - v0lkan
+
+      vsecm-sdk-rust-maintainers:
+        description: Maintainers of VMware Secrets Manager Rust SDK
+        privacy: closed
+        members:
+          - parlakisik
+          - v0lkan

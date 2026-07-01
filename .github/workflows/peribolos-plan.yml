@@ -1,0 +1,58 @@
+name: Peribolos (plan)
+
+# Dry-run on PRs that touch the org config. Peribolos runs WITHOUT --confirm, so
+# it makes no changes — it logs the diff it *would* apply. Review that diff in the
+# job log before approving the PR.
+#
+# SECURITY: this job runs in PR context, so for same-repo branch PRs its secrets
+# are readable by the PR author's workflow. It therefore uses a READ-ONLY GitHub
+# App (PLAN_APP_*, Org Members: Read). Even if the key leaks, it cannot mutate the
+# org. The write-capable App lives only in the apply workflow's protected
+# environment. See ssc/github-org-management/README.md.
+on:
+  pull_request:
+    paths:
+      - ssc/github-org-management/org.yaml
+      - .github/workflows/peribolos-*.yml
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version: stable
+
+      - name: Install peribolos
+        # Pinned for reproducibility. Prow publishes no semver tags, so this is a
+        # pseudo-version of the default branch. Bump with:
+        #   go install sigs.k8s.io/prow/cmd/peribolos@latest && go list -m sigs.k8s.io/prow
+        run: go install sigs.k8s.io/prow/cmd/peribolos@v0.0.0-20260624122823-2b5fea27a177
+
+      - name: Mint read-only GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.PLAN_APP_ID }}
+          private-key: ${{ secrets.PLAN_APP_PRIVATE_KEY }}
+          owner: spiffe
+
+      - name: Peribolos dry-run
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          umask 077
+          printf '%s' "$GH_TOKEN" > "${RUNNER_TEMP}/token"
+          peribolos \
+            --config-path ssc/github-org-management/org.yaml \
+            --github-token-path "${RUNNER_TEMP}/token" \
+            --fix-teams \
+            --fix-team-members
+          # No --confirm: this only reports the changes it would make.
