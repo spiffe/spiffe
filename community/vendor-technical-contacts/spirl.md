@@ -1,26 +1,26 @@
-# SPIRL
+# Defakto Security
 
 ## Web
 
-* Official Website: https://www.spirl.com/
+* Official Website: https://www.defakto.security/
 
 ## Documentation and Support
 
-Prospective customers should contact SPIRL via the contact form
-located at https://www.spirl.com/contact
+Prospective customers should contact Defakto via the contact form
+located at https://www.defakto.security/contact/
 
 ## Contacts
 
-### Evan Gilman (Technical and Community)
+### Arndt Schwenkschuster
 
 **Type:** Technical, Community
 
-* SPIFFE Community Slack: `Evan Gilman`
-* Email: `evan@spirl.com`
+* SPIFFE Community Slack: `Arndt Schwenkschuster`
+* Email: `arndt@defakto.security`
 
-### Marcel Levy (Community)
+### Marcel Levy
 
 **Type:** Community
 
 * SPIFFE Community Slack: `Marcel Levy`
-* Email: `marcel@spirl.com`
+* Email: `marcel@defakto.security`
