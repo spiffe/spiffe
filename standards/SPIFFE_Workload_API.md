@@ -1,5 +1,7 @@
 # The SPIFFE Workload API
 
+> **Stability: Stable** - see [STABILITY.md](STABILITY.md).
+
 ## Status of this Memo
 
 This document specifies an identity API standard for the internet community, and requests discussion and suggestions for improvements. Distribution of this document is unlimited.

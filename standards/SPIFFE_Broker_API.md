@@ -1,9 +1,6 @@
 # The SPIFFE Broker API
 
-> [!IMPORTANT]
-> **New in June 2026** — The Broker API is a new addition to the SPIFFE
-> specification. Users and implementers should confirm implementation
-> compatibility within their environment before adoption.
+> **Stability: Incubating** - see [STABILITY.md](STABILITY.md).
 
 ## Status of this Memo
 
