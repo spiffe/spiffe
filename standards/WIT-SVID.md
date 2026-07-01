@@ -1,7 +1,6 @@
 # The WIT SPIFFE Verifiable Identity Document
 
-> [!WARNING]  
-> This document belongs to an experimental branch of the SPIFFE standards that explores integration with the WIMSE standards. Contents of this document are subject to breaking change and should not be considered stable.
+> **Stability: Incubating** - see [STABILITY.md](STABILITY.md).
 
 ## Status of this Memo
 

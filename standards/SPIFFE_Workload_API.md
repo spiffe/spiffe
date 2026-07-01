@@ -360,6 +360,9 @@ The `FetchJWTBundles` method returns bundles keyed by the SPIFFE ID of the trust
 
 ## 7. WIT-SVID Profile
 
+> **Stability: Incubating** (this section only - the remainder of this document
+> is Stable.)
+
 The WIT-SVID Profile of the SPIFFE Workload API provides a set of gRPC methods which can be used by workloads to retrieve [WIT-SVIDs](WIT-SVID.md) and their related trust bundles. This profile outlines the signature of these methods, as well as related client and server behavior.
 
 Unlike the X.509-SVID and JWT-SVID profiles, implementation of the WIT-SVID profile is optional. Where a server does not support the WIT-SVID profile, calls to all RPCs defined by the WIT-SVID profile MUST return the "Unimplemented" gRPC status code. If the client receives an "Unimplemented" status code calling a WIT-SVID profile RPC, it SHOULD NOT attempt to reconnect to the server using the WIT-SVID profile.
