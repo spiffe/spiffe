@@ -115,7 +115,7 @@ WorkloadReference {
 - `key` is a structured `KubernetesObjectKey` message identifying the specific instance within that type by `namespace` and `name`. `key.namespace` MUST be set for namespaced resources and MUST be empty for cluster-scoped ones; `key.name` is required when `key` is set.
 - `uid` is the UID of the referenced Kubernetes object as assigned by Kubernetes.
 
-At least one of `key` or `uid` MUST be specified. When both are specified, the server MUST verify that the object resolved by `key` has the specified UID at the time of issuing the SVIDs and MUST return an error otherwise. When only `uid` is specified, the server resolves the object — and its namespace, if any — from the UID.
+At least one of `key` or `uid` MUST be specified. When both are specified, the server MUST verify that the object resolved by `key` has the specified UID at the time of attesting the reference and MUST return an error otherwise. When only `uid` is specified, the server resolves the object — and its namespace, if any — from the UID.
 
 This single reference type covers a range of Kubernetes identification patterns that earlier drafts of this specification expressed with multiple dedicated reference messages. In particular, identifying a Pod by its UID alone — a common pattern for Brokers running alongside the Kubernetes runtime that already know the pod UID but not its namespaced name — is expressed by setting `type = { plural: "pods", group: "core" }` and `uid = <pod uid>` (with `key` left unset); see the corresponding example below.
 

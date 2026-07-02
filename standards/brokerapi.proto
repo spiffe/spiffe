@@ -100,7 +100,7 @@ message KubernetesObjectReference {
     // UUID string as assigned by Kubernetes. At least one of `key` or `uid`
     // MUST be specified. When both `key` and `uid` are specified, the server
     // MUST verify that the object resolved by `key` has the specified UID at
-    // the time of issuing the SVIDs and MUST return an error otherwise.
+    // the time of attesting the reference and MUST return an error otherwise.
     string uid = 3;
 }
 
