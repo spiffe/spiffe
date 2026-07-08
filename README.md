@@ -81,6 +81,6 @@ The [SPIFFE Steering Committee](/GOVERNANCE.md#the-spiffe-steering-committee-ssc
 
 * Calendar: [iCal](https://calendar.google.com/calendar/ical/c_gck7v87m9obq6n3hpo01l7csus%40group.calendar.google.com/public/basic.ics) or [Browser-based](https://calendar.google.com/calendar/embed?src=c_gck7v87m9obq6n3hpo01l7csus%40group.calendar.google.com&ctz=America%2FChicago)
 * Meeting Notes: [Google Doc](https://docs.google.com/document/d/14YlmMTqwqNdx-CWapwwIBMaakH5Z2UnAvOBQBB8AwQM)
-* Call Details: [Zoom Link](https://zoom.us/j/95959131216?pwd=akw4RzlEUEVCTnFkWE5KdWFPZXpkdz09)
+* Call Details: [Google Meet](https://meet.google.com/grq-qwug-zmr)
 
 To contact the SSC privately, please send an email to [ssc@spiffe.io](mailto:ssc@spiffe.io).
