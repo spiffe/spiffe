@@ -81,7 +81,7 @@ Implementers SHOULD NOT include parameters which are defined neither here nor in
 The `kty` parameter MUST be set, and its behavior follows [Section 4.1][6] of RFC 7517. Clients encountering an unknown key type MUST ignore the entire JWK element.
 
 #### 4.2.2. Public Key Use
-The `use` parameter MUST be set. Its value indicates the type of identity document (or SVID) that it is authoritative for. At the time of this writing, only two SVID types are supported: `x509-svid` and `jwt-svid`. The values are case sensitive. Please see the respective SVID specifications for more information about `use` values. Clients encountering either a missing `use` parameter or an unknown `use` value MUST ignore the entire JWK element.
+The `use` parameter MUST be set. Its value indicates the type of identity document (or SVID) that it is authoritative for. At the time of this writing, three SVID types are supported: `x509-svid`, `jwt-svid`, and `wit-svid`. The values are case sensitive. Please see the respective SVID specifications for more information about `use` values. Clients encountering either a missing `use` parameter or an unknown `use` value MUST ignore the entire JWK element.
 
 ## 5. SPIFFE Bundle Map
 A SPIFFE Bundle Map is an object containing a collection of SPIFFE Bundles. The bundles it contains are considered authoritative for the corresponding trust domain name, which is also included.
