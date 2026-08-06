@@ -100,8 +100,8 @@ application's certificate chain, in leaf-to-root order.  The leaf certificate
 must be issued to the public key derived from the PRIVATE KEY block.  The leaf
 certificate SHOULD be an X.509 SVID.
 
-The certificate chain MAY contain the trust anchor ("root certificate") of the
-chain, or it MAY stop at the certificate preceding the trust anchor.
+The certificate chain MUST NOT contain the trust anchor ("root certificate") of
+the chain.  It MUST stop at the certificate preceding the trust anchor.
 
 The credential bundle:
 * MUST NOT contain any other PEM block types.
