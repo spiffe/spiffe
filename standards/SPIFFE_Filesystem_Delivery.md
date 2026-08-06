@@ -110,10 +110,11 @@ The credential bundle:
 
 The provisioning system SHOULD update the credential bundle on the filesystem
 with a new key and certificate chain before the leaf certificate currently in
-the bundle expires. The provisioning system SHOULD make these updates
-atomically, so that an application reading the credential bundle reads either
-the complete old content or the complete new content, with no intermediate
-state.
+the bundle expires, with enough additional time for the application to detect
+and reload the updated credential bundle. The provisioning system SHOULD make
+these updates atomically, so that an application reading the credential bundle
+reads either the complete old content or the complete new content, with no
+intermediate state.
 
 The developer SHOULD NOT copy this file anywhere, since compromise of the
 credential-bundle.private-key.pem file could compromise the security of TLS
