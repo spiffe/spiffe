@@ -248,13 +248,6 @@ SPIFFE credentials, you should ideally support both the Workload API and
 Filesystem Delivery, following the procedure from [Section
 3.1](#locating-the-credential-folder) to select.
 
-If supporting both is not feasible, then consider which standard the SPIFFE
-identity provisioning you are most likely to use supports.
-
-If you are writing or maintaining a SPIFFE X.509 identity provisioning system,
-then, again, ideally you would support both mechanisms, however (as in the case
-of Kubernetes) the Workload API may be less feasible.
-
 ## Appendix B: Example Kubernetes Setup {#example-kubernetes-setup}
 
 Kubernetes provides two built-in mechanisms that can be used together to
