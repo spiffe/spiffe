@@ -73,6 +73,10 @@ provisioning system and application must be coordinated so that the application
 knows where to find the additional credential folders, and in which
 circumstances they should be used.
 
+Because the credential folder contains sensitive credentials, provisioning
+systems SHOULD ensure that their contents do not appear on physical disks or in
+automatic backups.
+
 ### 2.1 Credential Bundle {#credential-bundle}
 
 A credential bundle file contains the application's private key and certificate
