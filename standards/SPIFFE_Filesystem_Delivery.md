@@ -188,10 +188,11 @@ writes the updated content.
 The provisioning system may periodically update the credential bundle on the
 filesystem.  The application SHOULD reload the credential bundle as soon as
 reasonably possible after the provisioning system updating it.  The application
-SHOULD NOT assume that the updated bundle will have any commonality with the
-previous bundle.  For example, the type of the private key may be different, or
-the certificate may be issued from a different root, with different
-intermediates.
+MUST reload the credential bundle within 5 minutes of an update on the
+filesystem.  The application SHOULD NOT assume that the updated bundle will have
+any commonality with the previous bundle.  For example, the type of the private
+key may be different, or the certificate may be issued from a different root,
+with different intermediates.
 
 ### 3.3 Validating Peer SPIFFE Certificates {#validating-peer-spiffe-certificates}
 
@@ -224,7 +225,8 @@ SVID verification for a certificate from the corresponding trust domain.
 Applications should NEVER unify the contents of multiple
 `*.spiffe-trust-bundle.pem` files into a single root store for certificate
 verification, including by treating the entire SPIFFE credential folder as a
-root certificate store.
+root certificate store.  Doing this allows for workloads in one trust domain to
+impersonate workloads in another trust domain.
 
 ## Appendix A: Filesystem Delivery Versus the Workload API {#filesystem-delivery-vs-the-workload-api}
 
