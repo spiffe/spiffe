@@ -1,5 +1,7 @@
 # The SPIFFE Filesystem Delivery Standard
 
+> **Stability: Incubating** - see [STABILITY.md](STABILITY.md).
+
 ## Status of this Memo {#memo-status}
 
 This document specifies an identity API standard for the internet community, and
@@ -32,8 +34,8 @@ Bundles features.
 3\.1\. [Locating the Credential Folder](#locating-the-credential-folder)
 3\.2\. [Loading and Refreshing the Credential Bundle](#loading-and-refreshing-the-credential-bundle)
 3\.3\. [Validating Peer SPIFFE Certificates](#validating-peer-spiffe-certificates)
-Appendix A. [Filesystem Delivery and the Workload API](#appendix-filesystem-delivery-vs-the-workload-api)
-Appendix B. [Example Kubernetes Setup](#appendix-example-kubernetes-setup)
+Appendix A. [Filesystem Delivery and the Workload API](#filesystem-delivery-vs-the-workload-api)
+Appendix B. [Reference Example: Filesystem Delivery on Kubernetes](#example-kubernetes-setup)
 
 
 ## 1. Participants {#participants}
@@ -58,8 +60,8 @@ filesystem.
 ## 2. Credential Folder {#credential-folder}
 
 A credential folder contains:
-* A single credential bundle, named `credential-bundle.private-key.pem`
-* One or more trust bundles, named `<trust-domain>.spiffe-trust-bundle.pem`
+* A single credential bundle, named `credential-bundle.private-key.x509.pem`
+* One or more trust bundles, named `<trust-domain>.spiffe-trust-bundle.x509.pem`
 
 A credential folder MAY contain other files and directories, used by the
 provisioning system for internal tracking or platform-specific features.  The
@@ -117,9 +119,9 @@ reads either the complete old content or the complete new content, with no
 intermediate state.
 
 The developer SHOULD NOT copy this file anywhere, since compromise of the
-credential-bundle.private-key.pem file could compromise the security of TLS
-sessions. The provisioning system SHOULD be configured to limit access to the
-credential-bundle.private-key.pem file to only the necessary user(s).
+credential-bundle.private-key.x509.pem file could compromise the security of
+TLS sessions. The provisioning system SHOULD be configured to limit access to
+the credential-bundle.private-key.x509.pem file to only the necessary user(s).
 
 ### 2.2 SPIFFE Trust Bundles {#spiffe-trust-bundles}
 
@@ -127,9 +129,9 @@ The credential folder will contain one or more trust bundles, one per trust
 domain that the provisioning system is configured to federate with.
 
 Each trust bundle file MUST be named following the pattern
-"<trust-domain>.spiffe-trust-bundle.pem".  The file contents are one or more PEM
-CERTIFICATE blocks, each with a PKIX-serialized certificate that is a trust
-anchor for the trust domain.  In most cases, a trust anchor is a root
+"<trust-domain>.spiffe-trust-bundle.x509.pem".  The file contents are one or
+more PEM CERTIFICATE blocks, each with a PKIX-serialized certificate that is a
+trust anchor for the trust domain.  In most cases, a trust anchor is a root
 certificate, although in rare cases it may be an intermediate certificate.
 
 A trust bundle file:
@@ -187,9 +189,7 @@ writes the updated content.
 
 The provisioning system may periodically update the credential bundle on the
 filesystem.  The application SHOULD reload the credential bundle as soon as
-reasonably possible after the provisioning system updating it.  The application
-MUST reload the credential bundle within 5 minutes of an update on the
-filesystem.  The application SHOULD NOT assume that the updated bundle will have
+reasonably possible after the provisioning system updates it.  The application SHOULD NOT assume that the updated bundle will have
 any commonality with the previous bundle.  For example, the type of the private
 key may be different, or the certificate may be issued from a different root,
 with different intermediates.
@@ -215,15 +215,13 @@ possible.
 The application SHOULD handle de-federation; if it has loaded a trust bundle for
 trust domain X, and then X's trust bundle is removed from the credential folder,
 the application SHOULD begin failing to verify certificates for trust domain X
-as soon as reasonably possible.  This only needs to affect new TLS handshakes;
-established TLS connections may remain open until they are otherwise finished or
-interrupted.
+as soon as reasonably possible.
 
 As mentioned in section 2.2, it is not safe to use the contents of a SPIFFE
 trust bundle file except by a SPIFFE-aware application performing SPIFFE X.509
 SVID verification for a certificate from the corresponding trust domain.
 Applications should NEVER unify the contents of multiple
-`*.spiffe-trust-bundle.pem` files into a single root store for certificate
+`*.spiffe-trust-bundle.x509.pem` files into a single root store for certificate
 verification, including by treating the entire SPIFFE credential folder as a
 root certificate store.  Doing this allows for workloads in one trust domain to
 impersonate workloads in another trust domain.
@@ -248,7 +246,7 @@ SPIFFE credentials, you should ideally support both the Workload API and
 Filesystem Delivery, following the procedure from [Section
 3.1](#locating-the-credential-folder) to select.
 
-## Appendix B: Example Kubernetes Setup {#example-kubernetes-setup}
+## Appendix B: Reference Example - Filesystem Delivery on Kubernetes {#example-kubernetes-setup}
 
 Kubernetes provides two built-in mechanisms that can be used together to
 implement the SPIFFE Filesystem Delivery API:
@@ -291,8 +289,7 @@ federated with C, workloads in B should not automatically also be federated just
 because they happen to run in the same Kubernetes cluster.
 
 This information can then be mounted into an application pod in a way that forms
-a valid SPIFFE credential folder, with the SPIFFE_CREDENTIAL_FOLDER environment
-variable pointing the application at the mount path:
+a valid SPIFFE credential folder, with an environment variable that the app understands.
 
 ```
 apiVersion: apps/v1
@@ -335,7 +332,7 @@ spec:
                   "k8s.spiffe.io/canarying":             "live"
                   "k8s.spiffe.io/workload-trust-domain": "a.myorg.example"
                   "k8s.spiffe.io/peer-trust-domain":     "a.myorg.example"
-              path: a.myorg.example.spiffe-trust-bundle.pem
+              path: a.myorg.example.spiffe-trust-bundle.x509.pem
           # This workload needs to federate with b.myorg.example, so it needs the appropriate bundle.
           - clusterTrustBundle:
               signerName: spiffe.example/identity
@@ -344,11 +341,11 @@ spec:
                   "k8s.spiffe.io/canarying":             "live"
                   "k8s.spiffe.io/workload-trust-domain": "a.myorg.example"
                   "k8s.spiffe.io/peer-trust-domain":     "b.myorg.example"
-              path: b.myorg.example.spiffe-trust-bundle.pem
+              path: b.myorg.example.spiffe-trust-bundle.x509.pem
           - podCertificate:
               signerName: spiffe.example/identity
               keyType: ECDSAP256
-              credentialBundlePath: credential-bundle.pem
+              credentialBundlePath: credential-bundle.private-key.x509.pem
 ```
 
 
