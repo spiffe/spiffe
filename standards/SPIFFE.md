@@ -60,6 +60,7 @@ This document covered, at a high level, the various components that make up the 
 * [The JWT SPIFFE Verifiable Identity Document](JWT-SVID.md)
 * [The WIT SPIFFE Verifiable Identity Document](WIT-SVID.md)
 * [The SPIFFE Workload Endpoint](SPIFFE_Workload_Endpoint.md)
+* [Locating the SPIFFE Endpoint](SPIFFE_Endpoint.md)
 * [The SPIFFE Workload API](SPIFFE_Workload_API.md)
 * [The SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md)
 * [SPIFFE Federation](SPIFFE_Federation.md)

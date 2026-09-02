@@ -39,6 +39,7 @@ SPIFFE is a [graduated](https://www.cncf.io/projects/spiffe/) project of the [Cl
 * [The JWT SPIFFE Verifiable Identity Document](standards/JWT-SVID.md)
 * [The SPIFFE Trust Domain and Bundle](standards/SPIFFE_Trust_Domain_and_Bundle.md)
 * [The SPIFFE Workload Endpoint](standards/SPIFFE_Workload_Endpoint.md)
+* [Locating the SPIFFE Endpoint](standards/SPIFFE_Endpoint.md)
 * [The SPIFFE Workload API](standards/SPIFFE_Workload_API.md)
 * [SPIFFE Federation](standards/SPIFFE_Federation.md)
 * [The SPIFFE Broker API](standards/SPIFFE_Broker_API.md)
