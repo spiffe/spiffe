@@ -22,6 +22,9 @@ properties:
           - "PS256"
           - "PS384"
           - "PS512"
+          - "ML-DSA-44"
+          - "ML-DSA-65"
+          - "ML-DSA-87"
       kid:
         type: "string"
         description: |
