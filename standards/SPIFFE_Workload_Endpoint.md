@@ -46,6 +46,8 @@ Transport Layer Security MUST NOT be required, despite the fact that gRPC strong
 
 ## 4. Locating the Endpoint
 
+> **Note:** The `SPIFFE_ENDPOINT_SOCKET` environment variable is deprecated in favor of the more general `SPIFFE_ENDPOINT` variable defined in [Locating the SPIFFE Endpoint](SPIFFE_Endpoint.md). Clients MUST continue to honor `SPIFFE_ENDPOINT_SOCKET` for backward compatibility, but SHOULD prefer `SPIFFE_ENDPOINT` where both are present. See [Locating the SPIFFE Endpoint](SPIFFE_Endpoint.md) for the full precedence rules.
+
 Clients may be explicitly configured with the socket location, or may utilize the well-known environment variable `SPIFFE_ENDPOINT_SOCKET`. If not explicitly configured, conforming clients MUST fall back to the environment variable.
 
 The value of the `SPIFFE_ENDPOINT_SOCKET` environment variable is structured as an [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt) URI. The scheme MUST be set to either `unix` or `tcp`, which indicates that the endpoint is served over a Unix Domain Socket or a TCP listen socket, respectively.
