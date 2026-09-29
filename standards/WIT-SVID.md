@@ -79,15 +79,18 @@ For a WIT-SVID, this parameter MUST be present and set to one of the following s
 
 `alg` Param Value | Digital Signature Algorithm
 ------------------|-----------------------------
-RS256 | RSASSA-PKCS1-v1_5 using SHA-256
-RS384 | RSASSA-PKCS1-v1_5 using SHA-384
-RS512 | RSASSA-PKCS1-v1_5 using SHA-512
-ES256 | ECDSA using P-256 and SHA-256
-ES384 | ECDSA using P-384 and SHA-384
-ES512 | ECDSA using P-521 and SHA-512
-PS256 | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
-PS384 | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
-PS512 | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
+RS256     | RSASSA-PKCS1-v1_5 using SHA-256
+RS384     | RSASSA-PKCS1-v1_5 using SHA-384
+RS512     | RSASSA-PKCS1-v1_5 using SHA-512
+ES256     | ECDSA using P-256 and SHA-256
+ES384     | ECDSA using P-384 and SHA-384
+ES512     | ECDSA using P-521 and SHA-512
+PS256     | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
+PS384     | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
+PS512     | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
+ML-DSA-44 | ML-DSA-44 as specified in table 1 of [FIPS-204][9]
+ML-DSA-65 | ML-DSA-65 as specified in table 1 of [FIPS-204][9]
+ML-DSA-87 | ML-DSA-87 as specified in table 1 of [FIPS-204][9]
 
 Validators MUST reject WIT-SVIDs with an unsupported `alg` parameter value.
 
@@ -123,15 +126,18 @@ In addition to the requirements set out in RFC7800 and WIMSE Workload Credential
 
 `alg` Param Value | Digital Signature Algorithm
 ------------------|-----------------------------
-RS256 | RSASSA-PKCS1-v1_5 using SHA-256
-RS384 | RSASSA-PKCS1-v1_5 using SHA-384
-RS512 | RSASSA-PKCS1-v1_5 using SHA-512
-ES256 | ECDSA using P-256 and SHA-256
-ES384 | ECDSA using P-384 and SHA-384
-ES512 | ECDSA using P-521 and SHA-512
-PS256 | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
-PS384 | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
-PS512 | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
+RS256     | RSASSA-PKCS1-v1_5 using SHA-256
+RS384     | RSASSA-PKCS1-v1_5 using SHA-384
+RS512     | RSASSA-PKCS1-v1_5 using SHA-512
+ES256     | ECDSA using P-256 and SHA-256
+ES384     | ECDSA using P-384 and SHA-384
+ES512     | ECDSA using P-521 and SHA-512
+PS256     | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
+PS384     | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
+PS512     | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
+ML-DSA-44 | ML-DSA-44 as specified in table 1 of [FIPS-204][9]
+ML-DSA-65 | ML-DSA-65 as specified in table 1 of [FIPS-204][9]
+ML-DSA-87 | ML-DSA-87 as specified in table 1 of [FIPS-204][9]
 
 ### 3.3. JWT ID - `jti`
 
@@ -389,3 +395,4 @@ It's entirely feasible for both may be used within the same connection (e.g the 
 [6]: https://www.rfc-editor.org/rfc/rfc7519.html
 [7]: https://www.rfc-editor.org/rfc/rfc7800.html
 [8]: https://example.com/todo-svid-type-compare
+[9]: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.204.pdf
