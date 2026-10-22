@@ -136,8 +136,9 @@ the credential-bundle.private-key.x509.pem file to only the intended consumer(s)
 
 ### 2.2 SPIFFE Trust Bundles {#spiffe-trust-bundles}
 
-The credential folder will contain one or more trust bundles, one per trust
-domain that the provisioning system is configured to federate with.
+The credential folder will contain one or more trust bundles, one for the
+workload's own trust domain and one per trust domain that the provisioning
+system is configured to federate with.
 
 Each trust bundle file MUST be named following the pattern
 "<trust-domain>.spiffe-trust-bundle.x509.pem".  The file contents are one or
