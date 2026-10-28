@@ -25,18 +25,18 @@ Bundles features.
 
 ## Table of Contents
 
-1\. [Participants](#1-participants)
-2\. [Credential Folder](#2-credential-folder)
-2\.1\. [Credential Bundle](#21-credential-bundle)
-2\.2\. [SPIFFE Trust Bundles](#22-spiffe-trust-bundles)
-2\.3\. [Redaction](#23-redaction)
-3\. [Application Behavior](#3-application-behavior)
+1\. [Participants](#1-participants)  
+2\. [Credential Folder](#2-credential-folder)  
+2\.1\. [Credential Bundle](#21-credential-bundle)  
+2\.2\. [SPIFFE Trust Bundles](#22-spiffe-trust-bundles)  
+2\.3\. [Redaction](#23-redaction)  
+3\. [Application Behavior](#3-application-behavior)  
 3\.1\. [Loading and Refreshing the Credential
-Bundle](#31-loading-and-refreshing-the-credential-bundle)
+Bundle](#31-loading-and-refreshing-the-credential-bundle)  
 3\.2\. [Validating Peer SPIFFE
-Certificates](#32-validating-peer-spiffe-certificates)
+Certificates](#32-validating-peer-spiffe-certificates)  
 Appendix A. [Filesystem Delivery Versus the Workload
-API](#appendix-a-filesystem-delivery-versus-the-workload-api)
+API](#appendix-a-filesystem-delivery-versus-the-workload-api)  
 Appendix B. [Reference Example - Filesystem Delivery on
 Kubernetes](#appendix-b-reference-example---filesystem-delivery-on-kubernetes)
 
