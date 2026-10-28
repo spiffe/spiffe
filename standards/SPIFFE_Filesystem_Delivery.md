@@ -2,13 +2,13 @@
 
 > **Stability: Incubating** - see [STABILITY.md](STABILITY.md).
 
-## Status of this Memo {#memo-status}
+## Status of this Memo
 
 This document specifies an identity API standard for the internet community, and
 requests discussion and suggestions for improvements. Distribution of this
 document is unlimited.
 
-## Abstract {#abstract}
+## Abstract
 
 Many applications run in environments where SPIFFE certificates and trust
 bundles are more easily delivered via the filesystem, rather than the SPIFFE
@@ -23,25 +23,25 @@ As a concrete target, all of the features required by this specification are
 natively available in Kubernetes using the Pod Certificates and Cluster Trust
 Bundles features.
 
-## Table of Contents {#toc}
+## Table of Contents
 
-1\. [Participants](#participants)
-2\. [Credential Folder](#credential-folder)
-2\.1\. [Credential Bundle](#credential-bundle)
-2\.2\. [SPIFFE Trust Bundles](#spiffe-trust-bundles)
-2\.3\. [Redaction](#redaction)
-3\. [Application Behavior](#application-behavior)
+1\. [Participants](#1-participants)
+2\. [Credential Folder](#2-credential-folder)
+2\.1\. [Credential Bundle](#21-credential-bundle)
+2\.2\. [SPIFFE Trust Bundles](#22-spiffe-trust-bundles)
+2\.3\. [Redaction](#23-redaction)
+3\. [Application Behavior](#3-application-behavior)
 3\.1\. [Loading and Refreshing the Credential
-Bundle](#loading-and-refreshing-the-credential-bundle)
+Bundle](#31-loading-and-refreshing-the-credential-bundle)
 3\.2\. [Validating Peer SPIFFE
-Certificates](#validating-peer-spiffe-certificates)
-Appendix A. [Filesystem Delivery and the Workload
-API](#filesystem-delivery-vs-the-workload-api)
-Appendix B. [Reference Example: Filesystem Delivery on
-Kubernetes](#example-kubernetes-setup)
+Certificates](#32-validating-peer-spiffe-certificates)
+Appendix A. [Filesystem Delivery Versus the Workload
+API](#appendix-a-filesystem-delivery-versus-the-workload-api)
+Appendix B. [Reference Example - Filesystem Delivery on
+Kubernetes](#appendix-b-reference-example---filesystem-delivery-on-kubernetes)
 
 
-## 1. Participants {#participants}
+## 1. Participants
 
 **Provisioning System:** The software stack responsible for distributing X.509
 SVIDS and trust domain federation configuration to individual applications.
@@ -60,7 +60,7 @@ filesystem.
 * Verify X.509 SVIDs presented by peers, including peers in different trust
   domains.
 
-## 2. Credential Folder {#credential-folder}
+## 2. Credential Folder
 
 A credential folder contains:
 * A single credential bundle, named `credential-bundle.private-key.x509.pem`
@@ -90,13 +90,13 @@ Because the credential folder contains sensitive credentials, provisioning
 systems SHOULD ensure that their contents do not appear on physical disks or in
 automatic backups.
 
-### 2.1 Credential Bundle {#credential-bundle}
+### 2.1 Credential Bundle
 
 A credential bundle file contains the application's private key and certificate
 chain.  Combining these together into one file ensures that the provisioning
 system can rotate the key and certificate atomically.  (Note that, for safety,
-the application must also read this file atomically, as described in section
-3.1).
+the application must also read this file atomically, as described in
+[section 3.1](#31-loading-and-refreshing-the-credential-bundle)).
 
 The credential bundle consists of two or more PEM blocks.  The first block MUST
 be of type PRIVATE KEY, and MUST contain a PKCS#8-serialized private key.
@@ -134,7 +134,7 @@ credential-bundle.private-key.x509.pem file could compromise the security of
 TLS sessions. The provisioning system SHOULD be configured to limit access to
 the credential-bundle.private-key.x509.pem file to only the intended consumer(s).
 
-### 2.2 SPIFFE Trust Bundles {#spiffe-trust-bundles}
+### 2.2 SPIFFE Trust Bundles
 
 The credential folder will contain one or more trust bundles, one for the
 workload's own trust domain and one per trust domain that the provisioning
@@ -163,7 +163,7 @@ these certificates for standard server TLS certificate verification.  In
 particular, it is *never* safe to combine the contents of more than one SPIFFE
 trust bundle into a single, undifferentiated bag of root certificates.
 
-### 2.3 Redaction {#redaction}
+### 2.3 Redaction
 
 Over time, a provisioning system may need to withdraw something it previously
 supplied: a trust domain may be de-federated, a trust anchor may be retired from
@@ -190,7 +190,7 @@ removing the file from the credential folder.  A file that is absent from the
 folder may instead be an artifact of the folder being remounted or repopulated,
 so emptiness is a stronger signal of intent than absence.
 
-## 3. Application Behavior {#application-behavior}
+## 3. Application Behavior
 
 This specification does not define how an application discovers the path of its
 credential folder, and defines no default or well-known location for it.  That
@@ -199,7 +199,7 @@ for example through application-specific configuration, as is any filesystem
 permission needed to keep a credential folder readable only by its intended
 workload.
 
-### 3.1 Loading and Refreshing the Credential Bundle {#loading-and-refreshing-the-credential-bundle}
+### 3.1 Loading and Refreshing the Credential Bundle
 
 Before the application can use its SPIFFE credentials, it needs to load the
 credential bundle from the filesystem.
@@ -222,9 +222,9 @@ SHOULD NOT assume that the updated bundle will have any commonality with the
 previous bundle.  For example, the type of the private
 key may be different, or the certificate may be issued from a different root,
 with different intermediates.  The provisioning system may also redact the
-credential bundle entirely, as described in [section 2.3](#redaction).
+credential bundle entirely, as described in [section 2.3](#23-redaction).
 
-### 3.2 Validating Peer SPIFFE Certificates {#validating-peer-spiffe-certificates}
+### 3.2 Validating Peer SPIFFE Certificates
 
 In order to verify a SPIFFE X.509 SVID presented by a peer, the application
 needs to determine the correct SPIFFE trust bundle for the peer's trust domain.
@@ -244,10 +244,10 @@ possible.
 
 The application SHOULD handle de-federation; if it has loaded a trust bundle for
 trust domain X, and X's trust bundle is subsequently redacted as described in
-[section 2.3](#redaction), the application SHOULD begin failing to verify
+[section 2.3](#23-redaction), the application SHOULD begin failing to verify
 certificates for trust domain X as soon as reasonably possible.
 
-As mentioned in section 2.2, it is not safe to use the contents of a SPIFFE
+As mentioned in [section 2.2](#22-spiffe-trust-bundles), it is not safe to use the contents of a SPIFFE
 trust bundle file except by a SPIFFE-aware application performing SPIFFE X.509
 SVID verification for a certificate from the corresponding trust domain.
 Applications should NEVER unify the contents of multiple
@@ -256,7 +256,7 @@ verification, including by treating the entire SPIFFE credential folder as a
 root certificate store.  Doing this allows for workloads in one trust domain to
 impersonate workloads in another trust domain.
 
-## Appendix A: Filesystem Delivery Versus the Workload API {#filesystem-delivery-vs-the-workload-api}
+## Appendix A: Filesystem Delivery Versus the Workload API
 
 There are currently two standards for SPIFFE-conforming applications to retrieve
 credentials and trust bundles: the Workload API, and Filesystem Delivery.  These
@@ -266,8 +266,8 @@ predates Filesystem Delivery, and is the preferred solution, all else equal.
 Filesystem Delivery exists because, in certain computing environments, such as
 Kubernetes, it is easier for the environment to furnish *files* to the workload,
 rather than making a TCP or Unix socket service available.  It's also lower
-effort to read files from workloads, but, as described in [Section
-3.1](#loading-and-refreshing-the-credential-bundle), it still requires care.
+effort to read files from workloads, but, as described in [section
+3.1](#31-loading-and-refreshing-the-credential-bundle), it still requires care.
 
 Given these two choices, which should you use?
 
@@ -277,7 +277,7 @@ Filesystem Delivery.  This specification does not define how an application
 selects between them; that selection is part of the same out-of-band
 configuration that supplies the credential folder path.
 
-## Appendix B: Reference Example - Filesystem Delivery on Kubernetes {#example-kubernetes-setup}
+## Appendix B: Reference Example - Filesystem Delivery on Kubernetes
 
 This appendix is a non-normative example.  It adds no requirements to this
 specification, and a conforming implementation may arrange these primitives
