@@ -43,21 +43,24 @@ Historically, complexity introduced by the cryptographic agility of the JOSE hea
 Only JWS is supported.
 
 ### 2.1. Algorithm
-The `alg` header MUST be set to one of the values defined in [RFC 7518][7] sections [3.3][8], [3.4][9], or [3.5][10]. Validators receiving a token with the `alg` parameter set to a different value MUST reject the token.
+The `alg` header MUST be set to one of the values defined in [RFC 7518][7] sections [3.3][8], [3.4][9], or [3.5][10] or [RFC 9964][13] section 5. Validators receiving a token with the `alg` parameter set to a different value MUST reject the token.
 
 The supported `alg` values are:
 
 `alg` Param Value | Digital Signature Algorithm
 ------------------|-----------------------------
-RS256 | RSASSA-PKCS1-v1_5 using SHA-256
-RS384 | RSASSA-PKCS1-v1_5 using SHA-384
-RS512 | RSASSA-PKCS1-v1_5 using SHA-512
-ES256 | ECDSA using P-256 and SHA-256
-ES384 | ECDSA using P-384 and SHA-384
-ES512 | ECDSA using P-521 and SHA-512
-PS256 | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
-PS384 | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
-PS512 | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
+RS256     | RSASSA-PKCS1-v1_5 using SHA-256
+RS384     | RSASSA-PKCS1-v1_5 using SHA-384
+RS512     | RSASSA-PKCS1-v1_5 using SHA-512
+ES256     | ECDSA using P-256 and SHA-256
+ES384     | ECDSA using P-384 and SHA-384
+ES512     | ECDSA using P-521 and SHA-512
+PS256     | RSASSA-PSS using SHA-256 and MGF1 with SHA-256
+PS384     | RSASSA-PSS using SHA-384 and MGF1 with SHA-384
+PS512     | RSASSA-PSS using SHA-512 and MGF1 with SHA-512
+ML-DSA-44 | ML-DSA-44 as specified in table 1 of [FIPS-204][14]
+ML-DSA-65 | ML-DSA-65 as specified in table 1 of [FIPS-204][14]
+ML-DSA-87 | ML-DSA-87 as specified in table 1 of [FIPS-204][14]
 
 ### 2.2. Key ID
 The `kid` header is optional.
@@ -146,3 +149,5 @@ Field | Type | Requirement
 [10]: https://tools.ietf.org/html/rfc7518#section-3.5
 [11]: https://tools.ietf.org/html/rfc7517
 [12]: https://tools.ietf.org/html/rfc7519#section-1
+[13]: https://tools.ietf.org/html/rfc9964#section-5
+[14]: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.204.pdf
