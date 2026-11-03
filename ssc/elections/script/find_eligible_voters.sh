@@ -23,7 +23,16 @@ echo "SSC voter eligibility script running..."
 #
 # Collect all public SPIFFE repos
 #
-REPO_RESPONSE=`curl -su username:$GHTOKEN https://api.github.com/orgs/spiffe/repos`
+REPO_RESPONSE=""
+REPO_PAGE_SIZE=100
+THIS_REPO_PAGE_SIZE=$REPO_PAGE_SIZE
+THIS_REPO_PAGE_NUM=1
+while [ $THIS_REPO_PAGE_SIZE -eq $REPO_PAGE_SIZE ]; do
+        resp=`curl -su username:$GHTOKEN "https://api.github.com/orgs/spiffe/repos?per_page=$REPO_PAGE_SIZE&page=$THIS_REPO_PAGE_NUM"`
+        THIS_REPO_PAGE_SIZE=`echo "$resp" | jq 'length'`
+        let "THIS_REPO_PAGE_NUM++"
+        REPO_RESPONSE+=$resp
+done
 REPOS=`echo "$REPO_RESPONSE" | jq  '.[] | {name: .name, private: .private}' | grep -B1 '"private": false' | grep '"name": ' | awk '{print $2}' | sed 's/^"//' | sed 's/",$//'`
 NUM_REPOS=`echo "$REPOS" | wc -l`
 echo "Found $NUM_REPOS SPIFFE repositories."
