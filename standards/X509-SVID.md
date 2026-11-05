@@ -96,6 +96,8 @@ The validation of trust in a given SVID is based on standard X.509 path validati
 
 Certificate path validation requires the leaf SVID certificate and one or more SVID signing certificates. The set of signing certificates required for validation is known as the CA bundle. The mechanism through which an entity can retrieve the relevant CA bundle(s) is out of scope for this document, and is instead defined in the [SPIFFE Workload API](SPIFFE_Workload_API.md) specification.
 
+When the validator is configured to trust more than one trust domain, it MUST determine the SVID's trust domain from the trust domain name (the authority component) of the SPIFFE ID in the URI SAN, and MUST perform path validation using only the CA bundle associated with that trust domain. A validator MUST NOT accept an X.509 SVID on the basis that its path is valid against the union of the CA bundles of the trust domains it trusts. Failing to bind validation to the SVID's own trust domain allows a compromised trust domain to issue SVIDs bearing SPIFFE IDs of another trust domain, so that the impact of a compromise is not contained to the affected trust domain. Where supported, URI name constraints (see [Section 5.2](#52-leaf-validation)) are a complementary defense-in-depth mechanism for this binding — particularly for validators that terminate concatenated root pools — but do not replace this requirement.
+
 ### 5.2. Leaf Validation
 When authenticating a resource or caller, it is necessary to perform validation beyond what is covered by the X.509 standard. Namely, we must ensure that 1) the certificate is a leaf certificate, and 2) that the signing authority was authorized to issue it.
 
