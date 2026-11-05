@@ -61,6 +61,7 @@ This document covered, at a high level, the various components that make up the 
 * [The WIT SPIFFE Verifiable Identity Document](WIT-SVID.md)
 * [The SPIFFE Workload Endpoint](SPIFFE_Workload_Endpoint.md)
 * [The SPIFFE Workload API](SPIFFE_Workload_API.md)
+* [The SPIFFE Filesystem Delivery Standard](SPIFFE_Filesystem_Delivery.md)
 * [The SPIFFE Trust Domain and Bundle](SPIFFE_Trust_Domain_and_Bundle.md)
 * [SPIFFE Federation](SPIFFE_Federation.md)
 * [The SPIFFE Broker API](SPIFFE_Broker_API.md)
