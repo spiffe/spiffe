@@ -22,6 +22,7 @@ This document describes the semantics of SPIFFE trust domains, how they are repr
 4.2. [JWK](#42-jwk)  
 4.2.1. [Key Type](#421-key-type)  
 4.2.2. [Public Key Use](#422-public-key-use)  
+4.2.3. [Algorithm](#423-algorithm)  
 5\. [SPIFFE Bundle Map](#5-spiffe-bundle-map)  
 5.1. [SPIFFE Bundle Map Format](#51-spiffe-bundle-map-format)  
 5.1.1. [Trust Domains](#511-trust-domains)  
@@ -82,6 +83,9 @@ The `kty` parameter MUST be set, and its behavior follows [Section 4.1][6] of RF
 
 #### 4.2.2. Public Key Use
 The `use` parameter MUST be set. Its value indicates the type of identity document (or SVID) that it is authoritative for. At the time of this writing, three SVID types are supported: `x509-svid`, `jwt-svid`, and `wit-svid`. The values are case sensitive. Please see the respective SVID specifications for more information about `use` values. Clients encountering either a missing `use` parameter or an unknown `use` value MUST ignore the entire JWK element.
+
+#### 4.2.3. Algorithm
+The `alg` parameter's behavior follows [Section 4.4][13] of RFC 7517. It MUST be set for keys whose `kty` is `AKP`, as required by [Section 3][14] of RFC 9964, and for any other key type whose defining specification requires it; otherwise it MAY be set. The respective SVID specification MAY place further requirements on its presence and value.
 
 ## 5. SPIFFE Bundle Map
 A SPIFFE Bundle Map is an object containing a collection of SPIFFE Bundles. The bundles it contains are considered authoritative for the corresponding trust domain name, which is also included.
@@ -266,3 +270,5 @@ SPIFFE Bundle Maps are designed to be loaded and ingested atomically. The entire
 [10]: https://tools.ietf.org/html/rfc7517#section-4.7
 [11]: https://tools.ietf.org/html/rfc7518#section-6
 [12]: https://tools.ietf.org/html/rfc8259
+[13]: https://tools.ietf.org/html/rfc7517#section-4.4
+[14]: https://tools.ietf.org/html/rfc9964#section-3
