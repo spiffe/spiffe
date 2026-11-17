@@ -63,6 +63,8 @@ The trust domain name is defined as the authority component of the URI with the 
 
 Please note that this definition does not exclude IPv4 addresses in dotted-quad notation, but does exclude IPv6 addresses. DNS names are a strict subset of valid trust domain names. Implementations MUST NOT process trust domain names differently whether or not they are valid IP addresses and/or valid DNS names.
 
+The SPIFFE ID of a trust domain is the SPIFFE ID made of the `spiffe` scheme and the trust domain name, with an empty path. For example, the SPIFFE ID of the trust domain `example.com` is `spiffe://example.com`. Other SPIFFE specifications use it to refer to a trust domain as a whole, for instance as the key of trust bundles returned by the Workload API. It is also the SPIFFE ID that [Section 3.1](#31-svid-trust) recommends for the trust domain's signing authority.
+
 #### 2.1.1. Trust Domain Name Collisions
 
 Trust domain operators are free to choose any trust domain name they find suitable: there is no centralized authority for regulation or registration of trust domain names. Thus, there is no guarantee of global uniqueness nor is there any technical means for preventing distinct trust domains from using identical trust domain names.

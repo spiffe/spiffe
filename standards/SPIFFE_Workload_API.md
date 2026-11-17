@@ -356,7 +356,7 @@ Workload API clients SHOULD use the `ValidateJWTSVID` method for JWT validation 
 
 When interfacing with legacy JWT validators, the `FetchJWTBundles` method can be used to fetch JWKS bundles that can be used to validate JWT-SVID signatures. For instance, if the SPIFFE Workload API is available but the JWT validating software is not aware of the Workload API (and thus cannot call `ValidateJWTSVID`), implementations can instead individually retrieve each bundle and feed them to the legacy workload for validation.
 
-The `FetchJWTBundles` method returns bundles keyed by the SPIFFE ID of the trust domain. When validating a JWT-SVID, the validator MUST use the bundle corresponding to the trust domain of the subject. If a JWT bundle for the specified trust domain is not present, then the token is untrusted.
+The `FetchJWTBundles` method returns bundles keyed by the SPIFFE ID of the trust domain, as defined in [Section 2.1 of the SPIFFE ID specification](SPIFFE-ID.md#21-trust-domain). When validating a JWT-SVID, the validator MUST use the bundle corresponding to the trust domain of the subject. If a JWT bundle for the specified trust domain is not present, then the token is untrusted.
 
 ## 7. WIT-SVID Profile
 
