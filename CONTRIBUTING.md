@@ -67,7 +67,7 @@ these conventions when reviewing pull requests.
   * [Effective Go](https://golang.org/doc/effective_go.html)
   * [Go's commenting conventions](http://blog.golang.org/godoc-documenting-go-code)
 * **Bash**
-  * [Google shell conventions](https://google.github.io/styleguide/shell.xml)
+  * [Google shell conventions](https://google.github.io/styleguide/shellguide.html)
 * **Python**
   * [PEP8](https://www.python.org/dev/peps/pep-0008/)
 
