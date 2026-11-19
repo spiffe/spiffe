@@ -6,7 +6,7 @@ The following is an evolving checklist of administrative items to complete, eith
 
 Remember, with great power comes great responsibility.
 
-[ ] Password / account handoff, or entirely new account creation, for Admin powers on the spiffe.io domain in Gsuite. For auditability, each SSC member has their own privileged acount.
+[ ] Password / account handoff, or entirely new account creation, for Admin powers on the spiffe.io domain in Gsuite. For auditability, each SSC member has their own privileged account.
 
 [ ] Ensure [documented membership of SSC](README.md) is updated, as is the associated GitHub issue for the election.
 
