@@ -25,7 +25,7 @@ In this interaction everyone was socially aware and respectful. Everyone conside
 
 Yellow:
 In this interaction someone was overly reactive. A "knee jerk" reaction to a statement, outcome, or situation caused frustration, anger, or some other negativity to surface *and* result in impacting others' comfortability, feeling of belonging in the community, or otherwise caused disruption. It is completely human to have negative emotions, but we must respectfully manage our emotions and not unleash them upon others.
-Much like subtle-isms, nearly everyone will on occassion dip into Yellow. To err is human. It shows emotional maturity to recognize when this has happened and apologize for the behavior. It is a community concern if the situation keeps repeating, resulting in a warning and eventual banning.
+Much like subtle-isms, nearly everyone will on occasion dip into Yellow. To err is human. It shows emotional maturity to recognize when this has happened and apologize for the behavior. It is a community concern if the situation keeps repeating, resulting in a warning and eventual banning.
 
 Red:
 Either excessive repeating of Yellow, or outright harassment, insults, etc. as listed non-exhaustively in Principles.
