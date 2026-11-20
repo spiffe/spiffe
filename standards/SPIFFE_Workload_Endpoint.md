@@ -68,7 +68,7 @@ A number of error conditions may be encountered by the client when interacting w
 
 Implementations receiving a client request that does not contain the mandatory security header MUST respond with gRPC status code "InvalidArgument". Clients encountering the "InvalidArgument" status code SHOULD NOT retry, as this indicates that an error has been made in the client implementation, and is not recoverable. 
 
-In the event that the SPIFFE Workload Endpoint implementation is running but unavailable, for instance if it is still initializing or it is performing load shedding, clients will receive the gRPC status code "Unavailable". Clients receiving this code OR clients which are unable to reach the SPIFFE Workload Endpoint MAY retry with a backoff.
+Implementations that are running but temporarily unable to handle a client request, for instance because they are still initializing or are performing load shedding, MUST respond with gRPC status code "Unavailable". Clients receiving this code OR clients which are unable to reach the SPIFFE Workload Endpoint MAY retry with a backoff.
 
 Finally, in the event that a SPIFFE Workload Endpoint service does not have an identity defined for a given caller/client, the service SHOULD respond with gRPC code "PermissionDenied". Clients receiving this code MAY retry with a backoff, as such a response could be encountered if the service implementation is eventually consistent.
 
