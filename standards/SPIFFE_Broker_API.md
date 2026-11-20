@@ -22,6 +22,7 @@ Brokers are trusted infrastructure components that can act on-behalf-of workload
 3.1.4. [Extensibility](#314-extensibility)  
 4\. [Client and Server Behavior](#4-client-and-server-behavior)  
 4.1. [Authenticating and authorizing the Caller](#41-authenticating-and-authorizing-the-caller)  
+4.1.1. [Kubernetes Authorization with SubjectAccessReview](#411-kubernetes-authorization-with-subjectaccessreview)  
 4.2. [Remote procedure scope](#42-remote-procedure-scope)  
 4.3. [Connection Lifetime](#43-connection-lifetime)  
 4.4. [Stream Responses](#44-stream-responses)  
@@ -223,6 +224,47 @@ Implementations MUST maintain a strict allow-only policy that prevents any calle
 Implementations MAY enforce more fine-grained access control by inspecting data carried in the request. For example, an implementation MAY restrict a given caller to a subset of reference types (such as only `WorkloadPIDReference`, or only `KubernetesObjectReference` against a specific namespace), to a subset of audiences in `FetchJWTSVID`, or to a subset of requested SPIFFE IDs. The exact policy model is implementation-defined.
 
 Because the [SPIFFE Broker Endpoint](./SPIFFE_Broker_Endpoint.md#3-transport) MAY be served over a TCP listen socket, the caller is not necessarily co-located with the implementation. Authorized brokers MAY therefore request SVIDs from outside the cluster or host on which the implementation runs, provided they satisfy the authentication and authorization requirements of the SPIFFE Broker Endpoint. Where this is not desired, an implementation can restrict such access either by differentiating on the SPIFFE ID of the broker as part of its authorization policy, or by limiting the endpoint to local accessibility, for instance by serving it over a Unix Domain Socket.
+
+### 4.1.1 Kubernetes Authorization with SubjectAccessReview
+
+Implementations that support `KubernetesObjectReference` MAY decide whether a caller is allowed to obtain SVIDs for a referenced object by asking the Kubernetes control plane that owns the object, through the Kubernetes [SubjectAccessReview](https://kubernetes.io/docs/reference/access-authn-authz/authorization/#checking-api-access) API. This lets operators authorize brokers with whatever authorization mechanism the cluster already uses, such as RBAC. Implementations that perform this check SHOULD build the review as described below, so that operators can keep the same authorization configuration when they switch between implementations.
+
+* `spec.user` SHOULD be set to the SPIFFE ID of the caller, as authenticated by the [SPIFFE Broker Endpoint](./SPIFFE_Broker_Endpoint.md#5-authentication-and-authorization). `spec.groups` SHOULD NOT be set.
+* `spec.resourceAttributes.verb` SHOULD be set to `impersonate-via-spiffe`. Implementations MUST NOT use `impersonate`, which Kubernetes uses for its own user impersonation, or any other verb that Kubernetes defines for its API, because permissions granted for those verbs have a different meaning.
+* `spec.resourceAttributes.group` and `spec.resourceAttributes.resource` SHOULD be set to the `group` and `plural` of the reference's `type`. The `core` group is sent as the empty string, which is how Kubernetes represents it.
+* `spec.resourceAttributes.namespace` and `spec.resourceAttributes.name` SHOULD be set to the namespace and name of the object the reference resolved to (see [Reference Resolution](#311-reference-resolution)), including when the reference identified the object by `uid` only. The namespace is left empty for cluster-scoped objects.
+
+The review is performed after the reference has been resolved. If the review is not allowed, the implementation MUST NOT return SVIDs for the referenced workload and SHOULD respond with gRPC status code "PermissionDenied". If the review cannot be completed, the implementation MUST NOT return SVIDs for the referenced workload either.
+
+Implementations that perform this check need permission to create `SubjectAccessReview` objects, in addition to the permissions needed to resolve the referenced objects.
+
+For example, the following RBAC configuration allows the broker `spiffe://example.org/broker` to obtain SVIDs for pods in the `payments` namespace from any implementation that follows this section:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: spiffe-broker
+  namespace: payments
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["impersonate-via-spiffe"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: spiffe-broker
+  namespace: payments
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: spiffe://example.org/broker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: spiffe-broker
+```
 
 ### 4.2 Remote procedure scope
 
