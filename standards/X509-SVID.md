@@ -128,7 +128,7 @@ Extension | Field | Description
 ----------|-------|------------
 Subject Alternative Name | uniformResourceIdentifier | This field is set equal to the SPIFFE ID. Only one instance of this field is permitted.
 Basic Constraints | CA | This field must be set to `true` if and only if the SVID is a signing certificate.
-Basic Constraints | pathLenConstraint | This field may be set if the implementor wishes to enforce a finite CA hierarchy depth, for example, if inherited from an existing private key infrastructure (PKI).
+Basic Constraints | pathLenConstraint | This field may be set if the implementor wishes to enforce a finite CA hierarchy depth, for example, if inherited from an existing public key infrastructure (PKI).
 Name Constraints | permittedSubtrees | This field may be set if the implementor wishes to use URI name constraints. It will be required in a future version of this document.
 Key Usage | keyCertSign | This field must be set if and only if the SVID is a signing certificate.
 Key Usage | cRLSign | This field may be set if and only if the SVID is a signing certificate.
