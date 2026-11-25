@@ -42,6 +42,7 @@ properties:
           - "JOSE"
     required:
       - "alg"
+    additionalProperties: false
   payload:
     type: "object"
     properties:
@@ -53,7 +54,12 @@ properties:
           See https://github.com/spiffe/spiffe/blob/main/standards/JWT-SVID.md#31-subject
           This claim is REQUIRED.
       aud:
-        type: "string"
+        oneOf:
+          - type: "string"
+          - type: "array"
+            items:
+              type: "string"
+            minItems: 1
         description: |
           The "aud" (audience) claim as defined in RFC 7519.
           See https://github.com/spiffe/spiffe/blob/main/standards/JWT-SVID.md#32-audience
